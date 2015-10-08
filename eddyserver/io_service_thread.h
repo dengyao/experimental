@@ -1,21 +1,20 @@
 ﻿#pragma once
 
 #include <memory>
-#include <unordered_set>
 #include <asio/io_service.hpp>
-#include "types.h"
+#include "tcp_session_queue.h"
 
-class tcp_session;
-class io_service_thread_manager;
+class TCPSession;
+class IOServiceThreadManager;
 
-class io_service_thread final
+class IOServiceThread final
 {
-	friend class io_service_thread_manager;
-	typedef std::shared_ptr<tcp_session> session_ptr;
+	friend class IOServiceThreadManager;
+	typedef std::shared_ptr<TCPSession> SessionPointer;
 
 public:
-	io_service_thread(io_service_thread_manager &manager);
-	~io_service_thread() = default;
+	IOServiceThread(IOServiceThreadManager &manager);
+	~IOServiceThread() = default;
 
 public:
 	void run_thread();
@@ -33,9 +32,9 @@ public:
 	}
 
 public:
-	thread_id id() const
+	ThreadID id() const
 	{
-		return thread_ != nullptr ? thread_->get_id() : thread_id();
+		return thread_ != nullptr ? thread_->get_id() : ThreadID();
 	}
 
 	asio::io_service& io_service()
@@ -43,12 +42,12 @@ public:
 		return io_service_;
 	}
 
-	io_service_thread_manager& manager()
+	IOServiceThreadManager& manager()
 	{
 		return manager_;
 	}
 
-	std::unordered_set<session_ptr>& session_queue()
+	TCPSessionQueue& session_queue()
 	{
 		return session_queue_;
 	}
@@ -56,14 +55,14 @@ public:
 private:
 	void run();
 
-protected:
-	io_service_thread(const io_service_thread&) = delete;
-	io_service_thread& operator=(const io_service_thread&) = delete;
+private:
+	IOServiceThread(const IOServiceThread&) = delete;
+	IOServiceThread& operator=(const IOServiceThread&) = delete;
 
 private:
-	io_service_thread_manager&				manager_;
+	IOServiceThreadManager&					manager_;
 	asio::io_service						io_service_;
 	std::shared_ptr<std::thread>			thread_;
 	std::unique_ptr<asio::io_service::work>	work_;
-	std::unordered_set<session_ptr>			session_queue_;
+	TCPSessionQueue							session_queue_;
 };

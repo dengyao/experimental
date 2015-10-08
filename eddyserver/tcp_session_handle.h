@@ -1,17 +1,18 @@
 ﻿#pragma once
 
 #include "tcp_session.h"
+#include "types.h"
 
-class io_service_thread_manager;
+class IOServiceThreadManager;
 
-class tcp_session_handle : public std::enable_shared_from_this < tcp_session_handle >
+class TCPSessionHandle : public std::enable_shared_from_this < TCPSessionHandle >
 {
-	friend class io_service_thread_manager;
+	friend class IOServiceThreadManager;
 
 public:
-	tcp_session_handle();
+	TCPSessionHandle();
 
-	virtual ~tcp_session_handle();
+	virtual ~TCPSessionHandle();
 
 	void send(message_buffer &message);
 
@@ -29,15 +30,15 @@ public:
 	virtual void on_close() = 0;
 
 private:
-	void init(session_id sid, thread_id tid, io_service_thread_manager* manager);
+	void init(TCPSessionID sid, ThreadID tid, IOServiceThreadManager* manager);
 
 protected:
-	tcp_session_handle(const tcp_session_handle &) = delete;
-	tcp_session_handle& operator= (const tcp_session_handle &) = delete;
+	TCPSessionHandle(const TCPSessionHandle &) = delete;
+	TCPSessionHandle& operator= (const TCPSessionHandle &) = delete;
 
 private:
-	session_id					session_id_;
-	thread_id					session_thread_id_;
-	io_service_thread_manager*	io_thread_manager_;
-	message_vector				messages_to_be_sent_;
+	TCPSessionID				session_id_;
+	ThreadID					session_thread_id_;
+	IOServiceThreadManager*		io_thread_manager_;
+	//message_vector				messages_to_be_sent_;
 };

@@ -1,29 +1,32 @@
 ﻿#include "io_service_thread_manager.h"
 
 #include <queue>
+#include <cassert>
 #include "io_service_thread.h"
 #include "tcp_session_handle.h"
 
-static const std::size_t kMainThreadIndex = 0;
+const size_t kMainThreadIndex = 0;
 
-
-io_service_thread_manager::io_service_thread_manager(size_t thread_num)
+IOServiceThreadManager::IOServiceThreadManager(size_t thread_num)
 {
-	assert(thread_num > kMainThreadIndex);
+	if (thread_num > kMainThreadIndex)
+	{
+		std::abort();
+	}
 
 	threads_.reserve(thread_num);
 	for (size_t i = 0; i < threads_.size(); ++i)
 	{
-		threads_[i] = std::make_shared<io_service_thread>(*this);
+		threads_[i] = std::make_shared<IOServiceThread>(*this);
 	}
 }
 
-io_service_thread_manager::~io_service_thread_manager()
+IOServiceThreadManager::~IOServiceThreadManager()
 {
 	stop();
 }
 
-void io_service_thread_manager::run()
+void IOServiceThreadManager::run()
 {
 	if (threads_.empty())
 	{
@@ -40,7 +43,7 @@ void io_service_thread_manager::run()
 	threads_[kMainThreadIndex]->run();
 }
 
-void io_service_thread_manager::stop()
+void IOServiceThreadManager::stop()
 {
 	if (threads_.empty())
 	{
@@ -66,7 +69,7 @@ void io_service_thread_manager::stop()
 	threads_[kMainThreadIndex]->stop();
 }
 
-io_service_thread& io_service_thread_manager::thread()
+IOServiceThread& IOServiceThreadManager::thread()
 {
 	if (threads_.size() == 1)
 	{
@@ -82,7 +85,7 @@ io_service_thread& io_service_thread_manager::thread()
 	return *threads_[que.top().second];
 }
 
-io_service_thread& io_service_thread_manager::thread(thread_id id)
+IOServiceThread& IOServiceThreadManager::thread(ThreadID id)
 {
 	for (size_t i = 0; i < threads_.size(); ++i)
 	{
@@ -94,14 +97,14 @@ io_service_thread& io_service_thread_manager::thread(thread_id id)
 	throw std::runtime_error("not found thread");
 }
 
-io_service_thread& io_service_thread_manager::main_thread()
+IOServiceThread& IOServiceThreadManager::main_thread()
 {
 	return *threads_[kMainThreadIndex];
 }
 
-void io_service_thread_manager::on_session_connect(session_ptr session, session_handler_ptr handler)
+void IOServiceThreadManager::on_session_connect(SessionPointer session, SessionHandlerPointer handler)
 {
-	session_id id = kInvalidSessionID;
+	TCPSessionID id;
 	if (id_generator_.get(id))
 	{
 		handler->init(id, session->thread().id(), this);
@@ -111,7 +114,7 @@ void io_service_thread_manager::on_session_connect(session_ptr session, session_
 	}
 }
 
-void io_service_thread_manager::on_session_close(session_id id)
+void IOServiceThreadManager::on_session_close(session_id id)
 {
 	assert(id != kInvalidSessionID);
 	session_handler_map::iterator itr = session_handler_map_.find(id);
@@ -128,7 +131,7 @@ void io_service_thread_manager::on_session_close(session_id id)
 	id_generator_.put(id);
 }
 
-io_service_thread_manager::session_handler_ptr io_service_thread_manager::session_handler(session_id id) const
+io_service_thread_manager::session_handler_ptr IOServiceThreadManager::session_handler(session_id id) const
 {
 	session_handler_map::const_iterator itr = session_handler_map_.find(id);
 	if (itr != session_handler_map_.end())

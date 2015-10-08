@@ -4,14 +4,14 @@
 #include "tcp_session.h"
 
 
-io_service_thread::io_service_thread(io_service_thread_manager &manager)
+IOServiceThread::IOServiceThread(IOServiceThreadManager &manager)
 	: manager_(manager_)
 	, work_(nullptr)
 {
 
 }
 
-void io_service_thread::run()
+void IOServiceThread::run()
 {
 	if (work_ == nullptr)
 	{
@@ -27,20 +27,20 @@ void io_service_thread::run()
 	}
 }
 
-void io_service_thread::run_thread()
+void IOServiceThread::run_thread()
 {
 	if (thread_ == nullptr)
 	{
-		thread_ = std::make_shared<std::thread>(std::bind(&io_service_thread::run, this));
+		thread_ = std::make_shared<std::thread>(std::bind(&IOServiceThread::run, this));
 	}
 }
 
-size_t io_service_thread::load() const
+size_t IOServiceThread::load() const
 {
 	return session_queue_.size();
 }
 
-void io_service_thread::join()
+void IOServiceThread::join()
 {
 	if (thread_ != nullptr)
 	{
@@ -48,7 +48,7 @@ void io_service_thread::join()
 	}
 }
 
-void io_service_thread::stop()
+void IOServiceThread::stop()
 {
 	if (work_ != nullptr)
 	{

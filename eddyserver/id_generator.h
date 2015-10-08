@@ -2,12 +2,11 @@
 
 #include <vector>
 #include <cstdint>
-#include <cassert>
 
-class id_generator
+class IDGenerator
 {
 public:
-	id_generator(uint32_t threshold = 4096)
+	explicit IDGenerator(uint32_t threshold = 4096)
 		: next_(0)
 		, threshold_(threshold)
 	{

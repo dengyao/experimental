@@ -1,12 +1,7 @@
-#pragma once
+﻿#pragma once
 
-#include <array>
-#include <vector>
-#include <cstdint>
 #include <thread>
+#include <cstdint>
 
-static const uint32_t kDefaultBufferSize = 1024;
-
-typedef std::thread::id								thread_id;
-typedef uint32_t									session_id;
-typedef std::vector<message_buffer>					message_vector;
+typedef std::thread::id		ThreadID;
+typedef uint32_t			TCPSessionID;

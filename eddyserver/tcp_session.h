@@ -1,8 +1,8 @@
 ﻿#pragma once
 
 #include <memory>
-#include "types.h"
 #include <asio/ip/tcp.hpp>
+#include "types.h"
 
 class message_filter;
 class io_service_thread;
@@ -10,25 +10,25 @@ class message_filter_interface;
 
 static const uint32_t kInvalidSessionID = 0;
 
-class tcp_session final : public std::enable_shared_from_this < tcp_session >
+class TCPSession final : public std::enable_shared_from_this < TCPSession >
 {
 	friend class io_service_thread_manager;
 
 public:
-	typedef asio::ip::tcp::socket						socket_type;
+	typedef asio::ip::tcp::socket						SocketType;
 	typedef std::shared_ptr<message_filter_interface>	message_filter_ptr;
 
 public:
-	tcp_session(io_service_thread &thread, message_filter_ptr filter);
-	~tcp_session();
+	TCPSession(io_service_thread &thread, message_filter_ptr filter);
+	~TCPSession();
 
 public:
-	session_id id() const
+	TCPSessionID id() const
 	{
 		return id_;
 	}
 
-	socket_type& socket()
+	SocketType& socket()
 	{
 		return socket_;
 	}
@@ -39,12 +39,11 @@ public:
 	}
 
 private:
-	void init(session_id id);
+	void init(TCPSessionID id);
 
 private:
-	session_id				id_;
-	socket_type				socket_;
+	TCPSessionID			id_;
+	SocketType				socket_;
 	io_service_thread&		thread_;
 	message_filter_ptr		filter_;
-	message_buffer			read_buffer_;
 };

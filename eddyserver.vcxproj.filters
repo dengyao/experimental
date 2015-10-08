@@ -27,10 +27,13 @@
     <ClInclude Include="eddyserver\tcp_session_handle.h">
       <Filter>eddyserver</Filter>
     </ClInclude>
+    <ClInclude Include="eddyserver\tcp_session_queue.h">
+      <Filter>eddyserver</Filter>
+    </ClInclude>
     <ClInclude Include="eddyserver\types.h">
       <Filter>eddyserver</Filter>
     </ClInclude>
-    <ClInclude Include="eddyserver\message_buffer.h">
+    <ClInclude Include="eddyserver\net_message.h">
       <Filter>eddyserver</Filter>
     </ClInclude>
   </ItemGroup>
@@ -53,7 +56,10 @@
     <ClCompile Include="eddyserver\tcp_session_handle.cpp">
       <Filter>eddyserver</Filter>
     </ClCompile>
-    <ClCompile Include="eddyserver\message_buffer.cpp">
+    <ClCompile Include="eddyserver\tcp_session_queue.cpp">
+      <Filter>eddyserver</Filter>
+    </ClCompile>
+    <ClCompile Include="eddyserver\net_message.cpp">
       <Filter>eddyserver</Filter>
     </ClCompile>
   </ItemGroup>

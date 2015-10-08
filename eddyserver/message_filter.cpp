@@ -1,5 +1,5 @@
 ﻿#include "message_filter.h"
-#include <asio.hpp>
+#include <asio/ip/address_v4.hpp>
 
 
 message_filter::message_filter()
