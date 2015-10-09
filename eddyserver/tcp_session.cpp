@@ -5,7 +5,9 @@
 #include "io_service_thread.h"
 
 
-tcp_session::tcp_session(io_service_thread &thread, message_filter_ptr filter)
+const TCPSessionID kInvalidSessionID = 0;
+
+TCPSession::TCPSession(IOServiceThread &thread, MessageFilterPointer filter)
 	: thread_(thread)
 	, filter_(filter)
 	, id_(kInvalidSessionID)
@@ -14,18 +16,20 @@ tcp_session::tcp_session(io_service_thread &thread, message_filter_ptr filter)
 
 }
 
-tcp_session::~tcp_session()
+TCPSession::~TCPSession()
 {
 
 }
 
-void tcp_session::init(session_id id)
+void TCPSession::init(TCPSessionID id)
 {
-	assert(id != kInvalidSessionID);
+	assert(id != kInvalidSessionIDkInvalidSessionID);
 
-	id_ = id;
-	socket_.set_option(asio::ip::tcp::no_delay(true));
-	thread_.session_queue().insert(shared_from_this());
+	set_session_id(id);
+	thread_.session_queue().add(shared_from_this());
+
+	asio::ip::tcp::no_delay option(true);
+	socket_.set_option(option);
 
 	size_t size = filter_->bytes_wanna_read();
 }

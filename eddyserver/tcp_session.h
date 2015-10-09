@@ -4,22 +4,19 @@
 #include <asio/ip/tcp.hpp>
 #include "types.h"
 
-class message_filter;
-class io_service_thread;
-class message_filter_interface;
-
-static const uint32_t kInvalidSessionID = 0;
+class IOServiceThread;
+class MessageFilterInterface;
 
 class TCPSession final : public std::enable_shared_from_this < TCPSession >
 {
-	friend class io_service_thread_manager;
+	friend class IOServiceThreadManager;
 
 public:
-	typedef asio::ip::tcp::socket						SocketType;
-	typedef std::shared_ptr<message_filter_interface>	message_filter_ptr;
+	typedef asio::ip::tcp::socket					SocketType;
+	typedef std::shared_ptr<MessageFilterInterface>	MessageFilterPointer;
 
 public:
-	TCPSession(io_service_thread &thread, message_filter_ptr filter);
+	TCPSession(IOServiceThread &thread, MessageFilterPointer filter);
 	~TCPSession();
 
 public:
@@ -33,7 +30,7 @@ public:
 		return socket_;
 	}
 
-	io_service_thread& thread() const
+	IOServiceThread& thread() const
 	{
 		return thread_;
 	}
@@ -41,9 +38,14 @@ public:
 private:
 	void init(TCPSessionID id);
 
+	void set_session_id(TCPSessionID id)
+	{
+		id_ = id;
+	}
+
 private:
 	TCPSessionID			id_;
 	SocketType				socket_;
-	io_service_thread&		thread_;
-	message_filter_ptr		filter_;
+	IOServiceThread&		thread_;
+	MessageFilterPointer	filter_;
 };
