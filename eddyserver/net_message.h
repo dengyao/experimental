@@ -34,16 +34,42 @@ public:
 		return begin() + reader_pos_;
 	}
 
-	void ensure_writable_bytes(size_t len);
+	void ensure_writable_bytes(size_t len)
+	{
+		if (writable_bytes() < len)
+		{
+			make_space(len);
+		}
+		assert(writable_bytes() >= len);
+	}
 
 	void append(const void *user_data, size_t len);
 
 	void prepend(const void *user_data, size_t len);
 
 private:
-	void make_space(size_t len);
+	void make_space(size_t len)
+	{
+		if (writable_bytes() + prependable_bytes() < len + kCheapPrepend)
+		{
+			buffer_.resize(writer_pos_ + len);
+		}
+		else
+		{
+			assert(kCheapPrepend < reader_pos_);
+			size_t readable = readable_bytes();
+			std::copy(begin() + reader_pos_, begin() + writer_pos_, begin() + kCheapPrepend);
+			reader_pos_ = kCheapPrepend;
+			writer_pos_ = reader_pos_ + readable;
+			assert(readable == readable_bytes());
+		}
+	}
 
-	void has_written(size_t len);
+	void has_written(size_t len)
+	{
+		assert(writable_bytes() >= len);
+		writer_pos_ += len;
+	}
 
 	uint8_t* begin()
 	{
