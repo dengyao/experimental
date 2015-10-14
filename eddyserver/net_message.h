@@ -34,11 +34,17 @@ public:
 		return begin() + reader_pos_;
 	}
 
+	void ensure_writable_bytes(size_t len);
+
 	void append(const void *user_data, size_t len);
 
 	void prepend(const void *user_data, size_t len);
 
 private:
+	void make_space(size_t len);
+
+	void has_written(size_t len);
+
 	uint8_t* begin()
 	{
 		return &*buffer_.begin();
