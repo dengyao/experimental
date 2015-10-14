@@ -10,32 +10,44 @@ public:
 	static const size_t kInitialSize = 1024;
 
 public:
-	explicit NetMessage(size_t initial_size = kInitialSize)
-		: buffer_(kCheapPrepend + initial_size)
-		, reader_pos_(kCheapPrepend)
-		, writer_pos_(kCheapPrepend)
-	{
-		assert(readable_bytes() == 0);
-		assert(writable_bytes() == initial_size);
-		assert(prependable_bytes() == kCheapPrepend);
-	}
+	explicit NetMessage(size_t initial_size = kInitialSize);
+	~NetMessage();
 
 public:
+	size_t readable_bytes() const
+	{
+		return writer_pos_ - reader_pos_;
+	}
 
-	size_t readable_bytes() const;
+	size_t writable_bytes() const
+	{
+		return buffer_.size() - writer_pos_;
+	}
 
-	size_t writable_bytes() const;
+	size_t prependable_bytes() const
+	{
+		return reader_pos_;
+	}
 
-	size_t prependable_bytes() const;
-
-	const uint8_t* peek() const;
+	const uint8_t* peek() const
+	{
+		return begin() + reader_pos_;
+	}
 
 	void append(const void *user_data, size_t len);
 
 	void prepend(const void *user_data, size_t len);
 
 private:
+	uint8_t* begin()
+	{
+		return &*buffer_.begin();
+	}
 
+	const uint8_t* begin() const
+	{
+		return &*buffer_.begin();
+	}
 
 private:
 	size_t reader_pos_;
