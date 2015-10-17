@@ -13,6 +13,63 @@ NetMessage::NetMessage(size_t initial_size)
 
 NetMessage::~NetMessage()
 {
+}
+
+char* NetMessage::begin()
+{
+	return &*buffer_.begin();
+}
+
+const char* NetMessage::begin() const
+{
+	return begin();
+}
+
+void NetMessage::make_space(size_t len)
+{
+	if (writable_bytes() + prependable_bytes() < len + kCheapPrepend)
+	{
+		buffer_.resize(writer_pos_ + len);
+	}
+	else
+	{
+		assert(kCheapPrepend < reader_pos_);
+		size_t readable = readable_bytes();
+		std::copy(begin() + reader_pos_, begin() + writer_pos_, begin() + kCheapPrepend);
+		reader_pos_ = kCheapPrepend;
+		writer_pos_ = reader_pos_ + readable;
+		assert(readable == readable_bytes());
+	}
+}
+
+void NetMessage::has_written(size_t len)
+{
+	assert(writable_bytes() >= len);
+	writer_pos_ += len;
+}
+
+size_t NetMessage::readable_bytes() const
+{
+
+}
+
+size_t NetMessage::writable_bytes() const
+{
+
+}
+
+size_t NetMessage::prependable_bytes() const
+{
+
+}
+
+const char* NetMessage::peek() const
+{
+	return begin() + reader_pos_;
+}
+
+void NetMessage::ensure_writable_bytes(size_t len)
+{
 
 }
 

@@ -14,25 +14,13 @@ public:
 	~NetMessage();
 
 public:
-	size_t readable_bytes() const
-	{
-		return writer_pos_ - reader_pos_;
-	}
+	size_t readable_bytes() const;
 
-	size_t writable_bytes() const
-	{
-		return buffer_.size() - writer_pos_;
-	}
+	size_t writable_bytes() const;
 
-	size_t prependable_bytes() const
-	{
-		return reader_pos_;
-	}
+	size_t prependable_bytes() const;
 
-	const uint8_t* peek() const
-	{
-		return begin() + reader_pos_;
-	}
+	const char* peek() const;
 
 	void ensure_writable_bytes(size_t len);
 
@@ -41,22 +29,17 @@ public:
 	void prepend(const void *user_data, size_t len);
 
 private:
+	char* begin();
+
+	const char* begin() const;
+
 	void make_space(size_t len);
 
 	void has_written(size_t len);
 
-	uint8_t* begin()
-	{
-		return &*buffer_.begin();
-	}
-
-	const uint8_t* begin() const
-	{
-		return &*buffer_.begin();
-	}
 
 private:
 	size_t reader_pos_;
 	size_t writer_pos_;
-	std::vector<uint8_t> buffer_;
+	std::vector<char> buffer_;
 };
