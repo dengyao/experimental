@@ -37,7 +37,6 @@ private:
 
 	void has_written(size_t len);
 
-
 private:
 	size_t reader_pos_;
 	size_t writer_pos_;

@@ -50,17 +50,17 @@ void NetMessage::has_written(size_t len)
 
 size_t NetMessage::readable_bytes() const
 {
-
+	return reader_pos_ - kCheapPrepend;
 }
 
 size_t NetMessage::writable_bytes() const
 {
-
+	return buffer_.size() - writer_pos_;
 }
 
 size_t NetMessage::prependable_bytes() const
 {
-
+	return reader_pos_;
 }
 
 const char* NetMessage::peek() const
@@ -70,15 +70,25 @@ const char* NetMessage::peek() const
 
 void NetMessage::ensure_writable_bytes(size_t len)
 {
-
+	if (writable_bytes() < len)
+	{
+		make_space(len);
+	}
+	assert(writable_bytes() >= len);
 }
 
 void NetMessage::append(const void *user_data, size_t len)
 {
-
+	ensure_writable_bytes(len);
+	const char *data = reinterpret_cast<const char *>(user_data);
+	std::copy(data, data + len, begin() + writer_pos_);
+	has_written(len);
 }
 
 void NetMessage::prepend(const void *user_data, size_t len)
 {
-
+	assert(prependable_bytes() >= len);
+	reader_pos_ -= len;
+	const char *data = reinterpret_cast<const char *>(user_data);
+	std::copy(data, data + len, begin() + reader_pos_);
 }
