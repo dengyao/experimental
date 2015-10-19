@@ -92,3 +92,22 @@ void NetMessage::prepend(const void *user_data, size_t len)
 	const char *data = reinterpret_cast<const char *>(user_data);
 	std::copy(data, data + len, begin() + reader_pos_);
 }
+
+void NetMessage::retrieve_all()
+{
+	reader_pos_ = kCheapPrepend;
+	writer_pos_ = kCheapPrepend;
+}
+
+void NetMessage::retrieve(size_t len)
+{
+	assert(readable_bytes() >= len);
+	if (readable_bytes() > len)
+	{
+		reader_pos_ += len;
+	}
+	else
+	{
+		retrieve_all();
+	}
+}

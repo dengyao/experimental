@@ -28,6 +28,10 @@ public:
 
 	void prepend(const void *user_data, size_t len);
 
+	void retrieve_all();
+
+	void retrieve(size_t len);
+
 private:
 	char* begin();
 
