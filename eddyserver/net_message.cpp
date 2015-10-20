@@ -1,4 +1,5 @@
 ﻿#include "net_message.h"
+#include <cassert>
 
 
 NetMessage::NetMessage(size_t initial_size)
@@ -22,7 +23,7 @@ char* NetMessage::begin()
 
 const char* NetMessage::begin() const
 {
-	return begin();
+	return &*buffer_.begin();
 }
 
 void NetMessage::make_space(size_t len)
@@ -50,7 +51,7 @@ void NetMessage::has_written(size_t len)
 
 size_t NetMessage::readable_bytes() const
 {
-	return reader_pos_ - kCheapPrepend;
+	return writer_pos_ - reader_pos_;
 }
 
 size_t NetMessage::writable_bytes() const
@@ -190,17 +191,20 @@ std::string NetMessage::read_string()
 	const char *eos = peek();
 	while (*eos++);
 	size_t lenght = eos - peek() - 1;
-	assert(readable_bytes() > lenght);
+	assert(readable_bytes() >= lenght);
 	std::string value;
-	value.resize(lenght);
-	::memcpy(&*value.begin(), peek(), lenght);
-	retrieve(lenght);
+	if (lenght > 0)
+	{
+		value.resize(lenght);
+		::memcpy(&*value.begin(), peek(), lenght);
+		retrieve(lenght);
+	}
 	return value;
 }
 
 std::string NetMessage::read_lenght_and_string()
 {
-	assert(readable_bytes() > sizeof(uint32_t));
+	assert(readable_bytes() >= sizeof(uint32_t));
 	uint32_t lenght = 0;
 	::memcpy(&lenght, peek(), sizeof(uint32_t));
 	retrieve(sizeof(uint32_t));
@@ -256,7 +260,10 @@ void NetMessage::write_uint64(uint64_t value)
 
 void NetMessage::write_string(const std::string &value)
 {
-	append(&*value.begin(), value.length());
+	if (!value.empty())
+	{
+		append(&*value.begin(), value.length());
+	}
 }
 
 void NetMessage::write_lenght_and_string(const std::string &value)

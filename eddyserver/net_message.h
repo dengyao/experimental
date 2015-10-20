@@ -1,6 +1,6 @@
 ﻿#include <vector>
+#include <string>
 #include <cstdint>
-#include <cassert>
 
 
 class NetMessage final
