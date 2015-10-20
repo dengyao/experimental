@@ -77,12 +77,15 @@ IOServiceThread& IOServiceThreadManager::thread()
 	}
 
 	typedef std::pair<size_t, size_t> value_type;
-	std::priority_queue<value_type, std::vector<value_type>, std::greater<value_type>> que;
+	std::priority_queue<value_type, std::vector<value_type>, std::greater<value_type> > td_queue;
 	for (size_t i = 0; i < threads_.size(); ++i)
 	{
-		que.push(std::make_pair(threads_[i]->load(), i));
+		if (kMainThreadIndex != i)
+		{
+			td_queue.push(std::make_pair(threads_[i]->load(), i));
+		}
 	}
-	return *threads_[que.top().second];
+	return *threads_[td_queue.top().second];
 }
 
 IOServiceThread& IOServiceThreadManager::thread(ThreadID id)
