@@ -20,6 +20,8 @@ public:
 
 	size_t prependable_bytes() const;
 
+	void make_space(size_t len);
+
 	const char* peek() const;
 
 	void retrieve(size_t len);
@@ -76,8 +78,6 @@ private:
 	char* begin();
 
 	const char* begin() const;
-
-	void make_space(size_t len);
 
 	void has_written(size_t len);
 
