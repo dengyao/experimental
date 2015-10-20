@@ -36,7 +36,7 @@ void NetMessage::make_space(size_t len)
 	{
 		assert(kCheapPrepend < reader_pos_);
 		size_t readable = readable_bytes();
-		std::copy(begin() + reader_pos_, begin() + writer_pos_, begin() + kCheapPrepend);
+		::memcpy(begin() + kCheapPrepend, begin() + reader_pos_, readable);
 		reader_pos_ = kCheapPrepend;
 		writer_pos_ = reader_pos_ + readable;
 		assert(readable == readable_bytes());
@@ -82,7 +82,7 @@ void NetMessage::append(const void *user_data, size_t len)
 {
 	ensure_writable_bytes(len);
 	const char *data = reinterpret_cast<const char *>(user_data);
-	std::copy(data, data + len, begin() + writer_pos_);
+	::memcpy(begin() + writer_pos_, data, len);
 	has_written(len);
 }
 
@@ -91,7 +91,7 @@ void NetMessage::prepend(const void *user_data, size_t len)
 	assert(prependable_bytes() >= len);
 	reader_pos_ -= len;
 	const char *data = reinterpret_cast<const char *>(user_data);
-	std::copy(data, data + len, begin() + reader_pos_);
+	::memcpy(begin() + reader_pos_, data, len);
 }
 
 void NetMessage::retrieve_all()
