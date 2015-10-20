@@ -22,15 +22,55 @@ public:
 
 	const char* peek() const;
 
-	void ensure_writable_bytes(size_t len);
+	void retrieve(size_t len);
+
+	void retrieve_all();
 
 	void append(const void *user_data, size_t len);
 
 	void prepend(const void *user_data, size_t len);
 
-	void retrieve_all();
+public:
+	int8_t read_int8();
 
-	void retrieve(size_t len);
+	int16_t read_int16();
+
+	int32_t read_int32();
+
+	int64_t read_int64();
+
+	uint8_t read_uint8();
+
+	uint16_t read_uint16();
+
+	uint32_t read_uint32();
+
+	uint64_t read_uint64();
+
+	std::string read_string();
+
+	std::string read_lenght_and_string();
+
+public:
+	void write_int8(int8_t value);
+
+	void write_int16(int16_t value);
+
+	void write_int32(int32_t value);
+
+	void write_int64(int64_t value);
+
+	void write_uint8(uint8_t value);
+
+	void write_uint16(uint16_t value);
+
+	void write_uint32(uint32_t value);
+
+	void write_uint64(uint64_t value);
+
+	void write_string(const std::string &value);
+
+	void write_lenght_and_string(const std::string &value);
 
 private:
 	char* begin();
@@ -40,6 +80,8 @@ private:
 	void make_space(size_t len);
 
 	void has_written(size_t len);
+
+	void ensure_writable_bytes(size_t len);
 
 private:
 	size_t reader_pos_;

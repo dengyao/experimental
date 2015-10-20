@@ -11,10 +11,10 @@ public:
 	virtual ~MessageFilterInterface() = default;
 
 public:
-	virtual size_t read(std::vector<NETMessage> &messages_received, NETMessage &messages) = 0;
-	virtual size_t write(std::vector<NETMessage> &messages_to_be_sent, NETMessage &messages) = 0;
+	virtual size_t read(std::vector<NetMessage> &messages_received, NetMessage &message) = 0;
+	virtual size_t write(std::vector<NetMessage> &messages_to_be_sent, NetMessage &message) = 0;
 	virtual size_t bytes_wanna_read() = 0;
-	virtual size_t bytes_wanna_write(std::vector<NETMessage> &messages_to_be_sent) = 0;
+	virtual size_t bytes_wanna_write(std::vector<NetMessage> &messages_to_be_sent) = 0;
 };
 
 class SimpleMessageFilter final : public MessageFilterInterface
@@ -28,13 +28,13 @@ public:
 	~SimpleMessageFilter() = default;
 
 public:
-	size_t read(std::vector<NETMessage> &messages_received, NETMessage &buffer) override;
+	size_t read(std::vector<NetMessage> &messages_received, NetMessage &message) override;
 
-	size_t write(std::vector<NETMessage> &messages_to_be_sent, NETMessage &buffer) override;
+	size_t write(std::vector<NetMessage> &messages_to_be_sent, NetMessage &message) override;
 
 	size_t bytes_wanna_read() override;
 
-	size_t bytes_wanna_write(std::vector<NETMessage> &messages_to_be_sent) override;
+	size_t bytes_wanna_write(std::vector<NetMessage> &messages_to_be_sent) override;
 
 private:
 	bool				header_read_;

@@ -111,3 +111,156 @@ void NetMessage::retrieve(size_t len)
 		retrieve_all();
 	}
 }
+
+int8_t NetMessage::read_int8()
+{
+	assert(readable_bytes() >= sizeof(int8_t));
+	int8_t value = 0;
+	::memcpy(&value, peek(), sizeof(int8_t));
+	retrieve(sizeof(int8_t));
+	return value;
+}
+
+int16_t NetMessage::read_int16()
+{
+	assert(readable_bytes() >= sizeof(int16_t));
+	int16_t value = 0;
+	::memcpy(&value, peek(), sizeof(int16_t));
+	retrieve(sizeof(int16_t));
+	return value;
+}
+
+int32_t NetMessage::read_int32()
+{
+	assert(readable_bytes() >= sizeof(int32_t));
+	int32_t value = 0;
+	::memcpy(&value, peek(), sizeof(int32_t));
+	retrieve(sizeof(int32_t));
+	return value;
+}
+
+int64_t NetMessage::read_int64()
+{
+	assert(readable_bytes() >= sizeof(int64_t));
+	int64_t value = 0;
+	::memcpy(&value, peek(), sizeof(int64_t));
+	retrieve(sizeof(int64_t));
+	return value;
+}
+
+uint8_t NetMessage::read_uint8()
+{
+	assert(readable_bytes() >= sizeof(uint8_t));
+	uint8_t value = 0;
+	::memcpy(&value, peek(), sizeof(uint8_t));
+	retrieve(sizeof(uint8_t));
+	return value;
+}
+
+uint16_t NetMessage::read_uint16()
+{
+	assert(readable_bytes() >= sizeof(uint16_t));
+	uint16_t value = 0;
+	::memcpy(&value, peek(), sizeof(uint16_t));
+	retrieve(sizeof(uint16_t));
+	return value;
+}
+
+uint32_t NetMessage::read_uint32()
+{
+	assert(readable_bytes() >= sizeof(uint32_t));
+	uint32_t value = 0;
+	::memcpy(&value, peek(), sizeof(uint32_t));
+	retrieve(sizeof(uint32_t));
+	return value;
+}
+
+uint64_t NetMessage::read_uint64()
+{
+	assert(readable_bytes() >= sizeof(uint64_t));
+	uint64_t value = 0;
+	::memcpy(&value, peek(), sizeof(uint64_t));
+	retrieve(sizeof(uint64_t));
+	return value;
+}
+
+std::string NetMessage::read_string()
+{
+	assert(readable_bytes() > 0);
+	const char *eos = peek();
+	while (*eos++);
+	size_t lenght = eos - peek() - 1;
+	assert(readable_bytes() > lenght);
+	std::string value;
+	value.resize(lenght);
+	::memcpy(&*value.begin(), peek(), lenght);
+	retrieve(lenght);
+	return value;
+}
+
+std::string NetMessage::read_lenght_and_string()
+{
+	assert(readable_bytes() > sizeof(uint32_t));
+	uint32_t lenght = 0;
+	::memcpy(&lenght, peek(), sizeof(uint32_t));
+	retrieve(sizeof(uint32_t));
+	std::string value;
+	if (lenght > 0)
+	{
+		value.resize(lenght);
+		::memcpy(&*value.begin(), peek(), lenght);
+		retrieve(lenght);
+	}
+	return value;
+}
+
+void NetMessage::write_int8(int8_t value)
+{
+	append(&value, sizeof(int8_t));
+}
+
+void NetMessage::write_int16(int16_t value)
+{
+	append(&value, sizeof(int16_t));
+}
+
+void NetMessage::write_int32(int32_t value)
+{
+	append(&value, sizeof(int32_t));
+}
+
+void NetMessage::write_int64(int64_t value)
+{
+	append(&value, sizeof(int64_t));
+}
+
+void NetMessage::write_uint8(uint8_t value)
+{
+	append(&value, sizeof(uint8_t));
+}
+
+void NetMessage::write_uint16(uint16_t value)
+{
+	append(&value, sizeof(uint16_t));
+}
+
+void NetMessage::write_uint32(uint32_t value)
+{
+	append(&value, sizeof(uint32_t));
+}
+
+void NetMessage::write_uint64(uint64_t value)
+{
+	append(&value, sizeof(uint64_t));
+}
+
+void NetMessage::write_string(const std::string &value)
+{
+	append(&*value.begin(), value.length());
+}
+
+void NetMessage::write_lenght_and_string(const std::string &value)
+{
+	write_uint32(value.length());
+	write_string(value);
+}
