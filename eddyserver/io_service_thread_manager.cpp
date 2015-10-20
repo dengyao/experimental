@@ -104,23 +104,23 @@ IOServiceThread& IOServiceThreadManager::main_thread()
 
 void IOServiceThreadManager::on_session_connect(SessionPointer session, SessionHandlerPointer handler)
 {
-	TCPSessionID id;
+	TCPSessionID id = IDGenerator::kInvalidID;
 	if (id_generator_.get(id))
 	{
 		handler->init(id, session->thread().id(), this);
 		session_handler_map_.insert(std::make_pair(id, handler));
-		session->thread().post(std::bind(&tcp_session::init, session, id));
+		session->thread().post(std::bind(&TCPSession::init, session, id));
 		handler->on_connect();
 	}
 }
 
-void IOServiceThreadManager::on_session_close(session_id id)
+void IOServiceThreadManager::on_session_close(TCPSessionID id)
 {
-	assert(id != kInvalidSessionID);
-	session_handler_map::iterator itr = session_handler_map_.find(id);
+	assert(IDGenerator::kInvalidID != id);
+	SessionHandlerMap::iterator itr = session_handler_map_.find(id);
 	if (itr != session_handler_map_.end())
 	{
-		session_handler_ptr handler = itr->second;
+		SessionHandlerPointer handler = itr->second;
 		if (handler != nullptr)
 		{
 			handler->on_close();
@@ -128,15 +128,19 @@ void IOServiceThreadManager::on_session_close(session_id id)
 		}
 		session_handler_map_.erase(itr);
 	}
-	id_generator_.put(id);
+
+	if (IDGenerator::kInvalidID != id)
+	{
+		id_generator_.put(id);
+	}
 }
 
-io_service_thread_manager::session_handler_ptr IOServiceThreadManager::session_handler(session_id id) const
+IOServiceThreadManager::SessionHandlerPointer IOServiceThreadManager::session_handler(TCPSessionID id) const
 {
-	session_handler_map::const_iterator itr = session_handler_map_.find(id);
+	SessionHandlerMap::const_iterator itr = session_handler_map_.find(id);
 	if (itr != session_handler_map_.end())
 	{
 		return itr->second;
 	}
-	return session_handler_ptr();
+	return SessionHandlerPointer();
 }

@@ -6,12 +6,11 @@
 class IDGenerator
 {
 public:
-	explicit IDGenerator(uint32_t threshold = 4096)
-		: next_(0)
-		, threshold_(threshold)
-	{
+	static const uint32_t kInvalidID = 0;
 
-	}
+public:
+	explicit IDGenerator(uint32_t threshold = 4096)
+		: next_(kInvalidID) , threshold_(threshold) {}
 
 	bool get(uint32_t &id)
 	{

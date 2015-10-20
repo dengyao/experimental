@@ -36,9 +36,9 @@ public:
 
 	void on_session_connect(SessionPointer session, SessionHandlerPointer handler);
 
-	void on_session_close(ThreadID id);
+	void on_session_close(TCPSessionID id);
 
-	SessionHandlerPointer session_handler(ThreadID id) const;
+	SessionHandlerPointer session_handler(TCPSessionID id) const;
 
 protected:
 	IOServiceThreadManager(const IOServiceThreadManager&) = delete;
