@@ -88,16 +88,18 @@ IOServiceThread& IOServiceThreadManager::thread()
 	return *threads_[td_queue.top().second];
 }
 
-IOServiceThread& IOServiceThreadManager::thread(ThreadID id)
+bool IOServiceThreadManager::thread(ThreadID id, IOServiceThread *&ret_thread)
 {
+	ret_thread = nullptr;
 	for (size_t i = 0; i < threads_.size(); ++i)
 	{
 		if (threads_[i]->id() == id)
 		{
-			return *threads_[i];
+			ret_thread = threads_[i].get();
+			return true;
 		}
 	}
-	throw std::runtime_error("not found thread");
+	return false;
 }
 
 IOServiceThread& IOServiceThreadManager::main_thread()

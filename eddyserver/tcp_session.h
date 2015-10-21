@@ -22,7 +22,7 @@ public:
 public:
 	TCPSessionID id() const
 	{
-		return id_;
+		return session_id_;
 	}
 
 	SocketType& socket()
@@ -40,11 +40,11 @@ private:
 
 	void set_session_id(TCPSessionID id)
 	{
-		id_ = id;
+		session_id_ = id;
 	}
 
 private:
-	TCPSessionID			id_;
+	TCPSessionID			session_id_;
 	SocketType				socket_;
 	IOServiceThread&		thread_;
 	MessageFilterPointer	filter_;

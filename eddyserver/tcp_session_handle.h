@@ -1,9 +1,11 @@
 ﻿#pragma once
 
-#include "tcp_session.h"
 #include "types.h"
+#include "net_message.h"
+#include "tcp_session.h"
 
 class IOServiceThreadManager;
+
 
 class TCPSessionHandle : public std::enable_shared_from_this < TCPSessionHandle >
 {
@@ -14,7 +16,7 @@ public:
 
 	virtual ~TCPSessionHandle();
 
-	void send(message_buffer &message);
+	void send(NetMessage &message);
 
 	void close();
 
@@ -25,7 +27,7 @@ public:
 public:
 	virtual void on_connect() = 0;
 
-	virtual void on_message(message_buffer &message) = 0;
+	virtual void on_message(NetMessage &message) = 0;
 
 	virtual void on_close() = 0;
 
@@ -40,5 +42,6 @@ private:
 	TCPSessionID				session_id_;
 	ThreadID					session_thread_id_;
 	IOServiceThreadManager*		io_thread_manager_;
+
 	//message_vector				messages_to_be_sent_;
 };

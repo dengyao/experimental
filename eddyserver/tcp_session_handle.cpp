@@ -1,38 +1,39 @@
 ﻿#include "tcp_session_handle.h"
+#include "id_generator.h"
 
 
-tcp_session_handle::tcp_session_handle()
-	: session_id_(kInvalidSessionID)
+TCPSessionHandle::TCPSessionHandle()
+	: session_id_(IDGenerator::kInvalidID)
 {
 
 }
 
-tcp_session_handle::~tcp_session_handle()
+TCPSessionHandle::~TCPSessionHandle()
 {
 
 }
 
-void tcp_session_handle::send(message_buffer &message)
+void TCPSessionHandle::send(NetMessage &message)
 {
 
 }
 
-void tcp_session_handle::close()
+void TCPSessionHandle::close()
 {
 
 }
 
-void tcp_session_handle::dispose()
+void TCPSessionHandle::dispose()
 {
-	session_id_ = kInvalidSessionID;
+	session_id_ = IDGenerator::kInvalidID;
 }
 
-bool tcp_session_handle::is_closed() const
+bool TCPSessionHandle::is_closed() const
 {
-	return kInvalidSessionID == session_id_;
+	return IDGenerator::kInvalidID == session_id_;
 }
 
-void tcp_session_handle::init(session_id sid, thread_id tid, io_service_thread_manager* manager)
+void TCPSessionHandle::init(TCPSessionID sid, ThreadID tid, IOServiceThreadManager* manager)
 {
 	session_id_ = sid;
 	session_thread_id_ = tid;

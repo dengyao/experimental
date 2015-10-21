@@ -1,17 +1,16 @@
 ﻿#include "tcp_session.h"
 
 #include <cassert>
+#include "id_generator.h"
 #include "message_filter.h"
 #include "io_service_thread.h"
 
 
-const TCPSessionID kInvalidSessionID = 0;
-
 TCPSession::TCPSession(IOServiceThread &thread, MessageFilterPointer filter)
 	: thread_(thread)
 	, filter_(filter)
-	, id_(kInvalidSessionID)
 	, socket_(thread.io_service())
+	, session_id_(IDGenerator::kInvalidID)
 {
 
 }
@@ -23,7 +22,7 @@ TCPSession::~TCPSession()
 
 void TCPSession::init(TCPSessionID id)
 {
-	assert(id != kInvalidSessionIDkInvalidSessionID);
+	assert(IDGenerator::kInvalidID != id);
 
 	set_session_id(id);
 	thread_.session_queue().add(shared_from_this());

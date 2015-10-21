@@ -30,7 +30,7 @@ public:
 
 	IOServiceThread& thread();
 
-	IOServiceThread& thread(ThreadID id);
+	bool thread(ThreadID id, IOServiceThread *&ret_thread);
 
 	IOServiceThread& main_thread();
 
