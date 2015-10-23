@@ -3,6 +3,7 @@
 #include <memory>
 #include <asio/ip/tcp.hpp>
 #include "types.h"
+#include "net_message.h"
 
 class IOServiceThread;
 class MessageFilterInterface;
@@ -13,6 +14,7 @@ class TCPSession final : public std::enable_shared_from_this < TCPSession >
 
 public:
 	typedef asio::ip::tcp::socket					SocketType;
+	typedef std::shared_ptr<NetMessage>				NetMessagePointer;
 	typedef std::shared_ptr<MessageFilterInterface>	MessageFilterPointer;
 
 public:
@@ -42,6 +44,8 @@ private:
 	{
 		session_id_ = id;
 	}
+
+	void on_message(NetMessagePointer message, asio::error_code, size_t size);
 
 private:
 	TCPSessionID			session_id_;

@@ -31,4 +31,19 @@ void TCPSession::init(TCPSessionID id)
 	socket_.set_option(option);
 
 	size_t size = filter_->bytes_wanna_read();
+	if (size == MAXSIZE_T)
+	{
+
+	}
+	else
+	{
+		NetMessage buffer;
+		buffer.make_space(size);
+		socket_.async_read_some(asio::buffer(buffer.peek(), size), , );
+	}
+}
+
+void TCPSession::on_message(NetMessagePointer message, asio::error_code, size_t size)
+{
+
 }
