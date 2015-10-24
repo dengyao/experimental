@@ -37,6 +37,8 @@ public:
 		return thread_;
 	}
 
+	void close();
+
 private:
 	void init(TCPSessionID id);
 
@@ -45,11 +47,19 @@ private:
 		session_id_ = id;
 	}
 
-	void on_message(NetMessagePointer message, asio::error_code, size_t size);
+	void handle_read(asio::error_code, size_t bytes_transferred);
+
+	void hanlde_write(asio::error_code, size_t bytes_transferred);
+
+	void hanlde_close();
 
 private:
+	bool					closed_;
+	int						num_handlers_;
 	TCPSessionID			session_id_;
 	SocketType				socket_;
 	IOServiceThread&		thread_;
 	MessageFilterPointer	filter_;
+	std::vector<NetMessage>	messages_received_;
+	std::vector<NetMessage>	messages_to_be_sent_;
 };
