@@ -1,6 +1,6 @@
 ﻿#include "io_service_thread_manager.h"
 
-#include <queue>
+#include <limits>
 #include <cassert>
 #include "io_service_thread.h"
 #include "tcp_session_handle.h"
@@ -76,16 +76,16 @@ IOServiceThread& IOServiceThreadManager::thread()
 		return *threads_[kMainThreadIndex];
 	}
 
-	typedef std::pair<size_t, size_t> value_type;
-	std::priority_queue<value_type, std::vector<value_type>, std::greater<value_type> > td_queue;
+	size_t min_element_index = kMainThreadIndex;
+	size_t min_element_value = std::numeric_limits<size_t>::max();
 	for (size_t i = 0; i < threads_.size(); ++i)
 	{
-		if (kMainThreadIndex != i)
+		if (kMainThreadIndex != i && threads_[i]->load() < min_element_value)
 		{
-			td_queue.push(std::make_pair(threads_[i]->load(), i));
+			min_element_index = i;
 		}
 	}
-	return *threads_[td_queue.top().second];
+	return *threads_[min_element_index];
 }
 
 bool IOServiceThreadManager::thread(ThreadID id, IOServiceThread *&ret_thread)
