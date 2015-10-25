@@ -47,9 +47,9 @@ private:
 		session_id_ = id;
 	}
 
-	void handle_read(asio::error_code, size_t bytes_transferred);
+	void handle_read(asio::error_code error_code, size_t bytes_transferred);
 
-	void hanlde_write(asio::error_code, size_t bytes_transferred);
+	void hanlde_write(asio::error_code error_code, size_t bytes_transferred);
 
 	void hanlde_close();
 

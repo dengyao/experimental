@@ -64,6 +64,11 @@ size_t NetMessage::prependable_bytes() const
 	return reader_pos_;
 }
 
+char* NetMessage::peek()
+{
+	return begin() + reader_pos_;
+}
+
 const char* NetMessage::peek() const
 {
 	return begin() + reader_pos_;

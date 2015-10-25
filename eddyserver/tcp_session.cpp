@@ -24,7 +24,7 @@ TCPSession::~TCPSession()
 
 }
 
-{
+//{
 	/*void SendMessageListToHandler(TCPIOThreadManager& manager,
 								  TCPSessionID id,
 								  NetMessageVector* messages) {
@@ -67,7 +67,7 @@ TCPSession::~TCPSession()
 
 		session->messages_received().clear();
 	}*/
-}
+//}
 
 void TCPSession::init(TCPSessionID id)
 {
@@ -80,26 +80,24 @@ void TCPSession::init(TCPSessionID id)
 	socket_.set_option(option);
 
 	size_t bytes_wanna_read = filter_->bytes_wanna_read();
-	if (bytes_wanna_read == 0)
+	if (bytes_wanna_read == 0) return;
+
+	NetMessagePointer message = std::make_shared<NetMessage>(bytes_wanna_read);
+	socket_.async_receive(asio::buffer(message->peek(), message->writable_bytes()),
+		std::bind(&TCPSession::handle_read, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
+}
+
+void TCPSession::hanlde_write(asio::error_code error_code, size_t bytes_transferred)
+{
+
+}
+
+void TCPSession::handle_read(asio::error_code error_code, size_t bytes_transferred)
+{
+	if (error_code)
 	{
 		return;
 	}
-	else
-	{
-		NetMessagePointer message = std::make_shared<NetMessage>(bytes_wanna_read);
-		socket_.async_receive(asio::buffer(message->peek(),bytes_wanna_read),
-							  std::bind(&TCPSession::handle_read, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
-	}
-}
-
-void TCPSession::hanlde_write(asio::error_code, size_t bytes_transferred)
-{
-
-}
-
-void TCPSession::handle_read(asio::error_code, size_t bytes_transferred)
-{
-
 }
 
 void TCPSession::hanlde_close()

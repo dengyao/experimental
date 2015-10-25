@@ -50,7 +50,7 @@ size_t SimpleMessageFilter::write(std::vector<NetMessage> &messages_to_be_sent, 
 	size_t result = 0;
 	for (NetMessage &message : messages_to_be_sent)
 	{
-		MessageHeader lenght = message.readable_bytes();
+		MessageHeader lenght = static_cast<MessageHeader>(message.readable_bytes());
 		lenght = htons(lenght);
 		buffer.append(&lenght, s_header_size_);
 		buffer.append(message.peek(), lenght);

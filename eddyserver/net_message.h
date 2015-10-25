@@ -1,4 +1,6 @@
-﻿#include <vector>
+﻿#pragma once
+
+#include <vector>
 #include <string>
 #include <cstdint>
 
@@ -21,6 +23,8 @@ public:
 	size_t prependable_bytes() const;
 
 	void make_space(size_t len);
+
+	char* peek();
 
 	const char* peek() const;
 
