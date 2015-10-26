@@ -24,6 +24,8 @@ public:
 
 	NetMessage& operator= (NetMessage &&that);
 
+	void swap(NetMessage &that);
+
 public:
 	size_t readable_bytes() const;
 

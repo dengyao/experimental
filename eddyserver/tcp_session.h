@@ -37,6 +37,8 @@ public:
 		return thread_;
 	}
 
+	void post_message_list(std::vector<NetMessage> &messages);
+
 	std::vector<NetMessage>& messages_received()
 	{
 		return messages_received_;
@@ -65,6 +67,9 @@ private:
 	SocketType				socket_;
 	IOServiceThread&		thread_;
 	MessageFilterPointer	filter_;
+	NetMessage				buffer_receiving_;
+	NetMessage				buffer_sending_;
+	NetMessage				buffer_to_be_sent_;
 	std::vector<NetMessage>	messages_received_;
 	std::vector<NetMessage>	messages_to_be_sent_;
 };

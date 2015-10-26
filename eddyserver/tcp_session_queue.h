@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include <mutex>
 #include <memory>
+#include <atomic>
 #include <unordered_map>
 #include "types.h"
 
@@ -12,13 +12,15 @@ class TCPSessionQueue final
 	typedef std::shared_ptr<TCPSession> SessionPointer;
 
 public:
-	TCPSessionQueue() = default;
-	~TCPSessionQueue() = default;
+	TCPSessionQueue();
+	~TCPSessionQueue();
 
 public:
 	size_t size() const;
 
 	void add(SessionPointer session);
+
+	bool get(TCPSessionID id, SessionPointer &session);
 
 	void remove(TCPSessionID id);
 
@@ -29,6 +31,6 @@ private:
 	TCPSessionQueue& operator= (const TCPSessionQueue&) = delete;
 
 private:
-	mutable std::mutex									locker_;
+	std::atomic<size_t>									load_count_;
 	std::unordered_map<TCPSessionID, SessionPointer>	session_queue_;
 };

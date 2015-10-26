@@ -42,6 +42,4 @@ private:
 	TCPSessionID				session_id_;
 	ThreadID					session_thread_id_;
 	IOServiceThreadManager*		io_thread_manager_;
-
-	//message_vector				messages_to_be_sent_;
 };

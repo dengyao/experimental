@@ -43,16 +43,31 @@ NetMessage& NetMessage::operator= (const NetMessage &that)
 
 NetMessage& NetMessage::operator= (NetMessage &&that)
 {
-	std::vector<char> &&temp = std::move(buffer_);
+	std::vector<char> &&origin_buffer = std::move(buffer_);
 
 	buffer_ = std::move(that.buffer_);
 	reader_pos_ = that.reader_pos_;
 	writer_pos_ = that.writer_pos_;
 
-	that.buffer_ = temp;
+	that.buffer_ = origin_buffer;
 	that.reader_pos_ = kCheapPrepend;
 	that.writer_pos_ = kCheapPrepend;
 	return *this;
+}
+
+void NetMessage::swap(NetMessage &that)
+{
+	size_t origin_read_pos = reader_pos_;
+	size_t origin_write_pos = writer_pos_;
+	std::vector<char> &&origin_buffer = std::move(buffer_);
+
+	buffer_ = std::move(that.buffer_);
+	reader_pos_ = that.reader_pos_;
+	writer_pos_ = that.writer_pos_;
+
+	that.buffer_ = origin_buffer;
+	that.reader_pos_ = origin_read_pos;
+	that.writer_pos_ = origin_write_pos;
 }
 
 char* NetMessage::begin()

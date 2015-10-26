@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include <limits>
 #include <numeric>
 #include "types.h"
 #include "net_message.h"
@@ -10,6 +11,12 @@ class MessageFilterInterface
 public:
 	MessageFilterInterface() = default;
 	virtual ~MessageFilterInterface() = default;
+
+public:
+	size_t any_bytes() const
+	{
+		return std::numeric_limits<size_t>::max();
+	}
 
 public:
 	virtual size_t bytes_wanna_read() = 0;

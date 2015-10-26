@@ -9,22 +9,6 @@
 #include "io_service_thread_manager.h"
 
 
-TCPSession::TCPSession(IOServiceThread &thread, MessageFilterPointer filter)
-	: closed_(false)
-	, thread_(thread)
-	, filter_(filter)
-	, num_handlers_(0)
-	, socket_(thread.io_service())
-	, session_id_(IDGenerator::kInvalidID)
-{
-
-}
-
-TCPSession::~TCPSession()
-{
-
-}
-
 namespace helper
 {
 	typedef std::shared_ptr< std::vector<NetMessage> > NetMessageVecPointer;
@@ -62,6 +46,23 @@ namespace helper
 	}
 }
 
+
+TCPSession::TCPSession(IOServiceThread &thread, MessageFilterPointer filter)
+	: closed_(false)
+	, thread_(thread)
+	, filter_(filter)
+	, num_handlers_(0)
+	, socket_(thread.io_service())
+	, session_id_(IDGenerator::kInvalidID)
+{
+
+}
+
+TCPSession::~TCPSession()
+{
+
+}
+
 void TCPSession::init(TCPSessionID id)
 {
 	assert(IDGenerator::kInvalidID != id);
@@ -75,22 +76,28 @@ void TCPSession::init(TCPSessionID id)
 	size_t bytes_wanna_read = filter_->bytes_wanna_read();
 	if (bytes_wanna_read == 0) return;
 
-	NetMessagePointer message = std::make_shared<NetMessage>(bytes_wanna_read);
-	socket_.async_receive(asio::buffer(message->peek(), message->writable_bytes()),
-		std::bind(&TCPSession::handle_read, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
+	++num_handlers_;
+	if (bytes_wanna_read == filter_->any_bytes())
+	{
+		socket_.async_read_some(asio::buffer(buffer_receiving_.peek(), buffer_receiving_.writable_bytes()),
+								std::bind(&TCPSession::handle_read, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
+	}
+	else
+	{
+		buffer_receiving_.make_space(bytes_wanna_read);
+		socket_.async_receive(asio::buffer(buffer_receiving_.peek(), bytes_wanna_read),
+							  std::bind(&TCPSession::handle_read, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
+	}
 }
 
-void TCPSession::hanlde_write(asio::error_code error_code, size_t bytes_transferred)
+void TCPSession::close()
 {
-
-}
-
-void TCPSession::handle_read(asio::error_code error_code, size_t bytes_transferred)
-{
-	if (error_code)
+	if (closed_)
 	{
 		return;
 	}
+	closed_ = true;
+	hanlde_close();
 }
 
 void TCPSession::hanlde_close()
@@ -114,12 +121,100 @@ void TCPSession::hanlde_close()
 	thread_.session_queue().remove(id());
 }
 
-void TCPSession::close()
+void TCPSession::post_message_list(std::vector<NetMessage> &messages)
 {
-	if (closed_)
+	if (closed_) return;
+
+	assert(!messages.empty());
+	messages_to_be_sent_ = std::move(messages);
+
+	size_t bytes_wanna_write = filter_->bytes_wanna_write(messages_to_be_sent_);
+	if (bytes_wanna_write == 0) return;
+	buffer_to_be_sent_.make_space(bytes_wanna_write);
+	filter_->write(messages_to_be_sent_, buffer_to_be_sent_);
+
+	if (buffer_sending_.readable_bytes() == 0)
 	{
+		++num_handlers_;
+		buffer_sending_.swap(buffer_to_be_sent_);
+		socket_.async_send(asio::buffer(buffer_sending_.peek(), bytes_wanna_write),
+						   std::bind(&TCPSession::hanlde_write, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
+	}
+}
+
+void TCPSession::handle_read(asio::error_code error_code, size_t bytes_transferred)
+{
+	--num_handlers_;
+	assert(num_handlers_ >= 0);
+
+	if (error_code || closed_)
+	{
+		closed_ = true;
+		hanlde_close();
 		return;
 	}
-	closed_ = true;
-	hanlde_close();
+
+	bool wanna_post = messages_received_.empty();
+	size_t bytes_read = filter_->read(buffer_receiving_, messages_received_);
+	assert(bytes_read == bytes_transferred);
+	wanna_post = wanna_post && !messages_received_.empty();
+
+	if (wanna_post)
+	{
+		if (thread_.id() == thread_.manager().main_thread().id())
+		{
+			helper::SendMessageListDirectly(shared_from_this());
+		}
+		else
+		{
+			thread_.post(std::bind(helper::PackMessageList, shared_from_this()));
+		}
+	}
+
+	size_t bytes_wanna_read = filter_->bytes_wanna_read();
+	if (bytes_wanna_read == 0) return;
+
+	++num_handlers_;
+	buffer_receiving_.retrieve_all();
+	if (bytes_wanna_read == filter_->any_bytes())
+	{
+		socket_.async_read_some(asio::buffer(buffer_receiving_.peek(), buffer_receiving_.writable_bytes()),
+								std::bind(&TCPSession::handle_read, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
+	}
+	else
+	{
+		buffer_receiving_.make_space(bytes_wanna_read);
+		socket_.async_receive(asio::buffer(buffer_receiving_.peek(), bytes_wanna_read),
+							  std::bind(&TCPSession::handle_read, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
+	}
+}
+
+void TCPSession::hanlde_write(asio::error_code error_code, size_t bytes_transferred)
+{
+	--num_handlers_;
+	assert(num_handlers_ >= 0);
+
+	if (error_code || closed_)
+	{
+		closed_ = true;
+		hanlde_close();
+		return;
+	}
+
+	buffer_sending_.retrieve_all();
+
+	if (buffer_to_be_sent_.readable_bytes() == 0)
+	{
+		size_t bytes_wanna_write = filter_->bytes_wanna_write(messages_to_be_sent_);
+
+		if (bytes_wanna_write == 0) return;
+	
+		buffer_to_be_sent_.make_space(bytes_wanna_write);
+		filter_->write(messages_to_be_sent_, buffer_to_be_sent_);
+	}
+
+	++num_handlers_;
+	buffer_sending_.swap(buffer_to_be_sent_);
+	socket_.async_send(asio::buffer(buffer_sending_.peek(), buffer_sending_.readable_bytes()),
+					   std::bind(&TCPSession::hanlde_write, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
 }
