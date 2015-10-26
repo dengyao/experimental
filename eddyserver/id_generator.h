@@ -9,7 +9,7 @@ public:
 	static const uint32_t kInvalidID = 0;
 
 public:
-	explicit IDGenerator(uint32_t threshold = 4096)
+	explicit IDGenerator(uint32_t threshold = 8192)
 		: next_(kInvalidID) , threshold_(threshold) {}
 
 	bool get(uint32_t &id)

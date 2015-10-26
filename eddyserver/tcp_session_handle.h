@@ -28,6 +28,26 @@ public:
 
 	bool is_closed() const;
 
+	TCPSessionID session_id() const
+	{
+		return session_id_;
+	}
+
+	ThreadID thread_id() const
+	{
+		return thread_id_;
+	}
+
+	IOServiceThreadManager* thread_manager()
+	{
+		return io_thread_manager_;
+	}
+
+	std::vector<NetMessage>& messages_to_be_sent()
+	{
+		return messages_to_be_sent_;
+	}
+
 public:
 	virtual void on_connect() = 0;
 
@@ -44,7 +64,7 @@ protected:
 
 private:
 	TCPSessionID				session_id_;
-	ThreadID					session_thread_id_;
+	ThreadID					thread_id_;
 	IOServiceThreadManager*		io_thread_manager_;
 	std::vector<NetMessage>		messages_to_be_sent_;
 };

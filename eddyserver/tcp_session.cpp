@@ -9,7 +9,7 @@
 #include "io_service_thread_manager.h"
 
 
-namespace helper
+namespace
 {
 	typedef std::shared_ptr<TCPSession>					SessionPointer;
 	typedef std::shared_ptr<TCPSessionHandle>			SessionHandlerPointer;
@@ -32,7 +32,7 @@ namespace helper
 
 		NetMessageVecPointer messages = std::make_shared< std::vector<NetMessage> >(std::move(session_ptr->messages_received()));
 		session_ptr->thread()->manager().main_thread()->post(std::bind(
-			helper::SendMessageListToHandler, std::ref(session_ptr->thread()->manager()), session_ptr->id(), messages));
+			SendMessageListToHandler, std::ref(session_ptr->thread()->manager()), session_ptr->id(), messages));
 	}
 
 	void SendMessageListDirectly(SessionPointer session_ptr)
@@ -165,11 +165,11 @@ void TCPSession::handle_read(asio::error_code error_code, size_t bytes_transferr
 	{
 		if (thread_->id() == thread_->manager().main_thread()->id())
 		{
-			helper::SendMessageListDirectly(shared_from_this());
+			thread_->post(std::bind(SendMessageListDirectly, shared_from_this()));
 		}
 		else
 		{
-			thread_->post(std::bind(helper::PackMessageList, shared_from_this()));
+			thread_->post(std::bind(PackMessageList, shared_from_this()));
 		}
 	}
 
