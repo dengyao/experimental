@@ -7,13 +7,13 @@
 
 namespace helper
 {
-	void CloseSession(IOServiceThread *td, TCPSessionID id)
+	/*void CloseSession(ThreadPointer td, TCPSessionID id)
 	{
-		std::shared_ptr<TCPSession> session;
-		if (td->session_queue().get(id, session))
-		{
-			session->close();
-		}
+	std::shared_ptr<TCPSession> session = td->session_queue().get(id);
+	if (session != nullptr)
+	{
+	session->close();
+	}
 	}
 
 	void SendMessageListToSession()
@@ -29,7 +29,7 @@ namespace helper
 	void SendMessageListDirectly()
 	{
 
-	}
+	}*/
 }
 
 TCPSessionHandle::TCPSessionHandle()
@@ -64,14 +64,39 @@ void TCPSessionHandle::close()
 {
 	if (is_closed()) return;
 
-	IOServiceThread *td = nullptr;
-	if (io_thread_manager_->thread(session_thread_id_, td))
+	std::shared_ptr<IOServiceThread> td = io_thread_manager_->thread(session_thread_id_);
+	if (td != nullptr)
 	{
-		td->post(std::bind(helper::CloseSession, td, session_id_));
+		//td->post(std::bind(helper::CloseSession, td, session_id_));
 	}
 }
 
 void TCPSessionHandle::send(NetMessage &message)
 {
+	if (is_closed()) return;
 
+	if (message.readable_bytes() == 0) return;
+
+	bool wanna_send = messages_to_be_sent_.empty();
+	messages_to_be_sent_.push_back(message);
+
+	if (wanna_send)
+	{
+		if (session_thread_id_ == io_thread_manager_->main_thread()->id())
+		{
+			std::shared_ptr<IOServiceThread> td = io_thread_manager_->thread(session_thread_id_);
+			if (td != nullptr)
+			{
+				std::shared_ptr<TCPSession> session = td->session_queue().get(session_id_);
+				if (session != nullptr)
+				{
+
+				}
+			}
+		}
+		else
+		{
+
+		}
+	}
 }

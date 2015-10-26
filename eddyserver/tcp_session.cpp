@@ -29,13 +29,13 @@ namespace helper
 		if (session->messages_received().empty()) return;
 
 		NetMessageVecPointer messages = std::make_shared< std::vector<NetMessage> >(std::move(session->messages_received()));
-		session->thread().manager().main_thread().post(std::bind(
-			helper::SendMessageListToHandler, std::ref(session->thread().manager()), session->id(), messages));
+		session->thread()->manager().main_thread()->post(std::bind(
+			helper::SendMessageListToHandler, std::ref(session->thread()->manager()), session->id(), messages));
 	}
 
 	void SendMessageListDirectly(std::shared_ptr<TCPSession> session)
 	{
-		std::shared_ptr<TCPSessionHandle> handler = session->thread().manager().session_handler(session->id());
+		std::shared_ptr<TCPSessionHandle> handler = session->thread()->manager().session_handler(session->id());
 		if (handler == nullptr) return;
 
 		for (auto &message : session->messages_received())
@@ -47,12 +47,12 @@ namespace helper
 }
 
 
-TCPSession::TCPSession(IOServiceThread &thread, MessageFilterPointer filter)
+TCPSession::TCPSession(ThreadPointer thread, MessageFilterPointer filter)
 	: closed_(false)
 	, thread_(thread)
 	, filter_(filter)
 	, num_handlers_(0)
-	, socket_(thread.io_service())
+	, socket_(thread->io_service())
 	, session_id_(IDGenerator::kInvalidID)
 {
 
@@ -68,7 +68,7 @@ void TCPSession::init(TCPSessionID id)
 	assert(IDGenerator::kInvalidID != id);
 
 	set_session_id(id);
-	thread_.session_queue().add(shared_from_this());
+	thread_->session_queue().add(shared_from_this());
 
 	asio::ip::tcp::no_delay option(true);
 	socket_.set_option(option);
@@ -107,8 +107,8 @@ void TCPSession::hanlde_close()
 		return;
 	}
 
-	thread_.manager().main_thread().post(
-		std::bind(&IOServiceThreadManager::on_session_close, &thread_.manager(), id()));
+	thread_->manager().main_thread()->post(
+		std::bind(&IOServiceThreadManager::on_session_close, &thread_->manager(), id()));
 
 	asio::error_code error_code;
 	socket_.shutdown(asio::ip::tcp::socket::shutdown_both, error_code);
@@ -118,7 +118,7 @@ void TCPSession::hanlde_close()
 	}
 
 	socket_.close();
-	thread_.session_queue().remove(id());
+	thread_->session_queue().remove(id());
 }
 
 void TCPSession::post_message_list(std::vector<NetMessage> &messages)
@@ -161,13 +161,13 @@ void TCPSession::handle_read(asio::error_code error_code, size_t bytes_transferr
 
 	if (wanna_post)
 	{
-		if (thread_.id() == thread_.manager().main_thread().id())
+		if (thread_->id() == thread_->manager().main_thread()->id())
 		{
 			helper::SendMessageListDirectly(shared_from_this());
 		}
 		else
 		{
-			thread_.post(std::bind(helper::PackMessageList, shared_from_this()));
+			thread_->post(std::bind(helper::PackMessageList, shared_from_this()));
 		}
 	}
 

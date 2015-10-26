@@ -28,11 +28,11 @@ public:
 
 	void stop();
 
-	IOServiceThread& thread();
+	ThreadPointer thread();
 
-	bool thread(ThreadID id, IOServiceThread *&ret_thread);
+	ThreadPointer thread(ThreadID id);
 
-	IOServiceThread& main_thread();
+	ThreadPointer main_thread();
 
 	void on_session_connect(SessionPointer session, SessionHandlerPointer handler);
 

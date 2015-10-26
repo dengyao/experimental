@@ -15,10 +15,11 @@ class TCPSession final : public std::enable_shared_from_this < TCPSession >
 public:
 	typedef asio::ip::tcp::socket					SocketType;
 	typedef std::shared_ptr<NetMessage>				NetMessagePointer;
+	typedef std::shared_ptr<IOServiceThread>		ThreadPointer;
 	typedef std::shared_ptr<MessageFilterInterface>	MessageFilterPointer;
 
 public:
-	TCPSession(IOServiceThread &thread, MessageFilterPointer filter);
+	TCPSession(ThreadPointer thread, MessageFilterPointer filter);
 	~TCPSession();
 
 public:
@@ -32,7 +33,7 @@ public:
 		return socket_;
 	}
 
-	IOServiceThread& thread()
+	ThreadPointer thread()
 	{
 		return thread_;
 	}
@@ -65,7 +66,7 @@ private:
 	int						num_handlers_;
 	TCPSessionID			session_id_;
 	SocketType				socket_;
-	IOServiceThread&		thread_;
+	ThreadPointer			thread_;
 	MessageFilterPointer	filter_;
 	NetMessage				buffer_receiving_;
 	NetMessage				buffer_sending_;

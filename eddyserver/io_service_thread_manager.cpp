@@ -69,11 +69,11 @@ void IOServiceThreadManager::stop()
 	threads_[kMainThreadIndex]->stop();
 }
 
-IOServiceThread& IOServiceThreadManager::thread()
+IOServiceThreadManager::ThreadPointer IOServiceThreadManager::thread()
 {
 	if (threads_.size() == 1)
 	{
-		return *threads_[kMainThreadIndex];
+		return threads_[kMainThreadIndex];
 	}
 
 	size_t min_element_index = kMainThreadIndex;
@@ -85,26 +85,24 @@ IOServiceThread& IOServiceThreadManager::thread()
 			min_element_index = i;
 		}
 	}
-	return *threads_[min_element_index];
+	return threads_[min_element_index];
 }
 
-bool IOServiceThreadManager::thread(ThreadID id, IOServiceThread *&ret_thread)
+IOServiceThreadManager::ThreadPointer IOServiceThreadManager::thread(ThreadID id)
 {
-	ret_thread = nullptr;
 	for (size_t i = 0; i < threads_.size(); ++i)
 	{
 		if (threads_[i]->id() == id)
 		{
-			ret_thread = threads_[i].get();
-			return true;
+			return threads_[i];
 		}
 	}
-	return false;
+	return nullptr;
 }
 
-IOServiceThread& IOServiceThreadManager::main_thread()
+IOServiceThreadManager::ThreadPointer IOServiceThreadManager::main_thread()
 {
-	return *threads_[kMainThreadIndex];
+	return threads_[kMainThreadIndex];
 }
 
 void IOServiceThreadManager::on_session_connect(SessionPointer session, SessionHandlerPointer handler)
@@ -112,9 +110,9 @@ void IOServiceThreadManager::on_session_connect(SessionPointer session, SessionH
 	TCPSessionID id = IDGenerator::kInvalidID;
 	if (id_generator_.get(id))
 	{
-		handler->init(id, session->thread().id(), this);
+		handler->init(id, session->thread()->id(), this);
 		session_handler_map_.insert(std::make_pair(id, handler));
-		session->thread().post(std::bind(&TCPSession::init, session, id));
+		session->thread()->post(std::bind(&TCPSession::init, session, id));
 		handler->on_connect();
 	}
 }

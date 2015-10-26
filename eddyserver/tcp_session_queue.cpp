@@ -28,15 +28,14 @@ void TCPSessionQueue::add(SessionPointer session)
 	session_queue_.insert(std::make_pair(session->id(), session));
 }
 
-bool TCPSessionQueue::get(TCPSessionID id, SessionPointer &session)
+TCPSessionQueue::SessionPointer TCPSessionQueue::get(TCPSessionID id)
 {
 	std::unordered_map<TCPSessionID, SessionPointer>::iterator itr = session_queue_.find(id);
 	if (itr == session_queue_.end())
 	{
-		return false;
+		return nullptr;
 	}
-	session = itr->second;
-	return true;
+	return itr->second;
 }
 
 void TCPSessionQueue::remove(TCPSessionID id)

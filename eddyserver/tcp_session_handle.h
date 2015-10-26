@@ -42,4 +42,5 @@ private:
 	TCPSessionID				session_id_;
 	ThreadID					session_thread_id_;
 	IOServiceThreadManager*		io_thread_manager_;
+	std::vector<NetMessage>		messages_to_be_sent_;
 };

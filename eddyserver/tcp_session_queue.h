@@ -20,7 +20,7 @@ public:
 
 	void add(SessionPointer session);
 
-	bool get(TCPSessionID id, SessionPointer &session);
+	SessionPointer get(TCPSessionID id);
 
 	void remove(TCPSessionID id);
 
