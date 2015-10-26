@@ -13,7 +13,16 @@ public:
 
 public:
 	explicit NetMessage(size_t initial_size = kInitialSize);
+
 	~NetMessage();
+
+	NetMessage(const NetMessage &that);
+
+	NetMessage(NetMessage &&that);
+
+	NetMessage& operator= (const NetMessage &that);
+
+	NetMessage& operator= (NetMessage &&that);
 
 public:
 	size_t readable_bytes() const;

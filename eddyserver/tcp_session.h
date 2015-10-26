@@ -32,9 +32,14 @@ public:
 		return socket_;
 	}
 
-	IOServiceThread& thread() const
+	IOServiceThread& thread()
 	{
 		return thread_;
+	}
+
+	std::vector<NetMessage>& messages_received()
+	{
+		return messages_received_;
 	}
 
 	void close();

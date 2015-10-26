@@ -16,6 +16,40 @@ NetMessage::~NetMessage()
 {
 }
 
+NetMessage::NetMessage(const NetMessage &that)
+	: buffer_(that.buffer_)
+	, reader_pos_(that.reader_pos_)
+	, writer_pos_(that.writer_pos_)
+{
+}
+
+NetMessage::NetMessage(NetMessage &&that)
+	: buffer_(std::move(that.buffer_))
+	, reader_pos_(that.reader_pos_)
+	, writer_pos_(that.writer_pos_)
+{
+	that.reader_pos_ = kCheapPrepend;
+	that.writer_pos_ = kCheapPrepend;
+}
+
+NetMessage& NetMessage::operator= (const NetMessage &that)
+{
+	buffer_ = that.buffer_;
+	reader_pos_ = that.reader_pos_;
+	writer_pos_ = that.writer_pos_;
+	return *this;
+}
+
+NetMessage& NetMessage::operator= (NetMessage &&that)
+{
+	buffer_ = std::move(that.buffer_);
+	reader_pos_ = that.reader_pos_;
+	writer_pos_ = that.writer_pos_;
+	that.reader_pos_ = kCheapPrepend;
+	that.writer_pos_ = kCheapPrepend;
+	return *this;
+}
+
 char* NetMessage::begin()
 {
 	return &*buffer_.begin();

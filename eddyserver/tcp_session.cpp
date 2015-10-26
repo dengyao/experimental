@@ -24,8 +24,9 @@ TCPSession::~TCPSession()
 
 }
 
-//{
-	/*void SendMessageListToHandler(TCPIOThreadManager& manager,
+namespace helper
+{
+	void SendMessageListToHandler(TCPIOThreadManager& manager,
 								  TCPSessionID id,
 								  NetMessageVector* messages) {
 		boost::shared_ptr<TCPSessionHandler> handler = manager.GetSessionHandler(id);
@@ -40,7 +41,8 @@ TCPSession::~TCPSession()
 		delete messages;
 	}
 
-	void PackMessageList(boost::shared_ptr<TCPSession> session) {
+	void PackMessageList(std::shared_ptr<TCPSession> session)
+	{
 		if (session->messages_received().empty())
 			return;
 
@@ -53,21 +55,18 @@ TCPSession::~TCPSession()
 			messages));
 	}
 
-	void SendMessageListDirectly(boost::shared_ptr<TCPSession> session) {
-		boost::shared_ptr<TCPSessionHandler> handler =
-			session->thread().manager().GetSessionHandler(session->id());
+	void SendMessageListDirectly(std::shared_ptr<TCPSession> session)
+	{
+		std::shared_ptr<TCPSessionHandle> handler = session->thread().manager().session_handler(session->id());
+		if (handler == nullptr) return;
 
-		if (handler == NULL)
-			return;
-
-		for_each(session->messages_received().begin(),
-				 session->messages_received().end(),
-				 boost::bind(&TCPSessionHandler::OnMessage,
-				 handler, _1));
-
+		for (auto &message : session->messages_received())
+		{
+			handler->on_message(message);
+		}
 		session->messages_received().clear();
-	}*/
-//}
+	}
+}
 
 void TCPSession::init(TCPSessionID id)
 {
