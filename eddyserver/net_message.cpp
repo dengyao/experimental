@@ -28,6 +28,7 @@ NetMessage::NetMessage(NetMessage &&that)
 	, reader_pos_(that.reader_pos_)
 	, writer_pos_(that.writer_pos_)
 {
+	that.buffer_.resize(kInitialSize);
 	that.reader_pos_ = kCheapPrepend;
 	that.writer_pos_ = kCheapPrepend;
 }
@@ -42,9 +43,13 @@ NetMessage& NetMessage::operator= (const NetMessage &that)
 
 NetMessage& NetMessage::operator= (NetMessage &&that)
 {
+	std::vector<char> &&temp = std::move(buffer_);
+
 	buffer_ = std::move(that.buffer_);
 	reader_pos_ = that.reader_pos_;
 	writer_pos_ = that.writer_pos_;
+
+	that.buffer_ = temp;
 	that.reader_pos_ = kCheapPrepend;
 	that.writer_pos_ = kCheapPrepend;
 	return *this;

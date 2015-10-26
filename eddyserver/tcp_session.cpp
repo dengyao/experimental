@@ -5,6 +5,7 @@
 #include "id_generator.h"
 #include "message_filter.h"
 #include "io_service_thread.h"
+#include "tcp_session_handle.h"
 #include "io_service_thread_manager.h"
 
 
@@ -26,33 +27,26 @@ TCPSession::~TCPSession()
 
 namespace helper
 {
-	void SendMessageListToHandler(TCPIOThreadManager& manager,
-								  TCPSessionID id,
-								  NetMessageVector* messages) {
-		boost::shared_ptr<TCPSessionHandler> handler = manager.GetSessionHandler(id);
+	typedef std::shared_ptr< std::vector<NetMessage> > NetMessageVecPointer;
 
-		if (handler == NULL)
-			return;
+	void SendMessageListToHandler(IOServiceThreadManager &manager, TCPSessionID id, NetMessageVecPointer messages)
+	{
+		std::shared_ptr<TCPSessionHandle> handler = manager.session_handler(id);
+		if (handler == nullptr) return;
 
-		for_each(messages->begin(), messages->end(),
-				 boost::bind(&TCPSessionHandler::OnMessage,
-				 handler, _1));
-
-		delete messages;
+		for (auto &message : *messages)
+		{
+			handler->on_message(message);
+		}
 	}
 
 	void PackMessageList(std::shared_ptr<TCPSession> session)
 	{
-		if (session->messages_received().empty())
-			return;
+		if (session->messages_received().empty()) return;
 
-		NetMessageVector* messages(new NetMessageVector);
-		messages->swap(session->messages_received());
-		session->thread().manager().GetMainThread().Post(
-			boost::bind(&SendMessageListToHandler,
-			boost::ref(session->thread().manager()),
-			session->id(),
-			messages));
+		NetMessageVecPointer messages = std::make_shared< std::vector<NetMessage> >(std::move(session->messages_received()));
+		session->thread().manager().main_thread().post(std::bind(
+			helper::SendMessageListToHandler, std::ref(session->thread().manager()), session->id(), messages));
 	}
 
 	void SendMessageListDirectly(std::shared_ptr<TCPSession> session)
