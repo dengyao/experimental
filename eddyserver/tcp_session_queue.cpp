@@ -19,13 +19,13 @@ size_t TCPSessionQueue::size() const
 	return load_count_;
 }
 
-void TCPSessionQueue::add(SessionPointer session)
+void TCPSessionQueue::add(SessionPointer session_ptr)
 {
-	if (session_queue_.count(session->id()) == 0)
+	if (session_queue_.count(session_ptr->id()) == 0)
 	{
 		++load_count_;
 	}
-	session_queue_.insert(std::make_pair(session->id(), session));
+	session_queue_.insert(std::make_pair(session_ptr->id(), session_ptr));
 }
 
 TCPSessionQueue::SessionPointer TCPSessionQueue::get(TCPSessionID id)

@@ -12,6 +12,10 @@ class TCPSessionHandle : public std::enable_shared_from_this < TCPSessionHandle 
 	friend class IOServiceThreadManager;
 
 public:
+	typedef std::shared_ptr<TCPSession>			SessionPointer;
+	typedef std::shared_ptr<IOServiceThread>	ThreadPointer;
+
+public:
 	TCPSessionHandle();
 
 	virtual ~TCPSessionHandle();

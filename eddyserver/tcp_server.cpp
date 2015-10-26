@@ -17,8 +17,8 @@ TCPServer::TCPServer(asio::ip::tcp::endpoint &endpoint,
 					 , message_filter_creator_(filter_creator)
 					 , acceptor_(io_thread_manager.main_thread()->io_service(), endpoint)
 {
-	SessionPointer session = std::make_shared<TCPSession>(io_thread_manager_.thread(), message_filter_creator_());
-	acceptor_.async_accept(session->socket(), std::bind(&TCPServer::handle_accept, this, session, std::placeholders::_1));
+	SessionPointer session_ptr = std::make_shared<TCPSession>(io_thread_manager_.thread(), message_filter_creator_());
+	acceptor_.async_accept(session_ptr->socket(), std::bind(&TCPServer::handle_accept, this, session_ptr, std::placeholders::_1));
 }
 
 asio::io_service& TCPServer::io_service()
@@ -26,7 +26,7 @@ asio::io_service& TCPServer::io_service()
 	return io_thread_manager_.main_thread()->io_service();
 }
 
-void TCPServer::handle_accept(SessionPointer session, asio::error_code error)
+void TCPServer::handle_accept(SessionPointer session_ptr, asio::error_code error)
 {
 	if (error)
 	{
@@ -35,9 +35,9 @@ void TCPServer::handle_accept(SessionPointer session, asio::error_code error)
 		return;
 	}
 
-	SessionHandlerPointer handle = session_handler_creator_();
-	io_thread_manager_.on_session_connect(session, handle);
+	SessionHandlerPointer handle_ptr = session_handler_creator_();
+	io_thread_manager_.on_session_connect(session_ptr, handle_ptr);
 
-	SessionPointer new_session = std::make_shared<TCPSession>(io_thread_manager_.thread(), message_filter_creator_());
-	acceptor_.async_accept(new_session->socket(), std::bind(&TCPServer::handle_accept, this, new_session, std::placeholders::_1));
+	SessionPointer new_session_ptr = std::make_shared<TCPSession>(io_thread_manager_.thread(), message_filter_creator_());
+	acceptor_.async_accept(new_session_ptr->socket(), std::bind(&TCPServer::handle_accept, this, new_session_ptr, std::placeholders::_1));
 }

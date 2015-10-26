@@ -11,38 +11,40 @@
 
 namespace helper
 {
-	typedef std::shared_ptr< std::vector<NetMessage> > NetMessageVecPointer;
+	typedef std::shared_ptr<TCPSession>					SessionPointer;
+	typedef std::shared_ptr<TCPSessionHandle>			SessionHandlerPointer;
+	typedef std::shared_ptr< std::vector<NetMessage> >	NetMessageVecPointer;
 
 	void SendMessageListToHandler(IOServiceThreadManager &manager, TCPSessionID id, NetMessageVecPointer messages)
 	{
-		std::shared_ptr<TCPSessionHandle> handler = manager.session_handler(id);
-		if (handler == nullptr) return;
+		SessionHandlerPointer handler_ptr = manager.session_handler(id);
+		if (handler_ptr == nullptr) return;
 
 		for (auto &message : *messages)
 		{
-			handler->on_message(message);
+			handler_ptr->on_message(message);
 		}
 	}
 
-	void PackMessageList(std::shared_ptr<TCPSession> session)
+	void PackMessageList(SessionPointer session_ptr)
 	{
-		if (session->messages_received().empty()) return;
+		if (session_ptr->messages_received().empty()) return;
 
-		NetMessageVecPointer messages = std::make_shared< std::vector<NetMessage> >(std::move(session->messages_received()));
-		session->thread()->manager().main_thread()->post(std::bind(
-			helper::SendMessageListToHandler, std::ref(session->thread()->manager()), session->id(), messages));
+		NetMessageVecPointer messages = std::make_shared< std::vector<NetMessage> >(std::move(session_ptr->messages_received()));
+		session_ptr->thread()->manager().main_thread()->post(std::bind(
+			helper::SendMessageListToHandler, std::ref(session_ptr->thread()->manager()), session_ptr->id(), messages));
 	}
 
-	void SendMessageListDirectly(std::shared_ptr<TCPSession> session)
+	void SendMessageListDirectly(SessionPointer session_ptr)
 	{
-		std::shared_ptr<TCPSessionHandle> handler = session->thread()->manager().session_handler(session->id());
-		if (handler == nullptr) return;
+		SessionHandlerPointer handler_ptr = session_ptr->thread()->manager().session_handler(session_ptr->id());
+		if (handler_ptr == nullptr) return;
 
-		for (auto &message : session->messages_received())
+		for (auto &message : session_ptr->messages_received())
 		{
-			handler->on_message(message);
+			handler_ptr->on_message(message);
 		}
-		session->messages_received().clear();
+		session_ptr->messages_received().clear();
 	}
 }
 

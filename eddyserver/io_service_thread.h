@@ -10,6 +10,8 @@ class IOServiceThreadManager;
 class IOServiceThread final
 {
 	friend class IOServiceThreadManager;
+
+public:
 	typedef std::shared_ptr<TCPSession> SessionPointer;
 
 public:

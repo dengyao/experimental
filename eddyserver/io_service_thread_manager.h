@@ -13,10 +13,11 @@ class TCPSessionHandle;
 
 class IOServiceThreadManager final
 {
-	typedef std::shared_ptr<TCPSession> SessionPointer;
-	typedef std::shared_ptr<IOServiceThread> ThreadPointer;
-	typedef std::shared_ptr<TCPSessionHandle> SessionHandlerPointer;
-	typedef std::unordered_map<TCPSessionID, SessionHandlerPointer > SessionHandlerMap;
+public:
+	typedef std::shared_ptr<TCPSession>									SessionPointer;
+	typedef std::shared_ptr<IOServiceThread>							ThreadPointer;
+	typedef std::shared_ptr<TCPSessionHandle>							SessionHandlerPointer;
+	typedef std::unordered_map<TCPSessionID, SessionHandlerPointer >	SessionHandlerMap;
 
 public:
 	explicit IOServiceThreadManager(size_t thread_num = 1);
@@ -34,7 +35,7 @@ public:
 
 	ThreadPointer main_thread();
 
-	void on_session_connect(SessionPointer session, SessionHandlerPointer handler);
+	void on_session_connect(SessionPointer session_ptr, SessionHandlerPointer handler);
 
 	void on_session_close(TCPSessionID id);
 

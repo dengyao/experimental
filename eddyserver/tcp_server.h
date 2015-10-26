@@ -28,7 +28,7 @@ public:
 	asio::io_service& io_service();
 
 private:
-	void handle_accept(SessionPointer session, asio::error_code error);
+	void handle_accept(SessionPointer session_ptr, asio::error_code error);
 
 private:
 	asio::ip::tcp::acceptor		acceptor_;

@@ -9,6 +9,7 @@ class TCPSession;
 
 class TCPSessionQueue final
 {
+public:
 	typedef std::shared_ptr<TCPSession> SessionPointer;
 
 public:
@@ -18,7 +19,7 @@ public:
 public:
 	size_t size() const;
 
-	void add(SessionPointer session);
+	void add(SessionPointer session_ptr);
 
 	SessionPointer get(TCPSessionID id);
 

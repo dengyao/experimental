@@ -105,14 +105,14 @@ IOServiceThreadManager::ThreadPointer IOServiceThreadManager::main_thread()
 	return threads_[kMainThreadIndex];
 }
 
-void IOServiceThreadManager::on_session_connect(SessionPointer session, SessionHandlerPointer handler)
+void IOServiceThreadManager::on_session_connect(SessionPointer session_ptr, SessionHandlerPointer handler)
 {
 	TCPSessionID id = IDGenerator::kInvalidID;
 	if (id_generator_.get(id))
 	{
-		handler->init(id, session->thread()->id(), this);
+		handler->init(id, session_ptr->thread()->id(), this);
 		session_handler_map_.insert(std::make_pair(id, handler));
-		session->thread()->post(std::bind(&TCPSession::init, session, id));
+		session_ptr->thread()->post(std::bind(&TCPSession::init, session_ptr, id));
 		handler->on_connect();
 	}
 }
