@@ -41,8 +41,8 @@ namespace eddy
 		{
 			NetMessage new_message(header_);
 			new_message.append(buffer.peek(), header_);
-			buffer.retrieve(header_);
 			messages_received.push_back(std::move(new_message));
+			buffer.retrieve(header_);
 			header_read_ = false;
 			return header_;
 		}
