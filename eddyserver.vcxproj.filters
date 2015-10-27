@@ -4,6 +4,9 @@
     <Filter Include="src">
       <UniqueIdentifier>{0e841827-0fcf-4260-8015-66dca7ce1cbc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="asio">
+      <UniqueIdentifier>{aa7a1be0-1e85-4ba4-bf63-a99a7089d906}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\id_generator.h">
