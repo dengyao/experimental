@@ -1,66 +1,66 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="eddyserver">
-      <UniqueIdentifier>{c424d84f-7dde-41d8-b2d9-1563c5c6345c}</UniqueIdentifier>
+    <Filter Include="src">
+      <UniqueIdentifier>{0e841827-0fcf-4260-8015-66dca7ce1cbc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="eddyserver\id_generator.h">
-      <Filter>eddyserver</Filter>
+    <ClInclude Include="src\id_generator.h">
+      <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="eddyserver\io_service_thread.h">
-      <Filter>eddyserver</Filter>
+    <ClInclude Include="src\io_service_thread.h">
+      <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="eddyserver\io_service_thread_manager.h">
-      <Filter>eddyserver</Filter>
+    <ClInclude Include="src\io_service_thread_manager.h">
+      <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="eddyserver\message_filter.h">
-      <Filter>eddyserver</Filter>
+    <ClInclude Include="src\message_filter.h">
+      <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="eddyserver\tcp_server.h">
-      <Filter>eddyserver</Filter>
+    <ClInclude Include="src\net_message.h">
+      <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="eddyserver\tcp_session.h">
-      <Filter>eddyserver</Filter>
+    <ClInclude Include="src\tcp_server.h">
+      <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="eddyserver\tcp_session_handle.h">
-      <Filter>eddyserver</Filter>
+    <ClInclude Include="src\tcp_session.h">
+      <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="eddyserver\tcp_session_queue.h">
-      <Filter>eddyserver</Filter>
+    <ClInclude Include="src\tcp_session_handle.h">
+      <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="eddyserver\types.h">
-      <Filter>eddyserver</Filter>
+    <ClInclude Include="src\tcp_session_queue.h">
+      <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="eddyserver\net_message.h">
-      <Filter>eddyserver</Filter>
+    <ClInclude Include="src\types.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="eddyserver\io_service_thread.cpp">
-      <Filter>eddyserver</Filter>
+    <ClCompile Include="src\io_service_thread.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="eddyserver\io_service_thread_manager.cpp">
-      <Filter>eddyserver</Filter>
+    <ClCompile Include="src\io_service_thread_manager.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="eddyserver\message_filter.cpp">
-      <Filter>eddyserver</Filter>
+    <ClCompile Include="src\message_filter.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="eddyserver\tcp_server.cpp">
-      <Filter>eddyserver</Filter>
+    <ClCompile Include="src\net_message.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="eddyserver\tcp_session.cpp">
-      <Filter>eddyserver</Filter>
+    <ClCompile Include="src\tcp_server.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="eddyserver\tcp_session_handle.cpp">
-      <Filter>eddyserver</Filter>
+    <ClCompile Include="src\tcp_session.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="eddyserver\tcp_session_queue.cpp">
-      <Filter>eddyserver</Filter>
+    <ClCompile Include="src\tcp_session_handle.cpp">
+      <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="eddyserver\net_message.cpp">
-      <Filter>eddyserver</Filter>
+    <ClCompile Include="src\tcp_session_queue.cpp">
+      <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
