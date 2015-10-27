@@ -22,7 +22,7 @@ namespace eddy
 		typedef std::shared_ptr<MessageFilterInterface>	MessageFilterPointer;
 
 	public:
-		TCPSession(ThreadPointer thread, MessageFilterPointer filter);
+		TCPSession(ThreadPointer thread_ptr, MessageFilterPointer filter);
 		~TCPSession();
 
 	public:

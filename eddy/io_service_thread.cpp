@@ -8,7 +8,12 @@ namespace eddy
 {
 	IOServiceThread::IOServiceThread(IOServiceThreadManager &manager)
 		: work_(nullptr)
-		, manager_(manager_)
+		, manager_(manager)
+	{
+
+	}
+
+	IOServiceThread::~IOServiceThread()
 	{
 
 	}

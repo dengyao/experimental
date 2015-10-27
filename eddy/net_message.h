@@ -45,6 +45,8 @@ namespace eddy
 
 		void retrieve_all();
 
+		void has_written(size_t len);
+
 		void append(const void *user_data, size_t len);
 
 		void prepend(const void *user_data, size_t len);
@@ -95,8 +97,6 @@ namespace eddy
 		char* begin();
 
 		const char* begin() const;
-
-		void has_written(size_t len);
 
 		void ensure_writable_bytes(size_t len);
 

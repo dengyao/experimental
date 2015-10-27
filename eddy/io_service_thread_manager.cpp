@@ -12,12 +12,12 @@ namespace eddy
 
 	IOServiceThreadManager::IOServiceThreadManager(size_t thread_num)
 	{
-		if (thread_num > kMainThreadIndex)
+		if (thread_num <= kMainThreadIndex)
 		{
 			std::abort();
 		}
 
-		threads_.reserve(thread_num);
+		threads_.resize(thread_num);
 		for (size_t i = 0; i < threads_.size(); ++i)
 		{
 			threads_[i] = std::make_shared<IOServiceThread>(*this);

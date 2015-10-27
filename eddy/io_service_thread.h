@@ -19,7 +19,7 @@ namespace eddy
 
 	public:
 		IOServiceThread(IOServiceThreadManager &manager);
-		~IOServiceThread() = default;
+		~IOServiceThread();
 
 	public:
 		void run_thread();

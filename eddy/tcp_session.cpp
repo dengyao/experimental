@@ -50,12 +50,12 @@ namespace eddy
 		}
 	}
 
-	TCPSession::TCPSession(ThreadPointer thread, MessageFilterPointer filter)
+	TCPSession::TCPSession(ThreadPointer thread_ptr, MessageFilterPointer filter)
 		: closed_(false)
-		, thread_(thread)
 		, filter_(filter)
 		, num_handlers_(0)
-		, socket_(thread->io_service())
+		, thread_(thread_ptr)
+		, socket_(thread_ptr->io_service())
 		, session_id_(IDGenerator::kInvalidID)
 	{
 
@@ -157,6 +157,7 @@ namespace eddy
 			return;
 		}
 
+		buffer_receiving_.has_written(bytes_transferred);
 		bool wanna_post = messages_received_.empty();
 		size_t bytes_read = filter_->read(buffer_receiving_, messages_received_);
 		assert(bytes_read == bytes_transferred);

@@ -90,7 +90,7 @@ namespace eddy
 		}
 		else
 		{
-			assert(kCheapPrepend < reader_pos_);
+			assert(kCheapPrepend <= reader_pos_);
 			size_t readable = readable_bytes();
 			::memcpy(begin() + kCheapPrepend, begin() + reader_pos_, readable);
 			reader_pos_ = kCheapPrepend;
