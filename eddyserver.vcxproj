@@ -11,43 +11,41 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="eddy.h" />
-    <ClInclude Include="eddy\id_generator.h" />
-    <ClInclude Include="eddy\io_service_thread.h" />
-    <ClInclude Include="eddy\io_service_thread_manager.h" />
-    <ClInclude Include="eddy\message_filter.h" />
-    <ClInclude Include="eddy\net_message.h" />
-    <ClInclude Include="eddy\tcp_server.h" />
-    <ClInclude Include="eddy\tcp_session.h" />
-    <ClInclude Include="eddy\tcp_session_handle.h" />
-    <ClInclude Include="eddy\tcp_session_queue.h" />
-    <ClInclude Include="eddy\types.h" />
+    <ClInclude Include="eddyserver\id_generator.h" />
+    <ClInclude Include="eddyserver\io_service_thread.h" />
+    <ClInclude Include="eddyserver\io_service_thread_manager.h" />
+    <ClInclude Include="eddyserver\message_filter.h" />
+    <ClInclude Include="eddyserver\net_message.h" />
+    <ClInclude Include="eddyserver\tcp_server.h" />
+    <ClInclude Include="eddyserver\tcp_session.h" />
+    <ClInclude Include="eddyserver\tcp_session_handle.h" />
+    <ClInclude Include="eddyserver\tcp_session_queue.h" />
+    <ClInclude Include="eddyserver\types.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="eddy\io_service_thread.cpp" />
-    <ClCompile Include="eddy\io_service_thread_manager.cpp" />
-    <ClCompile Include="eddy\message_filter.cpp" />
-    <ClCompile Include="eddy\net_message.cpp" />
-    <ClCompile Include="eddy\tcp_server.cpp" />
-    <ClCompile Include="eddy\tcp_session.cpp" />
-    <ClCompile Include="eddy\tcp_session_handle.cpp" />
-    <ClCompile Include="eddy\tcp_session_queue.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="eddyserver\io_service_thread.cpp" />
+    <ClCompile Include="eddyserver\io_service_thread_manager.cpp" />
+    <ClCompile Include="eddyserver\message_filter.cpp" />
+    <ClCompile Include="eddyserver\net_message.cpp" />
+    <ClCompile Include="eddyserver\tcp_server.cpp" />
+    <ClCompile Include="eddyserver\tcp_session.cpp" />
+    <ClCompile Include="eddyserver\tcp_session_handle.cpp" />
+    <ClCompile Include="eddyserver\tcp_session_queue.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{60A9B400-20C5-439B-A282-B2A9B5BA55E1}</ProjectGuid>
+    <ProjectGuid>{B72045B5-89BB-4FCC-9D7F-50D1C5ED7738}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>eddyserver</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -75,8 +73,8 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;ASIO_MSVC;ASIO_STANDALONE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)\asio;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;ASIO_STANDALONE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ASIO_INCLUDE_PATH);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -92,7 +90,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;ASIO_STANDALONE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)\asio;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ASIO_INCLUDE_PATH)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
