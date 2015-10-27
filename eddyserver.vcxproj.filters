@@ -36,6 +36,7 @@
     <ClInclude Include="eddyserver\types.h">
       <Filter>eddyserver</Filter>
     </ClInclude>
+    <ClInclude Include="eddyserver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="eddyserver\io_service_thread.cpp">
