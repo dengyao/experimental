@@ -11,7 +11,7 @@ namespace eddy
 	{
 	public:
 		static const size_t kCheapPrepend = 8;
-		static const size_t kInitialSize = 1024;
+		static const size_t kInitialSize = 1024 - kCheapPrepend;
 
 	public:
 		explicit NetMessage(size_t initial_size = kInitialSize);
@@ -105,4 +105,6 @@ namespace eddy
 		size_t writer_pos_;
 		std::vector<char> buffer_;
 	};
+
+	typedef std::vector<NetMessage> NetMessageVector;
 }

@@ -11,7 +11,10 @@ namespace eddy
 	class MessageFilterInterface
 	{
 	public:
+		typedef std::vector<char> Buffer;
+
 		MessageFilterInterface() = default;
+
 		virtual ~MessageFilterInterface() = default;
 
 	public:
@@ -23,8 +26,8 @@ namespace eddy
 	public:
 		virtual size_t bytes_wanna_read() = 0;
 		virtual size_t bytes_wanna_write(std::vector<NetMessage> &messages_to_be_sent) = 0;
-		virtual size_t read(NetMessage &buffer, std::vector<NetMessage> &messages_received) = 0;
-		virtual size_t write(std::vector<NetMessage> &messages_to_be_sent, NetMessage &buffer) = 0;
+		virtual size_t read(const Buffer &buffer, std::vector<NetMessage> &messages_received) = 0;
+		virtual size_t write(const std::vector<NetMessage> &messages_to_be_sent, Buffer &buffer) = 0;
 
 	protected:
 		MessageFilterInterface(const MessageFilterInterface&) = delete;
@@ -46,9 +49,9 @@ namespace eddy
 
 		size_t bytes_wanna_write(std::vector<NetMessage> &messages_to_be_sent) override;
 
-		size_t read(NetMessage &buffer, std::vector<NetMessage> &messages_received) override;
+		size_t read(const Buffer &buffer, std::vector<NetMessage> &messages_received) override;
 
-		size_t write(std::vector<NetMessage> &messages_to_be_sent, NetMessage &buffer) override;
+		size_t write(const std::vector<NetMessage> &messages_to_be_sent, Buffer &buffer) override;
 
 	private:
 		bool				header_read_;

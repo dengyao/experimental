@@ -63,10 +63,10 @@ namespace eddy
 		SocketType				socket_;
 		ThreadPointer			thread_;
 		MessageFilterPointer	filter_;
-		NetMessage				buffer_receiving_;
-		NetMessage				buffer_sending_;
-		NetMessage				buffer_to_be_sent_;
-		std::vector<NetMessage>	messages_received_;
-		std::vector<NetMessage>	messages_to_be_sent_;
+		std::vector<char>		buffer_receiving_;
+		std::vector<char>		buffer_sending_;
+		std::vector<char>		buffer_to_be_sent_;
+		NetMessageVector		messages_received_;
+		NetMessageVector		messages_to_be_sent_;
 	};
 }

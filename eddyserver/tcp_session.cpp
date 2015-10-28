@@ -80,13 +80,14 @@ namespace eddy
 		++num_handlers_;
 		if (bytes_wanna_read == filter_->any_bytes())
 		{
-			socket_.async_read_some(asio::buffer(buffer_receiving_.peek(), buffer_receiving_.writable_bytes()),
+			buffer_receiving_.resize(NetMessage::kInitialSize);
+			socket_.async_read_some(asio::buffer(&*buffer_receiving_.begin(), buffer_receiving_.size()),
 									std::bind(&TCPSession::handle_read, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
 		}
 		else
 		{
-			buffer_receiving_.make_space(bytes_wanna_read);
-			socket_.async_receive(asio::buffer(buffer_receiving_.peek(), bytes_wanna_read),
+			buffer_receiving_.resize(bytes_wanna_read);
+			socket_.async_receive(asio::buffer(&*buffer_receiving_.begin(), bytes_wanna_read),
 								  std::bind(&TCPSession::handle_read, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
 		}
 	}
@@ -131,14 +132,15 @@ namespace eddy
 
 		size_t bytes_wanna_write = filter_->bytes_wanna_write(messages_to_be_sent_);
 		if (bytes_wanna_write == 0) return;
-		buffer_to_be_sent_.make_space(bytes_wanna_write);
+		buffer_to_be_sent_.resize(bytes_wanna_write);
 		filter_->write(messages_to_be_sent_, buffer_to_be_sent_);
+		messages_to_be_sent_.clear();
 
-		if (buffer_sending_.readable_bytes() == 0)
+		if (buffer_sending_.empty())
 		{
 			++num_handlers_;
 			buffer_sending_.swap(buffer_to_be_sent_);
-			socket_.async_send(asio::buffer(buffer_sending_.peek(), bytes_wanna_write),
+			socket_.async_send(asio::buffer(&*buffer_sending_.begin(), bytes_wanna_write),
 							   std::bind(&TCPSession::hanlde_write, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
 		}
 	}
@@ -155,10 +157,10 @@ namespace eddy
 			return;
 		}
 
-		buffer_receiving_.has_written(bytes_transferred);
 		bool wanna_post = messages_received_.empty();
 		size_t bytes_read = filter_->read(buffer_receiving_, messages_received_);
 		assert(bytes_read == bytes_transferred);
+		buffer_receiving_.resize(0);
 		wanna_post = wanna_post && !messages_received_.empty();
 
 		if (wanna_post)
@@ -176,17 +178,17 @@ namespace eddy
 		size_t bytes_wanna_read = filter_->bytes_wanna_read();
 		if (bytes_wanna_read == 0) return;
 
-		++num_handlers_;
-		buffer_receiving_.retrieve_all();
+		++num_handlers_;	
 		if (bytes_wanna_read == filter_->any_bytes())
 		{
-			socket_.async_read_some(asio::buffer(buffer_receiving_.peek(), buffer_receiving_.writable_bytes()),
+			buffer_receiving_.resize(NetMessage::kInitialSize);
+			socket_.async_read_some(asio::buffer(&*buffer_receiving_.begin(), buffer_receiving_.size()),
 									std::bind(&TCPSession::handle_read, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
 		}
 		else
 		{
-			buffer_receiving_.make_space(bytes_wanna_read);
-			socket_.async_receive(asio::buffer(buffer_receiving_.peek(), bytes_wanna_read),
+			buffer_receiving_.resize(bytes_wanna_read);
+			socket_.async_receive(asio::buffer(&*buffer_receiving_.begin(), bytes_wanna_read),
 								  std::bind(&TCPSession::handle_read, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
 		}
 	}
@@ -203,22 +205,22 @@ namespace eddy
 			return;
 		}
 
-		buffer_sending_.retrieve_all();
+		buffer_sending_.resize(0);
 
-		if (buffer_to_be_sent_.readable_bytes() == 0)
+		if (buffer_to_be_sent_.empty())
 		{
 			size_t bytes_wanna_write = filter_->bytes_wanna_write(messages_to_be_sent_);
 
 			if (bytes_wanna_write == 0) return;
 
-			buffer_to_be_sent_.make_space(bytes_wanna_write);
+			buffer_to_be_sent_.resize(bytes_wanna_write);
 			filter_->write(messages_to_be_sent_, buffer_to_be_sent_);
+			messages_to_be_sent_.clear();
 		}
 
 		++num_handlers_;
 		buffer_sending_.swap(buffer_to_be_sent_);
-		socket_.async_send(asio::buffer(buffer_sending_.peek(), buffer_sending_.readable_bytes()),
+		socket_.async_send(asio::buffer(&*buffer_sending_.begin(), buffer_sending_.size()),
 						   std::bind(&TCPSession::hanlde_write, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
 	}
-
 }

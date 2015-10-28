@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include <thread>
 #include <memory>
+#include <thread>
 #include <cstdint>
 
 

@@ -29,37 +29,35 @@ namespace eddy
 		});
 	}
 
-	size_t SimpleMessageFilter::read(NetMessage &buffer, std::vector<NetMessage> &messages_received)
+	size_t SimpleMessageFilter::read(const Buffer &buffer, std::vector<NetMessage> &messages_received)
 	{
 		if (!header_read_)
 		{
-			header_ = ntohs(buffer.read_uint16());
+			char *data = const_cast<char *>(&*buffer.begin());
+			header_ = ntohs(*reinterpret_cast<MessageHeader *>(data));
 			header_read_ = true;
 			return s_header_size_;
 		}
 		else
 		{
 			NetMessage new_message(header_);
-			new_message.append(buffer.peek(), header_);
+			new_message.append(&*buffer.begin(), header_);
 			messages_received.push_back(std::move(new_message));
-			buffer.retrieve(header_);
 			header_read_ = false;
 			return header_;
 		}
 	}
 
-	size_t SimpleMessageFilter::write(std::vector<NetMessage> &messages_to_be_sent, NetMessage &buffer)
+	size_t SimpleMessageFilter::write(const std::vector<NetMessage> &messages_to_be_sent, Buffer &buffer)
 	{
 		size_t result = 0;
-		for (NetMessage &message : messages_to_be_sent)
+		for (const NetMessage &message : messages_to_be_sent)
 		{
-			MessageHeader lenght = static_cast<MessageHeader>(message.readable_bytes());
-			lenght = htons(lenght);
-			buffer.append(&lenght, s_header_size_);
-			buffer.append(message.peek(), lenght);
+			MessageHeader header = htons(static_cast<MessageHeader>(message.readable_bytes()));
+			buffer.insert(buffer.end(), reinterpret_cast<const char*>(&header), reinterpret_cast<const char*>(&header) + sizeof(MessageHeader));
+			buffer.insert(buffer.end(), message.peek(), message.peek() + message.readable_bytes());
 			result += s_header_size_ + message.readable_bytes();
 		}
-		messages_to_be_sent.clear();
 		return result;
 	}
 }
