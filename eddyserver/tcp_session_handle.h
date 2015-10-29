@@ -49,7 +49,11 @@ namespace eddy
 		template <typename CompletionHandler>
 		void thread_task(ASIO_MOVE_ARG(CompletionHandler) handler)
 		{
-			io_thread_manager_->thread()->post(handler);
+			assert(io_thread_manager_ != nullptr);
+			if (io_thread_manager_ != nullptr)
+			{
+				io_thread_manager_->thread()->post(handler);
+			}	
 		}
 
 	public:
