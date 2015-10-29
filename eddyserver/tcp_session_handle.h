@@ -26,14 +26,14 @@ namespace eddy
 
 		bool is_closed() const;
 
-		TCPSessionID session_id() const
-		{
-			return session_id_;
-		}
-
 		ThreadID thread_id() const
 		{
 			return thread_id_;
+		}
+
+		TCPSessionID session_id() const
+		{
+			return session_id_;
 		}
 
 		IOServiceThreadManager* thread_manager()
@@ -44,6 +44,12 @@ namespace eddy
 		std::vector<NetMessage>& messages_to_be_sent()
 		{
 			return messages_to_be_sent_;
+		}
+
+		template <typename CompletionHandler>
+		void thread_task(ASIO_MOVE_ARG(CompletionHandler) handler)
+		{
+			io_thread_manager_->thread()->post(handler);
 		}
 
 	public:
