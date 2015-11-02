@@ -88,6 +88,8 @@ namespace eddy
 	{
 		if (is_closed()) return;
 
+		PackMessageList(shared_from_this());
+
 		ThreadPointer thread_ptr = thread_manager()->thread(thread_id_);
 		if (thread_ptr != nullptr)
 		{
