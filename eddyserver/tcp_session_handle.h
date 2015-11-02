@@ -20,6 +20,8 @@ namespace eddy
 
 		void send(NetMessage &message);
 
+		void send(NetMessage &&message);
+
 		void close();
 
 		void dispose();

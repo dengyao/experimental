@@ -116,4 +116,26 @@ namespace eddy
 			}
 		}
 	}
+
+	void TCPSessionHandle::send(NetMessage &&message)
+	{
+		if (is_closed()) return;
+
+		if (message.readable_bytes() == 0) return;
+
+		bool wanna_send = messages_to_be_sent_.empty();
+		messages_to_be_sent_.push_back(message);
+
+		if (wanna_send)
+		{
+			if (thread_id_ == io_thread_manager_->main_thread()->id())
+			{
+				io_thread_manager_->main_thread()->post(std::bind(SendMessageListDirectly, shared_from_this()));
+			}
+			else
+			{
+				io_thread_manager_->main_thread()->post(std::bind(PackMessageList, shared_from_this()));
+			}
+		}
+	}
 }

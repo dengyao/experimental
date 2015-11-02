@@ -160,7 +160,7 @@ namespace eddy
 		bool wanna_post = messages_received_.empty();
 		size_t bytes_read = filter_->read(buffer_receiving_, messages_received_);
 		assert(bytes_read == bytes_transferred);
-		buffer_receiving_.resize(0);
+		buffer_receiving_.clear();
 		wanna_post = wanna_post && !messages_received_.empty();
 
 		if (wanna_post)
@@ -205,7 +205,7 @@ namespace eddy
 			return;
 		}
 
-		buffer_sending_.resize(0);
+		buffer_sending_.clear();
 
 		if (buffer_to_be_sent_.empty())
 		{
