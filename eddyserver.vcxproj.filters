@@ -2,7 +2,7 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="eddyserver">
-      <UniqueIdentifier>{27dd3e4b-7ac0-4564-8bb4-c98b692d96d9}</UniqueIdentifier>
+      <UniqueIdentifier>{a39faa7d-380c-48bf-86f8-287bfd06144a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
