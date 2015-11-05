@@ -25,7 +25,7 @@ namespace eddy
 		}
 		return std::accumulate(messages_to_be_sent.begin(), messages_to_be_sent.end(), 0, [=](size_t sum, const NetMessage &message)
 		{
-			return sum + s_header_size_ + message.readable_bytes();
+			return sum + s_header_size_ + message.readable();
 		});
 	}
 
@@ -41,7 +41,7 @@ namespace eddy
 		else
 		{
 			NetMessage new_message(header_);
-			new_message.append(&*buffer.begin(), header_);
+			new_message.write(&*buffer.begin(), header_);
 			messages_received.push_back(std::move(new_message));
 			header_read_ = false;
 			return header_;
@@ -53,10 +53,10 @@ namespace eddy
 		size_t result = 0;
 		for (const NetMessage &message : messages_to_be_sent)
 		{
-			MessageHeader header = htons(static_cast<MessageHeader>(message.readable_bytes()));
+			MessageHeader header = htons(static_cast<MessageHeader>(message.readable()));
 			buffer.insert(buffer.end(), reinterpret_cast<const char*>(&header), reinterpret_cast<const char*>(&header) + sizeof(MessageHeader));
-			buffer.insert(buffer.end(), message.peek(), message.peek() + message.readable_bytes());
-			result += s_header_size_ + message.readable_bytes();
+			buffer.insert(buffer.end(), message.data(), message.data() + message.readable());
+			result += s_header_size_ + message.readable();
 		}
 		return result;
 	}

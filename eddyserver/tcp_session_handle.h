@@ -3,12 +3,12 @@
 #include "types.h"
 #include "net_message.h"
 #include "tcp_session.h"
+#include "io_service_thread.h"
+#include "io_service_thread_manager.h"
 
 
 namespace eddy
 {
-	class IOServiceThreadManager;
-
 	class TCPSessionHandle : public std::enable_shared_from_this < TCPSessionHandle >
 	{
 		friend class IOServiceThreadManager;
@@ -19,8 +19,6 @@ namespace eddy
 		virtual ~TCPSessionHandle();
 
 		void send(NetMessage &message);
-
-		void send(NetMessage &&message);
 
 		void close();
 

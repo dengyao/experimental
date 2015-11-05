@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include <array>
+#include <memory>
 #include <vector>
 #include <string>
 #include <cstdint>
@@ -10,46 +12,80 @@ namespace eddy
 	class NetMessage
 	{
 	public:
-		static const size_t kCheapPrepend = 8;
-		static const size_t kInitialSize = 1024 - kCheapPrepend;
+		typedef char					value_type;
+		typedef value_type*				pointer;
+		typedef const value_type*		const_pointer;
+		typedef std::vector<value_type>	DynamicVector;
 
 	public:
-		explicit NetMessage(size_t initial_size = kInitialSize);
+		static const size_t kDynamicThreshold = 128;
 
-		~NetMessage();
+	public:
+		NetMessage();
+
+		NetMessage(size_t size);
 
 		NetMessage(const NetMessage &that);
 
 		NetMessage(NetMessage &&that);
 
+		~NetMessage();
+
 		NetMessage& operator= (const NetMessage &that);
 
 		NetMessage& operator= (NetMessage &&that);
 
-		void swap(NetMessage &that);
+	public:
+		bool is_dynamic() const
+		{
+			return dynamic_data_ != nullptr;
+		}
+
+		size_t readable() const
+		{
+			return writer_pos_ - reader_pos_;
+		}
+
+		size_t prependable() const
+		{
+			return reader_pos_;
+		}
+
+		size_t writeable() const
+		{
+			return is_dynamic() ? dynamic_data_->size() - writer_pos_ : static_data_.size() - writer_pos_;
+		}
+
+		size_t capacity() const
+		{
+			return is_dynamic() ? dynamic_data_->capacity() : static_data_.size();
+		}
+
+		bool empty() const
+		{
+			return readable() == 0;
+		}
+
+		pointer data()
+		{
+			return (is_dynamic() ? dynamic_data_->data() : static_data_.data()) + reader_pos_;
+		}
+
+		const_pointer data() const
+		{
+			return (is_dynamic() ? dynamic_data_->data() : static_data_.data()) + reader_pos_;
+		}
 
 	public:
-		size_t readable_bytes() const;
+		void clear();
 
-		size_t writable_bytes() const;
+		void set_dynamic();
 
-		size_t prependable_bytes() const;
+		void reserve(size_t size);
 
-		void make_space(size_t len);
+		void swap(NetMessage &that);
 
-		char* peek();
-
-		const char* peek() const;
-
-		void retrieve(size_t len);
-
-		void retrieve_all();
-
-		void has_written(size_t len);
-
-		void append(const void *user_data, size_t len);
-
-		void prepend(const void *user_data, size_t len);
+		size_t write(const void *user_data, size_t size);
 
 	public:
 		int8_t read_int8();
@@ -94,16 +130,21 @@ namespace eddy
 		void write_lenght_and_string(const std::string &value);
 
 	private:
-		char* begin();
+		void retrieve_all();
 
-		const char* begin() const;
+		void retrieve(size_t size);
 
-		void ensure_writable_bytes(size_t len);
+		void make_space(size_t size);
+
+		void has_written(size_t size);
+
+		void ensure_writable_bytes(size_t size);
 
 	private:
 		size_t reader_pos_;
 		size_t writer_pos_;
-		std::vector<char> buffer_;
+		std::unique_ptr<DynamicVector> dynamic_data_;
+		std::array<value_type, kDynamicThreshold> static_data_;
 	};
 
 	typedef std::vector<NetMessage> NetMessageVector;

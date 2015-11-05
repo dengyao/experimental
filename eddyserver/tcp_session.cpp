@@ -80,7 +80,7 @@ namespace eddy
 		++num_handlers_;
 		if (bytes_wanna_read == filter_->any_bytes())
 		{
-			buffer_receiving_.resize(NetMessage::kInitialSize);
+			buffer_receiving_.resize(NetMessage::kDynamicThreshold);
 			socket_.async_read_some(asio::buffer(&*buffer_receiving_.begin(), buffer_receiving_.size()),
 									std::bind(&TCPSession::handle_read, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
 		}
@@ -181,7 +181,7 @@ namespace eddy
 		++num_handlers_;	
 		if (bytes_wanna_read == filter_->any_bytes())
 		{
-			buffer_receiving_.resize(NetMessage::kInitialSize);
+			buffer_receiving_.resize(NetMessage::kDynamicThreshold);
 			socket_.async_read_some(asio::buffer(&*buffer_receiving_.begin(), buffer_receiving_.size()),
 									std::bind(&TCPSession::handle_read, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
 		}
