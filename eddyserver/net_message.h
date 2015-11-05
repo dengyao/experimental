@@ -85,6 +85,10 @@ namespace eddy
 
 		void swap(NetMessage &that);
 
+		void retrieve_all();
+
+		void retrieve(size_t size);
+
 		size_t write(const void *user_data, size_t size);
 
 	public:
@@ -130,10 +134,6 @@ namespace eddy
 		void write_lenght_and_string(const std::string &value);
 
 	private:
-		void retrieve_all();
-
-		void retrieve(size_t size);
-
 		void make_space(size_t size);
 
 		void has_written(size_t size);
