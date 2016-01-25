@@ -1,11 +1,11 @@
-﻿#pragma once
+﻿#ifndef __NET_MESSAGE_H__
+#define __NET_MESSAGE_H__
 
 #include <array>
 #include <memory>
 #include <vector>
 #include <string>
 #include <cstdint>
-
 
 namespace eddy
 {
@@ -149,3 +149,5 @@ namespace eddy
 
 	typedef std::vector<NetMessage> NetMessageVector;
 }
+
+#endif

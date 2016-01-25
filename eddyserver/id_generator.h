@@ -1,8 +1,8 @@
-﻿#pragma once
+﻿#ifndef __ID_GENERATOR_H__
+#define __ID_GENERATOR_H__
 
 #include <vector>
 #include <cstdint>
-
 
 namespace eddy
 {
@@ -42,3 +42,5 @@ namespace eddy
 		std::vector<uint32_t>	pool_;
 	};
 }
+
+#endif

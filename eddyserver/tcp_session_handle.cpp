@@ -1,9 +1,7 @@
 ﻿#include "tcp_session_handle.h"
-
 #include "id_generator.h"
 #include "io_service_thread.h"
 #include "io_service_thread_manager.h"
-
 
 namespace eddy
 {

@@ -1,10 +1,10 @@
-﻿#pragma once
+﻿#ifndef __MESSAGE_FILTER_H__
+#define __MESSAGE_FILTER_H__
 
 #include <limits>
 #include <numeric>
 #include "types.h"
 #include "net_message.h"
-
 
 namespace eddy
 {
@@ -59,3 +59,5 @@ namespace eddy
 		static const size_t	s_header_size_;
 	};
 }
+
+#endif

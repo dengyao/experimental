@@ -1,11 +1,11 @@
-﻿#pragma once
+﻿#ifndef __TCP_SESSION_HANDLE_H__
+#define __TCP_SESSION_HANDLE_H__
 
 #include "types.h"
 #include "net_message.h"
 #include "tcp_session.h"
 #include "io_service_thread.h"
 #include "io_service_thread_manager.h"
-
 
 namespace eddy
 {
@@ -77,3 +77,5 @@ namespace eddy
 		std::vector<NetMessage>		messages_to_be_sent_;
 	};
 }
+
+#endif

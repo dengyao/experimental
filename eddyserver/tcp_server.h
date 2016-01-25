@@ -1,9 +1,9 @@
-﻿#pragma once
+﻿#ifndef __TCP_SERVER_H__
+#define __TCP_SERVER_H__
 
 #include <functional>
 #include <asio.hpp>
 #include "types.h"
-
 
 namespace eddy
 {
@@ -33,3 +33,5 @@ namespace eddy
 		MessageFilterCreator		message_filter_creator_;
 	};
 }
+
+#endif

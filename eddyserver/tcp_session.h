@@ -1,10 +1,10 @@
-﻿#pragma once
+﻿#ifndef __TCP_SESSION_H__
+#define __TCP_SESSION_H__
 
 #include <memory>
 #include <asio/ip/tcp.hpp>
 #include "types.h"
 #include "net_message.h"
-
 
 namespace eddy
 {
@@ -70,3 +70,5 @@ namespace eddy
 		NetMessageVector		messages_to_be_sent_;
 	};
 }
+
+#endif

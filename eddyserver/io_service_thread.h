@@ -1,8 +1,8 @@
-﻿#pragma once
+﻿#ifndef __IO_SERVICE_THREAD_H__
+#define __IO_SERVICE_THREAD_H__
 
 #include <asio/io_service.hpp>
 #include "tcp_session_queue.h"
-
 
 namespace eddy
 {
@@ -67,3 +67,5 @@ namespace eddy
 		TCPSessionQueue							session_queue_;
 	};
 }
+
+#endif

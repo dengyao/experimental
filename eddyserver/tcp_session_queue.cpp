@@ -1,7 +1,5 @@
 ﻿#include "tcp_session_queue.h"
-
 #include "tcp_session.h"
-
 
 namespace eddy
 {

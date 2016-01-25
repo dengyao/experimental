@@ -1,8 +1,6 @@
 ﻿#include "net_message.h"
-
 #include <cassert>
 #include <cstring>
-
 
 namespace eddy
 {

@@ -8,7 +8,6 @@
 #include "tcp_session_handle.h"
 #include "io_service_thread_manager.h"
 
-
 namespace eddy
 {
 	namespace

@@ -1,9 +1,9 @@
-﻿#pragma once
+﻿#ifndef __TYPES_H__
+#define __TYPES_H__
 
 #include <memory>
 #include <thread>
 #include <cstdint>
-
 
 namespace eddy
 {
@@ -22,3 +22,5 @@ namespace eddy
 	typedef std::shared_ptr<TCPSessionHandle>		SessionHandlerPointer;
 	typedef std::shared_ptr<MessageFilterInterface>	MessageFilterPointer;
 }
+
+#endif

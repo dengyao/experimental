@@ -1,10 +1,8 @@
 ﻿#include "io_service_thread_manager.h"
-
 #include <limits>
 #include <cassert>
 #include "io_service_thread.h"
 #include "tcp_session_handle.h"
-
 
 namespace eddy
 {
