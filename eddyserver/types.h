@@ -4,6 +4,7 @@
 #include <memory>
 #include <thread>
 #include <cstdint>
+#include <functional>
 
 namespace eddy
 {
@@ -21,6 +22,9 @@ namespace eddy
 	typedef std::shared_ptr<IOServiceThread>		ThreadPointer;
 	typedef std::shared_ptr<TCPSessionHandle>		SessionHandlerPointer;
 	typedef std::shared_ptr<MessageFilterInterface>	MessageFilterPointer;
+
+	typedef std::function<SessionHandlerPointer()>	SessionHandlerCreator;
+	typedef std::function<MessageFilterPointer()>	MessageFilterCreator;
 }
 
 #endif

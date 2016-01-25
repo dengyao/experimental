@@ -1,7 +1,6 @@
 ﻿#ifndef __TCP_SESSION_QUEUE_H__
 #define __TCP_SESSION_QUEUE_H__
 
-#include <memory>
 #include <atomic>
 #include <unordered_map>
 #include "types.h"

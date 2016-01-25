@@ -1,7 +1,6 @@
 ﻿#ifndef __TCP_SERVER_H__
 #define __TCP_SERVER_H__
 
-#include <functional>
 #include <asio.hpp>
 #include "types.h"
 
@@ -11,10 +10,6 @@ namespace eddy
 
 	class TCPServer
 	{
-	public:
-		typedef std::function<SessionHandlerPointer()>	SessionHandlerCreator;
-		typedef std::function<MessageFilterPointer()>	MessageFilterCreator;
-
 	public:
 		TCPServer(asio::ip::tcp::endpoint &endpoint,
 				  IOServiceThreadManager &io_thread_manager,

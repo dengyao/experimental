@@ -2,7 +2,6 @@
 #define __IO_SERVICE_THREAD_MANAGER_H__
 
 #include <vector>
-#include <memory>
 #include <unordered_map>
 #include "types.h"
 #include "id_generator.h"

@@ -1,7 +1,6 @@
 ﻿#ifndef __TCP_SESSION_H__
 #define __TCP_SESSION_H__
 
-#include <memory>
 #include <asio/ip/tcp.hpp>
 #include "types.h"
 #include "net_message.h"

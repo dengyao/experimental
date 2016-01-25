@@ -17,6 +17,7 @@
     <ClInclude Include="eddyserver\io_service_thread_manager.h" />
     <ClInclude Include="eddyserver\message_filter.h" />
     <ClInclude Include="eddyserver\net_message.h" />
+    <ClInclude Include="eddyserver\tcp_client.h" />
     <ClInclude Include="eddyserver\tcp_server.h" />
     <ClInclude Include="eddyserver\tcp_session.h" />
     <ClInclude Include="eddyserver\tcp_session_handle.h" />
@@ -28,6 +29,7 @@
     <ClCompile Include="eddyserver\io_service_thread_manager.cpp" />
     <ClCompile Include="eddyserver\message_filter.cpp" />
     <ClCompile Include="eddyserver\net_message.cpp" />
+    <ClCompile Include="eddyserver\tcp_client.cpp" />
     <ClCompile Include="eddyserver\tcp_server.cpp" />
     <ClCompile Include="eddyserver\tcp_session.cpp" />
     <ClCompile Include="eddyserver\tcp_session_handle.cpp" />
@@ -64,6 +66,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>E:\SourceCode\asio-1.10.6\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
