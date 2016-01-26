@@ -11,15 +11,18 @@ namespace eddy
 	class TCPClient
 	{
 	public:
-		TCPClient(asio::ip::tcp::endpoint &endpoint,
-			IOServiceThreadManager &io_thread_manager,
+		TCPClient(IOServiceThreadManager &io_thread_manager,
 			const SessionHandlerCreator &handler_creator,
 			const MessageFilterCreator &filter_creator);
 
 		asio::io_service& io_service();
 
+		void async_connect(asio::ip::tcp::endpoint &endpoint);
+
+		void connect(asio::ip::tcp::endpoint &endpoint, asio::error_code &ec);
+
 	private:
-		void handle_connect(SessionPointer session_ptr, asio::error_code error);
+		void handle_connect(SessionPointer session_ptr, asio::error_code ec);
 
 	private:
 		IOServiceThreadManager&		io_thread_manager_;
