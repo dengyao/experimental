@@ -4,7 +4,6 @@
 namespace eddy
 {
 	TCPSessionQueue::TCPSessionQueue()
-		: load_count_(0)
 	{
 
 	}
@@ -16,15 +15,11 @@ namespace eddy
 
 	size_t TCPSessionQueue::size() const
 	{
-		return load_count_;
+		return session_queue_.size();
 	}
 
 	void TCPSessionQueue::add(SessionPointer session_ptr)
 	{
-		if (session_queue_.count(session_ptr->id()) == 0)
-		{
-			++load_count_;
-		}
 		session_queue_.insert(std::make_pair(session_ptr->id(), session_ptr));
 	}
 
@@ -40,10 +35,6 @@ namespace eddy
 
 	void TCPSessionQueue::remove(TCPSessionID id)
 	{
-		if (session_queue_.count(id) == 1)
-		{
-			--load_count_;
-		}
 		session_queue_.erase(id);
 	}
 

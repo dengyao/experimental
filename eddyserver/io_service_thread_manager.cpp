@@ -1,6 +1,7 @@
 ﻿#include "io_service_thread_manager.h"
 #include <limits>
 #include <cassert>
+#include <iostream>
 #include "io_service_thread.h"
 #include "tcp_session_handle.h"
 
@@ -16,9 +17,10 @@ namespace eddy
 		}
 
 		threads_.resize(thread_num);
+		thread_load_.resize(threads_.size());
 		for (size_t i = 0; i < threads_.size(); ++i)
 		{
-			threads_[i] = std::make_shared<IOServiceThread>(*this);
+			threads_[i] = std::make_shared<IOServiceThread>(i, *this);
 		}
 	}
 
@@ -79,9 +81,9 @@ namespace eddy
 
 		size_t min_element_index = kMainThreadIndex;
 		size_t min_element_value = std::numeric_limits<size_t>::max();
-		for (size_t i = 0; i < threads_.size(); ++i)
+		for (size_t i = 0; i < thread_load_.size(); ++i)
 		{
-			if (kMainThreadIndex != i && threads_[i]->load() < min_element_value)
+			if (kMainThreadIndex != i && thread_load_[i] < min_element_value)
 			{
 				min_element_index = i;
 			}
@@ -115,6 +117,16 @@ namespace eddy
 			session_handler_map_.insert(std::make_pair(id, handler_ptr));
 			session_ptr->thread()->post(std::bind(&TCPSession::init, session_ptr, id));
 			handler_ptr->on_connect();
+
+			ThreadID td_id = handler_ptr->thread_id();
+			if (td_id < thread_load_.size())
+			{
+				++thread_load_[td_id];
+			}
+		}
+		else
+		{
+			std::cerr << "generator session id fail!" << std::endl;
 		}
 	}
 
@@ -125,12 +137,18 @@ namespace eddy
 		if (itr != session_handler_map_.end())
 		{
 			SessionHandlerPointer handler_ptr = itr->second;
+			ThreadID td_id = handler_ptr->thread_id();
 			if (handler_ptr != nullptr)
 			{
 				handler_ptr->on_close();
 				handler_ptr->dispose();
 			}
 			session_handler_map_.erase(itr);
+
+			if (td_id < thread_load_.size() && thread_load_[td_id] > 0)
+			{
+				--thread_load_[td_id];
+			}
 		}
 
 		if (IDGenerator::kInvalidID != id)
@@ -146,6 +164,6 @@ namespace eddy
 		{
 			return itr->second;
 		}
-		return SessionHandlerPointer();
+		return nullptr;
 	}
 }

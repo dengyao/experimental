@@ -1,5 +1,4 @@
 ﻿#include "tcp_client.h"
-#include <cassert>
 #include <iostream>
 #include "tcp_session.h"
 #include "io_service_thread.h"
@@ -29,19 +28,18 @@ namespace eddy
 		session_ptr->socket().async_connect(endpoint, std::bind(&TCPClient::handle_connect, this, session_ptr, std::placeholders::_1));
 	}
 
-	void TCPClient::connect(asio::ip::tcp::endpoint &endpoint, asio::error_code &ec)
+	void TCPClient::connect(asio::ip::tcp::endpoint &endpoint, asio::error_code &error_code)
 	{
 		SessionPointer session_ptr = std::make_shared<TCPSession>(io_thread_manager_.thread(), message_filter_creator_());
-		session_ptr->socket().connect(endpoint, ec);
-		handle_connect(session_ptr, ec);
+		session_ptr->socket().connect(endpoint, error_code);
+		handle_connect(session_ptr, error_code);
 	}
 
-	void TCPClient::handle_connect(SessionPointer session_ptr, asio::error_code ec)
+	void TCPClient::handle_connect(SessionPointer session_ptr, asio::error_code error_code)
 	{
-		if (ec)
+		if (error_code)
 		{
-			std::cerr << ec.message() << std::endl;
-			assert(false);
+			std::cerr << error_code.message() << std::endl;
 			return;
 		}
 		SessionHandlerPointer handle_ptr = session_handler_creator_();

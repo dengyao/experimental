@@ -1,6 +1,7 @@
 ﻿#ifndef __IO_SERVICE_THREAD_MANAGER_H__
 #define __IO_SERVICE_THREAD_MANAGER_H__
 
+#include <map>
 #include <vector>
 #include <unordered_map>
 #include "types.h"
@@ -40,6 +41,7 @@ namespace eddy
 
 	private:
 		std::vector<ThreadPointer>	threads_;
+		std::vector<size_t>			thread_load_;
 		SessionHandlerMap			session_handler_map_;
 		IDGenerator					id_generator_;
 	};

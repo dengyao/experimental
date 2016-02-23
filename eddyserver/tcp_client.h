@@ -19,10 +19,10 @@ namespace eddy
 
 		void async_connect(asio::ip::tcp::endpoint &endpoint);
 
-		void connect(asio::ip::tcp::endpoint &endpoint, asio::error_code &ec);
+		void connect(asio::ip::tcp::endpoint &endpoint, asio::error_code &error_code);
 
 	private:
-		void handle_connect(SessionPointer session_ptr, asio::error_code ec);
+		void handle_connect(SessionPointer session_ptr, asio::error_code error_code);
 
 	private:
 		IOServiceThreadManager&		io_thread_manager_;

@@ -1,7 +1,6 @@
 ﻿#ifndef __TCP_SESSION_QUEUE_H__
 #define __TCP_SESSION_QUEUE_H__
 
-#include <atomic>
 #include <unordered_map>
 #include "types.h"
 
@@ -29,7 +28,6 @@ namespace eddy
 		TCPSessionQueue& operator= (const TCPSessionQueue&) = delete;
 
 	private:
-		std::atomic<size_t>									load_count_;
 		std::unordered_map<TCPSessionID, SessionPointer>	session_queue_;
 	};
 }

@@ -206,8 +206,8 @@ namespace eddy
 		else
 		{
 			dynamic_data_->insert(dynamic_data_->begin() + writer_pos_,
-								  reinterpret_cast<const_pointer>(user_data),
-								  reinterpret_cast<const_pointer>(user_data)+size);
+								  reinterpret_cast<ConstPointer>(user_data),
+								  reinterpret_cast<ConstPointer>(user_data)+size);
 		}
 		has_written(size);
 		return size;

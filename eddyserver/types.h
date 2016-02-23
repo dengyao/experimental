@@ -2,14 +2,13 @@
 #define __TYPES_H__
 
 #include <memory>
-#include <thread>
 #include <cstdint>
 #include <functional>
 
 namespace eddy
 {
+	typedef uint32_t								ThreadID;
 	typedef uint32_t								TCPSessionID;
-	typedef std::thread::id							ThreadID;
 
 	class											NetMessage;
 	class											TCPSession;

@@ -12,10 +12,10 @@ namespace eddy
 	class NetMessage
 	{
 	public:
-		typedef char					value_type;
-		typedef value_type*				pointer;
-		typedef const value_type*		const_pointer;
-		typedef std::vector<value_type>	DynamicVector;
+		typedef char					ValueType;
+		typedef ValueType*				Pointer;
+		typedef const ValueType*		ConstPointer;
+		typedef std::vector<ValueType>	DynamicVector;
 
 	public:
 		static const size_t kDynamicThreshold = 128;
@@ -66,12 +66,12 @@ namespace eddy
 			return readable() == 0;
 		}
 
-		pointer data()
+		Pointer data()
 		{
 			return (is_dynamic() ? dynamic_data_->data() : static_data_.data()) + reader_pos_;
 		}
 
-		const_pointer data() const
+		ConstPointer data() const
 		{
 			return (is_dynamic() ? dynamic_data_->data() : static_data_.data()) + reader_pos_;
 		}
@@ -144,7 +144,7 @@ namespace eddy
 		size_t reader_pos_;
 		size_t writer_pos_;
 		std::unique_ptr<DynamicVector> dynamic_data_;
-		std::array<value_type, kDynamicThreshold> static_data_;
+		std::array<ValueType, kDynamicThreshold> static_data_;
 	};
 
 	typedef std::vector<NetMessage> NetMessageVector;

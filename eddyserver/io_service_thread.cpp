@@ -3,8 +3,9 @@
 
 namespace eddy
 {
-	IOServiceThread::IOServiceThread(IOServiceThreadManager &manager)
+	IOServiceThread::IOServiceThread(ThreadID id, IOServiceThreadManager &manager)
 		: work_(nullptr)
+		, thread_id_(id)
 		, manager_(manager)
 	{
 
@@ -37,11 +38,6 @@ namespace eddy
 		{
 			thread_ = std::make_shared<std::thread>(std::bind(&IOServiceThread::run, this));
 		}
-	}
-
-	size_t IOServiceThread::load() const
-	{
-		return session_queue_.size();
 	}
 
 	void IOServiceThread::join()

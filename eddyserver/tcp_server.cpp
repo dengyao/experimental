@@ -35,8 +35,7 @@ namespace eddy
 			return;
 		}
 
-		SessionHandlerPointer handle_ptr = session_handler_creator_();
-		io_thread_manager_.on_session_connect(session_ptr, handle_ptr);
+		io_thread_manager_.on_session_connect(session_ptr, session_handler_creator_());
 
 		SessionPointer new_session_ptr = std::make_shared<TCPSession>(io_thread_manager_.thread(), message_filter_creator_());
 		acceptor_.async_accept(new_session_ptr->socket(), std::bind(&TCPServer::handle_accept, this, new_session_ptr, std::placeholders::_1));
