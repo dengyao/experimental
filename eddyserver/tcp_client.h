@@ -25,9 +25,9 @@ namespace eddy
 		void handle_connect(SessionPointer session_ptr, asio::error_code error_code);
 
 	private:
-		IOServiceThreadManager&		io_thread_manager_;
-		SessionHandlerCreator		session_handler_creator_;
-		MessageFilterCreator		message_filter_creator_;
+		IOServiceThreadManager&			io_thread_manager_;
+		const SessionHandlerCreator&	session_handler_creator_;
+		const MessageFilterCreator&		message_filter_creator_;
 	};
 }
 

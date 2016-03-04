@@ -141,10 +141,10 @@ namespace eddy
 		void ensure_writable_bytes(size_t size);
 
 	private:
-		size_t reader_pos_;
-		size_t writer_pos_;
-		std::unique_ptr<DynamicVector> dynamic_data_;
-		std::array<ValueType, kDynamicThreshold> static_data_;
+		size_t										reader_pos_;
+		size_t										writer_pos_;
+		std::unique_ptr<DynamicVector>				dynamic_data_;
+		std::array<ValueType, kDynamicThreshold>	static_data_;
 	};
 
 	typedef std::vector<NetMessage> NetMessageVector;
