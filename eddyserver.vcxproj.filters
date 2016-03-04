@@ -40,6 +40,9 @@
     <ClInclude Include="eddyserver\tcp_client.h">
       <Filter>eddyserver</Filter>
     </ClInclude>
+    <ClInclude Include="eddyserver\task_queue.h">
+      <Filter>eddyserver</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="eddyserver\io_service_thread.cpp">
@@ -67,6 +70,9 @@
       <Filter>eddyserver</Filter>
     </ClCompile>
     <ClCompile Include="eddyserver\tcp_client.cpp">
+      <Filter>eddyserver</Filter>
+    </ClCompile>
+    <ClCompile Include="eddyserver\task_queue.cpp">
       <Filter>eddyserver</Filter>
     </ClCompile>
   </ItemGroup>

@@ -17,6 +17,7 @@
     <ClInclude Include="eddyserver\io_service_thread_manager.h" />
     <ClInclude Include="eddyserver\message_filter.h" />
     <ClInclude Include="eddyserver\net_message.h" />
+    <ClInclude Include="eddyserver\task_queue.h" />
     <ClInclude Include="eddyserver\tcp_client.h" />
     <ClInclude Include="eddyserver\tcp_server.h" />
     <ClInclude Include="eddyserver\tcp_session.h" />
@@ -29,6 +30,7 @@
     <ClCompile Include="eddyserver\io_service_thread_manager.cpp" />
     <ClCompile Include="eddyserver\message_filter.cpp" />
     <ClCompile Include="eddyserver\net_message.cpp" />
+    <ClCompile Include="eddyserver\task_queue.cpp" />
     <ClCompile Include="eddyserver\tcp_client.cpp" />
     <ClCompile Include="eddyserver\tcp_server.cpp" />
     <ClCompile Include="eddyserver\tcp_session.cpp" />
@@ -78,7 +80,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;ASIO_MSVC;ASIO_STANDALONE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ASIO_INCLUDE_PATH);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\Work\Shared\base\asio;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

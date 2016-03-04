@@ -36,7 +36,7 @@ namespace eddy
 	{
 		if (thread_ == nullptr)
 		{
-			thread_ = std::make_shared<std::thread>(std::bind(&IOServiceThread::run, this));
+			thread_.reset(new std::thread(std::bind(&IOServiceThread::run, this)));
 		}
 	}
 

@@ -63,7 +63,7 @@ namespace eddy
 		ThreadID						thread_id_;
 		IOServiceThreadManager&			manager_;
 		asio::io_service				io_service_;
-		std::shared_ptr<std::thread>	thread_;
+		std::unique_ptr<std::thread>	thread_;
 		WorkPointer						work_;
 		TCPSessionQueue					session_queue_;
 	};

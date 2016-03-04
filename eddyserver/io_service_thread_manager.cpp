@@ -11,6 +11,7 @@ namespace eddy
 
 	IOServiceThreadManager::IOServiceThreadManager(size_t thread_num)
 	{
+		assert(thread_num > kMainThreadIndex);
 		if (thread_num <= kMainThreadIndex)
 		{
 			std::abort();

@@ -58,17 +58,15 @@ namespace eddy
 
 	public:
 		virtual void on_connect() = 0;
-
 		virtual void on_message(NetMessage &message) = 0;
-
 		virtual void on_close() = 0;
-
-	private:
-		void init(TCPSessionID sid, ThreadID tid, IOServiceThreadManager* manager);
 
 	protected:
 		TCPSessionHandle(const TCPSessionHandle &) = delete;
 		TCPSessionHandle& operator= (const TCPSessionHandle &) = delete;
+
+	private:
+		void init(TCPSessionID sid, ThreadID tid, IOServiceThreadManager* manager);
 
 	private:
 		TCPSessionID				session_id_;

@@ -41,6 +41,10 @@ namespace eddy
 
 		void close();
 
+	protected:
+		TCPSession(const TCPSession &) = delete;
+		TCPSession& operator= (const TCPSession &) = delete;
+
 	private:
 		void init(TCPSessionID id);
 

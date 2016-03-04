@@ -21,6 +21,10 @@ namespace eddy
 
 		void connect(asio::ip::tcp::endpoint &endpoint, asio::error_code &error_code);
 
+	protected:
+		TCPClient(const TCPClient &) = delete;
+		TCPClient& operator= (const TCPClient &) = delete;
+
 	private:
 		void handle_connect(SessionPointer session_ptr, asio::error_code error_code);
 

@@ -18,6 +18,10 @@ namespace eddy
 
 		asio::io_service& io_service();
 
+	protected:
+		TCPServer(const TCPServer &) = delete;
+		TCPServer& operator= (const TCPServer &) = delete;
+
 	private:
 		void handle_accept(SessionPointer session_ptr, asio::error_code error);
 
