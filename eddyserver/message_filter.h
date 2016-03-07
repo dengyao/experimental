@@ -25,7 +25,7 @@ namespace eddy
 
 	public:
 		virtual size_t bytes_wanna_read() = 0;
-		virtual size_t bytes_wanna_write(std::vector<NetMessage> &messages_to_be_sent) = 0;
+		virtual size_t bytes_wanna_write(const std::vector<NetMessage> &messages_to_be_sent) = 0;
 		virtual size_t read(const Buffer &buffer, std::vector<NetMessage> &messages_received) = 0;
 		virtual size_t write(const std::vector<NetMessage> &messages_to_be_sent, Buffer &buffer) = 0;
 
@@ -47,7 +47,7 @@ namespace eddy
 	public:
 		size_t bytes_wanna_read() override;
 
-		size_t bytes_wanna_write(std::vector<NetMessage> &messages_to_be_sent) override;
+		size_t bytes_wanna_write(const std::vector<NetMessage> &messages_to_be_sent) override;
 
 		size_t read(const Buffer &buffer, std::vector<NetMessage> &messages_received) override;
 

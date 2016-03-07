@@ -32,7 +32,7 @@ namespace eddy
 			return thread_;
 		}
 
-		void post_message_list(std::vector<NetMessage> &&messages);
+		void post_message_list(const std::vector<NetMessage> &messages);
 
 		std::vector<NetMessage>& messages_received()
 		{
@@ -70,7 +70,6 @@ namespace eddy
 		std::vector<char>		buffer_sending_;
 		std::vector<char>		buffer_to_be_sent_;
 		NetMessageVector		messages_received_;
-		NetMessageVector		messages_to_be_sent_;
 	};
 }
 

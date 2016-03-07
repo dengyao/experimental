@@ -16,7 +16,7 @@ namespace eddy
 		return header_read_ ? header_ : s_header_size_;
 	}
 
-	size_t SimpleMessageFilter::bytes_wanna_write(std::vector<NetMessage> &messages_to_be_sent)
+	size_t SimpleMessageFilter::bytes_wanna_write(const std::vector<NetMessage> &messages_to_be_sent)
 	{
 		if (messages_to_be_sent.empty())
 		{
