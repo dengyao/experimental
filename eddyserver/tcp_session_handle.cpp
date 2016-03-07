@@ -23,7 +23,7 @@ namespace eddy
 			SessionPointer session_ptr = thread_ptr->session_queue().get(id);
 			if (session_ptr != nullptr)
 			{
-				session_ptr->post_message_list(*messages);
+				session_ptr->post_message_list(std::move(*messages));
 			}
 		}
 
@@ -47,8 +47,7 @@ namespace eddy
 				SessionPointer session_ptr = thread_ptr->session_queue().get(session_handle_ptr->session_id());
 				if (session_ptr != nullptr)
 				{
-					session_ptr->post_message_list(session_handle_ptr->messages_to_be_sent());
-					session_handle_ptr->messages_to_be_sent().clear();
+					session_ptr->post_message_list(std::move(session_handle_ptr->messages_to_be_sent()));
 				}
 			}
 		}

@@ -122,12 +122,12 @@ namespace eddy
 		thread_->session_queue().remove(id());
 	}
 
-	void TCPSession::post_message_list(std::vector<NetMessage> &messages)
+	void TCPSession::post_message_list(std::vector<NetMessage> &&messages)
 	{
 		if (closed_) return;
 
 		assert(!messages.empty());
-		messages_to_be_sent_ = std::move(messages);
+		messages_to_be_sent_ = messages;
 
 		size_t bytes_wanna_write = filter_->bytes_wanna_write(messages_to_be_sent_);
 		if (bytes_wanna_write == 0) return;
