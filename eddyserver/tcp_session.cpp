@@ -208,13 +208,7 @@ namespace eddy
 
 		if (buffer_to_be_sent_.empty())
 		{
-			size_t bytes_wanna_write = filter_->bytes_wanna_write(messages_to_be_sent_);
-
-			if (bytes_wanna_write == 0) return;
-
-			buffer_to_be_sent_.resize(bytes_wanna_write);
-			filter_->write(messages_to_be_sent_, buffer_to_be_sent_);
-			messages_to_be_sent_.clear();
+			return;
 		}
 
 		++num_handlers_;

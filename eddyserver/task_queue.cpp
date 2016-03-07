@@ -106,7 +106,7 @@ namespace eddy
 		{
 			std::abort();
 		}
-		threads_.resize(thread_num);
+		//threads_.resize(thread_num);
 	}
 
 	TaskQueue::~TaskQueue()
@@ -134,12 +134,12 @@ namespace eddy
 	{
 		while (true)
 		{
-			size_t sum = std::accumulate(threads_.begin(), threads_.end(), 0, [](size_t sum, const TaskThread &item)
+			size_t task_sum = std::accumulate(threads_.begin(), threads_.end(), 0, [=](size_t sum, const TaskThread &item)
 			{
-				sum += item.load();
+				return sum += item.load();
 			});
 
-			if (sum > 0)
+			if (task_sum > 0)
 			{
 				std::this_thread::sleep_for(std::chrono::microseconds(200));
 			}
@@ -150,7 +150,7 @@ namespace eddy
 		}
 	}
 
-	size_t TaskQueue::append(const TaskThread::Task &task)
+	void TaskQueue::append(const TaskThread::Task &task)
 	{
 		size_t min_index = 0;
 		size_t min_value = threads_[min_index].load();

@@ -60,7 +60,7 @@ namespace eddy
 
 		void wait_for_idle();
 
-		size_t append(const TaskThread::Task &task);
+		void append(const TaskThread::Task &task);
 
 		void stop();
 
