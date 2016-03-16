@@ -12,11 +12,11 @@ namespace eddy
 	class IOServiceThreadManager;
 }
 
-#include "eddyserver/tcp_client.h"
-#include "eddyserver/tcp_server.h"
-#include "eddyserver/task_queue.h"
-#include "eddyserver/message_filter.h"
-#include "eddyserver/tcp_session_handle.h"
-#include "eddyserver/io_service_thread_manager.h"
+#include "eddy/tcp_client.h"
+#include "eddy/tcp_server.h"
+#include "eddy/task_queue.h"
+#include "eddy/message_filter.h"
+#include "eddy/tcp_session_handle.h"
+#include "eddy/io_service_thread_manager.h"
 
 #endif

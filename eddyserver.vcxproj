@@ -11,31 +11,31 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="eddyserver.h" />
-    <ClInclude Include="eddyserver\id_generator.h" />
-    <ClInclude Include="eddyserver\io_service_thread.h" />
-    <ClInclude Include="eddyserver\io_service_thread_manager.h" />
-    <ClInclude Include="eddyserver\message_filter.h" />
-    <ClInclude Include="eddyserver\net_message.h" />
-    <ClInclude Include="eddyserver\task_queue.h" />
-    <ClInclude Include="eddyserver\tcp_client.h" />
-    <ClInclude Include="eddyserver\tcp_server.h" />
-    <ClInclude Include="eddyserver\tcp_session.h" />
-    <ClInclude Include="eddyserver\tcp_session_handle.h" />
-    <ClInclude Include="eddyserver\tcp_session_queue.h" />
-    <ClInclude Include="eddyserver\types.h" />
+    <ClInclude Include="eddy.h" />
+    <ClInclude Include="eddy\id_generator.h" />
+    <ClInclude Include="eddy\io_service_thread.h" />
+    <ClInclude Include="eddy\io_service_thread_manager.h" />
+    <ClInclude Include="eddy\message_filter.h" />
+    <ClInclude Include="eddy\net_message.h" />
+    <ClInclude Include="eddy\task_queue.h" />
+    <ClInclude Include="eddy\tcp_client.h" />
+    <ClInclude Include="eddy\tcp_server.h" />
+    <ClInclude Include="eddy\tcp_session.h" />
+    <ClInclude Include="eddy\tcp_session_handle.h" />
+    <ClInclude Include="eddy\tcp_session_queue.h" />
+    <ClInclude Include="eddy\types.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="eddyserver\io_service_thread.cpp" />
-    <ClCompile Include="eddyserver\io_service_thread_manager.cpp" />
-    <ClCompile Include="eddyserver\message_filter.cpp" />
-    <ClCompile Include="eddyserver\net_message.cpp" />
-    <ClCompile Include="eddyserver\task_queue.cpp" />
-    <ClCompile Include="eddyserver\tcp_client.cpp" />
-    <ClCompile Include="eddyserver\tcp_server.cpp" />
-    <ClCompile Include="eddyserver\tcp_session.cpp" />
-    <ClCompile Include="eddyserver\tcp_session_handle.cpp" />
-    <ClCompile Include="eddyserver\tcp_session_queue.cpp" />
+    <ClCompile Include="eddy\io_service_thread.cpp" />
+    <ClCompile Include="eddy\io_service_thread_manager.cpp" />
+    <ClCompile Include="eddy\message_filter.cpp" />
+    <ClCompile Include="eddy\net_message.cpp" />
+    <ClCompile Include="eddy\task_queue.cpp" />
+    <ClCompile Include="eddy\tcp_client.cpp" />
+    <ClCompile Include="eddy\tcp_server.cpp" />
+    <ClCompile Include="eddy\tcp_session.cpp" />
+    <ClCompile Include="eddy\tcp_session_handle.cpp" />
+    <ClCompile Include="eddy\tcp_session_queue.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B72045B5-89BB-4FCC-9D7F-50D1C5ED7738}</ProjectGuid>

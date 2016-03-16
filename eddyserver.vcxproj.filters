@@ -1,79 +1,79 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="eddyserver">
+    <Filter Include="eddy">
       <UniqueIdentifier>{a39faa7d-380c-48bf-86f8-287bfd06144a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="eddyserver\id_generator.h">
-      <Filter>eddyserver</Filter>
+    <ClInclude Include="eddy.h" />
+    <ClInclude Include="eddy\id_generator.h">
+      <Filter>eddy</Filter>
     </ClInclude>
-    <ClInclude Include="eddyserver\io_service_thread.h">
-      <Filter>eddyserver</Filter>
+    <ClInclude Include="eddy\io_service_thread.h">
+      <Filter>eddy</Filter>
     </ClInclude>
-    <ClInclude Include="eddyserver\io_service_thread_manager.h">
-      <Filter>eddyserver</Filter>
+    <ClInclude Include="eddy\io_service_thread_manager.h">
+      <Filter>eddy</Filter>
     </ClInclude>
-    <ClInclude Include="eddyserver\message_filter.h">
-      <Filter>eddyserver</Filter>
+    <ClInclude Include="eddy\message_filter.h">
+      <Filter>eddy</Filter>
     </ClInclude>
-    <ClInclude Include="eddyserver\net_message.h">
-      <Filter>eddyserver</Filter>
+    <ClInclude Include="eddy\net_message.h">
+      <Filter>eddy</Filter>
     </ClInclude>
-    <ClInclude Include="eddyserver\tcp_server.h">
-      <Filter>eddyserver</Filter>
+    <ClInclude Include="eddy\task_queue.h">
+      <Filter>eddy</Filter>
     </ClInclude>
-    <ClInclude Include="eddyserver\tcp_session.h">
-      <Filter>eddyserver</Filter>
+    <ClInclude Include="eddy\tcp_client.h">
+      <Filter>eddy</Filter>
     </ClInclude>
-    <ClInclude Include="eddyserver\tcp_session_handle.h">
-      <Filter>eddyserver</Filter>
+    <ClInclude Include="eddy\tcp_server.h">
+      <Filter>eddy</Filter>
     </ClInclude>
-    <ClInclude Include="eddyserver\tcp_session_queue.h">
-      <Filter>eddyserver</Filter>
+    <ClInclude Include="eddy\tcp_session.h">
+      <Filter>eddy</Filter>
     </ClInclude>
-    <ClInclude Include="eddyserver\types.h">
-      <Filter>eddyserver</Filter>
+    <ClInclude Include="eddy\tcp_session_handle.h">
+      <Filter>eddy</Filter>
     </ClInclude>
-    <ClInclude Include="eddyserver.h" />
-    <ClInclude Include="eddyserver\tcp_client.h">
-      <Filter>eddyserver</Filter>
+    <ClInclude Include="eddy\tcp_session_queue.h">
+      <Filter>eddy</Filter>
     </ClInclude>
-    <ClInclude Include="eddyserver\task_queue.h">
-      <Filter>eddyserver</Filter>
+    <ClInclude Include="eddy\types.h">
+      <Filter>eddy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="eddyserver\io_service_thread.cpp">
-      <Filter>eddyserver</Filter>
+    <ClCompile Include="eddy\io_service_thread.cpp">
+      <Filter>eddy</Filter>
     </ClCompile>
-    <ClCompile Include="eddyserver\io_service_thread_manager.cpp">
-      <Filter>eddyserver</Filter>
+    <ClCompile Include="eddy\io_service_thread_manager.cpp">
+      <Filter>eddy</Filter>
     </ClCompile>
-    <ClCompile Include="eddyserver\message_filter.cpp">
-      <Filter>eddyserver</Filter>
+    <ClCompile Include="eddy\message_filter.cpp">
+      <Filter>eddy</Filter>
     </ClCompile>
-    <ClCompile Include="eddyserver\net_message.cpp">
-      <Filter>eddyserver</Filter>
+    <ClCompile Include="eddy\net_message.cpp">
+      <Filter>eddy</Filter>
     </ClCompile>
-    <ClCompile Include="eddyserver\tcp_server.cpp">
-      <Filter>eddyserver</Filter>
+    <ClCompile Include="eddy\task_queue.cpp">
+      <Filter>eddy</Filter>
     </ClCompile>
-    <ClCompile Include="eddyserver\tcp_session.cpp">
-      <Filter>eddyserver</Filter>
+    <ClCompile Include="eddy\tcp_client.cpp">
+      <Filter>eddy</Filter>
     </ClCompile>
-    <ClCompile Include="eddyserver\tcp_session_handle.cpp">
-      <Filter>eddyserver</Filter>
+    <ClCompile Include="eddy\tcp_server.cpp">
+      <Filter>eddy</Filter>
     </ClCompile>
-    <ClCompile Include="eddyserver\tcp_session_queue.cpp">
-      <Filter>eddyserver</Filter>
+    <ClCompile Include="eddy\tcp_session.cpp">
+      <Filter>eddy</Filter>
     </ClCompile>
-    <ClCompile Include="eddyserver\tcp_client.cpp">
-      <Filter>eddyserver</Filter>
+    <ClCompile Include="eddy\tcp_session_handle.cpp">
+      <Filter>eddy</Filter>
     </ClCompile>
-    <ClCompile Include="eddyserver\task_queue.cpp">
-      <Filter>eddyserver</Filter>
+    <ClCompile Include="eddy\tcp_session_queue.cpp">
+      <Filter>eddy</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
