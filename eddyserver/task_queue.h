@@ -62,8 +62,6 @@ namespace eddy
 
 		void append(const TaskThread::Task &task);
 
-		void stop();
-
 	protected:
 		TaskQueue(const TaskQueue &) = delete;
 		TaskQueue& operator= (const TaskQueue &) = delete;

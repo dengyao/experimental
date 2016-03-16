@@ -12,7 +12,6 @@ namespace eddy
 	class IOServiceThread : public std::enable_shared_from_this < IOServiceThread >
 	{
 		friend class IOServiceThreadManager;
-		typedef std::unique_ptr<asio::io_service::work> WorkPointer;
 
 	public:
 		IOServiceThread(ThreadID id, IOServiceThreadManager &manager);
@@ -60,12 +59,12 @@ namespace eddy
 		IOServiceThread& operator=(const IOServiceThread&) = delete;
 
 	private:
-		ThreadID						thread_id_;
-		IOServiceThreadManager&			manager_;
-		asio::io_service				io_service_;
-		std::unique_ptr<std::thread>	thread_;
-		WorkPointer						work_;
-		TCPSessionQueue					session_queue_;
+		ThreadID								thread_id_;
+		IOServiceThreadManager&					manager_;
+		asio::io_service						io_service_;
+		std::unique_ptr<std::thread>			thread_;
+		std::unique_ptr<asio::io_service::work>	work_;
+		TCPSessionQueue							session_queue_;
 	};
 }
 
