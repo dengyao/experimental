@@ -3,7 +3,7 @@
 
 #include <thread>
 #include <asio/io_service.hpp>
-#include "tcp_session_queue.h"
+#include "TCPSessionQueue.h"
 
 namespace eddy
 {
@@ -14,52 +14,52 @@ namespace eddy
 		friend class IOServiceThreadManager;
 
 	public:
-		IOServiceThread(ThreadID id, IOServiceThreadManager &manager);
+		IOServiceThread(IOThreadID id, IOServiceThreadManager &manager);
 		~IOServiceThread();
 
 	public:
-		void run_thread();
+		void RunThread();
 
-		void join();
+		void Join();
 
-		void stop();
+		void Stop();
 
 		template <typename CompletionHandler>
-		void post(ASIO_MOVE_ARG(CompletionHandler) handler)
+		void Post(ASIO_MOVE_ARG(CompletionHandler) handler)
 		{
 			io_service_.post(handler);
 		}
 
 	public:
-		ThreadID id() const
+		IOThreadID ID() const
 		{
 			return thread_id_;
 		}
 
-		asio::io_service& io_service()
+		asio::io_service& IOService()
 		{
 			return io_service_;
 		}
 
-		IOServiceThreadManager& manager()
+		IOServiceThreadManager& ThreadManager()
 		{
 			return manager_;
 		}
 
-		TCPSessionQueue& session_queue()
+		TCPSessionQueue& SessionQueue()
 		{
 			return session_queue_;
 		}
 
 	private:
-		void run();
+		void Run();
 
 	private:
 		IOServiceThread(const IOServiceThread&) = delete;
 		IOServiceThread& operator=(const IOServiceThread&) = delete;
 
 	private:
-		ThreadID								thread_id_;
+		IOThreadID								thread_id_;
 		IOServiceThreadManager&					manager_;
 		asio::io_service						io_service_;
 		std::unique_ptr<std::thread>			thread_;

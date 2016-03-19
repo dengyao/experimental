@@ -1,9 +1,9 @@
-﻿#include "io_service_thread_manager.h"
+﻿#include "IOServiceThreadManager.h"
 #include <limits>
 #include <cassert>
 #include <iostream>
-#include "io_service_thread.h"
-#include "tcp_session_handle.h"
+#include "IOServiceThread.h"
+#include "TcpSessionHandle.h"
 
 namespace eddy
 {
@@ -27,10 +27,10 @@ namespace eddy
 
 	IOServiceThreadManager::~IOServiceThreadManager()
 	{
-		stop();
+		Stop();
 	}
 
-	void IOServiceThreadManager::run()
+	void IOServiceThreadManager::Run()
 	{
 		if (threads_.empty())
 		{
@@ -41,13 +41,13 @@ namespace eddy
 		{
 			if (i != kMainThreadIndex)
 			{
-				threads_[i]->run_thread();
+				threads_[i]->RunThread();
 			}
 		}
-		threads_[kMainThreadIndex]->run();
+		threads_[kMainThreadIndex]->Run();
 	}
 
-	void IOServiceThreadManager::stop()
+	void IOServiceThreadManager::Stop()
 	{
 		if (threads_.empty())
 		{
@@ -58,7 +58,7 @@ namespace eddy
 		{
 			if (i != kMainThreadIndex)
 			{
-				threads_[i]->stop();
+				threads_[i]->Stop();
 			}
 		}
 
@@ -66,14 +66,14 @@ namespace eddy
 		{
 			if (i != kMainThreadIndex)
 			{
-				threads_[i]->join();
+				threads_[i]->Join();
 			}
 		}
 
-		threads_[kMainThreadIndex]->stop();
+		threads_[kMainThreadIndex]->Stop();
 	}
 
-	ThreadPointer IOServiceThreadManager::thread()
+	ThreadPointer IOServiceThreadManager::Thread()
 	{
 		if (threads_.size() == 1)
 		{
@@ -92,11 +92,11 @@ namespace eddy
 		return threads_[min_element_index];
 	}
 
-	ThreadPointer IOServiceThreadManager::thread(ThreadID id)
+	ThreadPointer IOServiceThreadManager::Thread(IOThreadID id)
 	{
 		for (size_t i = 0; i < threads_.size(); ++i)
 		{
-			if (threads_[i]->id() == id)
+			if (threads_[i]->ID() == id)
 			{
 				return threads_[i];
 			}
@@ -104,22 +104,22 @@ namespace eddy
 		return nullptr;
 	}
 
-	ThreadPointer IOServiceThreadManager::main_thread()
+	ThreadPointer IOServiceThreadManager::MainThread()
 	{
 		return threads_[kMainThreadIndex];
 	}
 
-	void IOServiceThreadManager::on_session_connect(SessionPointer session_ptr, SessionHandlerPointer handler_ptr)
+	void IOServiceThreadManager::OnSessionConnect(SessionPointer session_ptr, SessionHandlerPointer handler_ptr)
 	{
 		TCPSessionID id = IDGenerator::kInvalidID;
-		if (id_generator_.get(id))
+		if (id_generator_.Get(id))
 		{
-			handler_ptr->init(id, session_ptr->thread()->id(), this);
+			handler_ptr->Init(id, session_ptr->Thread()->ID(), this);
 			session_handler_map_.insert(std::make_pair(id, handler_ptr));
-			session_ptr->thread()->post(std::bind(&TCPSession::init, session_ptr, id));
-			handler_ptr->on_connect();
+			session_ptr->Thread()->Post(std::bind(&TCPSession::Init, session_ptr, id));
+			handler_ptr->OnConnect();
 
-			ThreadID td_id = handler_ptr->thread_id();
+			IOThreadID td_id = handler_ptr->ThreadID();
 			if (td_id < thread_load_.size())
 			{
 				++thread_load_[td_id];
@@ -131,18 +131,18 @@ namespace eddy
 		}
 	}
 
-	void IOServiceThreadManager::on_session_close(TCPSessionID id)
+	void IOServiceThreadManager::OnSessionClose(TCPSessionID id)
 	{
 		assert(IDGenerator::kInvalidID != id);
 		SessionHandlerMap::iterator itr = session_handler_map_.find(id);
 		if (itr != session_handler_map_.end())
 		{
 			SessionHandlerPointer handler_ptr = itr->second;
-			ThreadID td_id = handler_ptr->thread_id();
+			IOThreadID td_id = handler_ptr->ThreadID();
 			if (handler_ptr != nullptr)
 			{
-				handler_ptr->on_close();
-				handler_ptr->dispose();
+				handler_ptr->OnClose();
+				handler_ptr->Dispose();
 			}
 			session_handler_map_.erase(itr);
 
@@ -154,11 +154,11 @@ namespace eddy
 
 		if (IDGenerator::kInvalidID != id)
 		{
-			id_generator_.put(id);
+			id_generator_.Put(id);
 		}
 	}
 
-	SessionHandlerPointer IOServiceThreadManager::session_handler(TCPSessionID id) const
+	SessionHandlerPointer IOServiceThreadManager::SessionHandler(TCPSessionID id) const
 	{
 		SessionHandlerMap::const_iterator itr = session_handler_map_.find(id);
 		if (itr != session_handler_map_.end())

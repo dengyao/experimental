@@ -1,14 +1,14 @@
 set(EDDY_SRC
-  eddy/io_service_thread.cpp
-  eddy/io_service_thread_manager.cpp
-  eddy/message_filter.cpp
-  eddy/net_message.cpp
-  eddy/task_queue.cpp
-  eddy/tcp_client.cpp
-  eddy/tcp_server.cpp
-  eddy/tcp_session.cpp
-  eddy/tcp_session_handle.cpp
-  eddy/tcp_session_queue.cpp
+  eddy/IOServiceThread.cpp
+  eddy/IOServiceThreadManager.cpp
+  eddy/NetMessage.cpp
+  eddy/SimpleMessageFilter.cpp
+  eddy/TaskQueue.cpp
+  eddy/TCPClient.cpp
+  eddy/TCPServer.cpp
+  eddy/TCPSession.cpp
+  eddy/TCPSessionHandle.cpp
+  eddy/TCPSessionQueue.cpp
 )
 
 include_directories(

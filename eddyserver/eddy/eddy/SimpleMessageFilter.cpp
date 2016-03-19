@@ -1,4 +1,4 @@
-﻿#include "message_filter.h"
+﻿#include "SimpleMessageFilter.h"
 #include <asio/ip/address_v4.hpp>
 
 namespace eddy
@@ -11,12 +11,12 @@ namespace eddy
 
 	}
 
-	size_t SimpleMessageFilter::bytes_wanna_read()
+	size_t SimpleMessageFilter::BytesWannaRead()
 	{
 		return header_read_ ? header_ : s_header_size_;
 	}
 
-	size_t SimpleMessageFilter::bytes_wanna_write(const std::vector<NetMessage> &messages_to_be_sent)
+	size_t SimpleMessageFilter::BytesWannaWrite(const std::vector<NetMessage> &messages_to_be_sent)
 	{
 		if (messages_to_be_sent.empty())
 		{
@@ -24,11 +24,11 @@ namespace eddy
 		}
 		return std::accumulate(messages_to_be_sent.begin(), messages_to_be_sent.end(), 0, [=](size_t sum, const NetMessage &message)
 		{
-			return sum + s_header_size_ + message.readable();
+			return sum + s_header_size_ + message.Readable();
 		});
 	}
 
-	size_t SimpleMessageFilter::read(const Buffer &buffer, std::vector<NetMessage> &messages_received)
+	size_t SimpleMessageFilter::Read(const Buffer &buffer, std::vector<NetMessage> &messages_received)
 	{
 		if (!header_read_)
 		{
@@ -40,23 +40,23 @@ namespace eddy
 		else
 		{
 			NetMessage new_message(header_);
-			new_message.write(&*buffer.begin(), header_);
+			new_message.Write(&*buffer.begin(), header_);
 			messages_received.push_back(std::move(new_message));
 			header_read_ = false;
 			return header_;
 		}
 	}
 
-	size_t SimpleMessageFilter::write(const std::vector<NetMessage> &messages_to_be_sent, Buffer &buffer)
+	size_t SimpleMessageFilter::Write(const std::vector<NetMessage> &messages_to_be_sent, Buffer &buffer)
 	{
-		size_t result = 0;
+		size_t ret = 0;
 		for (const NetMessage &message : messages_to_be_sent)
 		{
-			MessageHeader header = htons(static_cast<MessageHeader>(message.readable()));
+			MessageHeader header = htons(static_cast<MessageHeader>(message.Readable()));
 			buffer.insert(buffer.end(), reinterpret_cast<const char*>(&header), reinterpret_cast<const char*>(&header) + sizeof(MessageHeader));
-			buffer.insert(buffer.end(), message.data(), message.data() + message.readable());
-			result += s_header_size_ + message.readable();
+			buffer.insert(buffer.end(), message.Data(), message.Data() + message.Readable());
+			ret += s_header_size_ + message.Readable();
 		}
-		return result;
+		return ret;
 	}
 }

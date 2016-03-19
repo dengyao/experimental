@@ -2,7 +2,7 @@
 #define __TCP_SESSION_QUEUE_H__
 
 #include <unordered_map>
-#include "types.h"
+#include "Types.h"
 
 namespace eddy
 {
@@ -13,22 +13,22 @@ namespace eddy
 		~TCPSessionQueue();
 
 	public:
-		size_t size() const;
+		size_t Size() const;
 
-		void add(SessionPointer session_ptr);
+		void Add(SessionPointer session_ptr);
 
-		SessionPointer get(TCPSessionID id);
+		SessionPointer Get(TCPSessionID id);
 
-		void remove(TCPSessionID id);
+		void Remove(TCPSessionID id);
 
-		void clear();
+		void Clear();
 
 	private:
 		TCPSessionQueue(const TCPSessionQueue&) = delete;
 		TCPSessionQueue& operator= (const TCPSessionQueue&) = delete;
 
 	private:
-		std::unordered_map<TCPSessionID, SessionPointer>	session_queue_;
+		std::unordered_map<TCPSessionID, SessionPointer> session_queue_;
 	};
 }
 

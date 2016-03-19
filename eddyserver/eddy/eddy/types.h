@@ -7,7 +7,7 @@
 
 namespace eddy
 {
-	typedef uint32_t								ThreadID;
+	typedef uint32_t								IOThreadID;
 	typedef uint32_t								TCPSessionID;
 
 	class											NetMessage;

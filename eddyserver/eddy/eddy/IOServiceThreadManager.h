@@ -4,8 +4,8 @@
 #include <map>
 #include <vector>
 #include <unordered_map>
-#include "types.h"
-#include "id_generator.h"
+#include "Types.h"
+#include "IDGenerator.h"
 
 namespace eddy
 {
@@ -19,21 +19,21 @@ namespace eddy
 		~IOServiceThreadManager();
 
 	public:
-		void run();
+		void Run();
 
-		void stop();
+		void Stop();
 
-		ThreadPointer thread();
+		ThreadPointer Thread();
 
-		ThreadPointer thread(ThreadID id);
+		ThreadPointer Thread(IOThreadID id);
 
-		ThreadPointer main_thread();
+		ThreadPointer MainThread();
 
-		void on_session_connect(SessionPointer session_ptr, SessionHandlerPointer handler);
+		void OnSessionConnect(SessionPointer session_ptr, SessionHandlerPointer handler);
 
-		void on_session_close(TCPSessionID id);
+		void OnSessionClose(TCPSessionID id);
 
-		SessionHandlerPointer session_handler(TCPSessionID id) const;
+		SessionHandlerPointer SessionHandler(TCPSessionID id) const;
 
 	protected:
 		IOServiceThreadManager(const IOServiceThreadManager&) = delete;

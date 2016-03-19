@@ -1,9 +1,9 @@
-﻿#include "io_service_thread.h"
+﻿#include "IOServiceThread.h"
 #include <iostream>
 
 namespace eddy
 {
-	IOServiceThread::IOServiceThread(ThreadID id, IOServiceThreadManager &manager)
+	IOServiceThread::IOServiceThread(IOThreadID id, IOServiceThreadManager &manager)
 		: work_(nullptr)
 		, thread_id_(id)
 		, manager_(manager)
@@ -16,7 +16,7 @@ namespace eddy
 
 	}
 
-	void IOServiceThread::run()
+	void IOServiceThread::Run()
 	{
 		if (work_ == nullptr)
 		{
@@ -32,15 +32,15 @@ namespace eddy
 		}
 	}
 
-	void IOServiceThread::run_thread()
+	void IOServiceThread::RunThread()
 	{
 		if (thread_ == nullptr)
 		{
-			thread_.reset(new std::thread(std::bind(&IOServiceThread::run, this)));
+			thread_.reset(new std::thread(std::bind(&IOServiceThread::Run, this)));
 		}
 	}
 
-	void IOServiceThread::join()
+	void IOServiceThread::Join()
 	{
 		if (thread_ != nullptr)
 		{
@@ -48,7 +48,7 @@ namespace eddy
 		}
 	}
 
-	void IOServiceThread::stop()
+	void IOServiceThread::Stop()
 	{
 		if (work_ != nullptr)
 		{

@@ -1,4 +1,4 @@
-﻿#include "task_queue.h"
+﻿#include "TaskQueue.h"
 #include <chrono>
 #include <cassert>
 #include <climits>
@@ -10,7 +10,7 @@ namespace eddy
 	TaskThread::TaskThread()
 		: finished_(false)
 	{
-		thread_.reset(new std::thread(std::bind(&TaskThread::run, this)));
+		thread_.reset(new std::thread(std::bind(&TaskThread::Run, this)));
 	}
 
 	TaskThread::~TaskThread()
@@ -18,19 +18,19 @@ namespace eddy
 
 	}
 
-	void TaskThread::join()
+	void TaskThread::Join()
 	{
-		termminiate();
+		Termminiate();
 		thread_->join();
 	}
 
-	void TaskThread::termminiate()
+	void TaskThread::Termminiate()
 	{
 		finished_ = true;
 		condition_incoming_task_.notify_one();
 	}
 
-	size_t TaskThread::load() const
+	size_t TaskThread::Load() const
 	{
 		size_t count = 0;
 		{
@@ -40,15 +40,15 @@ namespace eddy
 		return count;
 	}
 
-	void TaskThread::wait_for_idle()
+	void TaskThread::WaitForIdle()
 	{
-		while (load() > 0)
+		while (Load() > 0)
 		{
 			std::this_thread::sleep_for(std::chrono::microseconds(200));
 		}
 	}
 
-	size_t TaskThread::append(const Task &task)
+	size_t TaskThread::Append(const Task &task)
 	{
 		size_t count = 0;
 		if (!finished_)
@@ -67,7 +67,7 @@ namespace eddy
 		return count;
 	}
 
-	void TaskThread::run()
+	void TaskThread::Run()
 	{
 		while (!finished_)
 		{
@@ -86,7 +86,7 @@ namespace eddy
 				task();
 			}
 
-			while (load() == 0)
+			while (Load() == 0)
 			{
 				std::unique_lock<std::mutex> locker(condition_mutex_);
 				if (locker.mutex())
@@ -102,11 +102,11 @@ namespace eddy
 	TaskQueue::TaskQueue(size_t thread_num)
 	{
 		assert(thread_num > 0);
-		if (thread_num == 0)
+		threads_.resize(thread_num);
+		for (size_t i = 0; i < threads_.size(); ++i)
 		{
-			std::abort();
+			threads_[i].reset(new TaskThread);
 		}
-		//threads_.resize(thread_num);
 	}
 
 	TaskQueue::~TaskQueue()
@@ -114,29 +114,29 @@ namespace eddy
 
 	}
 
-	void TaskQueue::join()
+	void TaskQueue::Join()
 	{
 		for (auto &item : threads_)
 		{
-			item.join();
+			item->Join();
 		}
 	}
 
-	void TaskQueue::termminiate()
+	void TaskQueue::Termminiate()
 	{
 		for (auto &item : threads_)
 		{
-			item.termminiate();
+			item->Termminiate();
 		}
 	}
 
-	void TaskQueue::wait_for_idle()
+	void TaskQueue::WaitForIdle()
 	{
 		while (true)
 		{
-			size_t task_sum = std::accumulate(threads_.begin(), threads_.end(), 0, [=](size_t sum, const TaskThread &item)
+			size_t task_sum = std::accumulate(threads_.begin(), threads_.end(), 0, [=](size_t sum, const TaskThreadPointer &item)
 			{
-				return sum += item.load();
+				return sum += item->Load();
 			});
 
 			if (task_sum > 0)
@@ -150,19 +150,26 @@ namespace eddy
 		}
 	}
 
-	void TaskQueue::append(const TaskThread::Task &task)
+	void TaskQueue::Append(const TaskThread::Task &task)
 	{
-		size_t min_index = 0;
-		size_t min_value = threads_[min_index].load();
-		for (size_t index = 0; index < threads_.size(); ++index)
+		if (!threads_.empty())
 		{
-			size_t value = threads_[index].load();
-			if (value <= min_value)
+			size_t min_index = 0;
+			size_t min_value = threads_[min_index]->Load();
+			for (size_t index = 0; index < threads_.size(); ++index)
 			{
-				min_value = value;
-				min_index = index;
+				size_t value = threads_[index]->Load();
+				if (value <= min_value)
+				{
+					min_value = value;
+					min_index = index;
+				}
 			}
+			threads_[min_index]->Append(task);
 		}
-		threads_[min_index].append(task);
+		else
+		{
+			task();
+		}
 	}
 }

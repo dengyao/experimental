@@ -2,7 +2,7 @@
 #define __TCP_SERVER_H__
 
 #include <asio.hpp>
-#include "types.h"
+#include "Types.h"
 
 namespace eddy
 {
@@ -16,14 +16,14 @@ namespace eddy
 				  const SessionHandlerCreator &handler_creator,
 				  const MessageFilterCreator &filter_creator);
 
-		asio::io_service& io_service();
+		asio::io_service& IOService();
 
 	protected:
-		TCPServer(const TCPServer &) = delete;
-		TCPServer& operator= (const TCPServer &) = delete;
+		TCPServer(const TCPServer&) = delete;
+		TCPServer& operator= (const TCPServer&) = delete;
 
 	private:
-		void handle_accept(SessionPointer session_ptr, asio::error_code error);
+		void HandleAccept(SessionPointer session_ptr, asio::error_code error);
 
 	private:
 		asio::ip::tcp::acceptor			acceptor_;

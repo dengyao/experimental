@@ -2,7 +2,7 @@
 #define __TCP_CLIENT_H__
 
 #include <asio.hpp>
-#include "types.h"
+#include "Types.h"
 
 namespace eddy
 {
@@ -15,18 +15,18 @@ namespace eddy
 			const SessionHandlerCreator &handler_creator,
 			const MessageFilterCreator &filter_creator);
 
-		asio::io_service& io_service();
+		asio::io_service& IOService();
 
-		void async_connect(asio::ip::tcp::endpoint &endpoint);
+		void AsyncConnect(asio::ip::tcp::endpoint &endpoint);
 
-		void connect(asio::ip::tcp::endpoint &endpoint, asio::error_code &error_code);
+		void Connect(asio::ip::tcp::endpoint &endpoint, asio::error_code &error_code);
 
 	protected:
-		TCPClient(const TCPClient &) = delete;
-		TCPClient& operator= (const TCPClient &) = delete;
+		TCPClient(const TCPClient&) = delete;
+		TCPClient& operator= (const TCPClient&) = delete;
 
 	private:
-		void handle_connect(SessionPointer session_ptr, asio::error_code error_code);
+		void HandleConnect(SessionPointer session_ptr, asio::error_code error_code);
 
 	private:
 		IOServiceThreadManager&			io_thread_manager_;

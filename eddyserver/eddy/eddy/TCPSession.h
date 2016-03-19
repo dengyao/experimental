@@ -2,8 +2,8 @@
 #define __TCP_SESSION_H__
 
 #include <asio/ip/tcp.hpp>
-#include "types.h"
-#include "net_message.h"
+#include "Types.h"
+#include "NetMessage.h"
 
 namespace eddy
 {
@@ -17,47 +17,47 @@ namespace eddy
 		~TCPSession();
 
 	public:
-		TCPSessionID id() const
+		TCPSessionID ID() const
 		{
 			return session_id_;
 		}
 
-		SocketType& socket()
+		SocketType& Socket()
 		{
 			return socket_;
 		}
 
-		ThreadPointer thread()
+		ThreadPointer Thread()
 		{
 			return thread_;
 		}
 
-		void post_message_list(const std::vector<NetMessage> &messages);
+		void PostMessageList(const std::vector<NetMessage> &messages);
 
-		std::vector<NetMessage>& messages_received()
+		std::vector<NetMessage>& MessagesReceived()
 		{
 			return messages_received_;
 		}
 
-		void close();
+		void Close();
 
 	protected:
-		TCPSession(const TCPSession &) = delete;
-		TCPSession& operator= (const TCPSession &) = delete;
+		TCPSession(const TCPSession&) = delete;
+		TCPSession& operator= (const TCPSession&) = delete;
 
 	private:
-		void init(TCPSessionID id);
+		void Init(TCPSessionID id);
 
-		void set_session_id(TCPSessionID id)
+		void SetSessionID(TCPSessionID id)
 		{
 			session_id_ = id;
 		}
 
-		void handle_read(asio::error_code error, size_t bytes_transferred);
+		void HandleRead(asio::error_code error, size_t bytes_transferred);
 
-		void hanlde_write(asio::error_code error, size_t bytes_transferred);
+		void HanldeWrite(asio::error_code error, size_t bytes_transferred);
 
-		void hanlde_close();
+		void HanldeClose();
 
 	private:
 		bool					closed_;

@@ -1,8 +1,8 @@
 ﻿#ifndef __TASK_QUEUE_H__
 #define __TASK_QUEUE_H__
 
-#include <vector>
 #include <deque>
+#include <vector>
 #include <mutex>
 #include <atomic>
 #include <memory>
@@ -12,7 +12,7 @@
 
 namespace eddy
 {
-	class TaskThread
+	class TaskThread final
 	{
 	public:
 		typedef std::function<void()> Task;
@@ -22,22 +22,22 @@ namespace eddy
 		~TaskThread();
 
 	public:
-		void join();
+		void Join();
 
-		void termminiate();
+		void Termminiate();
 
-		size_t load() const;
+		size_t Load() const;
 
-		void wait_for_idle();
+		void WaitForIdle();
 
-		size_t append(const Task &task);
+		size_t Append(const Task &task);
 
 	protected:
-		TaskThread(const TaskThread &) = delete;
-		TaskThread& operator= (const TaskThread &) = delete;
+		TaskThread(const TaskThread&) = delete;
+		TaskThread& operator= (const TaskThread&) = delete;
 
 	private:
-		void run();
+		void Run();
 
 	private:
 		std::atomic<bool>				finished_;
@@ -48,27 +48,29 @@ namespace eddy
 		std::condition_variable			condition_incoming_task_;
 	};
 
-	class TaskQueue
+	class TaskQueue final
 	{
+		typedef std::unique_ptr<TaskThread> TaskThreadPointer;
+
 	public:
 		TaskQueue(size_t thread_num);
 		~TaskQueue();
 
 	public:
-		void join();
+		void Join();
 
-		void termminiate();
+		void Termminiate();
 
-		void wait_for_idle();
+		void WaitForIdle();
 
-		void append(const TaskThread::Task &task);
+		void Append(const TaskThread::Task &task);
 
 	protected:
-		TaskQueue(const TaskQueue &) = delete;
-		TaskQueue& operator= (const TaskQueue &) = delete;
+		TaskQueue(const TaskQueue&) = delete;
+		TaskQueue& operator= (const TaskQueue&) = delete;
 
 	private:
-		std::vector<TaskThread> threads_;
+		std::vector<TaskThreadPointer>	threads_;
 	};
 }
 

@@ -1,5 +1,5 @@
-﻿#include "tcp_session_queue.h"
-#include "tcp_session.h"
+﻿#include "TCPSessionQueue.h"
+#include "TCPSession.h"
 
 namespace eddy
 {
@@ -13,17 +13,17 @@ namespace eddy
 
 	}
 
-	size_t TCPSessionQueue::size() const
+	size_t TCPSessionQueue::Size() const
 	{
 		return session_queue_.size();
 	}
 
-	void TCPSessionQueue::add(SessionPointer session_ptr)
+	void TCPSessionQueue::Add(SessionPointer session_ptr)
 	{
-		session_queue_.insert(std::make_pair(session_ptr->id(), session_ptr));
+		session_queue_.insert(std::make_pair(session_ptr->ID(), session_ptr));
 	}
 
-	SessionPointer TCPSessionQueue::get(TCPSessionID id)
+	SessionPointer TCPSessionQueue::Get(TCPSessionID id)
 	{
 		std::unordered_map<TCPSessionID, SessionPointer>::iterator itr = session_queue_.find(id);
 		if (itr == session_queue_.end())
@@ -33,12 +33,12 @@ namespace eddy
 		return itr->second;
 	}
 
-	void TCPSessionQueue::remove(TCPSessionID id)
+	void TCPSessionQueue::Remove(TCPSessionID id)
 	{
 		session_queue_.erase(id);
 	}
 
-	void TCPSessionQueue::clear()
+	void TCPSessionQueue::Clear()
 	{
 		session_queue_.clear();
 	}
