@@ -23,11 +23,11 @@ namespace eddy
 
 		void Stop();
 
-		ThreadPointer Thread();
+		ThreadPointer& Thread();
 
 		ThreadPointer Thread(IOThreadID id);
 
-		ThreadPointer MainThread();
+		ThreadPointer& MainThread();
 
 		void OnSessionConnect(SessionPointer session_ptr, SessionHandlerPointer handler);
 

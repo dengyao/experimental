@@ -12,9 +12,10 @@ namespace eddy
 	{
 	public:
 		TCPServer(asio::ip::tcp::endpoint &endpoint,
-				  IOServiceThreadManager &io_thread_manager,
-				  const SessionHandlerCreator &handler_creator,
-				  const MessageFilterCreator &filter_creator);
+			IOServiceThreadManager &io_thread_manager,
+			const SessionHandlerCreator &handler_creator,
+			const MessageFilterCreator &filter_creator,
+			uint32_t timeout = 0);
 
 		asio::io_service& IOService();
 
@@ -26,6 +27,7 @@ namespace eddy
 		void HandleAccept(SessionPointer session_ptr, asio::error_code error);
 
 	private:
+		uint32_t						timeout_;
 		asio::ip::tcp::acceptor			acceptor_;
 		IOServiceThreadManager&			io_thread_manager_;
 		const SessionHandlerCreator&	session_handler_creator_;

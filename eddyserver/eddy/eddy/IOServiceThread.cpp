@@ -4,9 +4,11 @@
 namespace eddy
 {
 	IOServiceThread::IOServiceThread(IOThreadID id, IOServiceThreadManager &manager)
-		: work_(nullptr)
+		: timeout_(0)
+		, work_(nullptr)
 		, thread_id_(id)
 		, manager_(manager)
+		, timer_(io_service_)
 	{
 
 	}
@@ -54,5 +56,15 @@ namespace eddy
 		{
 			work_.reset();
 		}
+	}
+
+	void IOServiceThread::SetSessionTimeout(uint32_t timeout)
+	{
+		timeout_ = timeout;
+	}
+
+	void IOServiceThread::PostCheckTimeOut()
+	{
+
 	}
 }

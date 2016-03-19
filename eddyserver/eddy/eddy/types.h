@@ -1,6 +1,7 @@
 ﻿#ifndef __TYPES_H__
 #define __TYPES_H__
 
+#include <chrono>
 #include <memory>
 #include <cstdint>
 #include <functional>
@@ -9,6 +10,7 @@ namespace eddy
 {
 	typedef uint32_t								IOThreadID;
 	typedef uint32_t								TCPSessionID;
+	typedef std::chrono::steady_clock::time_point	TimePoint;
 
 	class											NetMessage;
 	class											TCPSession;

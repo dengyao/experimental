@@ -73,7 +73,7 @@ namespace eddy
 		threads_[kMainThreadIndex]->Stop();
 	}
 
-	ThreadPointer IOServiceThreadManager::Thread()
+	ThreadPointer& IOServiceThreadManager::Thread()
 	{
 		if (threads_.size() == 1)
 		{
@@ -104,7 +104,7 @@ namespace eddy
 		return nullptr;
 	}
 
-	ThreadPointer IOServiceThreadManager::MainThread()
+	ThreadPointer& IOServiceThreadManager::MainThread()
 	{
 		return threads_[kMainThreadIndex];
 	}

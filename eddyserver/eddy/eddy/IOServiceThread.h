@@ -3,6 +3,7 @@
 
 #include <thread>
 #include <asio/io_service.hpp>
+#include <asio/steady_timer.hpp>
 #include "TCPSessionQueue.h"
 
 namespace eddy
@@ -23,6 +24,13 @@ namespace eddy
 		void Join();
 
 		void Stop();
+
+		void SetSessionTimeout(uint32_t timeout);
+
+		uint32_t GetSessionTimeout() const
+		{
+			return timeout_;
+		}
 
 		template <typename CompletionHandler>
 		void Post(ASIO_MOVE_ARG(CompletionHandler) handler)
@@ -54,6 +62,8 @@ namespace eddy
 	private:
 		void Run();
 
+		void PostCheckTimeOut();
+
 	private:
 		IOServiceThread(const IOServiceThread&) = delete;
 		IOServiceThread& operator=(const IOServiceThread&) = delete;
@@ -62,6 +72,8 @@ namespace eddy
 		IOThreadID								thread_id_;
 		IOServiceThreadManager&					manager_;
 		asio::io_service						io_service_;
+		asio::steady_timer						timer_;
+		uint32_t								timeout_;
 		std::unique_ptr<std::thread>			thread_;
 		std::unique_ptr<asio::io_service::work>	work_;
 		TCPSessionQueue							session_queue_;

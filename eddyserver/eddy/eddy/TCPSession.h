@@ -32,6 +32,11 @@ namespace eddy
 			return thread_;
 		}
 
+		const TimePoint& LastActivityTime() const
+		{
+			return last_activity_;
+		}
+
 		void PostMessageList(const std::vector<NetMessage> &messages);
 
 		std::vector<NetMessage>& MessagesReceived()
@@ -47,6 +52,8 @@ namespace eddy
 
 	private:
 		void Init(TCPSessionID id);
+
+		void UpdateLastActivityTime();
 
 		void SetSessionID(TCPSessionID id)
 		{
@@ -66,6 +73,7 @@ namespace eddy
 		SocketType				socket_;
 		ThreadPointer			thread_;
 		MessageFilterPointer	filter_;
+		TimePoint				last_activity_;
 		std::vector<char>		buffer_receiving_;
 		std::vector<char>		buffer_sending_;
 		std::vector<char>		buffer_to_be_sent_;

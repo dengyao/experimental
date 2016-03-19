@@ -9,13 +9,15 @@
 namespace eddy
 {
 	TCPServer::TCPServer(asio::ip::tcp::endpoint &endpoint,
-						 IOServiceThreadManager &io_thread_manager,
-						 const SessionHandlerCreator &handler_creator,
-						 const MessageFilterCreator &filter_creator)
-						 : io_thread_manager_(io_thread_manager)
-						 , session_handler_creator_(handler_creator)
-						 , message_filter_creator_(filter_creator)
-						 , acceptor_(io_thread_manager.MainThread()->IOService(), endpoint)
+		IOServiceThreadManager &io_thread_manager,
+		const SessionHandlerCreator &handler_creator,
+		const MessageFilterCreator &filter_creator,
+		uint32_t timeout)
+		: timeout_(timeout)
+		, io_thread_manager_(io_thread_manager)
+		, session_handler_creator_(handler_creator)
+		, message_filter_creator_(filter_creator)
+		, acceptor_(io_thread_manager.MainThread()->IOService(), endpoint)
 	{
 		SessionPointer session_ptr = std::make_shared<TCPSession>(io_thread_manager_.Thread(), message_filter_creator_());
 		acceptor_.async_accept(session_ptr->Socket(), std::bind(&TCPServer::HandleAccept, this, session_ptr, std::placeholders::_1));
