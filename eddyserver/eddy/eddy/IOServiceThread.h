@@ -62,7 +62,7 @@ namespace eddy
 	private:
 		void Run();
 
-		void PostCheckTimeOut();
+		void CheckTimeOut(asio::error_code error);
 
 	private:
 		IOServiceThread(const IOServiceThread&) = delete;
