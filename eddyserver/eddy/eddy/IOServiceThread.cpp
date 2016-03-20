@@ -1,5 +1,6 @@
 ﻿#include "IOServiceThread.h"
 #include <iostream>
+#include "TCPSession.h"
 
 namespace eddy
 {
@@ -63,13 +64,26 @@ namespace eddy
 
 	void IOServiceThread::SetSessionTimeout(uint32_t timeout)
 	{
-		timeout_ = timeout;
+		timeout_ = std::chrono::seconds(timeout);
 	}
 
 	void IOServiceThread::CheckTimeOut(asio::error_code error)
 	{
 		if (!error)
 		{
+			if (timeout_ > std::chrono::seconds(0))
+			{
+				auto now_time = std::chrono::steady_clock::now();
+				session_queue_.Foreach([&](const SessionPointer &session)->void
+				{
+					auto interval = now_time - session->LastActivityTime();
+					if (interval >= timeout_)
+					{
+						session->Close();
+					}		
+				});
+			}
+
 			timer_.expires_from_now(std::chrono::seconds(1));
 			timer_.async_wait(std::bind(&IOServiceThread::CheckTimeOut, shared_from_this(), std::placeholders::_1));
 		}

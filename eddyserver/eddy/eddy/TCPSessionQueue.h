@@ -23,6 +23,8 @@ namespace eddy
 
 		void Clear();
 
+		void Foreach(const std::function<void(const SessionPointer &session)> &func);
+
 	private:
 		TCPSessionQueue(const TCPSessionQueue&) = delete;
 		TCPSessionQueue& operator= (const TCPSessionQueue&) = delete;

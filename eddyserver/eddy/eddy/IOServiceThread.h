@@ -29,7 +29,7 @@ namespace eddy
 
 		uint32_t GetSessionTimeout() const
 		{
-			return timeout_;
+			return timeout_.count();
 		}
 
 		template <typename CompletionHandler>
@@ -73,7 +73,7 @@ namespace eddy
 		IOServiceThreadManager&					manager_;
 		asio::io_service						io_service_;
 		asio::steady_timer						timer_;
-		uint32_t								timeout_;
+		std::chrono::seconds					timeout_;
 		std::unique_ptr<std::thread>			thread_;
 		std::unique_ptr<asio::io_service::work>	work_;
 		TCPSessionQueue							session_queue_;
