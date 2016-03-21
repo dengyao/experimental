@@ -27,7 +27,6 @@ namespace eddy
 		void HandleAccept(SessionPointer session_ptr, asio::error_code error);
 
 	private:
-		uint32_t						timeout_;
 		asio::ip::tcp::acceptor			acceptor_;
 		IOServiceThreadManager&			io_thread_manager_;
 		const SessionHandlerCreator&	session_handler_creator_;

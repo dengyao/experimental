@@ -25,9 +25,9 @@ namespace eddy
 
 		void Stop();
 
-		void SetSessionTimeout(uint32_t timeout);
+		void SetSessionTimeout(uint64_t timeout);
 
-		uint32_t GetSessionTimeout() const
+		uint64_t GetSessionTimeout() const
 		{
 			return timeout_.count();
 		}

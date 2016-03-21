@@ -62,7 +62,7 @@ namespace eddy
 		}
 	}
 
-	void IOServiceThread::SetSessionTimeout(uint32_t timeout)
+	void IOServiceThread::SetSessionTimeout(uint64_t timeout)
 	{
 		timeout_ = std::chrono::seconds(timeout);
 	}
