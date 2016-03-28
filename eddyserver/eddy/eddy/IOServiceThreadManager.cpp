@@ -167,4 +167,12 @@ namespace eddy
 		}
 		return nullptr;
 	}
+
+	void IOServiceThreadManager::SetSessionTimeout(uint64_t seconds)
+	{
+		for (auto &item : threads_)
+		{
+			item->Post(std::bind(&IOServiceThread::SetSessionTimeout, item, seconds));
+		}
+	}
 }

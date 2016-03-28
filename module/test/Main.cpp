@@ -36,7 +36,7 @@ int main(int argc, char **argv)
 {
 	asio::ip::tcp::endpoint ep(asio::ip::address_v4(), 4235);
 	eddy::IOServiceThreadManager thread_manager(std::thread::hardware_concurrency());
-	eddy::TCPServer server(ep, thread_manager, CreateSessionHandle, CreateMessageFilter);
+	eddy::TCPServer server(ep, thread_manager, CreateSessionHandle, CreateMessageFilter, 8);
 	thread_manager.run();
 
 	return 0;

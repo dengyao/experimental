@@ -35,6 +35,8 @@ namespace eddy
 
 		SessionHandlerPointer SessionHandler(TCPSessionID id) const;
 
+		void SetSessionTimeout(uint64_t timeout);
+
 	protected:
 		IOServiceThreadManager(const IOServiceThreadManager&) = delete;
 		IOServiceThreadManager& operator=(const IOServiceThreadManager&) = delete;
