@@ -29,7 +29,7 @@ namespace eddy
 
 		ThreadPointer& MainThread();
 
-		void OnSessionConnect(SessionPointer session_ptr, SessionHandlerPointer handler);
+		void OnSessionConnect(SessionPointer &session_ptr, SessionHandlerPointer &handler);
 
 		void OnSessionClose(TCPSessionID id);
 

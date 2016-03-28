@@ -14,8 +14,7 @@ namespace eddy
 		TCPServer(asio::ip::tcp::endpoint &endpoint,
 			IOServiceThreadManager &io_thread_manager,
 			const SessionHandlerCreator &handler_creator,
-			const MessageFilterCreator &filter_creator,
-			uint32_t timeout = 0);
+			const MessageFilterCreator &filter_creator);
 
 		asio::io_service& IOService();
 

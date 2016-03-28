@@ -12,7 +12,6 @@ namespace eddy
 
 	public:
 		SimpleMessageFilter();
-
 		~SimpleMessageFilter() = default;
 
 	public:

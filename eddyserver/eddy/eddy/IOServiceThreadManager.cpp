@@ -12,7 +12,7 @@ namespace eddy
 	IOServiceThreadManager::IOServiceThreadManager(size_t thread_num)
 	{
 		assert(thread_num > kMainThreadIndex);
-		if (thread_num <= kMainThreadIndex)
+		if (thread_num == kMainThreadIndex)
 		{
 			std::abort();
 		}
@@ -109,7 +109,7 @@ namespace eddy
 		return threads_[kMainThreadIndex];
 	}
 
-	void IOServiceThreadManager::OnSessionConnect(SessionPointer session_ptr, SessionHandlerPointer handler_ptr)
+	void IOServiceThreadManager::OnSessionConnect(SessionPointer &session_ptr, SessionHandlerPointer &handler_ptr)
 	{
 		TCPSessionID id = IDGenerator::kInvalidID;
 		if (id_generator_.Get(id))
