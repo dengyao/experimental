@@ -18,7 +18,7 @@ namespace eddy
 
 		virtual ~TCPSessionHandle();
 
-		void Send(NetMessage &message);
+		void Send(const NetMessage &message);
 
 		void Close();
 

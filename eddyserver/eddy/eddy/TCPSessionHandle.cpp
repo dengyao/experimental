@@ -100,7 +100,7 @@ namespace eddy
 		}
 	}
 
-	void TCPSessionHandle::Send(NetMessage &message)
+	void TCPSessionHandle::Send(const NetMessage &message)
 	{
 		if (IsClosed())
 		{
