@@ -6,6 +6,7 @@ namespace eddy
 	class TCPClient;
 	class TCPServer;
 	class TaskQueue;
+    class TaskQueuePool;
 	class TCPSessionHandle;
 	class SimpleMessageFilter;
 	class MessageFilterInterface;

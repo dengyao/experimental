@@ -12,14 +12,14 @@
 
 namespace eddy
 {
-	class TaskThread final
+	class TaskQueue final
 	{
 	public:
 		typedef std::function<void()> Task;
 
 	public:
-		TaskThread();
-		~TaskThread();
+		TaskQueue();
+		~TaskQueue() = default;
 
 	public:
 		void Join();
@@ -33,8 +33,8 @@ namespace eddy
 		size_t Append(const Task &task);
 
 	protected:
-		TaskThread(const TaskThread&) = delete;
-		TaskThread& operator= (const TaskThread&) = delete;
+		TaskQueue(const TaskQueue&) = delete;
+		TaskQueue& operator= (const TaskQueue&) = delete;
 
 	private:
 		void Run();
@@ -42,19 +42,19 @@ namespace eddy
 	private:
 		std::atomic<bool>				finished_;
 		std::unique_ptr<std::thread>	thread_;
-		std::deque<Task>				list_task_;
-		mutable std::mutex				list_task_mutex_;
-		mutable std::mutex				condition_mutex_;
-		std::condition_variable			condition_incoming_task_;
+		std::deque<Task>				queue_task_;
+		mutable std::mutex				queue_task_mutex_;
+		std::condition_variable			not_empty_;
+		mutable std::mutex				not_empty_mutex_;
 	};
 
-	class TaskQueue final
+	class TaskQueuePool final
 	{
-		typedef std::unique_ptr<TaskThread> TaskThreadPointer;
+		typedef std::unique_ptr<TaskQueue> TaskQueuePointer;
 
 	public:
-		TaskQueue(size_t thread_num);
-		~TaskQueue();
+		TaskQueuePool(size_t thread_num);
+		~TaskQueuePool() = default;
 
 	public:
 		void Join();
@@ -63,14 +63,14 @@ namespace eddy
 
 		void WaitForIdle();
 
-		void Append(const TaskThread::Task &task);
+		void Append(const TaskQueue::Task &task);
 
 	protected:
-		TaskQueue(const TaskQueue&) = delete;
-		TaskQueue& operator= (const TaskQueue&) = delete;
+		TaskQueuePool(const TaskQueuePool&) = delete;
+		TaskQueuePool& operator= (const TaskQueuePool&) = delete;
 
 	private:
-		std::vector<TaskThreadPointer>	threads_;
+		std::vector<TaskQueuePointer>	threads_;
 	};
 }
 

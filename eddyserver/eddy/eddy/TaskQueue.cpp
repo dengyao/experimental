@@ -4,43 +4,37 @@
 #include <climits>
 #include <numeric>
 
-
 namespace eddy
 {
-	TaskThread::TaskThread()
+	TaskQueue::TaskQueue()
 		: finished_(false)
 	{
-		thread_.reset(new std::thread(std::bind(&TaskThread::Run, this)));
+		thread_.reset(new std::thread(std::bind(&TaskQueue::Run, this)));
 	}
 
-	TaskThread::~TaskThread()
-	{
-
-	}
-
-	void TaskThread::Join()
+	void TaskQueue::Join()
 	{
 		Termminiate();
 		thread_->join();
 	}
 
-	void TaskThread::Termminiate()
+	void TaskQueue::Termminiate()
 	{
 		finished_ = true;
-		condition_incoming_task_.notify_one();
+		not_empty_.notify_one();
 	}
 
-	size_t TaskThread::Load() const
+	size_t TaskQueue::Load() const
 	{
 		size_t count = 0;
 		{
-			std::lock_guard<std::mutex> lock(list_task_mutex_);
-			count = list_task_.size();
+			std::lock_guard<std::mutex> lock(queue_task_mutex_);
+			count = queue_task_.size();
 		}
 		return count;
 	}
 
-	void TaskThread::WaitForIdle()
+	void TaskQueue::WaitForIdle()
 	{
 		while (Load() > 0)
 		{
@@ -48,73 +42,67 @@ namespace eddy
 		}
 	}
 
-	size_t TaskThread::Append(const Task &task)
+	size_t TaskQueue::Append(const Task &task)
 	{
+		assert(task != nullptr);
 		size_t count = 0;
 		if (!finished_)
 		{
 			{
-				std::lock_guard<std::mutex> lock(list_task_mutex_);
-				list_task_.push_back(task);
-				count = list_task_.size();
+				std::lock_guard<std::mutex> lock(queue_task_mutex_);
+				if (task != nullptr)
+				{
+					queue_task_.push_back(task);
+
+				}
+				count = queue_task_.size();
 			}
 
 			if (count == 1)
 			{
-				condition_incoming_task_.notify_one();
+				not_empty_.notify_one();
 			}
 		}
 		return count;
 	}
 
-	void TaskThread::Run()
+	void TaskQueue::Run()
 	{
 		while (!finished_)
 		{
 			Task task;
 			{
-				std::lock_guard<std::mutex> lock(list_task_mutex_);
-				if (!list_task_.empty())
+				std::lock_guard<std::mutex> lock(queue_task_mutex_);
+				if (!queue_task_.empty())
 				{
-					task = std::move(list_task_.front());
-					list_task_.pop_front();
+					task = std::move(queue_task_.front());
+					queue_task_.pop_front();
 				}
 			}
-
-			if (task != nullptr)
-			{
-				task();
-			}
+			task();
 
 			while (Load() == 0)
 			{
-				std::unique_lock<std::mutex> lock(condition_mutex_);
+				std::unique_lock<std::mutex> lock(not_empty_mutex_);
 				if (lock.mutex())
 				{
-					condition_incoming_task_.wait(lock);
+					not_empty_.wait(lock);
 				}
 			}
 		}
 	}
 
-	/************************************************************************/
-
-	TaskQueue::TaskQueue(size_t thread_num)
+	TaskQueuePool::TaskQueuePool(size_t thread_num)
 	{
 		assert(thread_num > 0);
 		threads_.resize(thread_num);
 		for (size_t i = 0; i < threads_.size(); ++i)
 		{
-			threads_[i].reset(new TaskThread);
+			threads_[i].reset(new TaskQueue);
 		}
 	}
 
-	TaskQueue::~TaskQueue()
-	{
-
-	}
-
-	void TaskQueue::Join()
+	void TaskQueuePool::Join()
 	{
 		for (auto &item : threads_)
 		{
@@ -122,7 +110,7 @@ namespace eddy
 		}
 	}
 
-	void TaskQueue::Termminiate()
+	void TaskQueuePool::Termminiate()
 	{
 		for (auto &item : threads_)
 		{
@@ -130,29 +118,36 @@ namespace eddy
 		}
 	}
 
-	void TaskQueue::WaitForIdle()
+	void TaskQueuePool::WaitForIdle()
 	{
 		while (true)
 		{
-			size_t task_sum = std::accumulate(threads_.begin(), threads_.end(), 0, [=](size_t sum, const TaskThreadPointer &item)
+			size_t task_sum = std::accumulate(threads_.begin(), threads_.end(), 0, [=](size_t sum, const TaskQueuePointer &item)
 			{
 				return sum += item->Load();
 			});
 
-			if (task_sum > 0)
-			{
-				std::this_thread::sleep_for(std::chrono::microseconds(200));
-			}
-			else
+			if (task_sum == 0)
 			{
 				break;
 			}
+			std::this_thread::sleep_for(std::chrono::microseconds(200));
 		}
 	}
 
-	void TaskQueue::Append(const TaskThread::Task &task)
+	void TaskQueuePool::Append(const TaskQueue::Task &task)
 	{
-		if (!threads_.empty())
+		assert(task != nullptr);
+		if (task == nullptr)
+		{
+			return;
+		}
+
+		if (threads_.empty())
+		{
+			task();
+		}
+		else
 		{
 			size_t min_index = 0;
 			size_t min_value = threads_[min_index]->Load();
@@ -166,10 +161,6 @@ namespace eddy
 				}
 			}
 			threads_[min_index]->Append(task);
-		}
-		else
-		{
-			task();
 		}
 	}
 }
