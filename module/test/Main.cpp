@@ -4,21 +4,21 @@
 
 class SessionHandle : public eddy::TCPSessionHandle
 {
-	virtual void on_connect() override
+	virtual void OnConnect() override
 	{
-		std::cout << "on_connect" << std::endl;
+		std::cout << "OnConnect" << std::endl;
 	}
 
-	virtual void on_message(eddy::NetMessage &message) override
+	virtual void OnMessage(eddy::NetMessage &message) override
 	{
-		std::string s(message.data(), message.readable());
-		std::cout << "on_message:" << s << std::endl;
-		send(message);
+		std::string s(message.Data(), message.Readable());
+		std::cout << "OnMessage:" << s << std::endl;
+		Send(message);
 	}
 
-	virtual void on_close() override
+	virtual void OnClose() override
 	{
-		std::cout << "on_close" << std::endl;
+		std::cout << "OnClose" << std::endl;
 	}
 };
 
@@ -37,7 +37,7 @@ int main(int argc, char **argv)
 	asio::ip::tcp::endpoint ep(asio::ip::address_v4(), 4235);
 	eddy::IOServiceThreadManager thread_manager(std::thread::hardware_concurrency());
 	eddy::TCPServer server(ep, thread_manager, CreateSessionHandle, CreateMessageFilter, 8);
-	thread_manager.run();
+	thread_manager.Run();
 
 	return 0;
 }

@@ -15,11 +15,22 @@ include_directories(
   ${ASIO_INCLUDE_DIRS}
 )
 
-add_library(eddy SHARED
+add_library(eddy_shared SHARED
   ${EDDY_SRC}
 )
 
-set_target_properties(eddy
+add_library(eddy_static STATIC
+  ${EDDY_SRC}
+)
+
+set_target_properties(eddy_shared
+  PROPERTIES
+  OUTPUT_NAME "eddy"
+  ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
+  LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
+set_target_properties(eddy_static
   PROPERTIES
   OUTPUT_NAME "eddy"
   ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
