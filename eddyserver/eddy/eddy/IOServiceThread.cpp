@@ -16,8 +16,8 @@ namespace eddy
 	void IOServiceThread::Run()
 	{
 		if (work_ == nullptr)
-		{
-			work_.reset(new asio::io_service::work(io_service_));
+		{		
+			work_ = std::make_unique<asio::io_service::work>(io_service_);
 		}
 
 		timer_.expires_from_now(std::chrono::seconds(1));
@@ -36,7 +36,7 @@ namespace eddy
 	{
 		if (thread_ == nullptr)
 		{
-			thread_.reset(new std::thread(std::bind(&IOServiceThread::Run, this)));
+			thread_ = std::make_unique<std::thread>(std::bind(&IOServiceThread::Run, this));
 		}
 	}
 

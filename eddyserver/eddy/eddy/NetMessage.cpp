@@ -27,7 +27,7 @@ namespace eddy
 		}
 		else
 		{
-			dynamic_data_.reset(new DynamicVector(std::move(*that.dynamic_data_)));
+			dynamic_data_ = std::make_unique<DynamicVector>(std::move(*that.dynamic_data_));
 		}
 	}
 
@@ -41,7 +41,7 @@ namespace eddy
 		}
 		else
 		{
-			dynamic_data_.reset(new DynamicVector(std::move(*that.dynamic_data_)));
+			dynamic_data_ = std::make_unique<DynamicVector>(std::move(*that.dynamic_data_));
 		}
 		that.reader_pos_ = 0;
 		that.writer_pos_ = 0;
@@ -59,7 +59,7 @@ namespace eddy
 			}
 			else
 			{
-				dynamic_data_.reset(new DynamicVector(std::move(*that.dynamic_data_)));
+				dynamic_data_ = std::make_unique<DynamicVector>(std::move(*that.dynamic_data_));
 			}
 		}
 		return *this;
@@ -77,7 +77,7 @@ namespace eddy
 			}
 			else
 			{
-				dynamic_data_.reset(new DynamicVector(std::move(*that.dynamic_data_)));
+				dynamic_data_ = std::make_unique<DynamicVector>(std::move(*that.dynamic_data_));
 			}
 			that.reader_pos_ = 0;
 			that.writer_pos_ = 0;
@@ -115,7 +115,7 @@ namespace eddy
 		}
 
 		const size_t content_size = Readable();
-		dynamic_data_.reset(new DynamicVector(content_size));
+		dynamic_data_ = std::make_unique<DynamicVector>(content_size);
 		dynamic_data_->insert(dynamic_data_->begin(), static_data_.begin() + reader_pos_, static_data_.begin() + writer_pos_);
 		reader_pos_ = 0;
 		writer_pos_ = content_size;

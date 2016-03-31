@@ -9,7 +9,7 @@ namespace eddy
 	TaskQueue::TaskQueue()
 		: finished_(false)
 	{
-		thread_.reset(new std::thread(std::bind(&TaskQueue::Run, this)));
+		thread_ = std::make_unique<std::thread>(std::bind(&TaskQueue::Run, this));
 	}
 
 	void TaskQueue::Join()
@@ -98,7 +98,7 @@ namespace eddy
 		threads_.resize(thread_num);
 		for (size_t i = 0; i < threads_.size(); ++i)
 		{
-			threads_[i].reset(new TaskQueue);
+			threads_[i] = std::make_unique<TaskQueue>();
 		}
 	}
 
