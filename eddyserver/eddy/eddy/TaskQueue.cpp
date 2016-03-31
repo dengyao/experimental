@@ -54,7 +54,7 @@ namespace eddy
 		if (!finished_)
 		{
 			{
-				std::lock_guard<std::mutex> locker(list_task_mutex_);
+				std::lock_guard<std::mutex> lock(list_task_mutex_);
 				list_task_.push_back(task);
 				count = list_task_.size();
 			}
@@ -73,7 +73,7 @@ namespace eddy
 		{
 			Task task;
 			{
-				std::lock_guard<std::mutex> locker(list_task_mutex_);
+				std::lock_guard<std::mutex> lock(list_task_mutex_);
 				if (!list_task_.empty())
 				{
 					task = std::move(list_task_.front());
@@ -88,10 +88,10 @@ namespace eddy
 
 			while (Load() == 0)
 			{
-				std::unique_lock<std::mutex> locker(condition_mutex_);
-				if (locker.mutex())
+				std::unique_lock<std::mutex> lock(condition_mutex_);
+				if (lock.mutex())
 				{
-					condition_incoming_task_.wait(locker);
+					condition_incoming_task_.wait(lock);
 				}
 			}
 		}
