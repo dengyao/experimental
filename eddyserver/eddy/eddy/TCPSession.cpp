@@ -15,7 +15,10 @@ namespace eddy
 		void SendMessageListToHandler(IOServiceThreadManager &manager, TCPSessionID id, NetMessageVecPointer messages)
 		{
 			SessionHandlerPointer handler_ptr = manager.SessionHandler(id);
-			if (handler_ptr == nullptr) return;
+			if (handler_ptr == nullptr)
+			{
+				return;
+			}
 
 			for (auto &message : *messages)
 			{
@@ -25,7 +28,10 @@ namespace eddy
 
 		void PackMessageList(SessionPointer session_ptr)
 		{
-			if (session_ptr->MessagesReceived().empty()) return;
+			if (session_ptr->MessagesReceived().empty())
+			{
+				return;
+			}
 
 			NetMessageVecPointer messages = std::make_shared< std::vector<NetMessage> >(std::move(session_ptr->MessagesReceived()));
 			session_ptr->Thread()->ThreadManager().MainThread()->Post(std::bind(
@@ -35,7 +41,10 @@ namespace eddy
 		void SendMessageListDirectly(SessionPointer session_ptr)
 		{
 			SessionHandlerPointer handler_ptr = session_ptr->Thread()->ThreadManager().SessionHandler(session_ptr->ID());
-			if (handler_ptr == nullptr) return;
+			if (handler_ptr == nullptr)
+			{
+				return;
+			}
 
 			for (auto &message : session_ptr->MessagesReceived())
 			{
@@ -73,7 +82,10 @@ namespace eddy
 		socket_.set_option(option);
 
 		size_t bytes_wanna_read = filter_->BytesWannaRead();
-		if (bytes_wanna_read == 0) return;
+		if (bytes_wanna_read == 0)
+		{
+			return;
+		}
 
 		++num_handlers_;
 		if (bytes_wanna_read == filter_->AnyBytes())
@@ -128,12 +140,19 @@ namespace eddy
 
 	void TCPSession::PostMessageList(const std::vector<NetMessage> &messages)
 	{
-		if (closed_) return;
+		if (closed_)
+		{
+			return;
+		}
 
 		assert(!messages.empty());
 
 		size_t bytes_wanna_write = filter_->BytesWannaWrite(messages);
-		if (bytes_wanna_write == 0) return;
+		if (bytes_wanna_write == 0)
+		{
+			return;
+		}
+
 		buffer_to_be_sent_.resize(buffer_to_be_sent_.size() + bytes_wanna_write);
 		filter_->Write(messages, buffer_to_be_sent_);
 
@@ -178,7 +197,10 @@ namespace eddy
 		}
 
 		size_t bytes_wanna_read = filter_->BytesWannaRead();
-		if (bytes_wanna_read == 0) return;
+		if (bytes_wanna_read == 0)
+		{
+			return;
+		}
 
 		++num_handlers_;
 		if (bytes_wanna_read == filter_->AnyBytes())

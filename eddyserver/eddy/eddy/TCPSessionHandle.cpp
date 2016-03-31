@@ -28,7 +28,10 @@ namespace eddy
 
 		void PackMessageList(SessionHandlerPointer session_handle_ptr)
 		{
-			if (session_handle_ptr->MessagesToBeSent().empty()) return;
+			if (session_handle_ptr->MessagesToBeSent().empty())
+			{
+				return;
+			}
 
 			ThreadPointer thread_ptr = session_handle_ptr->ThreadManager()->Thread(session_handle_ptr->ThreadID());
 			if (thread_ptr != nullptr)
@@ -83,7 +86,10 @@ namespace eddy
 
 	void TCPSessionHandle::Close()
 	{
-		if (IsClosed()) return;
+		if (IsClosed())
+		{
+			return;
+		}
 
 		PackMessageList(shared_from_this());
 
@@ -96,9 +102,15 @@ namespace eddy
 
 	void TCPSessionHandle::Send(NetMessage &message)
 	{
-		if (IsClosed()) return;
+		if (IsClosed())
+		{
+			return;
+		}
 
-		if (message.Empty()) return;
+		if (message.Empty())
+		{
+			return;
+		}
 
 		bool wanna_send = messages_to_be_sent_.empty();
 		messages_to_be_sent_.push_back(message);

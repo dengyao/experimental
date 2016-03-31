@@ -81,7 +81,7 @@ namespace eddy
 		}
 
 		size_t min_element_index = kMainThreadIndex;
-		size_t min_element_value = std::numeric_limits<size_t>::max();
+		size_t min_element_value = thread_load_[kMainThreadIndex];
 		for (size_t i = 0; i < thread_load_.size(); ++i)
 		{
 			if (kMainThreadIndex != i && thread_load_[i] < min_element_value)

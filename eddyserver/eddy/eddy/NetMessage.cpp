@@ -113,7 +113,11 @@ namespace eddy
 	void NetMessage::SetDynamic()
 	{
 		assert(!IsDynamic());
-		if (IsDynamic()) return;
+		if (IsDynamic())
+		{
+			return;
+		}
+
 		const size_t content_size = Readable();
 		dynamic_data_.reset(new DynamicVector(content_size));
 		dynamic_data_->insert(dynamic_data_->begin(), static_data_.begin() + reader_pos_, static_data_.begin() + writer_pos_);
