@@ -59,12 +59,6 @@ namespace eddy
 	TCPSessionHandle::TCPSessionHandle()
 		: session_id_(IDGenerator::kInvalidID)
 	{
-
-	}
-
-	TCPSessionHandle::~TCPSessionHandle()
-	{
-
 	}
 
 	void TCPSessionHandle::Init(TCPSessionID sid, IOThreadID tid, IOServiceThreadManager* manager)

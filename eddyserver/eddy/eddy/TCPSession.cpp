@@ -54,7 +54,7 @@ namespace eddy
 		}
 	}
 
-	TCPSession::TCPSession(ThreadPointer thread_ptr, MessageFilterPointer filter)
+	TCPSession::TCPSession(ThreadPointer &thread_ptr, MessageFilterPointer &filter)
 		: closed_(false)
 		, filter_(filter)
 		, num_handlers_(0)
@@ -62,12 +62,6 @@ namespace eddy
 		, socket_(thread_ptr->IOService())
 		, session_id_(IDGenerator::kInvalidID)
 	{
-
-	}
-
-	TCPSession::~TCPSession()
-	{
-
 	}
 
 	void TCPSession::Init(TCPSessionID id)

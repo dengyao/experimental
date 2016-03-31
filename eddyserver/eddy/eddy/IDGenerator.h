@@ -6,17 +6,19 @@
 
 namespace eddy
 {
-	class IDGenerator
+	class IDGenerator final
 	{
 	public:
 		static const uint32_t kInvalidID = 0;
+		static const uint32_t kDefaultThreshold = 8192;
 
 	public:
-		explicit IDGenerator(uint32_t threshold = 8192)
+		explicit IDGenerator(uint32_t threshold = kDefaultThreshold)
 			: next_(kInvalidID), threshold_(threshold)
 		{
-			pools_.reserve(threshold);
 		}
+
+		~IDGenerator() = default;
 
 		bool Get(uint32_t &id)
 		{

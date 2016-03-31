@@ -14,7 +14,6 @@ namespace eddy
 		, session_handler_creator_(handler_creator)
 		, message_filter_creator_(filter_creator)
 	{
-
 	}
 
 	asio::io_service& TCPClient::IOService()

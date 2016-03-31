@@ -8,7 +8,6 @@ namespace eddy
 	SimpleMessageFilter::SimpleMessageFilter()
 		: header_read_(false)
 	{
-
 	}
 
 	size_t SimpleMessageFilter::BytesWannaRead()

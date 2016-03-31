@@ -15,9 +15,16 @@ namespace eddy
 
 	public:
 		TCPSessionHandle();
+		virtual ~TCPSessionHandle() = default;
 
-		virtual ~TCPSessionHandle();
+	public:
+		virtual void OnConnect() = 0;
 
+		virtual void OnMessage(NetMessage &message) = 0;
+
+		virtual void OnClose() = 0;
+
+	public:
 		void Send(const NetMessage &message);
 
 		void Close();
@@ -45,11 +52,6 @@ namespace eddy
 		{
 			return messages_to_be_sent_;
 		}
-
-	public:
-		virtual void OnConnect() = 0;
-		virtual void OnMessage(NetMessage &message) = 0;
-		virtual void OnClose() = 0;
 
 	protected:
 		TCPSessionHandle(const TCPSessionHandle&) = delete;

@@ -7,14 +7,14 @@
 
 namespace eddy
 {
-	class TCPSession : public std::enable_shared_from_this < TCPSession >
+	class TCPSession final : public std::enable_shared_from_this < TCPSession >
 	{
 		friend class IOServiceThreadManager;
 		typedef asio::ip::tcp::socket SocketType;
 
 	public:
-		TCPSession(ThreadPointer thread_ptr, MessageFilterPointer filter);
-		~TCPSession();
+		TCPSession(ThreadPointer &thread_ptr, MessageFilterPointer &filter);
+		~TCPSession() = default;
 
 	public:
 		TCPSessionID ID() const
@@ -27,7 +27,7 @@ namespace eddy
 			return socket_;
 		}
 
-		ThreadPointer Thread()
+		ThreadPointer& Thread()
 		{
 			return thread_;
 		}

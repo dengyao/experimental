@@ -8,7 +8,7 @@ namespace eddy
 {
 	class IOServiceThreadManager;
 
-	class TCPServer
+	class TCPServer final
 	{
 	public:
 		TCPServer(asio::ip::tcp::endpoint &endpoint,
@@ -17,6 +17,9 @@ namespace eddy
 			const MessageFilterCreator &filter_creator,
 			uint64_t timeout = 0);
 
+		~TCPServer() = default;
+
+	public:
 		asio::io_service& IOService();
 
 	protected:

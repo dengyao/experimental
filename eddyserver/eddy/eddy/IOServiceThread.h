@@ -10,13 +10,13 @@ namespace eddy
 {
 	class IOServiceThreadManager;
 
-	class IOServiceThread : public std::enable_shared_from_this < IOServiceThread >
+	class IOServiceThread final : public std::enable_shared_from_this < IOServiceThread >
 	{
 		friend class IOServiceThreadManager;
 
 	public:
 		IOServiceThread(IOThreadID id, IOServiceThreadManager &manager);
-		~IOServiceThread();
+		~IOServiceThread() = default;
 
 	public:
 		void RunThread();

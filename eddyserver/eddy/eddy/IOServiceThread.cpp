@@ -11,12 +11,6 @@ namespace eddy
 		, manager_(manager)
 		, timer_(io_service_)
 	{
-
-	}
-
-	IOServiceThread::~IOServiceThread()
-	{
-
 	}
 
 	void IOServiceThread::Run()

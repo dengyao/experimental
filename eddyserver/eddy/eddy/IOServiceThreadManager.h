@@ -9,13 +9,12 @@
 
 namespace eddy
 {
-	class IOServiceThreadManager
+	class IOServiceThreadManager final
 	{
 		typedef std::unordered_map<TCPSessionID, SessionHandlerPointer > SessionHandlerMap;
 
 	public:
 		explicit IOServiceThreadManager(size_t thread_num = 1);
-
 		~IOServiceThreadManager();
 
 	public:

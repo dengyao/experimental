@@ -17,10 +17,6 @@ namespace eddy
 		EnsureWritableBytes(size);
 	}
 
-	NetMessage::~NetMessage()
-	{
-	}
-
 	NetMessage::NetMessage(const NetMessage &that)
 		: reader_pos_(that.reader_pos_)
 		, writer_pos_(that.writer_pos_)

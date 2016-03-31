@@ -6,7 +6,7 @@
 
 namespace eddy
 {
-	class TCPSessionQueue
+	class TCPSessionQueue final
 	{
 	public:
 		TCPSessionQueue();

@@ -9,7 +9,7 @@
 
 namespace eddy
 {
-	class NetMessage
+	class NetMessage final
 	{
 	public:
 		typedef char					ValueType;
@@ -29,7 +29,7 @@ namespace eddy
 
 		NetMessage(NetMessage &&that);
 
-		~NetMessage();
+		~NetMessage() = default;
 
 		NetMessage& operator= (const NetMessage &that);
 

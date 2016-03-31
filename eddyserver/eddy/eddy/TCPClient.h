@@ -8,13 +8,16 @@ namespace eddy
 {
 	class IOServiceThreadManager;
 
-	class TCPClient
+	class TCPClient final
 	{
 	public:
 		TCPClient(IOServiceThreadManager &io_thread_manager,
 			const SessionHandlerCreator &handler_creator,
 			const MessageFilterCreator &filter_creator);
 
+		~TCPClient() = default;
+
+	public:
 		asio::io_service& IOService();
 
 		void AsyncConnect(asio::ip::tcp::endpoint &endpoint);
