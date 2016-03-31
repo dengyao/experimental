@@ -19,7 +19,8 @@ namespace eddy
 		, acceptor_(io_thread_manager.MainThread()->IOService(), endpoint)
 	{
 		io_thread_manager.SetSessionTimeout(timeout);
-		SessionPointer session_ptr = std::make_shared<TCPSession>(io_thread_manager_.Thread(), message_filter_creator_());
+		MessageFilterPointer filter_ptr = message_filter_creator_();
+		SessionPointer session_ptr = std::make_shared<TCPSession>(io_thread_manager_.Thread(), filter_ptr);
 		acceptor_.async_accept(session_ptr->Socket(), std::bind(&TCPServer::HandleAccept, this, session_ptr, std::placeholders::_1));
 	}
 
@@ -37,9 +38,10 @@ namespace eddy
 			return;
 		}
 
-		io_thread_manager_.OnSessionConnect(session_ptr, session_handler_creator_());
-
-		SessionPointer new_session_ptr = std::make_shared<TCPSession>(io_thread_manager_.Thread(), message_filter_creator_());
+		MessageFilterPointer filter_ptr = message_filter_creator_();
+		SessionHandlerPointer handle_ptr = session_handler_creator_();
+		io_thread_manager_.OnSessionConnect(session_ptr, handle_ptr);
+		SessionPointer new_session_ptr = std::make_shared<TCPSession>(io_thread_manager_.Thread(), filter_ptr);
 		acceptor_.async_accept(new_session_ptr->Socket(), std::bind(&TCPServer::HandleAccept, this, new_session_ptr, std::placeholders::_1));
 	}
 }
