@@ -2,8 +2,7 @@ set(EDDY_SRC
   eddy/IOServiceThread.cpp
   eddy/IOServiceThreadManager.cpp
   eddy/NetMessage.cpp
-  eddy/SimpleMessageFilter.cpp
-  eddy/TaskQueue.cpp
+  eddy/DefaultMessageFilter.cpp
   eddy/TCPClient.cpp
   eddy/TCPServer.cpp
   eddy/TCPSession.cpp

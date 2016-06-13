@@ -1,18 +1,17 @@
-﻿#ifndef __SIMPLE_MESSAGE_FILTER_H__
-#define __SIMPLE_MESSAGE_FILTER_H__
+﻿#ifndef __DEFAULT_MESSAGE_FILTER_H__
+#define __DEFAULT_MESSAGE_FILTER_H__
 
 #include "MessageFilterInterface.h"
 
 namespace eddy
 {
-	class SimpleMessageFilter final : public MessageFilterInterface
+	class DefaultMessageFilter final : public MessageFilterInterface
 	{
 	public:
 		typedef uint16_t MessageHeader;
 
 	public:
-		SimpleMessageFilter();
-		~SimpleMessageFilter() = default;
+		DefaultMessageFilter();
 
 	public:
 		size_t BytesWannaRead() override;

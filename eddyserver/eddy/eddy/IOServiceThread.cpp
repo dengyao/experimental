@@ -70,7 +70,7 @@ namespace eddy
 				auto now_time = std::chrono::steady_clock::now();
 				session_queue_.Foreach([&](const SessionPointer &session)->void
 				{
-					auto interval = now_time - session->LastActivityTime();
+					auto interval = now_time - session->LastActivity();
 					if (interval >= timeout_)
 					{
 						session->Close();

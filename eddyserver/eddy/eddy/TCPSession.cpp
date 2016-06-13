@@ -69,7 +69,7 @@ namespace eddy
 		assert(IDGenerator::kInvalidID != id);
 
 		SetSessionID(id);
-		UpdateLastActivityTime();
+		UpdateLastActivity();
 		thread_->SessionQueue().Add(shared_from_this());
 
 		asio::ip::tcp::no_delay option(true);
@@ -96,7 +96,7 @@ namespace eddy
 		}
 	}
 
-	void TCPSession::UpdateLastActivityTime()
+	void TCPSession::UpdateLastActivity()
 	{
 		last_activity_ = std::chrono::steady_clock::now();
 	}
@@ -187,7 +187,7 @@ namespace eddy
 			{
 				thread_->Post(std::bind(PackMessageList, shared_from_this()));
 			}
-			UpdateLastActivityTime();
+			UpdateLastActivity();
 		}
 
 		size_t bytes_wanna_read = filter_->BytesWannaRead();

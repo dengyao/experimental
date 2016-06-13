@@ -32,7 +32,7 @@ namespace eddy
 			return thread_;
 		}
 
-		const TimePoint& LastActivityTime() const
+		const TimePoint& LastActivity() const
 		{
 			return last_activity_;
 		}
@@ -53,7 +53,7 @@ namespace eddy
 	private:
 		void Init(TCPSessionID id);
 
-		void UpdateLastActivityTime();
+		void UpdateLastActivity();
 
 		void SetSessionID(TCPSessionID id)
 		{

@@ -1,21 +1,21 @@
-﻿#include "SimpleMessageFilter.h"
+﻿#include "DefaultMessageFilter.h"
 #include <asio/ip/address_v4.hpp>
 
 namespace eddy
 {
-	const size_t SimpleMessageFilter::s_header_size_ = sizeof(SimpleMessageFilter::MessageHeader);
+	const size_t DefaultMessageFilter::s_header_size_ = sizeof(DefaultMessageFilter::MessageHeader);
 
-	SimpleMessageFilter::SimpleMessageFilter()
+	DefaultMessageFilter::DefaultMessageFilter()
 		: header_read_(false)
 	{
 	}
 
-	size_t SimpleMessageFilter::BytesWannaRead()
+	size_t DefaultMessageFilter::BytesWannaRead()
 	{
 		return header_read_ ? header_ : s_header_size_;
 	}
 
-	size_t SimpleMessageFilter::BytesWannaWrite(const std::vector<NetMessage> &messages_to_be_sent)
+	size_t DefaultMessageFilter::BytesWannaWrite(const std::vector<NetMessage> &messages_to_be_sent)
 	{
 		if (messages_to_be_sent.empty())
 		{
@@ -27,7 +27,7 @@ namespace eddy
 		});
 	}
 
-	size_t SimpleMessageFilter::Read(const Buffer &buffer, std::vector<NetMessage> &messages_received)
+	size_t DefaultMessageFilter::Read(const Buffer &buffer, std::vector<NetMessage> &messages_received)
 	{
 		if (!header_read_)
 		{
@@ -46,7 +46,7 @@ namespace eddy
 		}
 	}
 
-	size_t SimpleMessageFilter::Write(const std::vector<NetMessage> &messages_to_be_sent, Buffer &buffer)
+	size_t DefaultMessageFilter::Write(const std::vector<NetMessage> &messages_to_be_sent, Buffer &buffer)
 	{
 		size_t ret = 0;
 		for (const NetMessage &message : messages_to_be_sent)

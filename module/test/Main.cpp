@@ -27,9 +27,9 @@ std::shared_ptr<SessionHandle> CreateSessionHandle()
 	return std::make_shared<SessionHandle>();
 }
 
-std::shared_ptr<eddy::SimpleMessageFilter> CreateMessageFilter()
+std::shared_ptr<eddy::DefaultMessageFilter> CreateMessageFilter()
 {
-	return std::make_shared<eddy::SimpleMessageFilter>();
+	return std::make_shared<eddy::DefaultMessageFilter>();
 }
 
 int main(int argc, char **argv)
