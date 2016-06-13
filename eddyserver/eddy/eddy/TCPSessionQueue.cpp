@@ -45,7 +45,7 @@ namespace eddy
 
 	void TCPSessionQueue::Foreach(const std::function<void(const SessionPointer &session)> &func)
 	{
-		for (auto item : session_queue_)
+		for (const auto &item : session_queue_)
 		{
 			func(item.second);
 		}

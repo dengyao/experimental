@@ -7,7 +7,7 @@
 
 namespace eddy
 {
-	const size_t kMainThreadIndex = 0;
+	static const size_t kMainThreadIndex = 0;
 
 	IOServiceThreadManager::IOServiceThreadManager(size_t thread_num)
 	{
@@ -18,10 +18,10 @@ namespace eddy
 		}
 
 		threads_.resize(thread_num);
-		thread_load_.resize(threads_.size());
+		thread_load_.resize(thread_num);
 		for (size_t i = 0; i < threads_.size(); ++i)
 		{
-			threads_[i] = std::make_shared<IOServiceThread>(i, *this);
+			threads_[i] = std::make_shared<IOServiceThread>(i + 1, *this);
 		}
 	}
 
@@ -101,7 +101,7 @@ namespace eddy
 				return threads_[i];
 			}
 		}
-		return nullptr;
+		return ThreadPointer();
 	}
 
 	ThreadPointer& IOServiceThreadManager::MainThread()
@@ -119,10 +119,10 @@ namespace eddy
 			session_ptr->Thread()->Post(std::bind(&TCPSession::Init, session_ptr, id));
 			handler_ptr->OnConnect();
 
-			IOThreadID td_id = handler_ptr->ThreadID();
-			if (td_id < thread_load_.size())
+			IOThreadID tdid = handler_ptr->ThreadID();
+			if (tdid < thread_load_.size())
 			{
-				++thread_load_[td_id];
+				++thread_load_[tdid];
 			}
 		}
 		else

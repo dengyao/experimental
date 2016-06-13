@@ -6,7 +6,6 @@ namespace eddy
 {
 	IOServiceThread::IOServiceThread(IOThreadID id, IOServiceThreadManager &manager)
 		: timeout_(0)
-		, work_(nullptr)
 		, thread_id_(id)
 		, manager_(manager)
 		, timer_(io_service_)
