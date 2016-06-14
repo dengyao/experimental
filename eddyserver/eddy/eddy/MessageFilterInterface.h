@@ -11,12 +11,7 @@ namespace eddy
 	{
 	public:
 		typedef std::vector<uint8_t> Buffer;
-
-	public:
-		static size_t AnyBytes()
-		{
-			return std::numeric_limits<size_t>::max();
-		}
+		static const size_t kAnyBytes = std::numeric_limits<size_t>::max();
 
 	public:
 		MessageFilterInterface() = default;
@@ -24,8 +19,11 @@ namespace eddy
 
 	public:
 		virtual size_t BytesWannaRead() = 0;
+
 		virtual size_t BytesWannaWrite(const std::vector<NetMessage> &messages_to_be_sent) = 0;
+
 		virtual size_t Read(const Buffer &buffer, std::vector<NetMessage> &messages_received) = 0;
+
 		virtual size_t Write(const std::vector<NetMessage> &messages_to_be_sent, Buffer &buffer) = 0;
 
 	protected:

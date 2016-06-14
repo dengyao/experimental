@@ -87,7 +87,7 @@ namespace eddy
 		}
 
 		++num_handlers_;
-		if (bytes_wanna_read == filter_->AnyBytes())
+		if (bytes_wanna_read == MessageFilterInterface::kAnyBytes)
 		{
 			buffer_receiving_.resize(NetMessage::kDynamicThreshold);
 			socket_.async_read_some(asio::buffer(buffer_receiving_.data(), buffer_receiving_.size()),
@@ -197,7 +197,7 @@ namespace eddy
 		}
 
 		++num_handlers_;
-		if (bytes_wanna_read == filter_->AnyBytes())
+		if (bytes_wanna_read == MessageFilterInterface::kAnyBytes)
 		{
 			buffer_receiving_.resize(NetMessage::kDynamicThreshold);
 			socket_.async_read_some(asio::buffer(buffer_receiving_.data(), buffer_receiving_.size()),
