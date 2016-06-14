@@ -119,10 +119,11 @@ namespace eddy
 			session_ptr->Thread()->Post(std::bind(&TCPSession::Init, session_ptr, id));
 			handler_ptr->OnConnect();
 
-			IOThreadID tdid = handler_ptr->ThreadID();
-			if (tdid < thread_load_.size())
+			IOThreadID td_id = handler_ptr->ThreadID();
+			assert(td_id > 0 && td_id <= thread_load_.size());
+			if (td_id > 0 && td_id <= thread_load_.size())
 			{
-				++thread_load_[tdid];
+				++thread_load_[td_id - 1];
 			}
 		}
 		else
@@ -134,25 +135,30 @@ namespace eddy
 	void IOServiceThreadManager::OnSessionClose(TCPSessionID id)
 	{
 		assert(IDGenerator::kInvalidID != id);
-		SessionHandlerMap::iterator itr = session_handler_map_.find(id);
-		if (itr != session_handler_map_.end())
+		SessionHandlerMap::iterator found = session_handler_map_.find(id);
+		if (found != session_handler_map_.end())
 		{
-			SessionHandlerPointer handler_ptr = itr->second;
+			SessionHandlerPointer handler_ptr = found->second;
 			IOThreadID td_id = handler_ptr->ThreadID();
 			if (handler_ptr != nullptr)
 			{
 				handler_ptr->OnClose();
 				handler_ptr->Dispose();
 			}
-			session_handler_map_.erase(itr);
+			session_handler_map_.erase(found);
 
-			if (td_id < thread_load_.size() && thread_load_[td_id] > 0)
+			assert(td_id > 0 && td_id <= thread_load_.size());
+			if (td_id > 0 && td_id <= thread_load_.size())
 			{
-				--thread_load_[td_id];
+				assert(thread_load_[td_id - 1] > 0);
+				if (thread_load_[td_id - 1] > 0)
+				{
+					--thread_load_[td_id - 1];
+				}		
 			}
 		}
 
-		if (IDGenerator::kInvalidID != id)
+		if (id != IDGenerator::kInvalidID)
 		{
 			id_generator_.Put(id);
 		}
@@ -160,19 +166,19 @@ namespace eddy
 
 	SessionHandlerPointer IOServiceThreadManager::SessionHandler(TCPSessionID id) const
 	{
-		SessionHandlerMap::const_iterator itr = session_handler_map_.find(id);
-		if (itr != session_handler_map_.end())
+		SessionHandlerMap::const_iterator found = session_handler_map_.find(id);
+		if (found != session_handler_map_.end())
 		{
-			return itr->second;
+			return found->second;
 		}
-		return nullptr;
+		return SessionHandlerPointer();
 	}
 
 	void IOServiceThreadManager::SetSessionTimeout(uint64_t seconds)
 	{
-		for (auto &item : threads_)
+		for (const auto &td : threads_)
 		{
-			item->Post(std::bind(&IOServiceThread::SetSessionTimeout, item, seconds));
+			td->Post(std::bind(&IOServiceThread::SetSessionTimeout, td, seconds));
 		}
 	}
 }

@@ -25,12 +25,12 @@ namespace eddy
 
 	SessionPointer TCPSessionQueue::Get(TCPSessionID id)
 	{
-		std::unordered_map<TCPSessionID, SessionPointer>::iterator itr = session_queue_.find(id);
-		if (itr == session_queue_.end())
+		std::unordered_map<TCPSessionID, SessionPointer>::iterator found = session_queue_.find(id);
+		if (found != session_queue_.end())
 		{
-			return nullptr;
+			return found->second;
 		}
-		return itr->second;
+		return SessionPointer();
 	}
 
 	void TCPSessionQueue::Remove(TCPSessionID id)
