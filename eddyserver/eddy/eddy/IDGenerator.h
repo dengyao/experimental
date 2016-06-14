@@ -38,6 +38,12 @@ namespace eddy
 
 		void Put(uint32_t id)
 		{
+#ifdef DEBUG
+			for (size_t i = 0; i < pools_.size(); ++i)
+			{
+				assert(pools_[i] != id);
+			}
+#endif // _DEBUG
 			pools_.push_back(id);
 		}
 

@@ -64,6 +64,11 @@ namespace eddy
 	{
 	}
 
+	inline void TCPSession::UpdateLastActivity()
+	{
+		last_activity_ = std::chrono::steady_clock::now();
+	}
+
 	void TCPSession::Init(TCPSessionID id)
 	{
 		assert(IDGenerator::kInvalidID != id);
@@ -85,20 +90,15 @@ namespace eddy
 		if (bytes_wanna_read == filter_->AnyBytes())
 		{
 			buffer_receiving_.resize(NetMessage::kDynamicThreshold);
-			socket_.async_read_some(asio::buffer(&*buffer_receiving_.begin(), buffer_receiving_.size()),
+			socket_.async_read_some(asio::buffer(buffer_receiving_.data(), buffer_receiving_.size()),
 				std::bind(&TCPSession::HandleRead, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
 		}
 		else
 		{
 			buffer_receiving_.resize(bytes_wanna_read);
-			socket_.async_receive(asio::buffer(&*buffer_receiving_.begin(), bytes_wanna_read),
+			socket_.async_receive(asio::buffer(buffer_receiving_.data(), bytes_wanna_read),
 				std::bind(&TCPSession::HandleRead, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
 		}
-	}
-
-	void TCPSession::UpdateLastActivity()
-	{
-		last_activity_ = std::chrono::steady_clock::now();
 	}
 
 	void TCPSession::Close()
@@ -154,7 +154,7 @@ namespace eddy
 		{
 			++num_handlers_;
 			buffer_sending_.swap(buffer_to_be_sent_);
-			socket_.async_send(asio::buffer(&*buffer_sending_.begin(), bytes_wanna_write),
+			socket_.async_send(asio::buffer(buffer_sending_.data(), bytes_wanna_write),
 				std::bind(&TCPSession::HanldeWrite, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
 		}
 	}
@@ -200,13 +200,13 @@ namespace eddy
 		if (bytes_wanna_read == filter_->AnyBytes())
 		{
 			buffer_receiving_.resize(NetMessage::kDynamicThreshold);
-			socket_.async_read_some(asio::buffer(&*buffer_receiving_.begin(), buffer_receiving_.size()),
+			socket_.async_read_some(asio::buffer(buffer_receiving_.data(), buffer_receiving_.size()),
 				std::bind(&TCPSession::HandleRead, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
 		}
 		else
 		{
 			buffer_receiving_.resize(bytes_wanna_read);
-			socket_.async_receive(asio::buffer(&*buffer_receiving_.begin(), bytes_wanna_read),
+			socket_.async_receive(asio::buffer(buffer_receiving_.data(), bytes_wanna_read),
 				std::bind(&TCPSession::HandleRead, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
 		}
 	}
@@ -232,7 +232,7 @@ namespace eddy
 
 		++num_handlers_;
 		buffer_sending_.swap(buffer_to_be_sent_);
-		socket_.async_send(asio::buffer(&*buffer_sending_.begin(), buffer_sending_.size()),
+		socket_.async_send(asio::buffer(buffer_sending_.data(), buffer_sending_.size()),
 			std::bind(&TCPSession::HanldeWrite, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
 	}
 }

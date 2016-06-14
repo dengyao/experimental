@@ -296,7 +296,7 @@ namespace eddy
 		if (lenght > 0)
 		{
 			value.resize(lenght);
-			memcpy(&*value.begin(), Data(), lenght);
+			memcpy(const_cast<char *>(value.data()), Data(), lenght);
 			Retrieve(lenght);
 		}
 		return value;
@@ -312,7 +312,7 @@ namespace eddy
 		if (lenght > 0)
 		{
 			value.resize(lenght);
-			memcpy(&*value.begin(), Data(), lenght);
+			memcpy(const_cast<char *>(value.data()), Data(), lenght);
 			Retrieve(lenght);
 		}
 		return value;
@@ -362,7 +362,7 @@ namespace eddy
 	{
 		if (!value.empty())
 		{
-			Write(&*value.begin(), value.length());
+			Write(value.data(), value.length());
 		}
 	}
 
