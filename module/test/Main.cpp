@@ -10,8 +10,8 @@ class SessionHandle : public eddy::TCPSessionHandle
 	}
 
 	virtual void OnMessage(eddy::NetMessage &message) override
-	{
-		std::string s(message.Data(), message.Readable());
+	{		
+		std::string s(reinterpret_cast<const char*>(message.Data()), message.Readable());
 		std::cout << "OnMessage:" << s << std::endl;
 		Send(message);
 	}
