@@ -74,9 +74,9 @@ namespace eddy
 		ThreadPointer			thread_;
 		MessageFilterPointer	filter_;
 		TimePoint				last_activity_;
-		std::vector<char>		buffer_receiving_;
-		std::vector<char>		buffer_sending_;
-		std::vector<char>		buffer_to_be_sent_;
+		std::vector<uint8_t>	buffer_receiving_;
+		std::vector<uint8_t>	buffer_sending_;
+		std::vector<uint8_t>	buffer_to_be_sent_;
 		NetMessageVector		messages_received_;
 	};
 }

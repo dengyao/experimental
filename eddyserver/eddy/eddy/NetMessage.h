@@ -12,7 +12,7 @@ namespace eddy
 	class NetMessage final
 	{
 	public:
-		typedef char					ValueType;
+		typedef uint8_t					ValueType;
 		typedef ValueType*				Pointer;
 		typedef const ValueType*		ConstPointer;
 		typedef std::vector<ValueType>	DynamicVector;

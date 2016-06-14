@@ -288,7 +288,7 @@ namespace eddy
 	std::string NetMessage::ReadString()
 	{
 		assert(Readable() > 0);
-		const char *eos = Data();
+		const uint8_t *eos = Data();
 		while (*eos++);
 		size_t lenght = eos - Data() - 1;
 		assert(Readable() >= lenght);

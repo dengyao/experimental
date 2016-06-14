@@ -31,7 +31,7 @@ namespace eddy
 	{
 		if (!header_read_)
 		{
-			char *data = const_cast<char *>(&*buffer.begin());
+			uint8_t *data = const_cast<uint8_t *>(buffer.data());
 			header_ = ntohs(*reinterpret_cast<MessageHeader *>(data));
 			header_read_ = true;
 			return s_header_size_;
@@ -39,7 +39,7 @@ namespace eddy
 		else
 		{
 			NetMessage new_message(header_);
-			new_message.Write(&*buffer.begin(), header_);
+			new_message.Write(buffer.data(), header_);
 			messages_received.push_back(std::move(new_message));
 			header_read_ = false;
 			return header_;
@@ -48,14 +48,14 @@ namespace eddy
 
 	size_t DefaultMessageFilter::Write(const std::vector<NetMessage> &messages_to_be_sent, Buffer &buffer)
 	{
-		size_t ret = 0;
+		size_t bytes = 0;
 		for (const NetMessage &message : messages_to_be_sent)
 		{
 			MessageHeader header = htons(static_cast<MessageHeader>(message.Readable()));
-			buffer.insert(buffer.end(), reinterpret_cast<const char*>(&header), reinterpret_cast<const char*>(&header) + sizeof(MessageHeader));
+			buffer.insert(buffer.end(), reinterpret_cast<const uint8_t*>(&header), reinterpret_cast<const uint8_t*>(&header) + sizeof(MessageHeader));
 			buffer.insert(buffer.end(), message.Data(), message.Data() + message.Readable());
-			ret += s_header_size_ + message.Readable();
+			bytes += s_header_size_ + message.Readable();
 		}
-		return ret;
+		return bytes;
 	}
 }

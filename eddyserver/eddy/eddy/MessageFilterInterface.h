@@ -10,7 +10,7 @@ namespace eddy
 	class MessageFilterInterface
 	{
 	public:
-		typedef std::vector<char> Buffer;
+		typedef std::vector<uint8_t> Buffer;
 
 	public:
 		static size_t AnyBytes()
