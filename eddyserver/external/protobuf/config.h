@@ -1,5 +1,5 @@
 /* protobuf config.h for MSVC.  On other platforms, this is generated
- * automatically by autoheader / autoconf / configure. */
+* automatically by autoheader / autoconf / configure. */
 
 /* the location of <hash_map> */
 #define HASH_MAP_H <unordered_map>
@@ -25,8 +25,12 @@
 #define HAVE_HASH_SET 1
 
 /* define if you want to use zlib.  See readme.txt for additional
- * requirements. */
+* requirements. */
 // #define HAVE_ZLIB 1
+
+#if defined(_MSC_VER)
+#define _STLPORT_VERSION 1
+#endif
 
 #define HAVE_PTHREAD 1
 #define HASH_MAP_CLASS unordered_map

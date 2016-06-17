@@ -1,0 +1,23 @@
+package db;
+
+message request
+{
+    enum Target
+    {
+	    DRDB = 1;
+        MMDB = 2;
+    }
+
+    enum Command
+    { 
+        SELECT = 1; 
+        INSERT = 2; 
+        UPDATE = 3; 
+        DELETE = 4;
+    }
+
+    required Target target = 1;
+    required Command command = 2;
+    required int32 number = 3;
+    optional string execute = 4;
+}

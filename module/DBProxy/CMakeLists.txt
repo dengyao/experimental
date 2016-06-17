@@ -1,0 +1,26 @@
+set(MODULE_NAME DBProxy)
+
+set(DBPROXY_SRC_LISTS 
+  DBProxy/Private/Main.cpp
+  DBProxy/Private/TaskPools.cpp
+  DBProxy/Private/TaskQueue.cpp
+)
+
+include_directories(
+  .
+  ${MYSQL_INCLUDE_DIRS}
+)
+
+link_directories(${BINARY_OUTPUT_DIR})
+
+add_executable(${MODULE_NAME} ${DBPROXY_SRC_LISTS})
+
+set_target_properties(${MODULE_NAME}
+  PROPERTIES
+  RUNTIME_OUTPUT_DIRECTORY
+  "${BINARY_OUTPUT_DIR}"
+)
+
+target_link_libraries(${MODULE_NAME}
+  ${MYSQL_LIBRARY_NAME}
+)

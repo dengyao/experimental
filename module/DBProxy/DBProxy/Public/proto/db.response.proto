@@ -1,0 +1,7 @@
+package db;
+
+message response
+{
+    required int32 number = 1;
+    optional string result = 2;
+}

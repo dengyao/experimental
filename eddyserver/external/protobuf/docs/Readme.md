@@ -11,3 +11,9 @@ libprotobuf.py 用于提取libprotobuf库中需要的C++源文件，方便cmake�
 4. 添加宏定义```#define HAVE_PTHREAD 1```
 5. 添加宏定义```#define HASH_MAP_CLASS unordered_map```
 6. 添加宏定义```#define HASH_SET_CLASS unordered_set```
+7. 添加宏定义，防止windows上编译失败
+    ```
+    #if defined(_MSC_VER)
+    #define _STLPORT_VERSION 1
+    #endif
+    ```

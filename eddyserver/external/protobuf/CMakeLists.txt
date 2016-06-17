@@ -1,4 +1,4 @@
-set(PROTOBUF_SRC 
+set(PROTOBUF_SRC_LISTS
   google/protobuf/compiler/importer.cc
   google/protobuf/compiler/parser.cc
   google/protobuf/descriptor.cc
@@ -36,27 +36,27 @@ set(PROTOBUF_SRC
 )
 
 include_directories(
-  .
+  ${PROTOBUF_INCLUDE_DIRS}
 )
 
 add_library(protobuf_shared SHARED
-  ${PROTOBUF_SRC}
+  ${PROTOBUF_SRC_LISTS}
 )
 
 add_library(protobuf_static STATIC
-  ${PROTOBUF_SRC}
+  ${PROTOBUF_SRC_LISTS}
 )
 
 set_target_properties(protobuf_shared
   PROPERTIES
-  OUTPUT_NAME "protobuf"
-  ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
-  LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
+  OUTPUT_NAME ${PROTOBUF_LIBRARY_NAME}
+  ARCHIVE_OUTPUT_DIRECTORY ${BINARY_OUTPUT_DIR}
+  LIBRARY_OUTPUT_DIRECTORY ${BINARY_OUTPUT_DIR}
 )
 
 set_target_properties(protobuf_static
   PROPERTIES
-  OUTPUT_NAME "protobuf"
-  ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
-  LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
+  OUTPUT_NAME ${PROTOBUF_LIBRARY_NAME}
+  ARCHIVE_OUTPUT_DIRECTORY ${BINARY_OUTPUT_DIR}
+  LIBRARY_OUTPUT_DIRECTORY ${BINARY_OUTPUT_DIR}
 )

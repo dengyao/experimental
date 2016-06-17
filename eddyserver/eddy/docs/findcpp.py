@@ -3,7 +3,7 @@
 import os
 
 if __name__ == '__main__':
-    files = []
+    cppfiles = []
     types = set(["c", ".cpp", ".cc", ".cxx"])
     for root, dirs, files in os.walk(os.curdir):
         for item in files:
@@ -13,10 +13,10 @@ if __name__ == '__main__':
                 if relative_path.find(curdir) == 0:
                     relative_path = relative_path[len(curdir):]
                 relative_path = relative_path.replace(os.path.sep, '/')
-                files.append(relative_path)
+                cppfiles.append(relative_path)
 
     text = 'set(FILEPATH \n'
-    for filename in files:
+    for filename in cppfiles:
         text += '  '
         text += filename
         text += '\n'
