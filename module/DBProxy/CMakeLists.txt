@@ -9,6 +9,8 @@ set(DBPROXY_SRC_LISTS
 include_directories(
   .
   ${MYSQL_INCLUDE_DIRS}
+  ${RAPIDJSON_INCLUDE_DIRS}
+  ${EASYLOGGINGPP_INCLUDE_DIRS}
 )
 
 link_directories(${BINARY_OUTPUT_DIR})
