@@ -10,12 +10,15 @@ add_definitions(-DASIO_STANDALONE)
 if(CMAKE_COMPILER_IS_GNUCXX)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -pthread")
 endif()
-
 set(BINARY_OUTPUT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
 set(EDDY_LIBRARY_NAME eddy)
-set(MYSQL_LIBRARY_NAME mysqlclient)
 set(PROTOBUF_LIBRARY_NAME protobuf)
+if (WIN32)
+set(MYSQL_LIBRARY_NAME libmysql)
+else()
+set(MYSQL_LIBRARY_NAME mysqlclient)
+endif()
 
 set(ASIO_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/eddyserver/asio)
 set(EDDY_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/eddyserver/eddy)
