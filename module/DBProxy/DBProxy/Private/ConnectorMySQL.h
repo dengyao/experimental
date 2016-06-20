@@ -3,6 +3,7 @@
 
 #include <array>
 #include <vector>
+#include <memory>
 #include <cassert>
 #include <mysql.h>
 #include <mysqld_error.h>
@@ -121,7 +122,7 @@ namespace dbproxy
 	typedef DatabaseResult<MySQL> MySQLResult;
 
 	template <>
-	class Connector<MySQL> : public std::enable_shared_from_this< Connector<MySQL> >
+	class Connector<MySQL>
 	{
 	public:
 		Connector(const std::string &host, unsigned short port, const std::string &user, const std::string &passwd)
@@ -149,13 +150,22 @@ namespace dbproxy
 			Disconnect();
 		}
 
+		const char* Name() const
+		{
+			return select_db_.c_str();
+		}
+
 		void SelectDatabase(const char *db, ErrorCode &error_code)
 		{
 			if (IsConnected())
 			{
 				mysql_select_db(&mysql_, db);
 				int error = mysql_errno(&mysql_);
-				if (error != 0)
+				if (error == 0)
+				{
+					select_db_ = db;
+				}
+				else
 				{
 					error_code.SetError(error, mysql_error(&mysql_));
 				}
@@ -322,11 +332,12 @@ namespace dbproxy
 		const unsigned short	port_;
 		const std::string		user_;
 		const std::string		passwd_;
+		std::string				select_db_;
 		bool					connected_;
 	};
 
 	typedef Connector<MySQL> ConnectorMySQL;
-	typedef std::shared_ptr<ConnectorMySQL> ConnectorMySQLPointer;
+	typedef std::unique_ptr<ConnectorMySQL> ConnectorMySQLPointer;
 }
 
 #endif

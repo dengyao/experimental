@@ -1,7 +1,6 @@
 ﻿#ifndef __CONNECTOR_H__
 #define __CONNECTOR_H__
 
-#include <memory>
 #include <DBProxy/Private/Types.h>
 #include <DBProxy/Public/ResultWrap.h>
 
@@ -29,12 +28,14 @@ namespace dbproxy
 
 	// Database Connector Interface
 	template <typename Database>
-	class Connector : public std::enable_shared_from_this< Connector<Database> >
+	class Connector
 	{
 	public:
 		Connector(const std::string &host, unsigned short port, const std::string &user, const std::string &passwd);
 
 		Connector(const std::string &host, unsigned short port, const std::string &user, const std::string &passwd, int timeout);
+
+		const char* Name() const;
 
 		DatabaseResult<Database> Select(const std::string &command, ErrorCode &error_code);
 
