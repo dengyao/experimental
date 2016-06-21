@@ -193,7 +193,7 @@ namespace dbproxy
 			}
 		}
 
-		MySQLResult Select(const std::string &command, ErrorCode &error_code)
+		MySQLResult Select(const std::vector<char> &command, ErrorCode &error_code)
 		{
 			if (IsConnected())
 			{
@@ -216,7 +216,7 @@ namespace dbproxy
 			}
 		}
 
-		MySQLResult Insert(const std::string &command, ErrorCode &error_code)
+		MySQLResult Insert(const std::vector<char> &command, ErrorCode &error_code)
 		{
 			if (IsConnected())
 			{
@@ -242,12 +242,12 @@ namespace dbproxy
 			}
 		}
 
-		MySQLResult Update(const std::string &command, ErrorCode &error_code)
+		MySQLResult Update(const std::vector<char> &command, ErrorCode &error_code)
 		{
 			return AffectedRows(command, error_code);
 		}
 
-		MySQLResult Delete(const std::string &command, ErrorCode &error_code)
+		MySQLResult Delete(const std::vector<char> &command, ErrorCode &error_code)
 		{
 			return AffectedRows(command, error_code);
 		}
@@ -298,7 +298,7 @@ namespace dbproxy
 			return connected_;
 		}
 
-		MySQLResult AffectedRows(const std::string &command, ErrorCode &error_code)
+		MySQLResult AffectedRows(const std::vector<char> &command, ErrorCode &error_code)
 		{
 			if (IsConnected())
 			{

@@ -6,6 +6,14 @@
 
 namespace dbproxy
 {
+	enum class CommandType
+	{
+		kSelect = 1,
+		kInsert = 2,
+		kUpdate = 3,
+		kDelete = 4,
+	};
+
 	class ErrorCode
 	{
 	public:

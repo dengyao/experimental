@@ -37,13 +37,13 @@ namespace dbproxy
 
 		const char* Name() const;
 
-		DatabaseResult<Database> Select(const std::string &command, ErrorCode &error_code);
+		DatabaseResult<Database> Select(const std::vector<char> &command, ErrorCode &error_code);
 
-		DatabaseResult<Database> Insert(const std::string &command, ErrorCode &error_code);
+		DatabaseResult<Database> Insert(const std::vector<char> &command, ErrorCode &error_code);
 
-		DatabaseResult<Database> Update(const std::string &command, ErrorCode &error_code);
+		DatabaseResult<Database> Update(const std::vector<char> &command, ErrorCode &error_code);
 
-		DatabaseResult<Database> Delete(const std::string &command, ErrorCode &error_code);
+		DatabaseResult<Database> Delete(const std::vector<char> &command, ErrorCode &error_code);
 
 	private:
 		Connector(const Connector&) = delete;
