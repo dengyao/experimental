@@ -1,5 +1,5 @@
-﻿#ifndef __RESULT_WRAP_H__
-#define __RESULT_WRAP_H__
+﻿#ifndef __WRAP_RESULT_H__
+#define __WRAP_RESULT_H__
 
 #include <array>
 #include <vector>
@@ -8,20 +8,20 @@
 
 namespace dbproxy
 {
-	class ResultWrap
+	class WrapResult
 	{
 		static const size_t kNumRowsIndex = 0;
 		static const size_t kNumFieldIndex = 1;
 
 	public:
-		ResultWrap(const char *data, size_t size)
+		WrapResult(const char *data, size_t size)
 			: num_rows_(0)
 			, num_fields_(0)
 		{
 			Deserialize(data, size);
 		}
 
-		ResultWrap(ResultWrap &&other)
+		WrapResult(WrapResult &&other)
 			: num_rows_(other.num_rows_)
 			, num_fields_(other.num_fields_)
 		{
@@ -106,8 +106,8 @@ namespace dbproxy
 		}
 
 	private:
-		ResultWrap(const ResultWrap&) = delete;
-		ResultWrap operator= (const ResultWrap&) = delete;
+		WrapResult(const WrapResult&) = delete;
+		WrapResult operator= (const WrapResult&) = delete;
 
 	private:
 		size_t num_rows_;

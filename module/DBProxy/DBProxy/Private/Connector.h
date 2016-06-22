@@ -2,7 +2,7 @@
 #define __CONNECTOR_H__
 
 #include <DBProxy/Private/Types.h>
-#include <DBProxy/Public/ResultWrap.h>
+#include <DBProxy/Public/WrapResult.h>
 
 namespace dbproxy
 {
@@ -15,7 +15,7 @@ namespace dbproxy
 
 		const char* Binary() const;
 
-		ResultWrap Wrap() const;
+		WrapResult Wrap() const;
 
 		DatabaseResult(DatabaseResult&&);;
 

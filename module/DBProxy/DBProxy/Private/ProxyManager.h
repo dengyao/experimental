@@ -6,7 +6,7 @@
 #include "Types.h"
 #include "Connector.h"
 #include "TaskPools.h"
-#include "SafeContainer.h"
+#include "ContainerSafe.h"
 
 namespace dbproxy
 {
@@ -167,7 +167,7 @@ namespace dbproxy
 
 		bool Append(int number, CommandType type, const char *db, const char *command, const size_t length)
 		{
-			SafeQueue<ActorPointer> *waiting = nullptr;
+			QueueSafe<ActorPointer> *waiting = nullptr;
 			if (!waiting_queue_.Get(db, waiting))
 			{
 				return false;
@@ -206,7 +206,7 @@ namespace dbproxy
 			completion_queue_.Append(Result(actor->GetNumber(), std::forward<ErrorCode>(code), std::forward<DatabaseResult<Database>>(result)));
 			if (ongoing_queue_.Take(actor->GetNumber(), actor))
 			{
-				SafeQueue<ActorPointer> *waiting = nullptr;
+				QueueSafe<ActorPointer> *waiting = nullptr;
 				if (waiting_queue_.Get(connector->Name(), waiting))
 				{			
 					if (waiting->Take(actor))
@@ -236,10 +236,10 @@ namespace dbproxy
 	private:
 		const unsigned int                            bocklog_;
 		std::shared_ptr<TaskPools>                    pools_;
-		SafeMultimap<std::string, ConnectorPointer>   free_connectors_;
-		SafeMap<std::string, SafeQueue<ActorPointer>> waiting_queue_;
-		SafeMap<int, ActorPointer>                    ongoing_queue_;
-		SafeQueue<Result>                             completion_queue_;
+		MultimapSafe<std::string, ConnectorPointer>   free_connectors_;
+		MapSafe<std::string, QueueSafe<ActorPointer>> waiting_queue_;
+		MapSafe<int, ActorPointer>                    ongoing_queue_;
+		QueueSafe<Result>                             completion_queue_;
 		const CompleteNotify                          complete_notify_;
 	};
 }

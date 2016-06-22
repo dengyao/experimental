@@ -1,15 +1,15 @@
-﻿#ifndef __SAFE_CONTAINER_H__
-#define __SAFE_CONTAINER_H__
+﻿#ifndef __CONTAINER_SAFE_H__
+#define __CONTAINER_SAFE_H__
 
 #include <map>
 #include <list>
 #include <unordered_map>
 
 template <typename Value>
-class SafeQueue
+class QueueSafe
 {
 public:
-	SafeQueue() = default;
+	QueueSafe() = default;
 
 	bool Take(Value &value)
 	{
@@ -56,8 +56,8 @@ public:
 	}
 
 private:
-	SafeQueue(const SafeQueue&) = delete;
-	SafeQueue& operator= (const SafeQueue&) = delete;
+	QueueSafe(const QueueSafe&) = delete;
+	QueueSafe& operator= (const QueueSafe&) = delete;
 
 private:
 	mutable std::mutex mutex_;
@@ -65,10 +65,10 @@ private:
 };
 
 template <typename Key, typename Value>
-class SafeMap
+class MapSafe
 {
 public:
-	SafeMap() = default;
+	MapSafe() = default;
 
 	bool IsExist(const Key &key) const
 	{
@@ -126,8 +126,8 @@ public:
 	}
 
 private:
-	SafeMap(const SafeMap&) = delete;
-	SafeMap& operator= (const SafeMap&) = delete;
+	MapSafe(const MapSafe&) = delete;
+	MapSafe& operator= (const MapSafe&) = delete;
 
 private:
 	mutable std::mutex mutex_;
@@ -135,10 +135,10 @@ private:
 };
 
 template <typename Key, typename Value>
-class SafeMultimap
+class MultimapSafe
 {
 public:
-	SafeMultimap() = default;
+	MultimapSafe() = default;
 
 	bool Take(const Key &key, Value &value)
 	{
@@ -172,8 +172,8 @@ public:
 	}
 
 private:
-	SafeMultimap(const SafeMultimap&) = delete;
-	SafeMultimap& operator= (const SafeMultimap&) = delete;
+	MultimapSafe(const MultimapSafe&) = delete;
+	MultimapSafe& operator= (const MultimapSafe&) = delete;
 
 private:
 	mutable std::mutex mutex_;

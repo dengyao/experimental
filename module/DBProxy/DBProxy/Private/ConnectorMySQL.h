@@ -30,9 +30,9 @@ namespace dbproxy
 			memcpy(binary_.data(), data, size);
 		}
 
-		ResultWrap Wrap() const
+		WrapResult Wrap() const
 		{
-			return ResultWrap(Binary(), Size());
+			return WrapResult(Binary(), Size());
 		}
 
 		DatabaseResult(DatabaseResult &&other)
