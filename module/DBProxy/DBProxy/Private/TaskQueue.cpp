@@ -56,7 +56,6 @@ size_t TaskQueue::Append(Task &task)
 
 		if (size == 1)
 		{
-			std::unique_lock<std::mutex> lock(condition_mutex_);
 			condition_incoming_task_.notify_one();
 		}
 	}

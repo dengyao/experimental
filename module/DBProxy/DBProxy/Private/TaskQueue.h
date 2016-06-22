@@ -37,7 +37,7 @@ private:
 	TaskQueue& operator= (const TaskQueue&) = delete;
 
 private:
-	std::atomic_bool		finished_;
+	std::atomic_bool        finished_;
 	ThreadPointer           thread_;
 	std::list<Task>         queue_task_;
 	mutable std::mutex      queue_task_mutex_;
