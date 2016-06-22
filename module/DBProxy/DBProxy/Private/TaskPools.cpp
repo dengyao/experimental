@@ -51,10 +51,14 @@ void TaskPools::Append(TaskQueue::Task &task)
 	assert(!threads_.empty());
 	if (!threads_.empty())
 	{
-		auto result = std::min_element(threads_.begin(), threads_.end(), [](const TaskQueuePointer &a, const TaskQueuePointer &b)->bool
+		std::vector<TaskQueuePointer>::iterator min_load_thread;
 		{
-			return a->Load() < b->Load();
-		});
-		(*result)->Append(task);
+			std::lock_guard<std::mutex> lock(mutex_);
+			min_load_thread = std::min_element(threads_.begin(), threads_.end(), [](const TaskQueuePointer &a, const TaskQueuePointer &b)->bool
+			{
+				return a->Load() < b->Load();
+			});
+		}
+		(*min_load_thread)->Append(task);
 	}
 }

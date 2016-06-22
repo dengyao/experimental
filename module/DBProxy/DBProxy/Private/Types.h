@@ -22,6 +22,21 @@ namespace dbproxy
 		{
 		}
 
+		ErrorCode(ErrorCode &&other)
+		{
+			error_code_ = other.error_code_;
+			message_ = std::move(other.message_);
+			other.error_code_ = 0;
+		}
+
+		ErrorCode& operator= (ErrorCode &&other)
+		{
+			error_code_ = other.error_code_;
+			message_ = std::move(other.message_);
+			other.error_code_ = 0;
+			return *this;
+		}
+
 		int Value() const
 		{
 			return error_code_;

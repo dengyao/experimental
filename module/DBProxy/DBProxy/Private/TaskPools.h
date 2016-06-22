@@ -30,6 +30,7 @@ private:
 	TaskPools& operator= (const TaskPools&) = delete;
 
 private:
+	mutable std::mutex mutex_;
 	std::vector<TaskQueuePointer> threads_;
 };
 
