@@ -1,9 +1,9 @@
 set(MODULE_NAME DBProxy)
 
-set(DBPROXY_SRC_LISTS 
-  DBProxy/Private/Main.cpp
-  DBProxy/Private/TaskPools.cpp
-  DBProxy/Private/TaskQueue.cpp
+set(FILEPATH 
+  Main.cpp
+  TaskPools.cpp
+  TaskQueue.cpp
 )
 
 include_directories(
