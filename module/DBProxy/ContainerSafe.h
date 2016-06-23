@@ -3,7 +3,7 @@
 
 #include <map>
 #include <list>
-#include <unordered_map>
+#include <deque>
 
 template <typename Value>
 class QueueSafe
@@ -61,7 +61,7 @@ private:
 
 private:
 	mutable std::mutex mutex_;
-	std::list<Value> container_;
+	std::deque<Value> container_;
 };
 
 template <typename Key, typename Value>
@@ -177,7 +177,7 @@ private:
 
 private:
 	mutable std::mutex mutex_;
-	std::unordered_multimap<Key, Value> container_;
+	std::multimap<Key, Value> container_;
 };
 
 #endif

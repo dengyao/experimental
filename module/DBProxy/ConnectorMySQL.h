@@ -7,7 +7,7 @@
 #include <cassert>
 #include <mysql.h>
 #include <mysqld_error.h>
-#include <DBProxy/Private/Connector.h>
+#include "Connector.h"
 
 namespace dbproxy
 {

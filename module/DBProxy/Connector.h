@@ -1,8 +1,8 @@
 ﻿#ifndef __CONNECTOR_H__
 #define __CONNECTOR_H__
 
-#include <DBProxy/Private/Types.h>
-#include <DBProxy/Public/WrapResult.h>
+#include "Types.h"
+#include "WrapResult.h"
 
 namespace dbproxy
 {

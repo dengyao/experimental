@@ -1,9 +1,10 @@
 #include <iostream>
 #include <rapidjson/document.h>
-#include <DBProxy/Private/ConnectorMySQL.h>
-#include <DBProxy/Private/ProxyManager.h>
+#include "ConnectorMySQL.h"
+#include "ProxyManager.h"
 #include <functional>
-#include <DBProxy/Private/TaskPools.h>
+#include "TaskPools.h"
+
 
 class Duration
 {
@@ -41,7 +42,7 @@ private:
 	std::chrono::system_clock::time_point start_time_;
 };
 
-const int sum = 300000;
+const int sum = 3000000;
 const char *sql = "SELECT id FROM `actor` WHERE id=3983617;";
 
 void query(dbproxy::ProxyManager<dbproxy::MySQL> &proxy)
@@ -55,16 +56,17 @@ void query(dbproxy::ProxyManager<dbproxy::MySQL> &proxy)
 	}
 }
 
+
 int main(int argc, char *argv[])
 {
 	std::vector<std::unique_ptr<dbproxy::ConnectorMySQL>> vec;
-	for (int i = 0; i < 16; ++i)
+	for (int i = 0; i < std::thread::hardware_concurrency() * 2; ++i)
 	{
 		std::unique_ptr<dbproxy::ConnectorMySQL> connector;
 		try
 		{
 			dbproxy::ErrorCode error_code;
-			connector = std::make_unique<dbproxy::ConnectorMySQL>("192.168.1.201", 3306, "root", "123456", 5);
+			connector = std::make_unique<dbproxy::ConnectorMySQL>("localhost", 3306, "root", "123456", 5);
 
 			connector->SelectDatabase("sgs", error_code);
 			if (error_code)
@@ -85,10 +87,9 @@ int main(int argc, char *argv[])
 			std::cout << e.what() << std::endl;
 			system("pause");
 		}
-		
 	}
 
-	std::shared_ptr<TaskPools> pools = std::make_shared<TaskPools>(15);
+	std::shared_ptr<TaskPools> pools = std::make_shared<TaskPools>(std::thread::hardware_concurrency() *2);
 	dbproxy::ProxyManager<dbproxy::MySQL> proxy(std::move(vec), pools, 10000000);
 	std::thread td(std::bind(query, std::ref(proxy)));
 	
@@ -97,8 +98,10 @@ int main(int argc, char *argv[])
 	int count = 0;
 	while (true)
 	{
+		Sleep(1000);
 		if (proxy.GetCompletionQueue(completion) > 0)
 		{
+			std::cout << completion.size() << std::endl;
 			count += completion.size();
 			completion.clear();
 		}
