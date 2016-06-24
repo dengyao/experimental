@@ -33,8 +33,8 @@ namespace eddy
 
 	private:
 		IOServiceThreadManager&			io_thread_manager_;
-		const SessionHandlerCreator&	session_handler_creator_;
-		const MessageFilterCreator&		message_filter_creator_;
+		SessionHandlerCreator			session_handler_creator_;
+		MessageFilterCreator			message_filter_creator_;
 	};
 }
 

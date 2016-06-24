@@ -31,3 +31,4 @@ add_subdirectory(eddyserver/eddy)
 add_subdirectory(eddyserver/external/protobuf)
 
 add_subdirectory(module/DBProxy)
+add_subdirectory(module/TestClient)

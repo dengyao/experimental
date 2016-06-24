@@ -44,7 +44,7 @@ std::shared_ptr<eddy::DefaultMessageFilter> CreateMessageFilter()
 int main(int argc, char **argv)
 {
 	asio::ip::tcp::endpoint endpoint(asio::ip::address_v4(), 4235);
-	eddy::IOServiceThreadManager threads(/*std::thread::hardware_concurrency()*/1 );
+	eddy::IOServiceThreadManager threads(/*std::thread::hardware_concurrency()*/1);
 	eddy::TCPServer server(endpoint, threads, CreateSessionHandle, CreateMessageFilter);
 	threads.Run();
 

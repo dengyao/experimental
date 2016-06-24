@@ -1,6 +1,8 @@
 ﻿#include "TCPSession.h"
 #include <cassert>
 #include <iostream>
+#include <asio/read.hpp>
+#include <asio/write.hpp>
 #include "IOServiceThread.h"
 #include "TCPSessionHandle.h"
 #include "IOServiceThreadManager.h"
@@ -96,7 +98,7 @@ namespace eddy
 		else
 		{
 			buffer_receiving_.resize(bytes_wanna_read);
-			socket_.async_receive(asio::buffer(buffer_receiving_.data(), bytes_wanna_read),
+			asio::async_read(socket_, asio::buffer(buffer_receiving_.data(), bytes_wanna_read),
 				std::bind(&TCPSession::HandleRead, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
 		}
 	}
@@ -154,7 +156,7 @@ namespace eddy
 		{
 			++num_handlers_;
 			buffer_sending_.swap(buffer_to_be_sent_);
-			socket_.async_send(asio::buffer(buffer_sending_.data(), bytes_wanna_write),
+			asio::async_write(socket_, asio::buffer(buffer_sending_.data(), bytes_wanna_write),
 				std::bind(&TCPSession::HanldeWrite, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
 		}
 	}
@@ -173,6 +175,10 @@ namespace eddy
 
 		bool wanna_post = messages_received_.empty();
 		size_t bytes_read = filter_->Read(buffer_receiving_, messages_received_);
+		if (bytes_read != bytes_transferred)
+		{
+			std::cout << "bytes_read: " << bytes_read << " bytes_transferred: " << bytes_transferred << std::endl;
+		}
 		assert(bytes_read == bytes_transferred);
 		buffer_receiving_.clear();
 		wanna_post = wanna_post && !messages_received_.empty();
@@ -206,7 +212,7 @@ namespace eddy
 		else
 		{
 			buffer_receiving_.resize(bytes_wanna_read);
-			socket_.async_receive(asio::buffer(buffer_receiving_.data(), bytes_wanna_read),
+			asio::async_read(socket_, asio::buffer(buffer_receiving_.data(), bytes_wanna_read),
 				std::bind(&TCPSession::HandleRead, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
 		}
 	}
@@ -232,7 +238,7 @@ namespace eddy
 
 		++num_handlers_;
 		buffer_sending_.swap(buffer_to_be_sent_);
-		socket_.async_send(asio::buffer(buffer_sending_.data(), buffer_sending_.size()),
+		asio::async_write(socket_, asio::buffer(buffer_sending_.data(), buffer_sending_.size()),
 			std::bind(&TCPSession::HanldeWrite, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
 	}
 }
