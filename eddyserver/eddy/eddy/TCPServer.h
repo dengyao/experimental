@@ -32,8 +32,8 @@ namespace eddy
 	private:
 		asio::ip::tcp::acceptor			acceptor_;
 		IOServiceThreadManager&			io_thread_manager_;
-		const SessionHandlerCreator&	session_handler_creator_;
-		const MessageFilterCreator&		message_filter_creator_;
+		SessionHandlerCreator			session_handler_creator_;
+		MessageFilterCreator			message_filter_creator_;
 	};
 }
 

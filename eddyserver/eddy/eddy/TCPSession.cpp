@@ -147,7 +147,7 @@ namespace eddy
 			return;
 		}
 
-		buffer_to_be_sent_.resize(buffer_to_be_sent_.size() + bytes_wanna_write);
+		buffer_to_be_sent_.reserve(buffer_to_be_sent_.size() + bytes_wanna_write);
 		filter_->Write(messages, buffer_to_be_sent_);
 
 		if (buffer_sending_.empty())
