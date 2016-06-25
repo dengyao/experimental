@@ -8,6 +8,7 @@ set(DBPROXY_SRC_LISTS
 
 include_directories(
   ${ASIO_INCLUDE_DIRS}
+  ${BASE_INCLUDE_DIRS}
   ${EDDY_INCLUDE_DIRS}
   ${MYSQL_INCLUDE_DIRS}
   ${PROTOBUF_INCLUDE_DIRS}
@@ -24,6 +25,7 @@ set_target_properties(${DBPROXY_NAME}
 )
 
 target_link_libraries(${DBPROXY_NAME}
+  ${BASE_LIBRARY_NAME}
   ${EDDY_LIBRARY_NAME}
   ${MYSQL_LIBRARY_NAME}
   ${PROTOBUF_LIBRARY_NAME}

@@ -3,9 +3,9 @@
 
 #include <set>
 #include <vector>
+#include "base.h"
 #include "Types.h"
 #include "Connector.h"
-#include "TaskPools.h"
 #include "ContainerSafe.h"
 
 namespace dbproxy
@@ -66,14 +66,101 @@ namespace dbproxy
 	template <typename Database>
 	class ProxyManager
 	{
-	public:
-		typedef std::unique_ptr<Connector<Database>> ConnectorPointer;
-
-	private:
 		class Actor;
 		typedef std::shared_ptr<Actor> ActorPointer;
 		typedef std::function<void(ActorPointer &actor, ErrorCode&&, DatabaseResult<Database>&&)> CompleteNotify;
 
+	public:
+		typedef std::unique_ptr<Connector<Database>> ConnectorPointer;
+
+	public:
+		ProxyManager(std::vector<ConnectorPointer> &&connectors, TaskPools &pools, unsigned int bocklog)
+			: pools_(pools)
+			, bocklog_(bocklog)
+			, complete_notify_(std::bind(&ProxyManager::OnCompletionTask, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3))
+		{
+			for (size_t i = 0; i < connectors.size(); ++i)
+			{
+				assert(connectors[i] != nullptr);
+				waiting_queue_.Append(connectors[i]->Name());
+				free_connectors_.Append(connectors[i]->Name(), std::move(connectors[i]));		
+			}
+		}
+
+		size_t GetCompletionQueue(std::vector<Result> &lists)
+		{
+			return completion_queue_.TakeAll(lists);
+		}
+
+		bool Append(int number, ActionType type, const char *db, const char *command, const size_t length)
+		{
+			QueueSafe<ActorPointer> *waiting = nullptr;
+			if (!waiting_queue_.Get(db, waiting))
+			{
+				return false;
+			}
+
+			if (waiting->Size() >= bocklog_)
+			{
+				return false;
+			}
+
+			if (ongoing_queue_.IsExist(number))
+			{
+				throw std::logic_error("number cannot be repeated");
+			}
+
+			ConnectorPointer connector;
+			if (free_connectors_.Take(db, connector))
+			{
+				ActorPointer actor = std::make_shared<Actor>(number, type, command, length, std::move(connector), complete_notify_);
+				TaskQueue::Task task = std::bind(&Actor::Processing, actor);
+				ongoing_queue_.Append(number, actor);
+				pools_.Append(task);
+			}
+			else
+			{
+				ActorPointer actor = std::make_shared<Actor>(number, type, command, length, std::move(connector), complete_notify_);
+				waiting->Append(std::move(actor));
+			}
+			return true;
+		}
+
+	private:
+		void OnCompletionTask(ActorPointer &actor, ErrorCode &&code, DatabaseResult<Database> &&result)
+		{
+			ConnectorPointer connector(std::move(actor->GetConnector()));
+			completion_queue_.Append(Result(actor->GetNumber(), std::forward<ErrorCode>(code), std::move(result.GetData())));
+			if (ongoing_queue_.Take(actor->GetNumber(), actor))
+			{
+				QueueSafe<ActorPointer> *waiting = nullptr;
+				if (waiting_queue_.Get(connector->Name(), waiting))
+				{			
+					if (waiting->Take(actor))
+					{
+						actor->SetConnector(std::move(connector));
+						TaskQueue::Task task = std::bind(&Actor::Processing, actor);
+						ongoing_queue_.Append(actor->GetNumber(), actor);
+						pools_.Append(task);
+					}
+					else
+					{
+						free_connectors_.Append(connector->Name(), std::move(connector));
+					}
+				}
+				else
+				{
+					free_connectors_.Append(connector->Name(), std::move(connector));
+				}
+			}
+			else
+			{
+				assert(false);
+				free_connectors_.Append(connector->Name(), std::move(connector));
+			}
+		}
+
+	private:
 		class Actor : public std::enable_shared_from_this<Actor>
 		{
 		public:
@@ -146,96 +233,9 @@ namespace dbproxy
 			const CompleteNotify& complete_notify_;
 		};
 
-	public:
-		ProxyManager(std::vector<ConnectorPointer> &&connectors, std::shared_ptr<TaskPools> &pools, unsigned int bocklog)
-			: pools_(pools)
-			, bocklog_(bocklog)
-			, complete_notify_(std::bind(&ProxyManager::OnCompletionTask, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3))
-		{
-			for (size_t i = 0; i < connectors.size(); ++i)
-			{
-				assert(connectors[i] != nullptr);
-				waiting_queue_.Append(connectors[i]->Name());
-				free_connectors_.Append(connectors[i]->Name(), std::move(connectors[i]));		
-			}
-		}
-
-		size_t GetCompletionQueue(std::vector<Result> &lists)
-		{
-			return completion_queue_.TakeAll(lists);
-		}
-
-		bool Append(int number, ActionType type, const char *db, const char *command, const size_t length)
-		{
-			QueueSafe<ActorPointer> *waiting = nullptr;
-			if (!waiting_queue_.Get(db, waiting))
-			{
-				return false;
-			}
-
-			if (waiting->Size() >= bocklog_)
-			{
-				return false;
-			}
-
-			if (ongoing_queue_.IsExist(number))
-			{
-				throw std::logic_error("number cannot be repeated");
-			}
-
-			ConnectorPointer connector;
-			if (free_connectors_.Take(db, connector))
-			{
-				ActorPointer actor = std::make_shared<Actor>(number, type, command, length, std::move(connector), complete_notify_);
-				TaskQueue::Task task = std::bind(&Actor::Processing, actor);
-				ongoing_queue_.Append(number, actor);
-				pools_->Append(task);
-			}
-			else
-			{
-				ActorPointer actor = std::make_shared<Actor>(number, type, command, length, std::move(connector), complete_notify_);
-				waiting->Append(std::move(actor));
-			}
-			return true;
-		}
-
-	private:
-		void OnCompletionTask(ActorPointer &actor, ErrorCode &&code, DatabaseResult<Database> &&result)
-		{
-			ConnectorPointer connector(std::move(actor->GetConnector()));
-			completion_queue_.Append(Result(actor->GetNumber(), std::forward<ErrorCode>(code), std::move(result.GetData())));
-			if (ongoing_queue_.Take(actor->GetNumber(), actor))
-			{
-				QueueSafe<ActorPointer> *waiting = nullptr;
-				if (waiting_queue_.Get(connector->Name(), waiting))
-				{			
-					if (waiting->Take(actor))
-					{
-						actor->SetConnector(std::move(connector));
-						TaskQueue::Task task = std::bind(&Actor::Processing, actor);
-						ongoing_queue_.Append(actor->GetNumber(), actor);
-						pools_->Append(task);
-					}
-					else
-					{
-						free_connectors_.Append(connector->Name(), std::move(connector));
-					}
-				}
-				else
-				{
-					free_connectors_.Append(connector->Name(), std::move(connector));
-				}
-			}
-			else
-			{
-				assert(false);
-				free_connectors_.Append(connector->Name(), std::move(connector));
-			}
-		}
-
 	private:
 		const unsigned int                            bocklog_;
-		std::shared_ptr<TaskPools>                    pools_;
+		TaskPools                                     pools_;
 		MultimapSafe<std::string, ConnectorPointer>   free_connectors_;
 		MapSafe<std::string, QueueSafe<ActorPointer>> waiting_queue_;
 		MapSafe<int, ActorPointer>                    ongoing_queue_;

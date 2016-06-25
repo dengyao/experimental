@@ -26,6 +26,7 @@ endif()
 
 # 设置类库头文件包含目录
 set(ASIO_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/eddyserver/asio)
+set(BASE_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/eddyserver/base)
 set(EDDY_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/eddyserver/eddy)
 set(PROTOBUF_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/eddyserver/external/protobuf)
 set(RAPIDJSON_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/eddyserver/external/rapidjson)
