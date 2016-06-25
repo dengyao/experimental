@@ -39,22 +39,22 @@ include_directories(
   ${PROTOBUF_INCLUDE_DIRS}
 )
 
-add_library(protobuf_shared SHARED
+add_library(ProtobufShared SHARED
   ${PROTOBUF_SRC_LISTS}
 )
 
-add_library(protobuf_static STATIC
+add_library(ProtobufStatic STATIC
   ${PROTOBUF_SRC_LISTS}
 )
 
-set_target_properties(protobuf_shared
+set_target_properties(ProtobufShared
   PROPERTIES
   OUTPUT_NAME ${PROTOBUF_LIBRARY_NAME}
   ARCHIVE_OUTPUT_DIRECTORY ${BINARY_OUTPUT_DIR}
   LIBRARY_OUTPUT_DIRECTORY ${BINARY_OUTPUT_DIR}
 )
 
-set_target_properties(protobuf_static
+set_target_properties(ProtobufStatic
   PROPERTIES
   OUTPUT_NAME ${PROTOBUF_LIBRARY_NAME}
   ARCHIVE_OUTPUT_DIRECTORY ${BINARY_OUTPUT_DIR}
