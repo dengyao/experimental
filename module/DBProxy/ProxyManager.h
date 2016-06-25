@@ -10,63 +10,63 @@
 
 namespace dbproxy
 {
+	class Result
+	{
+	public:
+		Result(int number, ErrorCode &&code, ByteArray &&result)
+			: number_(number)
+			, code_(std::forward<ErrorCode>(code))
+			, result_(std::forward<ByteArray>(result))
+		{
+		}
+
+		Result(Result &&other)
+		{
+			number_ = other.number_;
+			code_ = std::move(other.code_);
+			result_ = std::move(other.result_);
+			other.number_ = 0;
+		}
+
+		int GetNumber() const
+		{
+			return number_;
+		}
+
+		ErrorCode& GetErrorCode()
+		{
+			return code_;
+		}
+
+		const ErrorCode& GetErrorCode() const
+		{
+			return code_;
+		}
+
+		ByteArray& GetResult()
+		{
+			return result_;
+		}
+
+		const ByteArray& GetResult() const
+		{
+			return result_;
+		}
+
+	private:
+		Result(const Result&) = delete;
+		Result& operator= (const Result&) = delete;
+
+	private:
+		int number_;
+		ErrorCode code_;
+		ByteArray result_;
+	};
+
 	template <typename Database>
 	class ProxyManager
 	{
 	public:
-		class Result
-		{
-		public:
-			Result(int number, ErrorCode &&code, DatabaseResult<Database> &&result)
-				: number_(number)
-				, code_(std::forward<ErrorCode>(code))
-				, result_(std::forward<DatabaseResult<Database>>(result))
-			{
-			}
-
-			Result(Result &&other)
-			{
-				number_ = other.number_;
-				code_ = std::move(other.code_);
-				result_ = std::move(other.result_);
-				other.number_ = 0;
-			}
-
-			int GetNumber() const
-			{
-				return number_;
-			}
-
-			ErrorCode& GetErrorCode()
-			{
-				return code_;
-			}
-
-			const ErrorCode& GetErrorCode() const
-			{
-				return code_;
-			}
-
-			DatabaseResult<Database>& GetResult()
-			{
-				return result_;
-			}
-
-			const DatabaseResult<Database>& GetResult() const
-			{
-				return result_;
-			}
-
-		private:
-			Result(const Result&) = delete;
-			Result& operator= (const Result&) = delete;
-
-		private:
-			int number_;
-			ErrorCode code_;
-			DatabaseResult<Database> result_;
-		};
-
 		typedef std::unique_ptr<Connector<Database>> ConnectorPointer;
 
 	private:
@@ -77,7 +77,7 @@ namespace dbproxy
 		class Actor : public std::enable_shared_from_this<Actor>
 		{
 		public:
-			Actor(int number, CommandType type, const char *command, const size_t length, ConnectorPointer &&connector, const CompleteNotify &callback)
+			Actor(int number, ActionType type, const char *command, const size_t length, ConnectorPointer &&connector, const CompleteNotify &callback)
 				: type_(type)
 				, number_(number)
 				, complete_notify_(callback)
@@ -113,16 +113,16 @@ namespace dbproxy
 				{
 					switch (type_)
 					{
-					case dbproxy::CommandType::kSelect:
+					case dbproxy::ActionType::kSelect:
 						result = connector_->Select(command_, error_code);
 						break;
-					case dbproxy::CommandType::kInsert:
+					case dbproxy::ActionType::kInsert:
 						result = connector_->Insert(command_, error_code);
 						break;
-					case dbproxy::CommandType::kUpdate:
+					case dbproxy::ActionType::kUpdate:
 						result = connector_->Update(command_, error_code);
 						break;
-					case dbproxy::CommandType::kDelete:
+					case dbproxy::ActionType::kDelete:
 						result = connector_->Delete(command_, error_code);
 						break;
 					default:
@@ -140,8 +140,8 @@ namespace dbproxy
 
 		private:
 			const int number_;
-			const CommandType type_;
-			std::vector<char> command_;
+			const ActionType type_;
+			ByteArray command_;
 			ConnectorPointer connector_;
 			const CompleteNotify& complete_notify_;
 		};
@@ -160,12 +160,12 @@ namespace dbproxy
 			}
 		}
 
-		size_t GetCompletionQueue(std::vector<Result> &completion)
+		size_t GetCompletionQueue(std::vector<Result> &lists)
 		{
-			return completion_queue_.TakeAll(completion);
+			return completion_queue_.TakeAll(lists);
 		}
 
-		bool Append(int number, CommandType type, const char *db, const char *command, const size_t length)
+		bool Append(int number, ActionType type, const char *db, const char *command, const size_t length)
 		{
 			QueueSafe<ActorPointer> *waiting = nullptr;
 			if (!waiting_queue_.Get(db, waiting))
@@ -203,7 +203,7 @@ namespace dbproxy
 		void OnCompletionTask(ActorPointer &actor, ErrorCode &&code, DatabaseResult<Database> &&result)
 		{
 			ConnectorPointer connector(std::move(actor->GetConnector()));
-			completion_queue_.Append(Result(actor->GetNumber(), std::forward<ErrorCode>(code), std::forward<DatabaseResult<Database>>(result)));
+			completion_queue_.Append(Result(actor->GetNumber(), std::forward<ErrorCode>(code), std::move(result.GetData())));
 			if (ongoing_queue_.Take(actor->GetNumber(), actor))
 			{
 				QueueSafe<ActorPointer> *waiting = nullptr;

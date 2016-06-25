@@ -1,0 +1,27 @@
+set(BASE_SRC_LISTS
+  base/StringHelper.cpp
+  base/TaskPools.cpp
+  base/TaskQueue.cpp
+)
+
+add_library(BaseShared SHARED
+  ${BASE_SRC_LISTS}
+)
+
+add_library(BaseStatic STATIC
+  ${BASE_SRC_LISTS}
+)
+
+set_target_properties(BaseShared
+  PROPERTIES
+  OUTPUT_NAME ${BASE_LIBRARY_NAME}
+  ARCHIVE_OUTPUT_DIRECTORY ${BINARY_OUTPUT_DIR}
+  LIBRARY_OUTPUT_DIRECTORY ${BINARY_OUTPUT_DIR}
+)
+
+set_target_properties(BaseStatic
+  PROPERTIES
+  OUTPUT_NAME ${BASE_LIBRARY_NAME}
+  ARCHIVE_OUTPUT_DIRECTORY ${BINARY_OUTPUT_DIR}
+  LIBRARY_OUTPUT_DIRECTORY ${BINARY_OUTPUT_DIR}
+)

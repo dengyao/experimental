@@ -26,35 +26,45 @@ namespace dbproxy
 
 		DatabaseResult(const char *data, size_t size)
 		{
-			binary_.resize(size);
-			memcpy(binary_.data(), data, size);
+			data_.resize(size);
+			memcpy(data_.data(), data, size);
 		}
 
-		WrapResult Wrap() const
+		ByteArray& GetData()
 		{
-			return WrapResult(Binary(), Size());
+			return data_;
+		}
+
+		const ByteArray& GetData() const
+		{
+			return data_;
+		}
+
+		WrapResult ToWrapResult() const
+		{
+			return WrapResult(data_.data(), data_.size());
 		}
 
 		DatabaseResult(DatabaseResult &&other)
 		{
-			binary_ = std::move(other.binary_);
+			data_ = std::move(other.data_);
 		}
 
 		DatabaseResult& operator= (DatabaseResult &&other)
 		{
-			binary_ = std::move(other.binary_);
+			data_ = std::move(other.data_);
 			return *this;
 		}
 
 	public:
 		size_t Size() const
 		{
-			return binary_.size();
+			return data_.size();
 		}
 
 		const char* Binary() const
 		{
-			return binary_.data();
+			return data_.data();
 		}
 
 	private:
@@ -78,21 +88,21 @@ namespace dbproxy
 						size_t new_use_size = use_size + field_size;
 						if (new_use_size > extrabuf.size())
 						{
-							if (binary_.empty())
+							if (data_.empty())
 							{
-								binary_.reserve(row == num_rows - 1 && field == num_fields - 1 ? new_use_size : new_use_size * 2);
-								binary_.resize(new_use_size);
-								memcpy(binary_.data(), extrabuf.data(), use_size);
-								memcpy(binary_.data() + use_size, row_data[field], field_size);
+								data_.reserve(row == num_rows - 1 && field == num_fields - 1 ? new_use_size : new_use_size * 2);
+								data_.resize(new_use_size);
+								memcpy(data_.data(), extrabuf.data(), use_size);
+								memcpy(data_.data() + use_size, row_data[field], field_size);
 							}
 							else
 							{
-								while (new_use_size > binary_.capacity())
+								while (new_use_size > data_.capacity())
 								{
-									binary_.reserve(new_use_size * 2);
+									data_.reserve(new_use_size * 2);
 								}
-								binary_.resize(new_use_size);
-								memcpy(binary_.data() + use_size, row_data[field], field_size);
+								data_.resize(new_use_size);
+								memcpy(data_.data() + use_size, row_data[field], field_size);
 							}
 						}
 						else
@@ -103,10 +113,10 @@ namespace dbproxy
 					}
 				}
 
-				if (binary_.empty())
+				if (data_.empty())
 				{
-					binary_.resize(use_size);
-					memcpy(binary_.data(), extrabuf.data(), use_size);
+					data_.resize(use_size);
+					memcpy(data_.data(), extrabuf.data(), use_size);
 				}
 			}
 		}
@@ -116,7 +126,7 @@ namespace dbproxy
 		DatabaseResult& operator= (const DatabaseResult&) = delete;
 
 	private:
-		std::vector<char> binary_;
+		ByteArray data_;
 	};
 
 	typedef DatabaseResult<MySQL> MySQLResult;
@@ -193,7 +203,7 @@ namespace dbproxy
 			}
 		}
 
-		MySQLResult Select(const std::vector<char> &command, ErrorCode &error_code)
+		MySQLResult Select(const ByteArray &command, ErrorCode &error_code)
 		{
 			if (IsConnected())
 			{
@@ -216,7 +226,7 @@ namespace dbproxy
 			}
 		}
 
-		MySQLResult Insert(const std::vector<char> &command, ErrorCode &error_code)
+		MySQLResult Insert(const ByteArray &command, ErrorCode &error_code)
 		{
 			if (IsConnected())
 			{
@@ -242,12 +252,12 @@ namespace dbproxy
 			}
 		}
 
-		MySQLResult Update(const std::vector<char> &command, ErrorCode &error_code)
+		MySQLResult Update(const ByteArray &command, ErrorCode &error_code)
 		{
 			return AffectedRows(command, error_code);
 		}
 
-		MySQLResult Delete(const std::vector<char> &command, ErrorCode &error_code)
+		MySQLResult Delete(const ByteArray &command, ErrorCode &error_code)
 		{
 			return AffectedRows(command, error_code);
 		}
@@ -298,7 +308,7 @@ namespace dbproxy
 			return connected_;
 		}
 
-		MySQLResult AffectedRows(const std::vector<char> &command, ErrorCode &error_code)
+		MySQLResult AffectedRows(const ByteArray &command, ErrorCode &error_code)
 		{
 			if (IsConnected())
 			{

@@ -3,6 +3,7 @@
 
 #include "Types.h"
 #include "WrapResult.h"
+#include "ProxyManager.h"
 
 namespace dbproxy
 {
@@ -11,13 +12,13 @@ namespace dbproxy
 	class DatabaseResult
 	{
 	public:
-		size_t Size() const;
+		ByteArray& GetData();
 
-		const char* Binary() const;
+		const ByteArray& GetData() const;
 
-		WrapResult Wrap() const;
+		WrapResult ToWrapResult() const;
 
-		DatabaseResult(DatabaseResult&&);;
+		DatabaseResult(DatabaseResult&&);
 
 		DatabaseResult& operator= (DatabaseResult&&);
 
@@ -37,13 +38,13 @@ namespace dbproxy
 
 		const char* Name() const;
 
-		DatabaseResult<Database> Select(const std::vector<char> &command, ErrorCode &error_code);
+		DatabaseResult<Database> Select(const ByteArray &command, ErrorCode &error_code);
 
-		DatabaseResult<Database> Insert(const std::vector<char> &command, ErrorCode &error_code);
+		DatabaseResult<Database> Insert(const ByteArray &command, ErrorCode &error_code);
 
-		DatabaseResult<Database> Update(const std::vector<char> &command, ErrorCode &error_code);
+		DatabaseResult<Database> Update(const ByteArray &command, ErrorCode &error_code);
 
-		DatabaseResult<Database> Delete(const std::vector<char> &command, ErrorCode &error_code);
+		DatabaseResult<Database> Delete(const ByteArray &command, ErrorCode &error_code);
 
 	private:
 		Connector(const Connector&) = delete;

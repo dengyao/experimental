@@ -1,33 +1,84 @@
-#include <chrono>
-#include <iostream>
 #include "eddy.h"
+#include "Types.h"
+#include "ProxyManager.h"
+#include "ConnectorMySQL.h"
+#include "proto/db.request.pb.h"
+#include "proto/db.response.pb.h"
 
-uint64_t sum = 0;
-std::chrono::system_clock::time_point start_time;
+class CentralProcessor
+{
+	struct RequestSource
+	{
+		int number;
+		eddy::TCPSessionID id;
+		RequestSource(int args1, eddy::TCPSessionID args2)
+			: number(args1)
+			, id(args2)
+		{
+
+		}
+	};
+
+public:
+	CentralProcessor(eddy::IOServiceThreadManager &threads, dbproxy::ProxyManager<dbproxy::MySQL> &mysql)
+		: threads_(threads)
+		, generator_(65535)
+		, mysql_proxy_(mysql)
+	{
+		threads_.MainThread()->IOService();
+	}
+
+	void OnMessage(eddy::TCPSessionID id, eddy::NetMessage &message)
+	{
+		proto_db::Request req;
+		if (req.ParseFromArray(message.Data(), message.Readable()))
+		{
+			uint32_t number = 0;
+			if (generator_.Get(number))
+			{
+				requests_.insert(std::make_pair(number, RequestSource(req.number(), id)));
+				mysql_proxy_.Append(number, (dbproxy::ActionType)req.action(), req.dbname().c_str(), req.statement().c_str(), req.statement().size());
+			}
+		}
+		else
+		{
+			assert(false);
+		}
+	}
+
+	void OnRefresh()
+	{
+		assert(completion_list_.empty());
+		if (mysql_proxy_.GetCompletionQueue(completion_list_) > 0)
+		{
+			
+		}
+	}
+
+public:
+	eddy::IOServiceThreadManager&          threads_;
+	std::map<uint32_t, RequestSource>      requests_;
+	eddy::IDGenerator                      generator_;
+	dbproxy::ProxyManager<dbproxy::MySQL>& mysql_proxy_;
+	std::vector<dbproxy::Result>           completion_list_;
+};
 
 class SessionHandle : public eddy::TCPSessionHandle
 {
+public:
 	virtual void OnConnect() override
 	{
-		std::cout << "OnConnect" << std::endl;
+
 	}
 
 	virtual void OnMessage(eddy::NetMessage &message) override
 	{
-		sum += (message.Readable() + 2) * 2;
-		Send(message);
-		auto now = std::chrono::system_clock::now();
-		if (std::chrono::duration_cast<std::chrono::seconds>(now - start_time).count() >= 1)
-		{
-			std::cout << sum / 1024 / 1024 << "mb" << std::endl;
-			sum = 0;
-			start_time = now;
-		}
+		processor_.OnMessage(SessionID(), message);
 	}
 
 	virtual void OnClose() override
 	{
-		std::cout << "OnClose" << std::endl;
+
 	}
 };
 
@@ -47,11 +98,12 @@ int main(int argc, char **argv)
 	eddy::IOServiceThreadManager threads(/*std::thread::hardware_concurrency()*/1);
 	eddy::TCPServer server(endpoint, threads, CreateSessionHandle, CreateMessageFilter);
 	threads.Run();
-
+	
 	return 0;
 }
 
-
+//#include <iostream>
+//
 //class Duration
 //{
 //public:
@@ -92,10 +144,10 @@ int main(int argc, char **argv)
 //const char *sql = "SELECT id FROM `actor` WHERE id=3983617;";
 //
 //void query(dbproxy::ProxyManager<dbproxy::MySQL> &proxy)
-//{	
+//{
 //	for (int i = 1; i <= sum; ++i)
 //	{
-//		if (!proxy.Append(i, dbproxy::CommandType::kSelect, "sgs", sql, strlen(sql)))
+//		if (!proxy.Append(i, dbproxy::ActionType::kSelect, "sgs", sql, strlen(sql)))
 //		{
 //			assert(false);
 //		}
@@ -106,13 +158,13 @@ int main(int argc, char **argv)
 //int main(int argc, char *argv[])
 //{
 //	std::vector<std::unique_ptr<dbproxy::ConnectorMySQL>> vec;
-//	for (int i = 0; i < std::thread::hardware_concurrency() * 2; ++i)
+//	for (int i = 0; i < 8; ++i)
 //	{
 //		std::unique_ptr<dbproxy::ConnectorMySQL> connector;
 //		try
 //		{
 //			dbproxy::ErrorCode error_code;
-//			connector = std::make_unique<dbproxy::ConnectorMySQL>("localhost", 3306, "root", "123456", 5);
+//			connector = std::make_unique<dbproxy::ConnectorMySQL>("192.168.1.201", 3306, "root", "123456", 5);
 //
 //			connector->SelectDatabase("sgs", error_code);
 //			if (error_code)
@@ -135,12 +187,12 @@ int main(int argc, char **argv)
 //		}
 //	}
 //
-//	std::shared_ptr<TaskPools> pools = std::make_shared<TaskPools>(std::thread::hardware_concurrency() *2);
+//	std::shared_ptr<TaskPools> pools = std::make_shared<TaskPools>(4);
 //	dbproxy::ProxyManager<dbproxy::MySQL> proxy(std::move(vec), pools, 10000000);
 //	std::thread td(std::bind(query, std::ref(proxy)));
-//	
+//
 //	Duration duration;
-//	std::vector<decltype(proxy)::Result> completion;
+//	std::vector<dbproxy::Result> completion;
 //	int count = 0;
 //	while (true)
 //	{

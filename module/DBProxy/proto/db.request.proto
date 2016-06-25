@@ -1,23 +1,24 @@
-package db;
+package proto_db;
 
-message request
+message Request
 {
-    enum Target
-    {
-	    DRDB = 1;
-        MMDB = 2;
-    }
-
-    enum Command
+    enum ActoinType
     { 
-        SELECT = 1; 
-        INSERT = 2; 
-        UPDATE = 3; 
-        DELETE = 4;
+        kSelect = 1; 
+        kInsert = 2; 
+        kUpdate = 3; 
+        kDelete = 4;
+    }
+    
+    enum DatabaseType
+    {
+        kRedis = 1;
+        kMySQL = 2;
     }
 
-    required Target target = 1;
-    required Command command = 2;
-    required int32 number = 3;
-    optional string execute = 4;
+    required int32 number = 1;
+    required DatabaseType dbtype = 2;
+    required ActoinType action = 3;
+    required string dbname = 4;
+    optional string statement = 5;
 }

@@ -1,12 +1,13 @@
-package db;
+package proto_db;
 
-message error
+message Error
 {
-    required int32 error_code;
-    optional string msg;
+    required int32 number = 1;
+    required int32 error_code = 2;
+    optional string msg = 3;
 }
 
-message response
+message Response
 {
     required int32 number = 1;
     optional string result = 2;

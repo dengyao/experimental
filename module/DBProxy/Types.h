@@ -1,12 +1,15 @@
-﻿#ifndef __TYPES_H__
-#define __TYPES_H__
+﻿#ifndef __DBPROXY_TYPES_H__
+#define __DBPROXY_TYPES_H__
 
+#include <vector>
 #include <string>
 #include <stdexcept>
 
 namespace dbproxy
 {
-	enum class CommandType
+	typedef std::vector<char> ByteArray;
+
+	enum class ActionType
 	{
 		kSelect = 1,
 		kInsert = 2,

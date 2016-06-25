@@ -1,5 +1,5 @@
-﻿#ifndef __TYPES_H__
-#define __TYPES_H__
+﻿#ifndef __EDDY_TYPES_H__
+#define __EDDY_TYPES_H__
 
 #include <chrono>
 #include <memory>
