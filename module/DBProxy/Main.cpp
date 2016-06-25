@@ -75,22 +75,22 @@ std::vector<std::unique_ptr<dbproxy::ConnectorMySQL>> CreateConnectorMySQL(const
 
 			connector_lists.push_back(std::move(connector));
 		}
-		catch (const std::exception &e)
+		catch (const std::exception&)
 		{
-			std::cerr << e.what() << std::endl;
+			std::cerr << "连接数据库失败!" << std::endl;
 			getchar();
+			exit(0);
 		}
 	}
 	return connector_lists;
 }
 
-int main(int argc, char **argv)
+int main(int argc, char *argv[])
 {
 	TaskPools pools(std::thread::hardware_concurrency() / 2);
 	eddy::IOServiceThreadManager threads(std::thread::hardware_concurrency() / 2);
 
-	std::vector<std::unique_ptr<dbproxy::ConnectorMySQL>> connector_lists = CreateConnectorMySQL(8);
-	dbproxy::ProxyManager<dbproxy::MySQL> mysql_proxy(std::move(connector_lists), pools);
+	dbproxy::ProxyManager<dbproxy::MySQL> mysql_proxy(CreateConnectorMySQL(8), pools, 1024000000);
 	MainHandler handler(threads, mysql_proxy);
 
 	MyCreator creator(handler);

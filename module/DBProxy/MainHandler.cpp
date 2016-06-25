@@ -10,7 +10,7 @@ MainHandler::MainHandler(eddy::IOServiceThreadManager &threads, dbproxy::ProxyMa
 	, mysql_proxy_(mysql)
 	, loop_(threads.MainThread()->IOService())
 {
-	loop_.async_wait(std::bind(&MainHandler::UpdateHandleResult, this));
+	loop_.async_wait(std::bind(&MainHandler::UpdateHandleResult, this, std::placeholders::_1));
 }
 
 void MainHandler::HandleMessage(eddy::TCPSessionHandle &session, eddy::NetMessage &message)
@@ -55,7 +55,7 @@ void MainHandler::UpdateHandleResult(asio::error_code error_code)
 	}
 	completion_list_.clear();
 
-	loop_.async_wait(std::bind(&MainHandler::UpdateHandleResult, this));
+	loop_.async_wait(std::bind(&MainHandler::UpdateHandleResult, this, std::placeholders::_1));
 }
 
 void MainHandler::ReplyHandleResult(eddy::TCPSessionID id, eddy::NetMessage &message)

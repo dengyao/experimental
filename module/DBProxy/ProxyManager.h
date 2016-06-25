@@ -235,7 +235,7 @@ namespace dbproxy
 
 	private:
 		const unsigned int                            bocklog_;
-		TaskPools                                     pools_;
+		TaskPools&                                    pools_;
 		MultimapSafe<std::string, ConnectorPointer>   free_connectors_;
 		MapSafe<std::string, QueueSafe<ActorPointer>> waiting_queue_;
 		MapSafe<int, ActorPointer>                    ongoing_queue_;
