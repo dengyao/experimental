@@ -23,11 +23,13 @@ namespace eddy
 	public:
 		NetMessage();
 
-		NetMessage(size_t size);
+		explicit NetMessage(size_t size);
 
-		NetMessage(const NetMessage &that);
+		explicit NetMessage(const NetMessage &that);
 
-		NetMessage(NetMessage &&that);
+		explicit NetMessage(NetMessage &&that);
+
+		NetMessage(const char *data, size_t size);
 
 		~NetMessage() = default;
 

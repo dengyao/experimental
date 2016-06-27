@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
 	TaskPools pools(std::thread::hardware_concurrency() / 2);
 	eddy::IOServiceThreadManager threads(std::thread::hardware_concurrency() / 2);
 
-	dbproxy::ProxyManager<dbproxy::MySQL> mysql_proxy(CreateConnectorMySQL(8), pools, 1024000000);
+	dbproxy::ProxyManager<dbproxy::MySQL> mysql_proxy(CreateConnectorMySQL(8), pools, 1000000);
 	MainHandler handler(threads, mysql_proxy);
 
 	MyCreator creator(handler);

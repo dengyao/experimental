@@ -40,4 +40,6 @@ set(BINARY_OUTPUT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 add_subdirectory(eddyserver/base)
 add_subdirectory(eddyserver/eddy)
 add_subdirectory(eddyserver/external/protobuf)
+
+add_subdirectory(module/Test)
 add_subdirectory(module/DBProxy)

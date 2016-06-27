@@ -1,0 +1,24 @@
+package proto_db;
+
+message Request
+{
+    enum ActoinType
+    { 
+        kSelect = 1; 
+        kInsert = 2; 
+        kUpdate = 3; 
+        kDelete = 4;
+    }
+    
+    enum DatabaseType
+    {
+        kRedis = 1;
+        kMySQL = 2;
+    }
+
+    required int32 number = 1;
+    required DatabaseType dbtype = 2;
+    required ActoinType action = 3;
+    required string dbname = 4;
+    optional string statement = 5;
+}

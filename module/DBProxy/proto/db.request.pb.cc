@@ -37,7 +37,7 @@ void protobuf_AssignDesc_db_2erequest_2eproto() {
   GOOGLE_CHECK(file != NULL);
   Request_descriptor_ = file->message_type(0);
   static const int Request_offsets_[5] = {
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Request, number_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Request, identifier_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Request, dbtype_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Request, action_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Request, dbname_),
@@ -86,14 +86,14 @@ void protobuf_AddDesc_db_2erequest_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\020db.request.proto\022\010proto_db\"\204\002\n\007Request"
-    "\022\016\n\006number\030\001 \002(\005\022.\n\006dbtype\030\002 \002(\0162\036.proto"
-    "_db.Request.DatabaseType\022,\n\006action\030\003 \002(\016"
-    "2\034.proto_db.Request.ActoinType\022\016\n\006dbname"
-    "\030\004 \002(\t\022\021\n\tstatement\030\005 \001(\t\"@\n\nActoinType\022"
-    "\013\n\007kSelect\020\001\022\013\n\007kInsert\020\002\022\013\n\007kUpdate\020\003\022\013"
-    "\n\007kDelete\020\004\"&\n\014DatabaseType\022\n\n\006kRedis\020\001\022"
-    "\n\n\006kMySQL\020\002", 291);
+    "\n\020db.request.proto\022\010proto_db\"\210\002\n\007Request"
+    "\022\022\n\nidentifier\030\001 \002(\r\022.\n\006dbtype\030\002 \002(\0162\036.p"
+    "roto_db.Request.DatabaseType\022,\n\006action\030\003"
+    " \002(\0162\034.proto_db.Request.ActoinType\022\016\n\006db"
+    "name\030\004 \002(\t\022\021\n\tstatement\030\005 \001(\t\"@\n\nActoinT"
+    "ype\022\013\n\007kSelect\020\001\022\013\n\007kInsert\020\002\022\013\n\007kUpdate"
+    "\020\003\022\013\n\007kDelete\020\004\"&\n\014DatabaseType\022\n\n\006kRedi"
+    "s\020\001\022\n\n\006kMySQL\020\002", 295);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "db.request.proto", &protobuf_RegisterTypes);
   Request::default_instance_ = new Request();
@@ -157,7 +157,7 @@ const Request_DatabaseType Request::DatabaseType_MAX;
 const int Request::DatabaseType_ARRAYSIZE;
 #endif  // _MSC_VER
 #ifndef _MSC_VER
-const int Request::kNumberFieldNumber;
+const int Request::kIdentifierFieldNumber;
 const int Request::kDbtypeFieldNumber;
 const int Request::kActionFieldNumber;
 const int Request::kDbnameFieldNumber;
@@ -183,7 +183,7 @@ Request::Request(const Request& from)
 void Request::SharedCtor() {
   ::google::protobuf::internal::GetEmptyString();
   _cached_size_ = 0;
-  number_ = 0;
+  identifier_ = 0u;
   dbtype_ = 1;
   action_ = 1;
   dbname_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
@@ -230,7 +230,7 @@ Request* Request::New() const {
 
 void Request::Clear() {
   if (_has_bits_[0 / 32] & 31) {
-    number_ = 0;
+    identifier_ = 0u;
     dbtype_ = 1;
     action_ = 1;
     if (has_dbname()) {
@@ -258,13 +258,13 @@ bool Request::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required int32 number = 1;
+      // required uint32 identifier = 1;
       case 1: {
         if (tag == 8) {
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
-                 input, &number_)));
-          set_has_number();
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &identifier_)));
+          set_has_identifier();
         } else {
           goto handle_unusual;
         }
@@ -371,9 +371,9 @@ failure:
 void Request::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:proto_db.Request)
-  // required int32 number = 1;
-  if (has_number()) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->number(), output);
+  // required uint32 identifier = 1;
+  if (has_identifier()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->identifier(), output);
   }
 
   // required .proto_db.Request.DatabaseType dbtype = 2;
@@ -418,9 +418,9 @@ void Request::SerializeWithCachedSizes(
 ::google::protobuf::uint8* Request::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // @@protoc_insertion_point(serialize_to_array_start:proto_db.Request)
-  // required int32 number = 1;
-  if (has_number()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(1, this->number(), target);
+  // required uint32 identifier = 1;
+  if (has_identifier()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->identifier(), target);
   }
 
   // required .proto_db.Request.DatabaseType dbtype = 2;
@@ -469,11 +469,11 @@ int Request::ByteSize() const {
   int total_size = 0;
 
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // required int32 number = 1;
-    if (has_number()) {
+    // required uint32 identifier = 1;
+    if (has_identifier()) {
       total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::Int32Size(
-          this->number());
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->identifier());
     }
 
     // required .proto_db.Request.DatabaseType dbtype = 2;
@@ -529,8 +529,8 @@ void Request::MergeFrom(const ::google::protobuf::Message& from) {
 void Request::MergeFrom(const Request& from) {
   GOOGLE_CHECK_NE(&from, this);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    if (from.has_number()) {
-      set_number(from.number());
+    if (from.has_identifier()) {
+      set_identifier(from.identifier());
     }
     if (from.has_dbtype()) {
       set_dbtype(from.dbtype());
@@ -568,7 +568,7 @@ bool Request::IsInitialized() const {
 
 void Request::Swap(Request* other) {
   if (other != this) {
-    std::swap(number_, other->number_);
+    std::swap(identifier_, other->identifier_);
     std::swap(dbtype_, other->dbtype_);
     std::swap(action_, other->action_);
     std::swap(dbname_, other->dbname_);

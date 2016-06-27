@@ -47,6 +47,13 @@ namespace eddy
 		that.writer_pos_ = 0;
 	}
 
+	NetMessage::NetMessage(const char *data, size_t size)
+		: reader_pos_(0)
+		, writer_pos_(0)
+	{
+		Write(data, size);
+	}
+
 	NetMessage& NetMessage::operator= (const NetMessage &that)
 	{
 		if (std::addressof(that) != this)

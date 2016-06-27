@@ -13,34 +13,34 @@ namespace dbproxy
 	class Result
 	{
 	public:
-		Result(int number, ErrorCode &&code, ByteArray &&result)
-			: number_(number)
-			, code_(std::forward<ErrorCode>(code))
+		Result(uint32_t identifier, ErrorCode &&code, ByteArray &&result)
+			: identifier_(identifier)
+			, error_code_(std::forward<ErrorCode>(error_code_))
 			, result_(std::forward<ByteArray>(result))
 		{
 		}
 
 		Result(Result &&other)
 		{
-			number_ = other.number_;
-			code_ = std::move(other.code_);
+			identifier_ = other.identifier_;
+			error_code_ = std::move(other.error_code_);
 			result_ = std::move(other.result_);
-			other.number_ = 0;
+			other.identifier_ = 0;
 		}
 
-		int GetNumber() const
+		int GetIdentifier() const
 		{
-			return number_;
+			return identifier_;
 		}
 
 		ErrorCode& GetErrorCode()
 		{
-			return code_;
+			return error_code_;
 		}
 
 		const ErrorCode& GetErrorCode() const
 		{
-			return code_;
+			return error_code_;
 		}
 
 		ByteArray& GetResult()
@@ -58,8 +58,8 @@ namespace dbproxy
 		Result& operator= (const Result&) = delete;
 
 	private:
-		int number_;
-		ErrorCode code_;
+		uint32_t  identifier_;
+		ErrorCode error_code_;
 		ByteArray result_;
 	};
 
@@ -92,46 +92,48 @@ namespace dbproxy
 			return completion_queue_.TakeAll(lists);
 		}
 
-		bool Append(int number, ActionType type, const char *db, const char *command, const size_t length)
+		void Append(uint32_t identifier, ActionType type, const char *db, const char *command, const size_t length)
 		{
 			QueueSafe<ActorPointer> *waiting = nullptr;
 			if (!waiting_queue_.Get(db, waiting))
 			{
-				return false;
+				throw NotFoundDatabase();
 			}
 
 			if (waiting->Size() >= bocklog_)
 			{
-				return false;
+				throw ResourceInsufficiency();
 			}
 
-			if (ongoing_queue_.IsExist(number))
+#ifdef _DEBUG
+			if (ongoing_queue_.IsExist(identifier))
 			{
-				throw std::logic_error("number cannot be repeated");
+				assert(false);
+				return;
 			}
-
+#endif // _DEBUG
+			
 			ConnectorPointer connector;
 			if (free_connectors_.Take(db, connector))
 			{
-				ActorPointer actor = std::make_shared<Actor>(number, type, command, length, std::move(connector), complete_notify_);
+				ActorPointer actor = std::make_shared<Actor>(identifier, type, command, length, std::move(connector), complete_notify_);
 				TaskQueue::Task task = std::bind(&Actor::Processing, actor);
-				ongoing_queue_.Append(number, actor);
+				ongoing_queue_.Append(identifier, actor);
 				pools_.Append(task);
 			}
 			else
 			{
-				ActorPointer actor = std::make_shared<Actor>(number, type, command, length, std::move(connector), complete_notify_);
+				ActorPointer actor = std::make_shared<Actor>(identifier, type, command, length, std::move(connector), complete_notify_);
 				waiting->Append(std::move(actor));
 			}
-			return true;
 		}
 
 	private:
 		void OnCompletionTask(ActorPointer &actor, ErrorCode &&code, DatabaseResult<Database> &&result)
 		{
 			ConnectorPointer connector(std::move(actor->GetConnector()));
-			completion_queue_.Append(Result(actor->GetNumber(), std::forward<ErrorCode>(code), std::move(result.GetData())));
-			if (ongoing_queue_.Take(actor->GetNumber(), actor))
+			completion_queue_.Append(Result(actor->GetIdentifier(), std::forward<ErrorCode>(code), std::move(result.GetData())));
+			if (ongoing_queue_.Take(actor->GetIdentifier(), actor))
 			{
 				QueueSafe<ActorPointer> *waiting = nullptr;
 				if (waiting_queue_.Get(connector->Name(), waiting))
@@ -140,7 +142,7 @@ namespace dbproxy
 					{
 						actor->SetConnector(std::move(connector));
 						TaskQueue::Task task = std::bind(&Actor::Processing, actor);
-						ongoing_queue_.Append(actor->GetNumber(), actor);
+						ongoing_queue_.Append(actor->GetIdentifier(), actor);
 						pools_.Append(task);
 					}
 					else
@@ -164,9 +166,9 @@ namespace dbproxy
 		class Actor : public std::enable_shared_from_this<Actor>
 		{
 		public:
-			Actor(int number, ActionType type, const char *command, const size_t length, ConnectorPointer &&connector, const CompleteNotify &callback)
+			Actor(uint32_t identifier, ActionType type, const char *command, const size_t length, ConnectorPointer &&connector, const CompleteNotify &callback)
 				: type_(type)
-				, number_(number)
+				, identifier_(identifier)
 				, complete_notify_(callback)
 				, connector_(std::forward<ConnectorPointer>(connector))
 			{
@@ -175,9 +177,9 @@ namespace dbproxy
 				assert(complete_notify_ != nullptr);
 			}
 
-			int GetNumber() const
+			int GetIdentifier() const
 			{
-				return number_;
+				return identifier_;
 			}
 
 			ConnectorPointer& GetConnector()
@@ -226,10 +228,10 @@ namespace dbproxy
 			Actor& operator= (const Actor&) = delete;
 
 		private:
-			const int number_;
-			const ActionType type_;
-			ByteArray command_;
-			ConnectorPointer connector_;
+			const ActionType      type_;
+			const uint32_t        identifier_;
+			ByteArray             command_;
+			ConnectorPointer      connector_;
 			const CompleteNotify& complete_notify_;
 		};
 
@@ -238,7 +240,7 @@ namespace dbproxy
 		TaskPools&                                    pools_;
 		MultimapSafe<std::string, ConnectorPointer>   free_connectors_;
 		MapSafe<std::string, QueueSafe<ActorPointer>> waiting_queue_;
-		MapSafe<int, ActorPointer>                    ongoing_queue_;
+		MapSafe<uint32_t, ActorPointer>               ongoing_queue_;
 		QueueSafe<Result>                             completion_queue_;
 		const CompleteNotify                          complete_notify_;
 	};

@@ -181,12 +181,12 @@ class Request : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // required int32 number = 1;
-  inline bool has_number() const;
-  inline void clear_number();
-  static const int kNumberFieldNumber = 1;
-  inline ::google::protobuf::int32 number() const;
-  inline void set_number(::google::protobuf::int32 value);
+  // required uint32 identifier = 1;
+  inline bool has_identifier() const;
+  inline void clear_identifier();
+  static const int kIdentifierFieldNumber = 1;
+  inline ::google::protobuf::uint32 identifier() const;
+  inline void set_identifier(::google::protobuf::uint32 value);
 
   // required .proto_db.Request.DatabaseType dbtype = 2;
   inline bool has_dbtype() const;
@@ -228,8 +228,8 @@ class Request : public ::google::protobuf::Message {
 
   // @@protoc_insertion_point(class_scope:proto_db.Request)
  private:
-  inline void set_has_number();
-  inline void clear_has_number();
+  inline void set_has_identifier();
+  inline void clear_has_identifier();
   inline void set_has_dbtype();
   inline void clear_has_dbtype();
   inline void set_has_action();
@@ -243,7 +243,7 @@ class Request : public ::google::protobuf::Message {
 
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
-  ::google::protobuf::int32 number_;
+  ::google::protobuf::uint32 identifier_;
   int dbtype_;
   ::std::string* dbname_;
   ::std::string* statement_;
@@ -262,28 +262,28 @@ class Request : public ::google::protobuf::Message {
 
 // Request
 
-// required int32 number = 1;
-inline bool Request::has_number() const {
+// required uint32 identifier = 1;
+inline bool Request::has_identifier() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void Request::set_has_number() {
+inline void Request::set_has_identifier() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void Request::clear_has_number() {
+inline void Request::clear_has_identifier() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void Request::clear_number() {
-  number_ = 0;
-  clear_has_number();
+inline void Request::clear_identifier() {
+  identifier_ = 0u;
+  clear_has_identifier();
 }
-inline ::google::protobuf::int32 Request::number() const {
-  // @@protoc_insertion_point(field_get:proto_db.Request.number)
-  return number_;
+inline ::google::protobuf::uint32 Request::identifier() const {
+  // @@protoc_insertion_point(field_get:proto_db.Request.identifier)
+  return identifier_;
 }
-inline void Request::set_number(::google::protobuf::int32 value) {
-  set_has_number();
-  number_ = value;
-  // @@protoc_insertion_point(field_set:proto_db.Request.number)
+inline void Request::set_identifier(::google::protobuf::uint32 value) {
+  set_has_identifier();
+  identifier_ = value;
+  // @@protoc_insertion_point(field_set:proto_db.Request.identifier)
 }
 
 // required .proto_db.Request.DatabaseType dbtype = 2;

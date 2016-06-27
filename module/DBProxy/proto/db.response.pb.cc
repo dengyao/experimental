@@ -20,9 +20,13 @@ namespace proto_db {
 
 namespace {
 
-const ::google::protobuf::Descriptor* Error_descriptor_ = NULL;
+const ::google::protobuf::Descriptor* DBError_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
-  Error_reflection_ = NULL;
+  DBError_reflection_ = NULL;
+const ::google::protobuf::Descriptor* SystemError_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  SystemError_reflection_ = NULL;
+const ::google::protobuf::EnumDescriptor* SystemError_ErrorCode_descriptor_ = NULL;
 const ::google::protobuf::Descriptor* Response_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   Response_reflection_ = NULL;
@@ -36,26 +40,44 @@ void protobuf_AssignDesc_db_2eresponse_2eproto() {
     ::google::protobuf::DescriptorPool::generated_pool()->FindFileByName(
       "db.response.proto");
   GOOGLE_CHECK(file != NULL);
-  Error_descriptor_ = file->message_type(0);
-  static const int Error_offsets_[3] = {
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Error, number_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Error, error_code_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Error, msg_),
+  DBError_descriptor_ = file->message_type(0);
+  static const int DBError_offsets_[3] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(DBError, identifier_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(DBError, error_code_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(DBError, what_),
   };
-  Error_reflection_ =
+  DBError_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
-      Error_descriptor_,
-      Error::default_instance_,
-      Error_offsets_,
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Error, _has_bits_[0]),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Error, _unknown_fields_),
+      DBError_descriptor_,
+      DBError::default_instance_,
+      DBError_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(DBError, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(DBError, _unknown_fields_),
       -1,
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
-      sizeof(Error));
-  Response_descriptor_ = file->message_type(1);
+      sizeof(DBError));
+  SystemError_descriptor_ = file->message_type(1);
+  static const int SystemError_offsets_[3] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SystemError, identifier_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SystemError, error_code_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SystemError, what_),
+  };
+  SystemError_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      SystemError_descriptor_,
+      SystemError::default_instance_,
+      SystemError_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SystemError, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SystemError, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(SystemError));
+  SystemError_ErrorCode_descriptor_ = SystemError_descriptor_->enum_type(0);
+  Response_descriptor_ = file->message_type(2);
   static const int Response_offsets_[2] = {
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Response, number_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Response, identifier_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Response, result_),
   };
   Response_reflection_ =
@@ -82,7 +104,9 @@ inline void protobuf_AssignDescriptorsOnce() {
 void protobuf_RegisterTypes(const ::std::string&) {
   protobuf_AssignDescriptorsOnce();
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-    Error_descriptor_, &Error::default_instance());
+    DBError_descriptor_, &DBError::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    SystemError_descriptor_, &SystemError::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     Response_descriptor_, &Response::default_instance());
 }
@@ -90,8 +114,10 @@ void protobuf_RegisterTypes(const ::std::string&) {
 }  // namespace
 
 void protobuf_ShutdownFile_db_2eresponse_2eproto() {
-  delete Error::default_instance_;
-  delete Error_reflection_;
+  delete DBError::default_instance_;
+  delete DBError_reflection_;
+  delete SystemError::default_instance_;
+  delete SystemError_reflection_;
   delete Response::default_instance_;
   delete Response_reflection_;
 }
@@ -103,15 +129,21 @@ void protobuf_AddDesc_db_2eresponse_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\021db.response.proto\022\010proto_db\"8\n\005Error\022\016"
-    "\n\006number\030\001 \002(\005\022\022\n\nerror_code\030\002 \002(\005\022\013\n\003ms"
-    "g\030\003 \001(\t\"*\n\010Response\022\016\n\006number\030\001 \002(\005\022\016\n\006r"
-    "esult\030\002 \001(\t", 131);
+    "\n\021db.response.proto\022\010proto_db\"\?\n\007DBError"
+    "\022\022\n\nidentifier\030\001 \002(\r\022\022\n\nerror_code\030\002 \002(\005"
+    "\022\014\n\004what\030\003 \001(\t\"\240\001\n\013SystemError\022\022\n\nidenti"
+    "fier\030\001 \002(\r\0223\n\nerror_code\030\002 \002(\0162\037.proto_d"
+    "b.SystemError.ErrorCode\022\014\n\004what\030\003 \001(\t\":\n"
+    "\tErrorCode\022\025\n\021kNotFoundDatabase\020\001\022\026\n\022kRe"
+    "sourcesShortage\020\002\".\n\010Response\022\022\n\nidentif"
+    "ier\030\001 \002(\r\022\016\n\006result\030\002 \001(\t", 305);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "db.response.proto", &protobuf_RegisterTypes);
-  Error::default_instance_ = new Error();
+  DBError::default_instance_ = new DBError();
+  SystemError::default_instance_ = new SystemError();
   Response::default_instance_ = new Response();
-  Error::default_instance_->InitAsDefaultInstance();
+  DBError::default_instance_->InitAsDefaultInstance();
+  SystemError::default_instance_->InitAsDefaultInstance();
   Response::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_db_2eresponse_2eproto);
 }
@@ -126,73 +158,73 @@ struct StaticDescriptorInitializer_db_2eresponse_2eproto {
 // ===================================================================
 
 #ifndef _MSC_VER
-const int Error::kNumberFieldNumber;
-const int Error::kErrorCodeFieldNumber;
-const int Error::kMsgFieldNumber;
+const int DBError::kIdentifierFieldNumber;
+const int DBError::kErrorCodeFieldNumber;
+const int DBError::kWhatFieldNumber;
 #endif  // !_MSC_VER
 
-Error::Error()
+DBError::DBError()
   : ::google::protobuf::Message() {
   SharedCtor();
-  // @@protoc_insertion_point(constructor:proto_db.Error)
+  // @@protoc_insertion_point(constructor:proto_db.DBError)
 }
 
-void Error::InitAsDefaultInstance() {
+void DBError::InitAsDefaultInstance() {
 }
 
-Error::Error(const Error& from)
+DBError::DBError(const DBError& from)
   : ::google::protobuf::Message() {
   SharedCtor();
   MergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:proto_db.Error)
+  // @@protoc_insertion_point(copy_constructor:proto_db.DBError)
 }
 
-void Error::SharedCtor() {
+void DBError::SharedCtor() {
   ::google::protobuf::internal::GetEmptyString();
   _cached_size_ = 0;
-  number_ = 0;
+  identifier_ = 0u;
   error_code_ = 0;
-  msg_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  what_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
-Error::~Error() {
-  // @@protoc_insertion_point(destructor:proto_db.Error)
+DBError::~DBError() {
+  // @@protoc_insertion_point(destructor:proto_db.DBError)
   SharedDtor();
 }
 
-void Error::SharedDtor() {
-  if (msg_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-    delete msg_;
+void DBError::SharedDtor() {
+  if (what_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete what_;
   }
   if (this != default_instance_) {
   }
 }
 
-void Error::SetCachedSize(int size) const {
+void DBError::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const ::google::protobuf::Descriptor* Error::descriptor() {
+const ::google::protobuf::Descriptor* DBError::descriptor() {
   protobuf_AssignDescriptorsOnce();
-  return Error_descriptor_;
+  return DBError_descriptor_;
 }
 
-const Error& Error::default_instance() {
+const DBError& DBError::default_instance() {
   if (default_instance_ == NULL) protobuf_AddDesc_db_2eresponse_2eproto();
   return *default_instance_;
 }
 
-Error* Error::default_instance_ = NULL;
+DBError* DBError::default_instance_ = NULL;
 
-Error* Error::New() const {
-  return new Error;
+DBError* DBError::New() const {
+  return new DBError;
 }
 
-void Error::Clear() {
+void DBError::Clear() {
 #define OFFSET_OF_FIELD_(f) (reinterpret_cast<char*>(      \
-  &reinterpret_cast<Error*>(16)->f) - \
+  &reinterpret_cast<DBError*>(16)->f) - \
    reinterpret_cast<char*>(16))
 
 #define ZR_(first, last) do {                              \
@@ -202,10 +234,10 @@ void Error::Clear() {
   } while (0)
 
   if (_has_bits_[0 / 32] & 7) {
-    ZR_(number_, error_code_);
-    if (has_msg()) {
-      if (msg_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-        msg_->clear();
+    ZR_(identifier_, error_code_);
+    if (has_what()) {
+      if (what_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+        what_->clear();
       }
     }
   }
@@ -217,23 +249,23 @@ void Error::Clear() {
   mutable_unknown_fields()->Clear();
 }
 
-bool Error::MergePartialFromCodedStream(
+bool DBError::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:proto_db.Error)
+  // @@protoc_insertion_point(parse_start:proto_db.DBError)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required int32 number = 1;
+      // required uint32 identifier = 1;
       case 1: {
         if (tag == 8) {
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
-                 input, &number_)));
-          set_has_number();
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &identifier_)));
+          set_has_identifier();
         } else {
           goto handle_unusual;
         }
@@ -252,20 +284,20 @@ bool Error::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(26)) goto parse_msg;
+        if (input->ExpectTag(26)) goto parse_what;
         break;
       }
 
-      // optional string msg = 3;
+      // optional string what = 3;
       case 3: {
         if (tag == 26) {
-         parse_msg:
+         parse_what:
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
-                input, this->mutable_msg()));
+                input, this->mutable_what()));
           ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
-            this->msg().data(), this->msg().length(),
+            this->what().data(), this->what().length(),
             ::google::protobuf::internal::WireFormat::PARSE,
-            "msg");
+            "what");
         } else {
           goto handle_unusual;
         }
@@ -287,20 +319,20 @@ bool Error::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:proto_db.Error)
+  // @@protoc_insertion_point(parse_success:proto_db.DBError)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:proto_db.Error)
+  // @@protoc_insertion_point(parse_failure:proto_db.DBError)
   return false;
 #undef DO_
 }
 
-void Error::SerializeWithCachedSizes(
+void DBError::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:proto_db.Error)
-  // required int32 number = 1;
-  if (has_number()) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->number(), output);
+  // @@protoc_insertion_point(serialize_start:proto_db.DBError)
+  // required uint32 identifier = 1;
+  if (has_identifier()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->identifier(), output);
   }
 
   // required int32 error_code = 2;
@@ -308,29 +340,29 @@ void Error::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteInt32(2, this->error_code(), output);
   }
 
-  // optional string msg = 3;
-  if (has_msg()) {
+  // optional string what = 3;
+  if (has_what()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
-      this->msg().data(), this->msg().length(),
+      this->what().data(), this->what().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE,
-      "msg");
+      "what");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      3, this->msg(), output);
+      3, this->what(), output);
   }
 
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
   }
-  // @@protoc_insertion_point(serialize_end:proto_db.Error)
+  // @@protoc_insertion_point(serialize_end:proto_db.DBError)
 }
 
-::google::protobuf::uint8* Error::SerializeWithCachedSizesToArray(
+::google::protobuf::uint8* DBError::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // @@protoc_insertion_point(serialize_to_array_start:proto_db.Error)
-  // required int32 number = 1;
-  if (has_number()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(1, this->number(), target);
+  // @@protoc_insertion_point(serialize_to_array_start:proto_db.DBError)
+  // required uint32 identifier = 1;
+  if (has_identifier()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->identifier(), target);
   }
 
   // required int32 error_code = 2;
@@ -338,34 +370,34 @@ void Error::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(2, this->error_code(), target);
   }
 
-  // optional string msg = 3;
-  if (has_msg()) {
+  // optional string what = 3;
+  if (has_what()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
-      this->msg().data(), this->msg().length(),
+      this->what().data(), this->what().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE,
-      "msg");
+      "what");
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        3, this->msg(), target);
+        3, this->what(), target);
   }
 
   if (!unknown_fields().empty()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:proto_db.Error)
+  // @@protoc_insertion_point(serialize_to_array_end:proto_db.DBError)
   return target;
 }
 
-int Error::ByteSize() const {
+int DBError::ByteSize() const {
   int total_size = 0;
 
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // required int32 number = 1;
-    if (has_number()) {
+    // required uint32 identifier = 1;
+    if (has_identifier()) {
       total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::Int32Size(
-          this->number());
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->identifier());
     }
 
     // required int32 error_code = 2;
@@ -375,11 +407,11 @@ int Error::ByteSize() const {
           this->error_code());
     }
 
-    // optional string msg = 3;
-    if (has_msg()) {
+    // optional string what = 3;
+    if (has_what()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::StringSize(
-          this->msg());
+          this->what());
     }
 
   }
@@ -394,10 +426,10 @@ int Error::ByteSize() const {
   return total_size;
 }
 
-void Error::MergeFrom(const ::google::protobuf::Message& from) {
+void DBError::MergeFrom(const ::google::protobuf::Message& from) {
   GOOGLE_CHECK_NE(&from, this);
-  const Error* source =
-    ::google::protobuf::internal::dynamic_cast_if_available<const Error*>(
+  const DBError* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const DBError*>(
       &from);
   if (source == NULL) {
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
@@ -406,56 +438,407 @@ void Error::MergeFrom(const ::google::protobuf::Message& from) {
   }
 }
 
-void Error::MergeFrom(const Error& from) {
+void DBError::MergeFrom(const DBError& from) {
   GOOGLE_CHECK_NE(&from, this);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    if (from.has_number()) {
-      set_number(from.number());
+    if (from.has_identifier()) {
+      set_identifier(from.identifier());
     }
     if (from.has_error_code()) {
       set_error_code(from.error_code());
     }
-    if (from.has_msg()) {
-      set_msg(from.msg());
+    if (from.has_what()) {
+      set_what(from.what());
     }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
 
-void Error::CopyFrom(const ::google::protobuf::Message& from) {
+void DBError::CopyFrom(const ::google::protobuf::Message& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-void Error::CopyFrom(const Error& from) {
+void DBError::CopyFrom(const DBError& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool Error::IsInitialized() const {
+bool DBError::IsInitialized() const {
   if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
 
   return true;
 }
 
-void Error::Swap(Error* other) {
+void DBError::Swap(DBError* other) {
   if (other != this) {
-    std::swap(number_, other->number_);
+    std::swap(identifier_, other->identifier_);
     std::swap(error_code_, other->error_code_);
-    std::swap(msg_, other->msg_);
+    std::swap(what_, other->what_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
   }
 }
 
-::google::protobuf::Metadata Error::GetMetadata() const {
+::google::protobuf::Metadata DBError::GetMetadata() const {
   protobuf_AssignDescriptorsOnce();
   ::google::protobuf::Metadata metadata;
-  metadata.descriptor = Error_descriptor_;
-  metadata.reflection = Error_reflection_;
+  metadata.descriptor = DBError_descriptor_;
+  metadata.reflection = DBError_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+const ::google::protobuf::EnumDescriptor* SystemError_ErrorCode_descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return SystemError_ErrorCode_descriptor_;
+}
+bool SystemError_ErrorCode_IsValid(int value) {
+  switch(value) {
+    case 1:
+    case 2:
+      return true;
+    default:
+      return false;
+  }
+}
+
+#ifndef _MSC_VER
+const SystemError_ErrorCode SystemError::kNotFoundDatabase;
+const SystemError_ErrorCode SystemError::kResourcesShortage;
+const SystemError_ErrorCode SystemError::ErrorCode_MIN;
+const SystemError_ErrorCode SystemError::ErrorCode_MAX;
+const int SystemError::ErrorCode_ARRAYSIZE;
+#endif  // _MSC_VER
+#ifndef _MSC_VER
+const int SystemError::kIdentifierFieldNumber;
+const int SystemError::kErrorCodeFieldNumber;
+const int SystemError::kWhatFieldNumber;
+#endif  // !_MSC_VER
+
+SystemError::SystemError()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:proto_db.SystemError)
+}
+
+void SystemError::InitAsDefaultInstance() {
+}
+
+SystemError::SystemError(const SystemError& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:proto_db.SystemError)
+}
+
+void SystemError::SharedCtor() {
+  ::google::protobuf::internal::GetEmptyString();
+  _cached_size_ = 0;
+  identifier_ = 0u;
+  error_code_ = 1;
+  what_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+SystemError::~SystemError() {
+  // @@protoc_insertion_point(destructor:proto_db.SystemError)
+  SharedDtor();
+}
+
+void SystemError::SharedDtor() {
+  if (what_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete what_;
+  }
+  if (this != default_instance_) {
+  }
+}
+
+void SystemError::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* SystemError::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return SystemError_descriptor_;
+}
+
+const SystemError& SystemError::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_db_2eresponse_2eproto();
+  return *default_instance_;
+}
+
+SystemError* SystemError::default_instance_ = NULL;
+
+SystemError* SystemError::New() const {
+  return new SystemError;
+}
+
+void SystemError::Clear() {
+  if (_has_bits_[0 / 32] & 7) {
+    identifier_ = 0u;
+    error_code_ = 1;
+    if (has_what()) {
+      if (what_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+        what_->clear();
+      }
+    }
+  }
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool SystemError::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:proto_db.SystemError)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required uint32 identifier = 1;
+      case 1: {
+        if (tag == 8) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &identifier_)));
+          set_has_identifier();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(16)) goto parse_error_code;
+        break;
+      }
+
+      // required .proto_db.SystemError.ErrorCode error_code = 2;
+      case 2: {
+        if (tag == 16) {
+         parse_error_code:
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          if (::proto_db::SystemError_ErrorCode_IsValid(value)) {
+            set_error_code(static_cast< ::proto_db::SystemError_ErrorCode >(value));
+          } else {
+            mutable_unknown_fields()->AddVarint(2, value);
+          }
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(26)) goto parse_what;
+        break;
+      }
+
+      // optional string what = 3;
+      case 3: {
+        if (tag == 26) {
+         parse_what:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_what()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+            this->what().data(), this->what().length(),
+            ::google::protobuf::internal::WireFormat::PARSE,
+            "what");
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:proto_db.SystemError)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:proto_db.SystemError)
+  return false;
+#undef DO_
+}
+
+void SystemError::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:proto_db.SystemError)
+  // required uint32 identifier = 1;
+  if (has_identifier()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->identifier(), output);
+  }
+
+  // required .proto_db.SystemError.ErrorCode error_code = 2;
+  if (has_error_code()) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      2, this->error_code(), output);
+  }
+
+  // optional string what = 3;
+  if (has_what()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->what().data(), this->what().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "what");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      3, this->what(), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:proto_db.SystemError)
+}
+
+::google::protobuf::uint8* SystemError::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:proto_db.SystemError)
+  // required uint32 identifier = 1;
+  if (has_identifier()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->identifier(), target);
+  }
+
+  // required .proto_db.SystemError.ErrorCode error_code = 2;
+  if (has_error_code()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
+      2, this->error_code(), target);
+  }
+
+  // optional string what = 3;
+  if (has_what()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->what().data(), this->what().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "what");
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        3, this->what(), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:proto_db.SystemError)
+  return target;
+}
+
+int SystemError::ByteSize() const {
+  int total_size = 0;
+
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required uint32 identifier = 1;
+    if (has_identifier()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->identifier());
+    }
+
+    // required .proto_db.SystemError.ErrorCode error_code = 2;
+    if (has_error_code()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::EnumSize(this->error_code());
+    }
+
+    // optional string what = 3;
+    if (has_what()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->what());
+    }
+
+  }
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void SystemError::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const SystemError* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const SystemError*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void SystemError::MergeFrom(const SystemError& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_identifier()) {
+      set_identifier(from.identifier());
+    }
+    if (from.has_error_code()) {
+      set_error_code(from.error_code());
+    }
+    if (from.has_what()) {
+      set_what(from.what());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void SystemError::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void SystemError::CopyFrom(const SystemError& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool SystemError::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
+
+  return true;
+}
+
+void SystemError::Swap(SystemError* other) {
+  if (other != this) {
+    std::swap(identifier_, other->identifier_);
+    std::swap(error_code_, other->error_code_);
+    std::swap(what_, other->what_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata SystemError::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = SystemError_descriptor_;
+  metadata.reflection = SystemError_reflection_;
   return metadata;
 }
 
@@ -463,7 +846,7 @@ void Error::Swap(Error* other) {
 // ===================================================================
 
 #ifndef _MSC_VER
-const int Response::kNumberFieldNumber;
+const int Response::kIdentifierFieldNumber;
 const int Response::kResultFieldNumber;
 #endif  // !_MSC_VER
 
@@ -486,7 +869,7 @@ Response::Response(const Response& from)
 void Response::SharedCtor() {
   ::google::protobuf::internal::GetEmptyString();
   _cached_size_ = 0;
-  number_ = 0;
+  identifier_ = 0u;
   result_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
@@ -527,7 +910,7 @@ Response* Response::New() const {
 
 void Response::Clear() {
   if (_has_bits_[0 / 32] & 3) {
-    number_ = 0;
+    identifier_ = 0u;
     if (has_result()) {
       if (result_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
         result_->clear();
@@ -548,13 +931,13 @@ bool Response::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required int32 number = 1;
+      // required uint32 identifier = 1;
       case 1: {
         if (tag == 8) {
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
-                 input, &number_)));
-          set_has_number();
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &identifier_)));
+          set_has_identifier();
         } else {
           goto handle_unusual;
         }
@@ -604,9 +987,9 @@ failure:
 void Response::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:proto_db.Response)
-  // required int32 number = 1;
-  if (has_number()) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(1, this->number(), output);
+  // required uint32 identifier = 1;
+  if (has_identifier()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->identifier(), output);
   }
 
   // optional string result = 2;
@@ -629,9 +1012,9 @@ void Response::SerializeWithCachedSizes(
 ::google::protobuf::uint8* Response::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // @@protoc_insertion_point(serialize_to_array_start:proto_db.Response)
-  // required int32 number = 1;
-  if (has_number()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(1, this->number(), target);
+  // required uint32 identifier = 1;
+  if (has_identifier()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->identifier(), target);
   }
 
   // optional string result = 2;
@@ -657,11 +1040,11 @@ int Response::ByteSize() const {
   int total_size = 0;
 
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // required int32 number = 1;
-    if (has_number()) {
+    // required uint32 identifier = 1;
+    if (has_identifier()) {
       total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::Int32Size(
-          this->number());
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->identifier());
     }
 
     // optional string result = 2;
@@ -698,8 +1081,8 @@ void Response::MergeFrom(const ::google::protobuf::Message& from) {
 void Response::MergeFrom(const Response& from) {
   GOOGLE_CHECK_NE(&from, this);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    if (from.has_number()) {
-      set_number(from.number());
+    if (from.has_identifier()) {
+      set_identifier(from.identifier());
     }
     if (from.has_result()) {
       set_result(from.result());
@@ -728,7 +1111,7 @@ bool Response::IsInitialized() const {
 
 void Response::Swap(Response* other) {
   if (other != this) {
-    std::swap(number_, other->number_);
+    std::swap(identifier_, other->identifier_);
     std::swap(result_, other->result_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);

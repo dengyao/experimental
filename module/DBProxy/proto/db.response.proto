@@ -1,14 +1,27 @@
 package proto_db;
 
-message Error
+message DBError
 {
-    required int32 number = 1;
-    required int32 error_code = 2;
-    optional string msg = 3;
+    required uint32 identifier    = 1;
+    required int32 error_code     = 2;
+    optional string what          = 3;
+}
+
+message SystemError
+{
+    enum ErrorCode
+    {
+        kNotFoundDatabase         = 1;
+        kResourceInsufficiency    = 2;
+    }
+    
+    required uint32 identifier    = 1;
+    required ErrorCode error_code = 2;
+    optional string what          = 3;
 }
 
 message Response
 {
-    required int32 number = 1;
-    optional string result = 2;
+    required uint32 identifier    = 1;
+    optional string result        = 2;
 }

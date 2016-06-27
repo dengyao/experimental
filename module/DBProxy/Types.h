@@ -77,6 +77,18 @@ namespace dbproxy
 	public:
 		ConnectionError() : std::runtime_error("database connection error") {}
 	};
+
+	class NotFoundDatabase : public std::logic_error
+	{
+	public:
+		NotFoundDatabase() : std::logic_error("database not found") {}
+	};
+
+	class ResourceInsufficiency : public std::runtime_error
+	{
+	public:
+		ResourceInsufficiency() : std::runtime_error("system resource insufficiency") {}
+	};
 }
 
 #endif
