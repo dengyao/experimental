@@ -55,30 +55,30 @@ void ProcessManager::HandleMessage(eddy::TCPSessionHandle &session, eddy::NetMes
 						assert(false);
 					}
 				}
-				catch (dbproxy::NotFoundDatabase &e)
+				catch (dbproxy::NotFoundDatabase&)
 				{
 					requests_.erase(local_identifier);
-					ReplyErrorCode(session, request.identifier(), proto_db::ServerError::kNotFoundDatabase);
+					ReplyErrorCode(session, request.identifier(), proto_db::ProxyError::kNotFoundDatabase);
 				}
-				catch (dbproxy::ResourceInsufficiency &e)
+				catch (dbproxy::ResourceInsufficiency&)
 				{
 					requests_.erase(local_identifier);
-					ReplyErrorCode(session, request.identifier(), proto_db::ServerError::kResourceInsufficiency);
+					ReplyErrorCode(session, request.identifier(), proto_db::ProxyError::kResourceInsufficiency);
 				}
 			}
 			else
 			{
-				ReplyErrorCode(session, request.identifier(), proto_db::ServerError::kInvalidAction);
+				ReplyErrorCode(session, request.identifier(), proto_db::ProxyError::kInvalidAction);
 			}
 		}
 		else
 		{
-			ReplyErrorCode(session, proto_db::ServerError::kResourceInsufficiency);
+			ReplyErrorCode(session, request.identifier(), proto_db::ProxyError::kResourceInsufficiency);
 		}
 	}
 	else
 	{
-		ReplyErrorCode(session, proto_db::ServerError::kInvalidProtocol);
+		ReplyErrorCode(session, 0, proto_db::ProxyError::kInvalidProtocol);
 	}
 }
 
@@ -107,17 +107,12 @@ void ProcessManager::UpdateHandleResult(asio::error_code error_code)
 	timer_.async_wait(std::bind(&ProcessManager::UpdateHandleResult, this, std::placeholders::_1));
 }
 
-void ProcessManager::ReplyErrorCode(eddy::TCPSessionHandle &session, int error_code)
-{
-	ReplyErrorCode(session, 0, error_code);
-}
-
 void ProcessManager::ReplyErrorCode(eddy::TCPSessionHandle &session, uint32_t identifier, int error_code)
 {
 	eddy::NetMessage message;
-	proto_db::ServerError error;
+	proto_db::ProxyError error;
 	error.set_identifier(identifier);
-	error.set_error_code(static_cast<proto_db::ServerError::ErrorCode>(error_code));
+	error.set_error_code(static_cast<proto_db::ProxyError::ErrorCode>(error_code));
 	int size = error.ByteSize();
 	message.EnsureWritableBytes(size);
 	error.SerializeToArray(message.Data(), size);
