@@ -7,17 +7,18 @@ message DBError
     optional string what          = 3;
 }
 
-message SystemError
+message ServerError
 {
     enum ErrorCode
     {
-        kNotFoundDatabase         = 1;
-        kResourceInsufficiency    = 2;
+        kInvalidProtocol          = 1;
+        kInvalidAction            = 2;
+        kNotFoundDatabase         = 3;
+        kResourceInsufficiency    = 4;
     }
     
-    required uint32 identifier    = 1;
-    required ErrorCode error_code = 2;
-    optional string what          = 3;
+    required ErrorCode error_code = 1;
+    optional uint32 identifier    = 2;
 }
 
 message Response

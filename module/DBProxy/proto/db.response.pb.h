@@ -35,27 +35,29 @@ void protobuf_AssignDesc_db_2eresponse_2eproto();
 void protobuf_ShutdownFile_db_2eresponse_2eproto();
 
 class DBError;
-class SystemError;
+class ServerError;
 class Response;
 
-enum SystemError_ErrorCode {
-  SystemError_ErrorCode_kNotFoundDatabase = 1,
-  SystemError_ErrorCode_kResourcesShortage = 2
+enum ServerError_ErrorCode {
+  ServerError_ErrorCode_kInvalidProtocol = 1,
+  ServerError_ErrorCode_kInvalidAction = 2,
+  ServerError_ErrorCode_kNotFoundDatabase = 3,
+  ServerError_ErrorCode_kResourceInsufficiency = 4
 };
-bool SystemError_ErrorCode_IsValid(int value);
-const SystemError_ErrorCode SystemError_ErrorCode_ErrorCode_MIN = SystemError_ErrorCode_kNotFoundDatabase;
-const SystemError_ErrorCode SystemError_ErrorCode_ErrorCode_MAX = SystemError_ErrorCode_kResourcesShortage;
-const int SystemError_ErrorCode_ErrorCode_ARRAYSIZE = SystemError_ErrorCode_ErrorCode_MAX + 1;
+bool ServerError_ErrorCode_IsValid(int value);
+const ServerError_ErrorCode ServerError_ErrorCode_ErrorCode_MIN = ServerError_ErrorCode_kInvalidProtocol;
+const ServerError_ErrorCode ServerError_ErrorCode_ErrorCode_MAX = ServerError_ErrorCode_kResourceInsufficiency;
+const int ServerError_ErrorCode_ErrorCode_ARRAYSIZE = ServerError_ErrorCode_ErrorCode_MAX + 1;
 
-const ::google::protobuf::EnumDescriptor* SystemError_ErrorCode_descriptor();
-inline const ::std::string& SystemError_ErrorCode_Name(SystemError_ErrorCode value) {
+const ::google::protobuf::EnumDescriptor* ServerError_ErrorCode_descriptor();
+inline const ::std::string& ServerError_ErrorCode_Name(ServerError_ErrorCode value) {
   return ::google::protobuf::internal::NameOfEnum(
-    SystemError_ErrorCode_descriptor(), value);
+    ServerError_ErrorCode_descriptor(), value);
 }
-inline bool SystemError_ErrorCode_Parse(
-    const ::std::string& name, SystemError_ErrorCode* value) {
-  return ::google::protobuf::internal::ParseNamedEnum<SystemError_ErrorCode>(
-    SystemError_ErrorCode_descriptor(), name, value);
+inline bool ServerError_ErrorCode_Parse(
+    const ::std::string& name, ServerError_ErrorCode* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<ServerError_ErrorCode>(
+    ServerError_ErrorCode_descriptor(), name, value);
 }
 // ===================================================================
 
@@ -163,14 +165,14 @@ class DBError : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
-class SystemError : public ::google::protobuf::Message {
+class ServerError : public ::google::protobuf::Message {
  public:
-  SystemError();
-  virtual ~SystemError();
+  ServerError();
+  virtual ~ServerError();
 
-  SystemError(const SystemError& from);
+  ServerError(const ServerError& from);
 
-  inline SystemError& operator=(const SystemError& from) {
+  inline ServerError& operator=(const ServerError& from) {
     CopyFrom(from);
     return *this;
   }
@@ -184,17 +186,17 @@ class SystemError : public ::google::protobuf::Message {
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
-  static const SystemError& default_instance();
+  static const ServerError& default_instance();
 
-  void Swap(SystemError* other);
+  void Swap(ServerError* other);
 
   // implements Message ----------------------------------------------
 
-  SystemError* New() const;
+  ServerError* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const SystemError& from);
-  void MergeFrom(const SystemError& from);
+  void CopyFrom(const ServerError& from);
+  void MergeFrom(const ServerError& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -214,80 +216,67 @@ class SystemError : public ::google::protobuf::Message {
 
   // nested types ----------------------------------------------------
 
-  typedef SystemError_ErrorCode ErrorCode;
-  static const ErrorCode kNotFoundDatabase = SystemError_ErrorCode_kNotFoundDatabase;
-  static const ErrorCode kResourcesShortage = SystemError_ErrorCode_kResourcesShortage;
+  typedef ServerError_ErrorCode ErrorCode;
+  static const ErrorCode kInvalidProtocol = ServerError_ErrorCode_kInvalidProtocol;
+  static const ErrorCode kInvalidAction = ServerError_ErrorCode_kInvalidAction;
+  static const ErrorCode kNotFoundDatabase = ServerError_ErrorCode_kNotFoundDatabase;
+  static const ErrorCode kResourceInsufficiency = ServerError_ErrorCode_kResourceInsufficiency;
   static inline bool ErrorCode_IsValid(int value) {
-    return SystemError_ErrorCode_IsValid(value);
+    return ServerError_ErrorCode_IsValid(value);
   }
   static const ErrorCode ErrorCode_MIN =
-    SystemError_ErrorCode_ErrorCode_MIN;
+    ServerError_ErrorCode_ErrorCode_MIN;
   static const ErrorCode ErrorCode_MAX =
-    SystemError_ErrorCode_ErrorCode_MAX;
+    ServerError_ErrorCode_ErrorCode_MAX;
   static const int ErrorCode_ARRAYSIZE =
-    SystemError_ErrorCode_ErrorCode_ARRAYSIZE;
+    ServerError_ErrorCode_ErrorCode_ARRAYSIZE;
   static inline const ::google::protobuf::EnumDescriptor*
   ErrorCode_descriptor() {
-    return SystemError_ErrorCode_descriptor();
+    return ServerError_ErrorCode_descriptor();
   }
   static inline const ::std::string& ErrorCode_Name(ErrorCode value) {
-    return SystemError_ErrorCode_Name(value);
+    return ServerError_ErrorCode_Name(value);
   }
   static inline bool ErrorCode_Parse(const ::std::string& name,
       ErrorCode* value) {
-    return SystemError_ErrorCode_Parse(name, value);
+    return ServerError_ErrorCode_Parse(name, value);
   }
 
   // accessors -------------------------------------------------------
 
-  // required uint32 identifier = 1;
+  // required .proto_db.ServerError.ErrorCode error_code = 1;
+  inline bool has_error_code() const;
+  inline void clear_error_code();
+  static const int kErrorCodeFieldNumber = 1;
+  inline ::proto_db::ServerError_ErrorCode error_code() const;
+  inline void set_error_code(::proto_db::ServerError_ErrorCode value);
+
+  // optional uint32 identifier = 2;
   inline bool has_identifier() const;
   inline void clear_identifier();
-  static const int kIdentifierFieldNumber = 1;
+  static const int kIdentifierFieldNumber = 2;
   inline ::google::protobuf::uint32 identifier() const;
   inline void set_identifier(::google::protobuf::uint32 value);
 
-  // required .proto_db.SystemError.ErrorCode error_code = 2;
-  inline bool has_error_code() const;
-  inline void clear_error_code();
-  static const int kErrorCodeFieldNumber = 2;
-  inline ::proto_db::SystemError_ErrorCode error_code() const;
-  inline void set_error_code(::proto_db::SystemError_ErrorCode value);
-
-  // optional string what = 3;
-  inline bool has_what() const;
-  inline void clear_what();
-  static const int kWhatFieldNumber = 3;
-  inline const ::std::string& what() const;
-  inline void set_what(const ::std::string& value);
-  inline void set_what(const char* value);
-  inline void set_what(const char* value, size_t size);
-  inline ::std::string* mutable_what();
-  inline ::std::string* release_what();
-  inline void set_allocated_what(::std::string* what);
-
-  // @@protoc_insertion_point(class_scope:proto_db.SystemError)
+  // @@protoc_insertion_point(class_scope:proto_db.ServerError)
  private:
-  inline void set_has_identifier();
-  inline void clear_has_identifier();
   inline void set_has_error_code();
   inline void clear_has_error_code();
-  inline void set_has_what();
-  inline void clear_has_what();
+  inline void set_has_identifier();
+  inline void clear_has_identifier();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
-  ::google::protobuf::uint32 identifier_;
   int error_code_;
-  ::std::string* what_;
+  ::google::protobuf::uint32 identifier_;
   friend void  protobuf_AddDesc_db_2eresponse_2eproto();
   friend void protobuf_AssignDesc_db_2eresponse_2eproto();
   friend void protobuf_ShutdownFile_db_2eresponse_2eproto();
 
   void InitAsDefaultInstance();
-  static SystemError* default_instance_;
+  static ServerError* default_instance_;
 };
 // -------------------------------------------------------------------
 
@@ -516,131 +505,55 @@ inline void DBError::set_allocated_what(::std::string* what) {
 
 // -------------------------------------------------------------------
 
-// SystemError
+// ServerError
 
-// required uint32 identifier = 1;
-inline bool SystemError::has_identifier() const {
+// required .proto_db.ServerError.ErrorCode error_code = 1;
+inline bool ServerError::has_error_code() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void SystemError::set_has_identifier() {
+inline void ServerError::set_has_error_code() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void SystemError::clear_has_identifier() {
+inline void ServerError::clear_has_error_code() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void SystemError::clear_identifier() {
-  identifier_ = 0u;
-  clear_has_identifier();
-}
-inline ::google::protobuf::uint32 SystemError::identifier() const {
-  // @@protoc_insertion_point(field_get:proto_db.SystemError.identifier)
-  return identifier_;
-}
-inline void SystemError::set_identifier(::google::protobuf::uint32 value) {
-  set_has_identifier();
-  identifier_ = value;
-  // @@protoc_insertion_point(field_set:proto_db.SystemError.identifier)
-}
-
-// required .proto_db.SystemError.ErrorCode error_code = 2;
-inline bool SystemError::has_error_code() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
-}
-inline void SystemError::set_has_error_code() {
-  _has_bits_[0] |= 0x00000002u;
-}
-inline void SystemError::clear_has_error_code() {
-  _has_bits_[0] &= ~0x00000002u;
-}
-inline void SystemError::clear_error_code() {
+inline void ServerError::clear_error_code() {
   error_code_ = 1;
   clear_has_error_code();
 }
-inline ::proto_db::SystemError_ErrorCode SystemError::error_code() const {
-  // @@protoc_insertion_point(field_get:proto_db.SystemError.error_code)
-  return static_cast< ::proto_db::SystemError_ErrorCode >(error_code_);
+inline ::proto_db::ServerError_ErrorCode ServerError::error_code() const {
+  // @@protoc_insertion_point(field_get:proto_db.ServerError.error_code)
+  return static_cast< ::proto_db::ServerError_ErrorCode >(error_code_);
 }
-inline void SystemError::set_error_code(::proto_db::SystemError_ErrorCode value) {
-  assert(::proto_db::SystemError_ErrorCode_IsValid(value));
+inline void ServerError::set_error_code(::proto_db::ServerError_ErrorCode value) {
+  assert(::proto_db::ServerError_ErrorCode_IsValid(value));
   set_has_error_code();
   error_code_ = value;
-  // @@protoc_insertion_point(field_set:proto_db.SystemError.error_code)
+  // @@protoc_insertion_point(field_set:proto_db.ServerError.error_code)
 }
 
-// optional string what = 3;
-inline bool SystemError::has_what() const {
-  return (_has_bits_[0] & 0x00000004u) != 0;
+// optional uint32 identifier = 2;
+inline bool ServerError::has_identifier() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void SystemError::set_has_what() {
-  _has_bits_[0] |= 0x00000004u;
+inline void ServerError::set_has_identifier() {
+  _has_bits_[0] |= 0x00000002u;
 }
-inline void SystemError::clear_has_what() {
-  _has_bits_[0] &= ~0x00000004u;
+inline void ServerError::clear_has_identifier() {
+  _has_bits_[0] &= ~0x00000002u;
 }
-inline void SystemError::clear_what() {
-  if (what_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-    what_->clear();
-  }
-  clear_has_what();
+inline void ServerError::clear_identifier() {
+  identifier_ = 0u;
+  clear_has_identifier();
 }
-inline const ::std::string& SystemError::what() const {
-  // @@protoc_insertion_point(field_get:proto_db.SystemError.what)
-  return *what_;
+inline ::google::protobuf::uint32 ServerError::identifier() const {
+  // @@protoc_insertion_point(field_get:proto_db.ServerError.identifier)
+  return identifier_;
 }
-inline void SystemError::set_what(const ::std::string& value) {
-  set_has_what();
-  if (what_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-    what_ = new ::std::string;
-  }
-  what_->assign(value);
-  // @@protoc_insertion_point(field_set:proto_db.SystemError.what)
-}
-inline void SystemError::set_what(const char* value) {
-  set_has_what();
-  if (what_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-    what_ = new ::std::string;
-  }
-  what_->assign(value);
-  // @@protoc_insertion_point(field_set_char:proto_db.SystemError.what)
-}
-inline void SystemError::set_what(const char* value, size_t size) {
-  set_has_what();
-  if (what_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-    what_ = new ::std::string;
-  }
-  what_->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:proto_db.SystemError.what)
-}
-inline ::std::string* SystemError::mutable_what() {
-  set_has_what();
-  if (what_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-    what_ = new ::std::string;
-  }
-  // @@protoc_insertion_point(field_mutable:proto_db.SystemError.what)
-  return what_;
-}
-inline ::std::string* SystemError::release_what() {
-  clear_has_what();
-  if (what_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-    return NULL;
-  } else {
-    ::std::string* temp = what_;
-    what_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-    return temp;
-  }
-}
-inline void SystemError::set_allocated_what(::std::string* what) {
-  if (what_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-    delete what_;
-  }
-  if (what) {
-    set_has_what();
-    what_ = what;
-  } else {
-    clear_has_what();
-    what_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  }
-  // @@protoc_insertion_point(field_set_allocated:proto_db.SystemError.what)
+inline void ServerError::set_identifier(::google::protobuf::uint32 value) {
+  set_has_identifier();
+  identifier_ = value;
+  // @@protoc_insertion_point(field_set:proto_db.ServerError.identifier)
 }
 
 // -------------------------------------------------------------------
@@ -756,10 +669,10 @@ inline void Response::set_allocated_result(::std::string* result) {
 namespace google {
 namespace protobuf {
 
-template <> struct is_proto_enum< ::proto_db::SystemError_ErrorCode> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::proto_db::ServerError_ErrorCode> : ::google::protobuf::internal::true_type {};
 template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::proto_db::SystemError_ErrorCode>() {
-  return ::proto_db::SystemError_ErrorCode_descriptor();
+inline const EnumDescriptor* GetEnumDescriptor< ::proto_db::ServerError_ErrorCode>() {
+  return ::proto_db::ServerError_ErrorCode_descriptor();
 }
 
 }  // namespace google

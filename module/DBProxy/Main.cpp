@@ -1,12 +1,11 @@
 #include <iostream>
-#include "MainHandler.h"
-
+#include "ProcessManager.h"
 
 class SessionHandle : public eddy::TCPSessionHandle
 {
 public:
-	SessionHandle(MainHandler &handler)
-		: handler_(handler)
+	SessionHandle(ProcessManager &process)
+		: process_(process)
 	{
 	}
 
@@ -16,7 +15,7 @@ public:
 
 	virtual void OnMessage(eddy::NetMessage &message) override
 	{
-		handler_.HandleMessage(*this, message);
+		process_.HandleMessage(*this, message);
 	}
 
 	virtual void OnClose() override
@@ -24,20 +23,20 @@ public:
 	}
 
 private:
-	MainHandler& handler_;
+	ProcessManager& process_;
 };
 
 class MyCreator
 {
 public:
-	MyCreator(MainHandler &handler)
-		: handler_(handler)
+	MyCreator(ProcessManager &process)
+		: process_(process)
 	{
 	}
 
 	std::shared_ptr<SessionHandle> CreateSessionHandle()
 	{
-		return std::make_shared<SessionHandle>(handler_);
+		return std::make_shared<SessionHandle>(process_);
 	}
 
 	std::shared_ptr<eddy::DefaultMessageFilter> CreateMessageFilter()
@@ -46,7 +45,7 @@ public:
 	}
 
 private:
-	MainHandler& handler_;
+	ProcessManager& process_;
 };
 
 std::vector<std::unique_ptr<dbproxy::ConnectorMySQL>> CreateConnectorMySQL(const size_t num)
@@ -91,7 +90,7 @@ int main(int argc, char *argv[])
 	eddy::IOServiceThreadManager threads(std::thread::hardware_concurrency() / 2);
 
 	dbproxy::ProxyManager<dbproxy::MySQL> mysql_proxy(CreateConnectorMySQL(8), pools, 1000000);
-	MainHandler handler(threads, mysql_proxy);
+	ProcessManager handler(threads, mysql_proxy);
 
 	MyCreator creator(handler);
 	asio::ip::tcp::endpoint endpoint(asio::ip::address_v4(), 4235);

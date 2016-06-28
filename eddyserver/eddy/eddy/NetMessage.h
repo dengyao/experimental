@@ -91,6 +91,10 @@ namespace eddy
 
 		void Retrieve(size_t size);
 
+		void HasWritten(size_t size);
+
+		void EnsureWritableBytes(size_t size);
+
 		size_t Write(const void *user_data, size_t size);
 
 	public:
@@ -137,10 +141,6 @@ namespace eddy
 
 	private:
 		void MakeSpace(size_t size);
-
-		void HasWritten(size_t size);
-
-		void EnsureWritableBytes(size_t size);
 
 	private:
 		size_t										reader_pos_;

@@ -1,20 +1,24 @@
-﻿#ifndef __MAIN_PROCESSOR_H__
-#define __MAIN_PROCESSOR_H__
+﻿#ifndef __PROCESS_MANAGER_H__
+#define __PROCESS_MANAGER_H__
 
 #include "eddy.h"
 #include "ProxyManager.h"
 #include "ConnectorMySQL.h"
 
-class MainHandler
+class ProcessManager
 {
 public:
-	MainHandler(eddy::IOServiceThreadManager &threads, dbproxy::ProxyManager<dbproxy::MySQL> &mysql);
+	ProcessManager(eddy::IOServiceThreadManager &threads, dbproxy::ProxyManager<dbproxy::MySQL> &mysql);
 
 public:
 	void HandleMessage(eddy::TCPSessionHandle &session, eddy::NetMessage &message);
 
 private:
 	void UpdateHandleResult(asio::error_code error_code);
+
+	void ReplyErrorCode(eddy::TCPSessionHandle &session, int error_code);
+
+	void ReplyErrorCode(eddy::TCPSessionHandle &session, uint32_t identifier, int error_code);
 
 	void ReplyHandleResult(eddy::TCPSessionID id, uint32_t identifier, const dbproxy::Result &result);
 
@@ -30,7 +34,7 @@ private:
 		}
 	};
 
-	asio::steady_timer                     loop_;
+	asio::steady_timer                     timer_;
 	eddy::IOServiceThreadManager&          threads_;
 	std::map<uint32_t, SourceInfo>         requests_;
 	eddy::IDGenerator                      generator_;
