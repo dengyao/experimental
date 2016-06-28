@@ -1,0 +1,28 @@
+package proto_db;
+
+message DBError
+{
+    required uint32 identifier    = 1;
+    required int32 error_code     = 2;
+    optional string what          = 3;
+}
+
+message ServerError
+{
+    enum ErrorCode
+    {
+        kInvalidProtocol          = 1;
+        kInvalidAction            = 2;
+        kNotFoundDatabase         = 3;
+        kResourceInsufficiency    = 4;
+    }
+    
+    required ErrorCode error_code = 1;
+    optional uint32 identifier    = 2;
+}
+
+message Response
+{
+    required uint32 identifier    = 1;
+    optional string result        = 2;
+}
