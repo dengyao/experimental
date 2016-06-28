@@ -2,7 +2,7 @@
 // source: db/db.response.proto
 
 #define INTERNAL_SUPPRESS_PROTOBUF_FIELD_DEPRECATION
-#include "db/db.response.pb.h"
+#include "db.response.pb.h"
 
 #include <algorithm>
 
