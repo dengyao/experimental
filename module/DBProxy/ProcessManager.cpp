@@ -43,8 +43,17 @@ void ProcessManager::HandleMessage(eddy::TCPSessionHandle &session, eddy::NetMes
 			{
 				try
 				{
+					proto_db::Request::DatabaseType dbtype = request.dbtype();
 					requests_.insert(std::make_pair(local_identifier, SourceInfo(request.identifier(), session.SessionID())));
-					mysql_proxy_.Append(local_identifier, local_type, request.dbname().c_str(), request.statement().c_str(), request.statement().size());
+					if (dbtype == proto_db::Request::kMySQL)
+					{
+						mysql_proxy_.Append(local_identifier, local_type, request.dbname().c_str(), request.statement().c_str(), request.statement().size());
+					}
+					else
+					{
+						requests_.erase(local_identifier);
+						assert(false);
+					}
 				}
 				catch (dbproxy::NotFoundDatabase &e)
 				{
