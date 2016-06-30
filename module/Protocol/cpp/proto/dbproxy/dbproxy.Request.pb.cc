@@ -2,7 +2,7 @@
 // source: proto/dbproxy/dbproxy.Request.proto
 
 #define INTERNAL_SUPPRESS_PROTOBUF_FIELD_DEPRECATION
-#include "dbproxy.Request.pb.h"
+#include "proto/dbproxy/dbproxy.Request.pb.h"
 
 #include <algorithm>
 
