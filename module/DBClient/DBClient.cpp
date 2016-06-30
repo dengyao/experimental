@@ -4,45 +4,51 @@
 #include "proto/db.request.pb.h"
 #include "proto/db.response.pb.h"
 
-
-static DBClientPointer g_client_instance;
+static DBClient* g_client_instance;
 
 class DBClientHanle : public eddy::TCPSessionHandler
 {
 	friend class DBClient;
 
 public:
-	DBClientHanle(DBClientPointer &client)
+	DBClientHanle(DBClient *client, std::shared_ptr<bool> &shared)
 		: client_(client)
+		, client_shared_(shared)
 	{
+	}
+
+	std::shared_ptr<bool>& GetShared()
+	{
+		return client_shared_;
 	}
 
 	virtual void OnConnect() override
 	{
-		if (!client_.expired)
+		if (!client_shared_.unique())
 		{
-			client_.lock()->OnConnected(this);
+			client_->OnConnected(this);
 		}
 	}
 
 	virtual void OnMessage(eddy::NetMessage &message) override
 	{
-		if (!client_.expired)
+		if (!client_shared_.unique())
 		{
-			client_.lock()->OnMessage(message);
+			client_->OnMessage(message);
 		}
 	}
 
 	virtual void OnClose() override
 	{
-		if (!client_.expired)
+		if (!client_shared_.unique())
 		{
-			client_.lock()->OnDisconnect(this);
+			client_->OnDisconnect(this);
 		}
 	}
 
 private:
-	std::weak_ptr<DBClient> client_;
+	DBClient*             client_;
+	std::shared_ptr<bool> client_shared_;
 };
 
 eddy::MessageFilterPointer CreaterMessageFilter()
@@ -64,9 +70,11 @@ DBClient::DBClient(eddy::IOServiceThreadManager &threads, asio::ip::tcp::endpoin
 
 DBClient::~DBClient()
 {
+	Clear();
+	DestroyInstance();
 }
 
-const DBClientPointer& DBClient::GetInstance()
+DBClient* DBClient::GetInstance()
 {
 	return g_client_instance;
 }
@@ -78,12 +86,27 @@ void DBClient::DestroyInstance()
 
 void DBClient::OnInitComplete()
 {
-	g_client_instance = shared_from_this();
+	g_client_instance = this;
 }
 
 eddy::SessionHandlePointer DBClient::CreateClient()
 {
-	return std::make_shared<DBClientHanle>(shared_from_this());
+	auto life = std::make_shared<bool>();
+	lifetimes_.insert(life);
+	return std::make_shared<DBClientHanle>(this, life);
+}
+
+void DBClient::Clear()
+{
+	lifetimes_.clear();
+	for (auto handle : client_lists_)
+	{
+		if (handle != nullptr)
+		{
+			handle->Close();
+		}
+	}
+	client_lists_.clear();
 }
 
 void DBClient::InitConnections()
@@ -94,9 +117,9 @@ void DBClient::InitConnections()
 		eddy::TCPSessionID id = client_creator_.Connect(endpoint_, error_code);
 		if (error_code)
 		{
+			Clear();
 			throw ConnectDBSFailed(error_code.message().c_str());
 		}
-		SessionHandlePointer handle = threads_.SessionHandler(id);
 	}
 }
 
@@ -118,6 +141,8 @@ void DBClient::OnConnected(DBClientHanle *client)
 
 void DBClient::OnDisconnect(DBClientHanle *client)
 {
+	lifetimes_.erase(client->GetShared());
+
 	auto client_iter = std::find(client_lists_.begin(), client_lists_.end(), client);
 	if (client_iter != client_lists_.end())
 	{
@@ -136,13 +161,16 @@ void DBClient::OnDisconnect(DBClientHanle *client)
 			assert(callback_iter != ongoing_lists_.end());
 			if (callback_iter != ongoing_lists_.end())
 			{
-				QueryCallBack func = std::move(callback_iter->second);
+				QueryCallBack callback = std::move(callback_iter->second);
 				ongoing_lists_.erase(callback_iter);
 
-				proto_db::ProxyError error;
-				error.set_identifier(0);
-				error.set_error_code(proto_db::ProxyError::kDisconnect);
-				func(&error);
+				if (callback != nullptr)
+				{
+					proto_db::ProxyError error;
+					error.set_identifier(0);
+					error.set_error_code(proto_db::ProxyError::kDisconnect);
+					callback(&error);
+				}	
 			}
 		}
 	}
@@ -200,6 +228,7 @@ void DBClient::AsyncQuery(DatabaseType dbtype, const char *dbname, DatabaseActio
 		int size = request.ByteSize();
 		message.EnsureWritableBytes(size);
 		request.SerializeToArray(message.Data(), size);
+		message.HasWritten(size);
 
 		DBClientHanle *client = client_lists_[next_client_index_++];
 		assigned_lists_[client].insert(identifier);

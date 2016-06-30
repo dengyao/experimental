@@ -10,12 +10,16 @@ inline bool ToLocalActionType(proto_db::Request::ActoinType type, dbproxy::Actio
 	{
 	case proto_db::Request::kSelect:
 		local_type = dbproxy::ActionType::kSelect;
+		break;
 	case proto_db::Request::kInsert:
 		local_type = dbproxy::ActionType::kInsert;
+		break;
 	case proto_db::Request::kUpdate:
 		local_type = dbproxy::ActionType::kUpdate;
+		break;
 	case proto_db::Request::kDelete:
 		local_type = dbproxy::ActionType::kDelete;
+		break;
 	default:
 		return false;
 	}
@@ -118,6 +122,7 @@ void ProcessManager::ReplyErrorCode(eddy::TCPSessionHandler &session, uint32_t i
 	message.EnsureWritableBytes(size);
 	error.SerializeToArray(message.Data(), size);
 	message.HasWritten(size);
+	session.Send(message);
 }
 
 void ProcessManager::ReplyHandleResult(eddy::TCPSessionID id, uint32_t identifier, const dbproxy::Result &result)

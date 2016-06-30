@@ -1,4 +1,4 @@
-package proto_db;
+package proto_dbproxy;
 
 message DBError
 {
