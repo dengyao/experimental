@@ -22,7 +22,7 @@ namespace eddy
 
 		void AsyncConnect(asio::ip::tcp::endpoint &endpoint);
 
-		void Connect(asio::ip::tcp::endpoint &endpoint, asio::error_code &error_code);
+		TCPSessionID Connect(asio::ip::tcp::endpoint &endpoint, asio::error_code &error_code);
 
 	protected:
 		TCPClient(const TCPClient&) = delete;

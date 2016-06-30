@@ -3,7 +3,7 @@
 #include <cassert>
 #include <iostream>
 #include "IOServiceThread.h"
-#include "TCPSessionHandle.h"
+#include "TCPSessionHandler.h"
 
 namespace eddy
 {
@@ -109,7 +109,7 @@ namespace eddy
 		return threads_[kMainThreadIndex];
 	}
 
-	void IOServiceThreadManager::OnSessionConnect(SessionPointer &session_ptr, SessionHandlerPointer &handler_ptr)
+	void IOServiceThreadManager::OnSessionConnect(SessionPointer &session_ptr, SessionHandlePointer &handler_ptr)
 	{
 		TCPSessionID id = IDGenerator::kInvalidID;
 		if (id_generator_.Get(id))
@@ -138,7 +138,7 @@ namespace eddy
 		SessionHandlerMap::iterator found = session_handler_map_.find(id);
 		if (found != session_handler_map_.end())
 		{
-			SessionHandlerPointer handler_ptr = found->second;
+			SessionHandlePointer handler_ptr = found->second;
 			IOThreadID td_id = handler_ptr->ThreadID();
 			if (handler_ptr != nullptr)
 			{
@@ -164,14 +164,14 @@ namespace eddy
 		}
 	}
 
-	SessionHandlerPointer IOServiceThreadManager::SessionHandler(TCPSessionID id) const
+	SessionHandlePointer IOServiceThreadManager::SessionHandler(TCPSessionID id) const
 	{
 		SessionHandlerMap::const_iterator found = session_handler_map_.find(id);
 		if (found != session_handler_map_.end())
 		{
 			return found->second;
 		}
-		return SessionHandlerPointer();
+		return SessionHandlePointer();
 	}
 
 	void IOServiceThreadManager::SetSessionTimeout(uint64_t seconds)

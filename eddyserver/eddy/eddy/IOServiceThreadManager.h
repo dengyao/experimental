@@ -11,7 +11,7 @@ namespace eddy
 {
 	class IOServiceThreadManager final
 	{
-		typedef std::unordered_map<TCPSessionID, SessionHandlerPointer > SessionHandlerMap;
+		typedef std::unordered_map<TCPSessionID, SessionHandlePointer > SessionHandlerMap;
 
 	public:
 		explicit IOServiceThreadManager(size_t thread_num = 1);
@@ -28,11 +28,11 @@ namespace eddy
 
 		ThreadPointer& MainThread();
 
-		void OnSessionConnect(SessionPointer &session_ptr, SessionHandlerPointer &handler);
+		void OnSessionConnect(SessionPointer &session_ptr, SessionHandlePointer &handler);
 
 		void OnSessionClose(TCPSessionID id);
 
-		SessionHandlerPointer SessionHandler(TCPSessionID id) const;
+		SessionHandlePointer SessionHandler(TCPSessionID id) const;
 
 		void SetSessionTimeout(uint64_t timeout);
 

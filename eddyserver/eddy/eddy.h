@@ -6,7 +6,7 @@ namespace eddy
 	class TCPClient;
 	class TCPServer;
 	class NetMessage;
-	class TCPSessionHandle;
+	class TCPSessionHandler;
 	class DefaultMessageFilter;
 	class MessageFilterInterface;
 	class IOServiceThreadManager;
@@ -15,7 +15,7 @@ namespace eddy
 #include <eddy/TCPClient.h>
 #include <eddy/TCPServer.h>
 #include <eddy/NetMessage.h>
-#include <eddy/TCPSessionHandle.h>
+#include <eddy/TCPSessionHandler.h>
 #include <eddy/DefaultMessageFilter.h>
 #include <eddy/IOServiceThreadManager.h>
 

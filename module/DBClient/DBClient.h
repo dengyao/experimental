@@ -29,8 +29,6 @@ enum DatabaseActionType
 	kDelete = 4
 };
 
-class DBClientHanle;
-
 class ConnectDBSFailed : public std::runtime_error
 {
 public:
@@ -40,7 +38,11 @@ public:
 	}
 };
 
-class DBClient : public std::enable_shared_from_this<DBClient>
+class DBClient;
+class DBClientHanle;
+typedef std::shared_ptr<DBClient> DBClientPointer;
+
+class DBClient : public std::enable_shared_from_this< DBClient >
 {
 public:
 	typedef std::function<void(google::protobuf::Message*)> QueryCallBack;
@@ -50,7 +52,9 @@ public:
 
 	~DBClient();
 
-	static DBClient* GetInstance();
+	static const DBClientPointer& GetInstance();
+
+	static void DestroyInstance();
 
 public:
 	size_t GetKeepAliveConnectionNum() const;
@@ -63,23 +67,27 @@ public:
 
 	void AsyncDelete(DatabaseType dbtype, const char *dbname, const char *statement, QueryCallBack &&callback);
 
-private:
-	void InitConnections();
-
-	void ConnectionKeepAlive();
-
+public:
 	void OnConnected(DBClientHanle *client);
 
 	void OnDisconnect(DBClientHanle *client);
 
 	void OnMessage(eddy::NetMessage &message);
 
-	eddy::SessionHandlerPointer CreateClient();
+private:
+	void OnInitComplete();
+
+	void InitConnections();
+
+	void ConnectionKeepAlive();
+
+	eddy::SessionHandlePointer CreateClient();
 
 	void AsyncQuery(DatabaseType dbtype, const char *dbname, DatabaseActionType action, const char *statement, QueryCallBack &&callback);
 
 private:
 	const size_t                                 client_num_;
+	eddy::IOServiceThreadManager&                threads_;
 	eddy::TCPClient					             client_creator_;
 	eddy::IDGenerator                            generator_;
 	std::vector<DBClientHanle*>                  client_lists_;

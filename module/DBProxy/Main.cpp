@@ -1,7 +1,7 @@
 #include <iostream>
 #include "ProcessManager.h"
 
-class SessionHandle : public eddy::TCPSessionHandle
+class SessionHandle : public eddy::TCPSessionHandler
 {
 public:
 	SessionHandle(ProcessManager &process)

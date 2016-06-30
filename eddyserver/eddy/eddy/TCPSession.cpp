@@ -4,7 +4,7 @@
 #include <asio/read.hpp>
 #include <asio/write.hpp>
 #include "IOServiceThread.h"
-#include "TCPSessionHandle.h"
+#include "TCPSessionHandler.h"
 #include "IOServiceThreadManager.h"
 #include "MessageFilterInterface.h"
 
@@ -16,7 +16,7 @@ namespace eddy
 
 		void SendMessageListToHandler(IOServiceThreadManager &manager, TCPSessionID id, NetMessageVecPointer messages)
 		{
-			SessionHandlerPointer handler_ptr = manager.SessionHandler(id);
+			SessionHandlePointer handler_ptr = manager.SessionHandler(id);
 			if (handler_ptr == nullptr)
 			{
 				return;
@@ -42,7 +42,7 @@ namespace eddy
 
 		void SendMessageListDirectly(SessionPointer session_ptr)
 		{
-			SessionHandlerPointer handler_ptr = session_ptr->Thread()->ThreadManager().SessionHandler(session_ptr->ID());
+			SessionHandlePointer handler_ptr = session_ptr->Thread()->ThreadManager().SessionHandler(session_ptr->ID());
 			if (handler_ptr == nullptr)
 			{
 				return;

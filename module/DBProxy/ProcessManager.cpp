@@ -1,4 +1,5 @@
 ﻿#include "ProcessManager.h"
+#include <limits>
 #include <iostream>
 #include "proto/db.request.pb.h"
 #include "proto/db.response.pb.h"
@@ -23,14 +24,14 @@ inline bool ToLocalActionType(proto_db::Request::ActoinType type, dbproxy::Actio
 
 ProcessManager::ProcessManager(eddy::IOServiceThreadManager &threads, dbproxy::ProxyManager<dbproxy::MySQL> &mysql)
 	: threads_(threads)
-	, generator_(65535)
 	, mysql_proxy_(mysql)
 	, timer_(threads.MainThread()->IOService())
+	, generator_(std::numeric_limits<uint16_t>::max())
 {
 	timer_.async_wait(std::bind(&ProcessManager::UpdateHandleResult, this, std::placeholders::_1));
 }
 
-void ProcessManager::HandleMessage(eddy::TCPSessionHandle &session, eddy::NetMessage &message)
+void ProcessManager::HandleMessage(eddy::TCPSessionHandler &session, eddy::NetMessage &message)
 {
 	proto_db::Request request;
 	if (request.ParseFromArray(message.Data(), message.Readable()))
@@ -107,7 +108,7 @@ void ProcessManager::UpdateHandleResult(asio::error_code error_code)
 	timer_.async_wait(std::bind(&ProcessManager::UpdateHandleResult, this, std::placeholders::_1));
 }
 
-void ProcessManager::ReplyErrorCode(eddy::TCPSessionHandle &session, uint32_t identifier, int error_code)
+void ProcessManager::ReplyErrorCode(eddy::TCPSessionHandler &session, uint32_t identifier, int error_code)
 {
 	eddy::NetMessage message;
 	proto_db::ProxyError error;
@@ -121,7 +122,7 @@ void ProcessManager::ReplyErrorCode(eddy::TCPSessionHandle &session, uint32_t id
 
 void ProcessManager::ReplyHandleResult(eddy::TCPSessionID id, uint32_t identifier, const dbproxy::Result &result)
 {
-	eddy::SessionHandlerPointer session = threads_.SessionHandler(id);
+	eddy::SessionHandlePointer session = threads_.SessionHandler(id);
 	if (session != nullptr)
 	{
 		eddy::NetMessage message;

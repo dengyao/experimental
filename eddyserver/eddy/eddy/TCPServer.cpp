@@ -3,7 +3,7 @@
 #include <iostream>
 #include "TCPSession.h"
 #include "IOServiceThread.h"
-#include "TCPSessionHandle.h"
+#include "TCPSessionHandler.h"
 #include "IOServiceThreadManager.h"
 
 namespace eddy
@@ -38,7 +38,7 @@ namespace eddy
 			return;
 		}
 
-		SessionHandlerPointer handle_ptr = session_handler_creator_();
+		SessionHandlePointer handle_ptr = session_handler_creator_();
 		io_thread_manager_.OnSessionConnect(session_ptr, handle_ptr);
 
 		MessageFilterPointer filter_ptr = message_filter_creator_();

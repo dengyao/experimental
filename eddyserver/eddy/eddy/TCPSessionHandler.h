@@ -9,13 +9,13 @@
 
 namespace eddy
 {
-	class TCPSessionHandle : public std::enable_shared_from_this < TCPSessionHandle >
+	class TCPSessionHandler : public std::enable_shared_from_this < TCPSessionHandler >
 	{
 		friend class IOServiceThreadManager;
 
 	public:
-		TCPSessionHandle();
-		virtual ~TCPSessionHandle() = default;
+		TCPSessionHandler();
+		virtual ~TCPSessionHandler() = default;
 
 	public:
 		virtual void OnConnect() = 0;
@@ -54,8 +54,8 @@ namespace eddy
 		}
 
 	protected:
-		TCPSessionHandle(const TCPSessionHandle&) = delete;
-		TCPSessionHandle& operator= (const TCPSessionHandle&) = delete;
+		TCPSessionHandler(const TCPSessionHandler&) = delete;
+		TCPSessionHandler& operator= (const TCPSessionHandler&) = delete;
 
 	private:
 		void Init(TCPSessionID sid, IOThreadID tid, IOServiceThreadManager *manager);

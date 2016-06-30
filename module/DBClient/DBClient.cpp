@@ -1,52 +1,49 @@
 ﻿#include "DBClient.h"
+#include <limits>
 #include <iostream>
 #include "proto/db.request.pb.h"
 #include "proto/db.response.pb.h"
 
-class DBClientHanle : public eddy::TCPSessionHandle
+
+static DBClientPointer g_client_instance;
+
+class DBClientHanle : public eddy::TCPSessionHandler
 {
 	friend class DBClient;
 
 public:
+	DBClientHanle(DBClientPointer &client)
+		: client_(client)
+	{
+	}
+
 	virtual void OnConnect() override
 	{
-		if (connected_ != nullptr)
+		if (!client_.expired)
 		{
-			connected_(this);
+			client_.lock()->OnConnected(this);
 		}
 	}
 
 	virtual void OnMessage(eddy::NetMessage &message) override
 	{
-		if (receive_ != nullptr)
+		if (!client_.expired)
 		{
-			receive_(message);
+			client_.lock()->OnMessage(message);
 		}
 	}
 
 	virtual void OnClose() override
 	{
-		if (disconnect_ != nullptr)
+		if (!client_.expired)
 		{
-			disconnect_(this);
+			client_.lock()->OnDisconnect(this);
 		}
 	}
 
 private:
-	void SetCallback(std::function<void(DBClientHanle*)> &&connected, std::function<void(DBClientHanle*)> &&disconnect, std::function<void(eddy::NetMessage&)> &&receive)
-	{
-		receive_ = std::move(receive);
-		connected_ = std::move(connected);
-		disconnect_ = std::move(disconnect);
-	}
-
-private:
-	std::function<void(DBClientHanle*)>    connected_;
-	std::function<void(DBClientHanle*)>    disconnect_;
-	std::function<void(eddy::NetMessage&)> receive_;
+	std::weak_ptr<DBClient> client_;
 };
-
-static DBClient *g_client_manager = nullptr;
 
 eddy::MessageFilterPointer CreaterMessageFilter()
 {
@@ -54,34 +51,39 @@ eddy::MessageFilterPointer CreaterMessageFilter()
 }
 
 DBClient::DBClient(eddy::IOServiceThreadManager &threads, asio::ip::tcp::endpoint &endpoint, size_t client_num)
-	: generator_(65535)
+	: threads_(threads)
 	, endpoint_(endpoint)
 	, next_client_index_(0)
 	, client_num_(client_num)
-	, client_creator_(threads, std::bind(&DBClient::CreateClient, this), std::bind(CreaterMessageFilter))
+	, generator_(std::numeric_limits<uint16_t>::max())
+	, client_creator_(threads_, std::bind(&DBClient::CreateClient, this), std::bind(CreaterMessageFilter))
 {
 	InitConnections();
-	assert(g_client_manager == nullptr);
-	g_client_manager = this;
+	assert(g_client_instance == nullptr);
 }
 
 DBClient::~DBClient()
 {
-
 }
 
-DBClient* DBClient::GetInstance()
+const DBClientPointer& DBClient::GetInstance()
 {
-	return g_client_manager;
+	return g_client_instance;
 }
 
-eddy::SessionHandlerPointer DBClient::CreateClient()
+void DBClient::DestroyInstance()
 {
-	std::shared_ptr<DBClientHanle> handle = std::make_shared<DBClientHanle>();
-	handle->SetCallback(std::bind(&DBClient::OnConnected, this, std::placeholders::_1),
-		std::bind(&DBClient::OnDisconnect, this, std::placeholders::_1),
-		std::bind(&DBClient::OnMessage, this, std::placeholders::_1));
-	return handle;
+	g_client_instance = nullptr;
+}
+
+void DBClient::OnInitComplete()
+{
+	g_client_instance = shared_from_this();
+}
+
+eddy::SessionHandlePointer DBClient::CreateClient()
+{
+	return std::make_shared<DBClientHanle>(shared_from_this());
 }
 
 void DBClient::InitConnections()
@@ -89,11 +91,12 @@ void DBClient::InitConnections()
 	asio::error_code error_code;
 	for (size_t i = 0; i < client_num_; ++i)
 	{
-		client_creator_.Connect(endpoint_, error_code);
+		eddy::TCPSessionID id = client_creator_.Connect(endpoint_, error_code);
 		if (error_code)
 		{
 			throw ConnectDBSFailed(error_code.message().c_str());
 		}
+		SessionHandlePointer handle = threads_.SessionHandler(id);
 	}
 }
 

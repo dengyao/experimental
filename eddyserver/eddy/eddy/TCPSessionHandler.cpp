@@ -1,4 +1,4 @@
-﻿#include "TCPSessionHandle.h"
+﻿#include "TCPSessionHandler.h"
 #include "IOServiceThread.h"
 #include "IOServiceThreadManager.h"
 
@@ -26,7 +26,7 @@ namespace eddy
 			}
 		}
 
-		void PackMessageList(SessionHandlerPointer session_handle_ptr)
+		void PackMessageList(SessionHandlePointer session_handle_ptr)
 		{
 			if (session_handle_ptr->MessagesToBeSent().empty())
 			{
@@ -41,7 +41,7 @@ namespace eddy
 			}
 		}
 
-		void SendMessageListDirectly(SessionHandlerPointer session_handle_ptr)
+		void SendMessageListDirectly(SessionHandlePointer session_handle_ptr)
 		{
 			ThreadPointer thread_ptr = session_handle_ptr->ThreadManager()->Thread(session_handle_ptr->ThreadID());
 			if (thread_ptr != nullptr)
@@ -56,29 +56,29 @@ namespace eddy
 		}
 	}
 
-	TCPSessionHandle::TCPSessionHandle()
+	TCPSessionHandler::TCPSessionHandler()
 		: session_id_(IDGenerator::kInvalidID)
 	{
 	}
 
-	void TCPSessionHandle::Init(TCPSessionID sid, IOThreadID tid, IOServiceThreadManager* manager)
+	void TCPSessionHandler::Init(TCPSessionID sid, IOThreadID tid, IOServiceThreadManager* manager)
 	{
 		thread_id_ = tid;
 		session_id_ = sid;
 		io_thread_manager_ = manager;
 	}
 
-	void TCPSessionHandle::Dispose()
+	void TCPSessionHandler::Dispose()
 	{
 		session_id_ = IDGenerator::kInvalidID;
 	}
 
-	bool TCPSessionHandle::IsClosed() const
+	bool TCPSessionHandler::IsClosed() const
 	{
 		return IDGenerator::kInvalidID == session_id_;
 	}
 
-	void TCPSessionHandle::Close()
+	void TCPSessionHandler::Close()
 	{
 		if (IsClosed())
 		{
@@ -94,7 +94,7 @@ namespace eddy
 		}
 	}
 
-	void TCPSessionHandle::Send(const NetMessage &message)
+	void TCPSessionHandler::Send(const NetMessage &message)
 	{
 		if (IsClosed())
 		{

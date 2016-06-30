@@ -6,7 +6,7 @@ set(EDDY_SRC_LISTS
   eddy/TCPClient.cpp
   eddy/TCPServer.cpp
   eddy/TCPSession.cpp
-  eddy/TCPSessionHandle.cpp
+  eddy/TCPSessionHandler.cpp
   eddy/TCPSessionQueue.cpp
 )
 

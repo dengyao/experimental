@@ -11,12 +11,12 @@ public:
 	ProcessManager(eddy::IOServiceThreadManager &threads, dbproxy::ProxyManager<dbproxy::MySQL> &mysql);
 
 public:
-	void HandleMessage(eddy::TCPSessionHandle &session, eddy::NetMessage &message);
+	void HandleMessage(eddy::TCPSessionHandler &session, eddy::NetMessage &message);
 
 private:
 	void UpdateHandleResult(asio::error_code error_code);
 
-	void ReplyErrorCode(eddy::TCPSessionHandle &session, uint32_t identifier, int error_code);
+	void ReplyErrorCode(eddy::TCPSessionHandler &session, uint32_t identifier, int error_code);
 
 	void ReplyHandleResult(eddy::TCPSessionID id, uint32_t identifier, const dbproxy::Result &result);
 
