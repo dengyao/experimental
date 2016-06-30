@@ -1,8 +1,8 @@
 ﻿#include "DBClient.h"
 #include <limits>
 #include <iostream>
-#include "proto/db.request.pb.h"
-#include "proto/db.response.pb.h"
+#include <proto/dbproxy/dbproxy.Request.pb.h>
+#include <proto/dbproxy/dbproxy.Response.pb.h>
 
 static DBClient* g_client_instance;
 
@@ -166,9 +166,9 @@ void DBClient::OnDisconnect(DBClientHanle *client)
 
 				if (callback != nullptr)
 				{
-					proto_db::ProxyError error;
+					proto_dbproxy::ProxyError error;
 					error.set_identifier(0);
-					error.set_error_code(proto_db::ProxyError::kDisconnect);
+					error.set_error_code(proto_dbproxy::ProxyError::kDisconnect);
 					callback(&error);
 				}	
 			}
@@ -188,22 +188,22 @@ size_t DBClient::GetKeepAliveConnectionNum() const
 
 void DBClient::AsyncQuery(DatabaseType dbtype, const char *dbname, DatabaseActionType action, const char *statement, QueryCallBack &&callback)
 {
-	static_assert(DatabaseType::kRedis == proto_db::Request::kRedis &&
-		DatabaseType::kMySQL == proto_db::Request::kMySQL, "type mismatch");
+	static_assert(DatabaseType::kRedis == proto_dbproxy::Request::kRedis &&
+		DatabaseType::kMySQL == proto_dbproxy::Request::kMySQL, "type mismatch");
 
-	static_assert(DatabaseActionType::kSelect == proto_db::Request::kSelect &&
-		DatabaseActionType::kInsert == proto_db::Request::kInsert &&
-		DatabaseActionType::kUpdate == proto_db::Request::kUpdate &&
-		DatabaseActionType::kDelete == proto_db::Request::kDelete, "type mismatch");
+	static_assert(DatabaseActionType::kSelect == proto_dbproxy::Request::kSelect &&
+		DatabaseActionType::kInsert == proto_dbproxy::Request::kInsert &&
+		DatabaseActionType::kUpdate == proto_dbproxy::Request::kUpdate &&
+		DatabaseActionType::kDelete == proto_dbproxy::Request::kDelete, "type mismatch");
 
 	if (client_lists_.size() < client_num_)
 	{
 		ConnectionKeepAlive();
 		if (client_lists_.empty())
 		{
-			proto_db::ProxyError error;
+			proto_dbproxy::ProxyError error;
 			error.set_identifier(0);
-			error.set_error_code(proto_db::ProxyError::kNotConnected);
+			error.set_error_code(proto_dbproxy::ProxyError::kNotConnected);
 			callback(&error);
 			return;
 		}
@@ -217,12 +217,12 @@ void DBClient::AsyncQuery(DatabaseType dbtype, const char *dbname, DatabaseActio
 			next_client_index_ = 0;
 		}
 
-		proto_db::Request request;
+		proto_dbproxy::Request request;
 		request.set_dbname(dbname);
 		request.set_statement(statement);
 		request.set_identifier(identifier);
-		request.set_action(static_cast<proto_db::Request::ActoinType>(action));
-		request.set_dbtype(static_cast<proto_db::Request::DatabaseType>(dbtype));
+		request.set_action(static_cast<proto_dbproxy::Request::ActoinType>(action));
+		request.set_dbtype(static_cast<proto_dbproxy::Request::DatabaseType>(dbtype));
 
 		eddy::NetMessage message;
 		int size = request.ByteSize();

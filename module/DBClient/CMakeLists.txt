@@ -3,14 +3,14 @@ set(DBCLIENT_PROJECT_NAME DBClient)
 set(DBCLIENT_SRC_LISTS 
   Main.cpp
   DBClient.cpp
-  proto/db.request.pb.cc
-  proto/db.response.pb.cc
 )
 
 include_directories(
   ${ASIO_INCLUDE_DIRS}
   ${EDDY_INCLUDE_DIRS}
   ${PROTO_INCLUDE_DIRS}
+  ${PROTOBUF_INCLUDE_DIRS}
+  ${PROTOCOL_INCLUDE_DIRS}
 )
 
 link_directories(${BINARY_OUTPUT_DIR})
@@ -27,5 +27,6 @@ target_link_libraries(${DBCLIENT_PROJECT_NAME}
   ${BASE_LIBRARY_NAME}
   ${EDDY_LIBRARY_NAME}
   ${MYSQL_LIBRARY_NAME}
-  ${PROTO_LIBRARY_NAME}
+  ${PROTOBUF_LIBRARY_NAME}
+  ${PROTOCOL_LIBRARY_NAME}
 )

@@ -1,23 +1,23 @@
 ﻿#include "ProcessManager.h"
 #include <limits>
 #include <iostream>
-#include "proto/db.request.pb.h"
-#include "proto/db.response.pb.h"
+#include <proto/dbproxy/dbproxy.Request.pb.h>
+#include <proto/dbproxy/dbproxy.Response.pb.h>
 
-inline bool ToLocalActionType(proto_db::Request::ActoinType type, dbproxy::ActionType &local_type)
+inline bool ToLocalActionType(proto_dbproxy::Request::ActoinType type, dbproxy::ActionType &local_type)
 {
 	switch (type)
 	{
-	case proto_db::Request::kSelect:
+	case proto_dbproxy::Request::kSelect:
 		local_type = dbproxy::ActionType::kSelect;
 		break;
-	case proto_db::Request::kInsert:
+	case proto_dbproxy::Request::kInsert:
 		local_type = dbproxy::ActionType::kInsert;
 		break;
-	case proto_db::Request::kUpdate:
+	case proto_dbproxy::Request::kUpdate:
 		local_type = dbproxy::ActionType::kUpdate;
 		break;
-	case proto_db::Request::kDelete:
+	case proto_dbproxy::Request::kDelete:
 		local_type = dbproxy::ActionType::kDelete;
 		break;
 	default:
@@ -37,7 +37,7 @@ ProcessManager::ProcessManager(eddy::IOServiceThreadManager &threads, dbproxy::P
 
 void ProcessManager::HandleMessage(eddy::TCPSessionHandler &session, eddy::NetMessage &message)
 {
-	proto_db::Request request;
+	proto_dbproxy::Request request;
 	if (request.ParseFromArray(message.Data(), message.Readable()))
 	{
 		uint32_t local_identifier = 0;
@@ -48,9 +48,9 @@ void ProcessManager::HandleMessage(eddy::TCPSessionHandler &session, eddy::NetMe
 			{
 				try
 				{
-					proto_db::Request::DatabaseType dbtype = request.dbtype();
+					proto_dbproxy::Request::DatabaseType dbtype = request.dbtype();
 					requests_.insert(std::make_pair(local_identifier, SourceInfo(request.identifier(), session.SessionID())));
-					if (dbtype == proto_db::Request::kMySQL)
+					if (dbtype == proto_dbproxy::Request::kMySQL)
 					{
 						mysql_proxy_.Append(local_identifier, local_type, request.dbname().c_str(), request.statement().c_str(), request.statement().size());
 					}
@@ -63,27 +63,27 @@ void ProcessManager::HandleMessage(eddy::TCPSessionHandler &session, eddy::NetMe
 				catch (dbproxy::NotFoundDatabase&)
 				{
 					requests_.erase(local_identifier);
-					ReplyErrorCode(session, request.identifier(), proto_db::ProxyError::kNotFoundDatabase);
+					ReplyErrorCode(session, request.identifier(), proto_dbproxy::ProxyError::kNotFoundDatabase);
 				}
 				catch (dbproxy::ResourceInsufficiency&)
 				{
 					requests_.erase(local_identifier);
-					ReplyErrorCode(session, request.identifier(), proto_db::ProxyError::kResourceInsufficiency);
+					ReplyErrorCode(session, request.identifier(), proto_dbproxy::ProxyError::kResourceInsufficiency);
 				}
 			}
 			else
 			{
-				ReplyErrorCode(session, request.identifier(), proto_db::ProxyError::kInvalidAction);
+				ReplyErrorCode(session, request.identifier(), proto_dbproxy::ProxyError::kInvalidAction);
 			}
 		}
 		else
 		{
-			ReplyErrorCode(session, request.identifier(), proto_db::ProxyError::kResourceInsufficiency);
+			ReplyErrorCode(session, request.identifier(), proto_dbproxy::ProxyError::kResourceInsufficiency);
 		}
 	}
 	else
 	{
-		ReplyErrorCode(session, 0, proto_db::ProxyError::kInvalidProtocol);
+		ReplyErrorCode(session, 0, proto_dbproxy::ProxyError::kInvalidProtocol);
 	}
 }
 
@@ -115,9 +115,9 @@ void ProcessManager::UpdateHandleResult(asio::error_code error_code)
 void ProcessManager::ReplyErrorCode(eddy::TCPSessionHandler &session, uint32_t identifier, int error_code)
 {
 	eddy::NetMessage message;
-	proto_db::ProxyError error;
+	proto_dbproxy::ProxyError error;
 	error.set_identifier(identifier);
-	error.set_error_code(static_cast<proto_db::ProxyError::ErrorCode>(error_code));
+	error.set_error_code(static_cast<proto_dbproxy::ProxyError::ErrorCode>(error_code));
 	int size = error.ByteSize();
 	message.EnsureWritableBytes(size);
 	error.SerializeToArray(message.Data(), size);
@@ -133,7 +133,7 @@ void ProcessManager::ReplyHandleResult(eddy::TCPSessionID id, uint32_t identifie
 		eddy::NetMessage message;
 		if (result.GetErrorCode())
 		{
-			proto_db::DBError error;
+			proto_dbproxy::DBError error;
 			error.set_identifier(identifier);
 			error.set_error_code(result.GetErrorCode().Value());
 			error.set_what(result.GetErrorCode().Message());
@@ -144,7 +144,7 @@ void ProcessManager::ReplyHandleResult(eddy::TCPSessionID id, uint32_t identifie
 		}
 		else
 		{
-			proto_db::Response response;
+			proto_dbproxy::Response response;
 			response.set_identifier(identifier);
 			response.set_result(result.GetResult().data(), result.GetResult().size());
 			int size = response.ByteSize();

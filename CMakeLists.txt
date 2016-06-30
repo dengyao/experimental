@@ -16,8 +16,8 @@ endif()
 # 设置类库名称
 set(BASE_LIBRARY_NAME base)
 set(EDDY_LIBRARY_NAME eddy)
-set(PROTO_LIBRARY_NAME proto)
 set(PROTOBUF_LIBRARY_NAME protobuf)
+set(PROTOCOL_LIBRARY_NAME protocol)
 
 if (WIN32)
 set(MYSQL_LIBRARY_NAME libmysql)
@@ -34,7 +34,7 @@ set(RAPIDJSON_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/eddyserver/external/rapid
 set(MYSQL_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/eddyserver/external/mysql/include)
 set(EASYLOGGINGPP_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/eddyserver/external/easyloggingpp)
 
-set(PROTO_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/eddyserver/module/Protocol/cpp/proto)
+set(PROTOCOL_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/module/Protocol/cpp/)
 
 # 设置二进制输出目录
 set(BINARY_OUTPUT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/bin)
@@ -44,6 +44,6 @@ add_subdirectory(eddyserver/base)
 add_subdirectory(eddyserver/eddy)
 add_subdirectory(eddyserver/external/protobuf)
 
+add_subdirectory(module/Protocol)
 add_subdirectory(module/DBProxy)
 add_subdirectory(module/DBClient)
-

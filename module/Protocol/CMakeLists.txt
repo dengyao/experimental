@@ -1,34 +1,33 @@
-set(PROTO_SRC_LISTS
+set(PROTOCOL_SRC_LISTS 
+  cpp/proto/dbproxy/dbproxy.Request.pb.cc
+  cpp/proto/dbproxy/dbproxy.Response.pb.cc
 )
 
 include_directories(
   ${PROTOBUF_INCLUDE_DIRS}
+  ${PROTOCOL_INCLUDE_DIRS}
 )
 
 link_directories(${BINARY_OUTPUT_DIR})
 
-add_library(ProtoShared SHARED
-  ${PROTO_SRC_LISTS}
+add_library(ProtocolShared SHARED
+  ${PROTOCOL_SRC_LISTS}
 )
 
-add_library(ProtoStatic STATIC
-  ${PROTO_SRC_LISTS}
+add_library(ProtocolStatic STATIC
+  ${PROTOCOL_SRC_LISTS}
 )
 
-set_target_properties(ProtoShared
+set_target_properties(ProtocolShared
   PROPERTIES
-  OUTPUT_NAME ${PROTO_LIBRARY_NAME}
+  OUTPUT_NAME ${PROTOCOL_LIBRARY_NAME}
   ARCHIVE_OUTPUT_DIRECTORY ${BINARY_OUTPUT_DIR}
   LIBRARY_OUTPUT_DIRECTORY ${BINARY_OUTPUT_DIR}
 )
 
-set_target_properties(ProtoStatic
+set_target_properties(ProtocolStatic
   PROPERTIES
-  OUTPUT_NAME ${PROTO_LIBRARY_NAME}
+  OUTPUT_NAME ${PROTOCOL_LIBRARY_NAME}
   ARCHIVE_OUTPUT_DIRECTORY ${BINARY_OUTPUT_DIR}
   LIBRARY_OUTPUT_DIRECTORY ${BINARY_OUTPUT_DIR}
-)
-
-target_link_libraries(${DBCLIENT_PROJECT_NAME}
-  ${PROTOBUF_LIBRARY_NAME}
 )
