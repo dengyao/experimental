@@ -5,6 +5,7 @@ set(PROTOCOL_SRC_LISTS
 )
 
 include_directories(
+  ${EDDY_INCLUDE_DIRS}
   ${PROTOBUF_INCLUDE_DIRS}
   ${PROTOCOL_INCLUDE_DIRS}
 )

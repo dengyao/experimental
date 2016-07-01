@@ -170,7 +170,8 @@ void DBClient::OnDisconnect(DBClientHanle *client)
 
 void DBClient::OnMessage(eddy::NetMessage &message)
 {
-
+	auto res =  UnpackageMessage(message);
+	std::cout << res->GetTypeName() << std::endl;
 }
 
 size_t DBClient::GetKeepAliveConnectionNum() const
