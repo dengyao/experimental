@@ -1,7 +1,7 @@
 ﻿#ifndef __PROCESS_MANAGER_H__
 #define __PROCESS_MANAGER_H__
 
-#include "eddy.h"
+#include <eddy.h>
 #include "ProxyManager.h"
 #include "ConnectorMySQL.h"
 

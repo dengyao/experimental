@@ -4,7 +4,7 @@
 #include <set>
 #include <map>
 #include <vector>
-#include "eddy.h"
+#include <eddy.h>
 
 namespace google
 {
@@ -40,7 +40,7 @@ public:
 class DBClient;
 class DBClientHanle;
 
-class DBClient
+class DBClient final
 {
 	friend class DBClientHanle;
 
@@ -54,8 +54,6 @@ public:
 
 	static DBClient* GetInstance();
 
-	static void DestroyInstance();
-
 public:
 	size_t GetKeepAliveConnectionNum() const;
 
@@ -68,8 +66,6 @@ public:
 	void AsyncDelete(DatabaseType dbtype, const char *dbname, const char *statement, QueryCallBack &&callback);
 
 private:
-	void OnInitComplete();
-
 	void OnConnected(DBClientHanle *client);
 
 	void OnDisconnect(DBClientHanle *client);

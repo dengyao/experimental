@@ -1,70 +1,9 @@
 ﻿#include "DBClient.h"
 #include <limits>
 #include <iostream>
+#include "Helper.h"
 #include <proto/dbproxy/dbproxy.Request.pb.h>
 #include <proto/dbproxy/dbproxy.Response.pb.h>
-
-typedef std::shared_ptr<google::protobuf::Message> MessagePointer;
-
-void PackageMessage(google::protobuf::Message *in_message, eddy::NetMessage &out_message)
-{
-	const std::string &full_name = in_message->GetDescriptor()->full_name();
-	const uint8_t name_size = static_cast<uint8_t>(full_name.size()) + 1;
-	assert(name_size < std::numeric_limits<uint8_t>::max());
-	if (name_size >= std::numeric_limits<uint8_t>::max())
-	{
-		return;
-	}
-
-	const size_t byte_size = in_message->ByteSize();
-	out_message.EnsureWritableBytes(sizeof(uint8_t) + name_size + byte_size);
-	out_message.WriteUInt8(name_size);
-	out_message.Write(full_name.data(), name_size);
-	in_message->SerializePartialToArray(out_message.Data(), byte_size);
-	out_message.HasWritten(byte_size);
-}
-
-MessagePointer UnpackageMessage(eddy::NetMessage &in_message)
-{
-	if (in_message.Readable() == 0)
-	{
-		return nullptr;
-	}
-
-	const uint8_t name_size = in_message.ReadUInt8();
-	assert(name_size <= in_message.Readable());
-	if (name_size > in_message.Readable())
-	{
-		return nullptr;
-	}
-
-	const std::string full_name(reinterpret_cast<const char*>(in_message.Data()), name_size);
-	in_message.Retrieve(name_size);
-
-	auto descriptor = google::protobuf::DescriptorPool::generated_pool()->FindMessageTypeByName(full_name);
-	assert(descriptor != nullptr);
-	if (descriptor == nullptr)
-	{
-		return nullptr;
-	}
-
-	auto message_factory = google::protobuf::MessageFactory::generated_factory()->GetPrototype(descriptor);
-	assert(message_factory != nullptr);
-	if (message_factory == nullptr)
-	{
-		return nullptr;
-	}
-
-	auto message = MessagePointer(message_factory->New());
-	bool parse_success = message->ParseFromArray(in_message.Data(), in_message.Readable());
-	in_message.Retrieve(in_message.Readable());
-	if (!parse_success)
-	{
-		return nullptr;
-	}
-
-	return message;
-}
 
 static DBClient* g_client_instance;
 
@@ -128,27 +67,18 @@ DBClient::DBClient(eddy::IOServiceThreadManager &threads, asio::ip::tcp::endpoin
 {
 	InitConnections();
 	assert(g_client_instance == nullptr);
+	g_client_instance = this;
 }
 
 DBClient::~DBClient()
 {
 	Clear();
-	DestroyInstance();
+	g_client_instance = nullptr;
 }
 
 DBClient* DBClient::GetInstance()
 {
 	return g_client_instance;
-}
-
-void DBClient::DestroyInstance()
-{
-	g_client_instance = nullptr;
-}
-
-void DBClient::OnInitComplete()
-{
-	g_client_instance = this;
 }
 
 eddy::SessionHandlePointer DBClient::CreateClient()

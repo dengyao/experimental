@@ -20,7 +20,7 @@ void PackageMessage(google::protobuf::Message *in_message, eddy::NetMessage &out
 	out_message.EnsureWritableBytes(sizeof(uint8_t) + name_size + byte_size);
 	out_message.WriteUInt8(name_size);
 	out_message.Write(full_name.data(), name_size);
-	in_message->SerializePartialToArray(out_message.Data(), byte_size);
+	in_message->SerializePartialToArray(out_message.Data() + out_message.Readable(), byte_size);
 	out_message.HasWritten(byte_size);
 }
 
@@ -48,14 +48,14 @@ MessagePointer UnpackageMessage(eddy::NetMessage &in_message)
 		return nullptr;
 	}
 
-	auto message_factory = google::protobuf::MessageFactory::generated_factory()->GetPrototype(descriptor);
-	assert(message_factory != nullptr);
-	if (message_factory == nullptr)
+	auto message_creator = google::protobuf::MessageFactory::generated_factory()->GetPrototype(descriptor);
+	assert(message_creator != nullptr);
+	if (message_creator == nullptr)
 	{
 		return nullptr;
 	}
 
-	auto message = MessagePointer(message_factory->New());
+	auto message = MessagePointer(message_creator->New());
 	bool parse_success = message->ParseFromArray(in_message.Data(), in_message.Readable());
 	in_message.Retrieve(in_message.Readable());
 	if (!parse_success)
