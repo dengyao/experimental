@@ -1,7 +1,7 @@
 ﻿#include "DBClient.h"
 #include <limits>
 #include <iostream>
-#include "Helper.h"
+#include <proto/MessageHelper.h>
 #include <proto/dbproxy/dbproxy.Request.pb.h>
 #include <proto/dbproxy/dbproxy.Response.pb.h>
 
