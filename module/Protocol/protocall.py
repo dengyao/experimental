@@ -54,16 +54,25 @@ if __name__ == '__main__':
     source_code += '#endif\r\n'
 
     out_cpp_filename = ''.join((os.curdir, sep, out_path, sep, proto_path, sep, 'InitProtoDescriptor.h'))
-    handle = codecs.open(out_cpp_filename, 'w', 'utf8')
+    handle = codecs.open(out_cpp_filename, 'w', 'utf_8_sig')
     handle.write(source_code)
     handle.close()
 
     """ 包含头文件 """
     helper_file = ''.join((os.curdir, sep, out_path, sep, proto_path, sep, 'MessageHelper.cpp'))
-    handle = codecs.open(helper_file, 'rb', 'utf_8_sig')
+    handle = codecs.open(helper_file, 'r+', 'utf_8_sig')
     helper_source = handle.read()
+    handle.seek(0)
     if helper_source.find('#include "InitProtoDescriptor.h"') < 0:
-        print('xxxxxxxxxxxx')
+        result = re.findall('#\s*include\s*["|<][^"|>]+["|>]', helper_source)
+        if len(result) > 0:
+            pos = helper_source.find(result[-1]) + len(result[-1])
+            helper_source = helper_source[:pos] + "\r\n#include \"InitProtoDescriptor.h\"" + helper_source[pos:]
+            print(helper_source)
+        else:
+            helper_source = "#include \"InitProtoDescriptor.h\"\r\n" + helper_source
+
+        handle.write(helper_source)
     handle.close()
 
     """ 生成CMake源文件列表 """

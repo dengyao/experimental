@@ -1,6 +1,7 @@
 ﻿#include "MessageHelper.h"
 #include <eddy/NetMessage.h>
 #include <google/protobuf/message.h>
+#include "InitProtoDescriptor.h"
 
 void PackageMessage(google::protobuf::Message *in_message, eddy::NetMessage &out_message)
 {

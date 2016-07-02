@@ -1,4 +1,4 @@
-#ifndef __INIT_PROTO_DESCRIPTOR_H__
+﻿#ifndef __INIT_PROTO_DESCRIPTOR_H__
 #define __INIT_PROTO_DESCRIPTOR_H__
 
 #include <proto/dbproxy/dbproxy.Request.pb.h>
