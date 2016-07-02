@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 2.8)
+project(eddyserver)
 
-project(eddyserver CXX)
+cmake_minimum_required(VERSION 2.8)
 
 # 设置宏
 if (WIN32)
@@ -10,7 +10,15 @@ add_definitions(-DASIO_STANDALONE)
 
 # 设置编译选项
 if(CMAKE_COMPILER_IS_GNUCXX)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -pthread")
+  list(FIND CMAKE_CXX_FLAGS "-pthread" VAR_POS)
+  if(${VAR_POS} EQUAL -1)
+    list(APPEND CMAKE_CXX_FLAGS "-pthread")
+  endif()
+  list(FIND CMAKE_CXX_FLAGS "-std=gnu++14" VAR_POS)
+  if(${VAR_POS} EQUAL -1)
+    list(APPEND CMAKE_CXX_FLAGS "-std=gnu++14")
+  endif()
+  message("CMAKE_CXX_FLAGS: " ${CMAKE_CXX_FLAGS})
 endif()
 
 # 设置类库名称
@@ -19,6 +27,7 @@ set(EDDY_LIBRARY_NAME eddy)
 set(PROTOBUF_LIBRARY_NAME protobuf)
 set(PROTOCOL_LIBRARY_NAME protocol)
 
+# 选择MySQL链接库
 if (WIN32)
 set(MYSQL_LIBRARY_NAME libmysql)
 else()
