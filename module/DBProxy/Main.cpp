@@ -1,4 +1,4 @@
-#include <iostream>
+ï»¿#include <iostream>
 #include "ProcessManager.h"
 
 class SessionHandle : public eddy::TCPSessionHandler
@@ -76,7 +76,7 @@ std::vector<std::unique_ptr<dbproxy::ConnectorMySQL>> CreateConnectorMySQL(const
 		}
 		catch (const std::exception&)
 		{
-			std::cerr << "Á¬½ÓÊý¾Ý¿âÊ§°Ü!" << std::endl;
+			std::cerr << "è¿žæŽ¥æ•°æ®åº“å¤±è´¥!" << std::endl;
 			getchar();
 			exit(0);
 		}

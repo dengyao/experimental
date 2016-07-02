@@ -2,25 +2,28 @@
 
 import os
 import re
+import codecs
 
 if __name__ == '__main__':
     """ 查找所有proto文件并生成c++源码 """
-    sep = os.path.sep
     head_files = []
-    out_path = '' .join((os.curdir, sep, 'cpp'))
+    sep = os.path.sep
+    out_path = 'cpp'
     proto_path = 'proto'
     for root, dirs, files in os.walk(''.join((os.curdir, os.path.sep, proto_path))):
         for filename in files:
             name, suffix = os.path.splitext(filename)
             if suffix == '.proto':
                 fullname = ''.join((root, sep, filename))
-                os.system('protoc --cpp_out={0} {1}'.format(out_path, fullname))
-                print(fullname)
-                head_file_path = ''.join((out_path, os.path.split(fullname)[0].lstrip(os.curdir), sep, name, '.pb.h'))
+                relative_out_path = ''.join((os.curdir, sep, out_path))
+                os.system('protoc --cpp_out={0} {1}'.format(relative_out_path, fullname))
+                head_file_path = ''.join((relative_out_path, os.path.split(fullname)[0].lstrip(os.curdir), sep, name, '.pb.h'))
                 head_files.append(head_file_path)
 
     """ 生成proto消息自动初始化代码 """
     source_code = ''
+    source_code += '#ifndef __INIT_PROTO_DESCRIPTOR_H__\r\n'
+    source_code += '#define __INIT_PROTO_DESCRIPTOR_H__\r\n\r\n'
     method_lists = []
     for filename in head_files:
         s = open(filename, 'r').read()
@@ -30,27 +33,37 @@ if __name__ == '__main__':
             method = ''.join((namespace, '::', class_item, '::descriptor();'))
             method_lists.append(method)
 
-        out_path_has_sep = ''.join((out_path, sep))
+        out_path_has_sep = ''.join((''.join((os.curdir, sep, out_path)), sep))
         head_file = filename.replace(out_path_has_sep, '').replace(sep, '/')
-        source_code += ''.join(('#include <', head_file, '>\n'))
+        source_code += ''.join(('#include <', head_file, '>\r\n'))
 
-    source_code += '\n'
-    source_code += 'class InitProtoMessageDdasdas\n' \
-                   '{\n' \
-                   'public:\n' \
-                   '    InitProtoMessageDdasdas()\n' \
-                   '    {\n'
+    source_code += '\r\n'
+    source_code += 'class InitProtoMessageDdasdas\r\n' \
+                   '{\r\n' \
+                   'public:\r\n' \
+                   '    InitProtoMessageDdasdas()\r\n' \
+                   '    {\r\n'
 
     for method in method_lists:
         source_code += '        '
         source_code += method
-        source_code += '\n'
+        source_code += '\r\n'
 
-    source_code += '    }\n};\n'
-    source_code += 'static InitProtoMessageDdasdas g_once_init;'
+    source_code += '    }\r\n};\r\n\r\n'
+    source_code += 'static InitProtoMessageDdasdas g_once_init;\r\n\r\n'
+    source_code += '#endif\r\n'
 
-    handle = open('InitProtoDescriptor.cpp', 'w')
+    out_cpp_filename = ''.join((os.curdir, sep, out_path, sep, proto_path, sep, 'InitProtoDescriptor.h'))
+    handle = codecs.open(out_cpp_filename, 'w', 'utf8')
     handle.write(source_code)
+    handle.close()
+
+    """ 包含头文件 """
+    helper_file = ''.join((os.curdir, sep, out_path, sep, proto_path, sep, 'MessageHelper.cpp'))
+    handle = codecs.open(helper_file, 'rb', 'utf_8_sig')
+    helper_source = handle.read()
+    if helper_source.find('#include "InitProtoDescriptor.h"') < 0:
+        print('xxxxxxxxxxxx')
     handle.close()
 
     """ 生成CMake源文件列表 """
@@ -71,11 +84,11 @@ if __name__ == '__main__':
     handle.close()
     result = re.search('set\s*\((\w+)\s+', content)
 
-    text = 'set({0} \n'.format(result.groups()[0])
+    text = 'set({0} \r\n'.format(result.groups()[0])
     for filename in cppfiles:
         text += '  '
         text += filename
-        text += '\n'
+        text += '\r\n'
     text += ')'
 
     new_content = re.sub('set\s*\([^)]+\)', text, content)

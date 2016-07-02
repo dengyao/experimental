@@ -38,9 +38,6 @@ ProcessManager::ProcessManager(eddy::IOServiceThreadManager &threads, dbproxy::P
 
 void ProcessManager::HandleMessage(eddy::TCPSessionHandler &session, eddy::NetMessage &message)
 {
-	proto_dbproxy::Request req;
-	std::cout << req.descriptor()->full_name() << std::endl;
-
 	auto request = std::dynamic_pointer_cast<proto_dbproxy::Request>(UnpackageMessage(message));
 	if (request != nullptr)
 	{

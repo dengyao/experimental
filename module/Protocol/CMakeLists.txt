@@ -1,9 +1,7 @@
-set(PROTOCOL_SRC_LISTS 
-  InitProtoDescriptor.cpp
-  cpp/proto/InitProtoDescriptor.cpp
-  cpp/proto/MessageHelper.cpp
-  cpp/proto/dbproxy/dbproxy.Request.pb.cc
-  cpp/proto/dbproxy/dbproxy.Response.pb.cc
+set(PROTOCOL_SRC_LISTS 
+  cpp/proto/MessageHelper.cpp
+  cpp/proto/dbproxy/dbproxy.Request.pb.cc
+  cpp/proto/dbproxy/dbproxy.Response.pb.cc
 )
 
 include_directories(
