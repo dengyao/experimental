@@ -57,23 +57,27 @@ void ProcessManager::HandleMessage(eddy::TCPSessionHandler &session, eddy::NetMe
 					}
 					else
 					{
+						generator_.Put(local_identifier);
 						requests_.erase(local_identifier);
 						assert(false);
 					}
 				}
 				catch (dbproxy::NotFoundDatabase&)
 				{
+					generator_.Put(local_identifier);
 					requests_.erase(local_identifier);
 					ReplyErrorCode(session, request->identifier(), proto_dbproxy::ProxyError::kNotFoundDatabase);
 				}
 				catch (dbproxy::ResourceInsufficiency&)
 				{
+					generator_.Put(local_identifier);
 					requests_.erase(local_identifier);
 					ReplyErrorCode(session, request->identifier(), proto_dbproxy::ProxyError::kResourceInsufficiency);
 				}
 			}
 			else
 			{
+				generator_.Put(local_identifier);
 				ReplyErrorCode(session, request->identifier(), proto_dbproxy::ProxyError::kInvalidAction);
 			}
 		}
@@ -106,6 +110,7 @@ void ProcessManager::UpdateHandleResult(asio::error_code error_code)
 		{
 			ReplyHandleResult(found->second.session_id, found->second.identifier, result);
 		}
+		generator_.Put(result.GetIdentifier());
 		requests_.erase(found);
 	}
 	completion_list_.clear();

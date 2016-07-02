@@ -170,7 +170,6 @@ void DBClient::OnDisconnect(DBClientHanle *client)
 
 void DBClient::OnMessage(eddy::NetMessage &message)
 {
-	proto_dbproxy::Response::descriptor();
 	auto res =  UnpackageMessage(message);
 	std::cout << res->GetTypeName() << std::endl;
 }
