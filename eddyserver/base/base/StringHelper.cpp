@@ -1,4 +1,5 @@
 ﻿#include "StringHelper.h"
+#include <cstring>
 
 namespace stringhlper
 {

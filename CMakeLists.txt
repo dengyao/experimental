@@ -10,16 +10,9 @@ add_definitions(-DASIO_STANDALONE)
 
 # 设置编译选项
 if(CMAKE_COMPILER_IS_GNUCXX)
-  list(FIND CMAKE_CXX_FLAGS "-pthread" VAR_POS)
-  if(${VAR_POS} EQUAL -1)
-    list(APPEND CMAKE_CXX_FLAGS "-pthread")
-  endif()
-  list(FIND CMAKE_CXX_FLAGS "-std=gnu++14" VAR_POS)
-  if(${VAR_POS} EQUAL -1)
-    list(APPEND CMAKE_CXX_FLAGS "-std=gnu++14")
-  endif()
-  message("CMAKE_CXX_FLAGS: " ${CMAKE_CXX_FLAGS})
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -pthread")
 endif()
+message("CMAKE_CXX_FLAGS: " ${CMAKE_CXX_FLAGS})
 
 # 设置类库名称
 set(BASE_LIBRARY_NAME base)

@@ -1,4 +1,5 @@
 ﻿#include "MessageHelper.h"
+#include <limits>
 #include <eddy/NetMessage.h>
 #include <google/protobuf/message.h>
 #include "InitProtoDescriptor.h"
