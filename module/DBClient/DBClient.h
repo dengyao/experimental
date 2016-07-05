@@ -48,11 +48,9 @@ public:
 	typedef std::function<void(google::protobuf::Message*)> QueryCallBack;
 
 public:
-	DBClient(eddy::IOServiceThreadManager &threads, asio::ip::tcp::endpoint &endpoint, size_t client_num);
+	DBClient(eddy::IOServiceThreadManager &threads, asio::ip::tcp::endpoint &endpoint, size_t connection_num = 0);
 
 	~DBClient();
-
-	static DBClient* GetInstance();
 
 public:
 	size_t GetKeepAliveConnectionNum() const;
@@ -70,21 +68,19 @@ private:
 
 	void OnDisconnect(DBClientHanle *client);
 
-	void OnMessage(eddy::NetMessage &message);
+	void OnMessage(DBClientHanle *client, eddy::NetMessage &message);
 
 private:
 	void Clear();
 
 	void InitConnections();
 
-	void ConnectionKeepAlive();
-
 	eddy::SessionHandlePointer CreateClient();
 
 	void AsyncQuery(DatabaseType dbtype, const char *dbname, DatabaseActionType action, const char *statement, QueryCallBack &&callback);
 
 private:
-	const size_t                                  client_num_;
+	const size_t                                  connection_num_;
 	eddy::IOServiceThreadManager&                 threads_;
 	eddy::IDGenerator                             generator_;
 	std::set<std::shared_ptr<bool> >              lifetimes_;

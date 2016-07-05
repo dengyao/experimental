@@ -1,0 +1,10 @@
+package proto_global;
+
+message HeartbeatReq
+{
+}
+
+message HeartbeatIntervalRes
+{
+
+}

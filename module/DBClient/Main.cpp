@@ -13,9 +13,8 @@ int main(int argc, char *argv[])
 	{
 		db_client = std::make_unique<DBClient>(threads, endpoint, 4);
 	}
-	catch (std::exception &e)
+	catch (std::exception &)
 	{
-		std::cerr << e.what() << std::endl;
 		getchar();
 	}
 

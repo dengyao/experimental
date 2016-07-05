@@ -101,6 +101,6 @@ if __name__ == '__main__':
     text += ')'
 
     new_content = re.sub('set\s*\([^)]+\)', text, content)
-    with open('CMakeLists.txt', 'w') as handle:
+    with codecs.open('CMakeLists.txt', 'w', 'utf8') as handle:
         handle.write(new_content)
         handle.close()
