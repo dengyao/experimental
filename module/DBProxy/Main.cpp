@@ -1,53 +1,13 @@
 ﻿#include <iostream>
-#include "ProcessManager.h"
+#include <vector>
+#include <memory>
+#include <base.h>
+#include "ProxyImpl.h"
+#include "ConnectorMySQL.h"
+#include "SessionHandle.h"
+#include "ProxyManager.h"
 
-class SessionHandle : public eddy::TCPSessionHandler
-{
-public:
-	SessionHandle(ProcessManager &process)
-		: process_(process)
-	{
-	}
-
-	virtual void OnConnect() override
-	{
-	}
-
-	virtual void OnMessage(eddy::NetMessage &message) override
-	{
-		process_.HandleMessage(*this, message);
-	}
-
-	virtual void OnClose() override
-	{
-	}
-
-private:
-	ProcessManager& process_;
-};
-
-class MyCreator
-{
-public:
-	MyCreator(ProcessManager &process)
-		: process_(process)
-	{
-	}
-
-	std::shared_ptr<SessionHandle> CreateSessionHandle()
-	{
-		return std::make_shared<SessionHandle>(process_);
-	}
-
-	std::shared_ptr<eddy::DefaultMessageFilter> CreateMessageFilter()
-	{
-		return std::make_shared<eddy::DefaultMessageFilter>();
-	}
-
-private:
-	ProcessManager& process_;
-};
-
+// 创建MySQL连接器
 std::vector<std::unique_ptr<dbproxy::ConnectorMySQL>> CreateConnectorMySQL(const size_t num)
 {
 	assert(num > 0);
@@ -89,12 +49,11 @@ int main(int argc, char *argv[])
 	TaskPools pools(std::thread::hardware_concurrency() / 2);
 	eddy::IOServiceThreadManager threads(std::thread::hardware_concurrency() / 2);
 
-	dbproxy::ProxyManager<dbproxy::MySQL> mysql_proxy(CreateConnectorMySQL(8), pools, 1000000);
-	ProcessManager handler(threads, mysql_proxy);
+	dbproxy::ProxyImpl<dbproxy::MySQL> mysql_proxy(CreateConnectorMySQL(8), pools, 1000000);
+	dbproxy::ProxyManager handler(threads, mysql_proxy);
 
-	MyCreator creator(handler);
 	asio::ip::tcp::endpoint endpoint(asio::ip::address_v4(), 4235);
-	eddy::TCPServer server(endpoint, threads, std::bind(&MyCreator::CreateSessionHandle, &creator), std::bind(&MyCreator::CreateMessageFilter, &creator));
+	eddy::TCPServer server(endpoint, threads, std::bind(dbproxy::CreateSessionHandle, std::ref(handler)), dbproxy::CreateMessageFilter);
 	threads.Run();
 	
 	return 0;

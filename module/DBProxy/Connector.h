@@ -3,7 +3,6 @@
 
 #include "Types.h"
 #include "WrapResult.h"
-#include "ProxyManager.h"
 
 namespace dbproxy
 {

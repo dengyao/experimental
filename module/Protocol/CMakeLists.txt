@@ -1,8 +1,7 @@
 set(PROTOCOL_SRC_LISTS 
-  cpp/proto/global.Heartbeat.pb.cc
+  cpp/proto/externall.protocol.pb.cc
+  cpp/proto/internal.protocol.pb.cc
   cpp/proto/MessageHelper.cpp
-  cpp/proto/dbproxy/dbproxy.Request.pb.cc
-  cpp/proto/dbproxy/dbproxy.Response.pb.cc
 )
 
 include_directories(

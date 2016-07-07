@@ -2,6 +2,7 @@ set(DBPROXY_NAME DBProxy)
 
 set(DBPROXY_SRC_LISTS 
   Main.cpp
+  SessionHandle.cpp
   ProcessManager.cpp
 )
 
