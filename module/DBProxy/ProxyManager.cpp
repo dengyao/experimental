@@ -3,7 +3,6 @@
 #include <iostream>
 #include <proto/MessageHelper.h>
 #include <proto/internal.protocol.pb.h>
-#include <eddy.h>
 
 namespace dbproxy
 {
@@ -35,8 +34,9 @@ namespace dbproxy
 		, mysql_proxy_(mysql)
 		, generator_(backlog)
 		, timer_(threads.MainThread()->IOService())
+		, wait_handler_(std::bind(&ProxyManager::UpdateHandleResult, this, std::placeholders::_1))
 	{
-		timer_.async_wait(std::bind(&ProxyManager::UpdateHandleResult, this, std::placeholders::_1));
+		timer_.async_wait(wait_handler_);
 	}
 
 	// 接受处理请求
@@ -127,7 +127,7 @@ namespace dbproxy
 		}
 		completion_list_.clear();
 
-		timer_.async_wait(std::bind(&ProxyManager::UpdateHandleResult, this, std::placeholders::_1));
+		timer_.async_wait(wait_handler_);
 	}
 
 	// 回复错误码

@@ -52,9 +52,6 @@ public:
 	~DBClient();
 
 public:
-	// 执行登录
-	bool Login(std::chrono::seconds timeout);
-
 	// 获取有效连接数量
 	size_t GetKeepAliveConnectionNum() const;
 
@@ -87,6 +84,9 @@ private:
 	// 初始化连接
 	void InitConnections();
 
+	// 更新计时器
+	void UpdateTimer(asio::error_code error_code);
+
 	// 创建会话处理器
 	eddy::SessionHandlePointer CreateClientHandle();
 
@@ -103,6 +103,8 @@ private:
 	std::map<uint32_t, QueryCallBack>              ongoing_lists_;
 	std::map<DBClientHandle*, std::set<uint32_t> > assigned_lists_;
 	asio::ip::tcp::endpoint                        endpoint_;
+	asio::steady_timer                             timer_;
+	const std::function<void(asio::error_code)>    wait_handler_;
 	size_t                                         next_client_index_;
 };
 

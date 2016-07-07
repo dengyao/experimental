@@ -16,7 +16,7 @@ namespace google
 	}
 }
 
-typedef std::shared_ptr<google::protobuf::Message> MessagePointer;
+typedef std::unique_ptr<google::protobuf::Message> MessagePointer;
 
 void PackageMessage(google::protobuf::Message *in_message, eddy::NetMessage &out_message);
 

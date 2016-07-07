@@ -12,7 +12,6 @@ int main(int argc, char *argv[])
 	try
 	{
 		db_client = std::make_unique<DBClient>(threads, endpoint, 1);
-		db_client->Login(std::chrono::seconds(1));
 	}
 	catch (std::exception &)
 	{

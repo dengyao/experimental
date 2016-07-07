@@ -10,9 +10,11 @@ class DBClientHandle : public eddy::TCPSessionHandler
 
 public:
 	DBClientHandle(DBClient *client, std::shared_ptr<bool> &shared)
-		: client_(client)
+		: counter_(0)
+		, client_(client)
 		, is_logged_(false)
 		, client_shared_(shared)
+		, heartbeat_interval_(0)
 	{
 	}
 
@@ -24,13 +26,14 @@ public:
 	// 连接成功
 	virtual void OnConnect() override
 	{
-		if (!is_logged_)
+		eddy::NetMessage message;
+		internal::LoginDBProxyReq login;
+		PackageMessage(&login, message);
+		Send(message);
+
+		if (!client_shared_.unique())
 		{
-			// 发送登录请求
-			eddy::NetMessage message;
-			internal::LoginDBProxyReq login;
-			PackageMessage(&login, message);
-			Send(message);
+			client_->OnConnected(this);
 		}
 	}
 
@@ -46,18 +49,17 @@ public:
 
 		if (!is_logged_)
 		{
-			// 是否登录成功
 			if (dynamic_cast<internal::PongRsp*>(respond.get()) == nullptr)
 			{
-				if (dynamic_cast<internal::LoginDBProxyRsp*>(respond.get()) == nullptr)
+				if (dynamic_cast<internal::LoginDBProxyRsp*>(respond.get()) != nullptr)
+				{
+					is_logged_ = true;
+					counter_ = heartbeat_interval_ = dynamic_cast<internal::LoginDBProxyRsp*>(respond.get())->heartbeat_interval();
+				}
+				else
 				{
 					assert(false);
 					return;
-				}
-				is_logged_ = true;
-				if (!client_shared_.unique())
-				{
-					client_->OnConnected(this);
 				}
 			}
 		}
@@ -68,25 +70,44 @@ public:
 				client_->OnMessage(this, respond.get());
 			}
 		}
+		else
+		{
+			assert(false);
+		}
 	}
 
 	// 连接关闭
 	virtual void OnClose() override
 	{
-		if (is_logged_)
+		is_logged_ = false;
+		if (!client_shared_.unique())
 		{
-			is_logged_ = false;
-			if (!client_shared_.unique())
-			{
-				client_->OnDisconnect(this);
-			}
+			client_->OnDisconnect(this);
 		}
+	}
+
+	// 发送心跳倒计时
+	void HeartbeatCountdown()
+	{
+		if (is_logged_ && heartbeat_interval_ > 0)
+		{
+			if (--counter_ == 0)
+			{
+				internal::PingReq req;
+				eddy::NetMessage message;
+				PackageMessage(&req, message);
+				Send(message);
+				counter_ = heartbeat_interval_;
+			}		
+		}	
 	}
 
 private:
 	DBClient*             client_;
 	bool                  is_logged_;
 	std::shared_ptr<bool> client_shared_;
+	uint32_t              counter_;
+	uint32_t              heartbeat_interval_;
 };
 
 eddy::MessageFilterPointer CreaterMessageFilter()
@@ -99,10 +120,14 @@ DBClient::DBClient(eddy::IOServiceThreadManager &threads, asio::ip::tcp::endpoin
 	, endpoint_(endpoint)
 	, next_client_index_(0)
 	, connection_num_(connection_num)
+	, timer_(threads.MainThread()->IOService())
 	, generator_(std::numeric_limits<uint16_t>::max())
+	, wait_handler_(std::bind(&DBClient::UpdateTimer, this, std::placeholders::_1))
 	, client_creator_(threads_, std::bind(&DBClient::CreateClientHandle, this), std::bind(CreaterMessageFilter))
 {
 	InitConnections();
+	timer_.expires_from_now(std::chrono::seconds(1));
+	timer_.async_wait(wait_handler_);
 }
 
 DBClient::~DBClient()
@@ -145,6 +170,17 @@ void DBClient::InitConnections()
 			throw ConnectDBSFailed(error_code.message().c_str());
 		}
 	}
+}
+
+// 更新计时器
+void DBClient::UpdateTimer(asio::error_code error_code)
+{
+	for (auto handle : client_lists_)
+	{
+		handle->HeartbeatCountdown();
+	}
+	timer_.expires_from_now(std::chrono::seconds(1));
+	timer_.async_wait(wait_handler_);
 }
 
 // 连接事件
@@ -246,16 +282,6 @@ void DBClient::OnMessage(DBClientHandle *client, google::protobuf::Message *mess
 	{
 		callback(message);
 	}
-}
-
-// 执行登录
-bool DBClient::Login(std::chrono::seconds timeout)
-{
-	while (connection_num_ != client_lists_.size())
-	{
-		std::this_thread::yield();
-	}
-	return false;
 }
 
 // 获取有效连接数量

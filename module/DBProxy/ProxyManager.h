@@ -45,12 +45,13 @@ namespace dbproxy
 		void UpdateHandleResult(asio::error_code error_code);
 
 	private:
-		asio::steady_timer                  timer_;
-		eddy::IOServiceThreadManager&       threads_;
-		std::map<uint32_t, SSourceInfo>     requests_;
-		eddy::IDGenerator                   generator_;
-		dbproxy::ProxyImpl<dbproxy::MySQL>& mysql_proxy_;
-		std::vector<dbproxy::Result>        completion_list_;
+		asio::steady_timer                          timer_;
+		const std::function<void(asio::error_code)> wait_handler_;
+		eddy::IOServiceThreadManager&               threads_;
+		std::map<uint32_t, SSourceInfo>             requests_;
+		eddy::IDGenerator                           generator_;
+		dbproxy::ProxyImpl<dbproxy::MySQL>&         mysql_proxy_;
+		std::vector<dbproxy::Result>                completion_list_;
 	};
 }
 
