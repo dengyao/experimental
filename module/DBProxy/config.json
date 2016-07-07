@@ -1,0 +1,14 @@
+{
+    "host" : "0.0.0.0",
+    "port" : 4235,
+    "backlog" : 10000,
+    "connection_backlog" : 1000,
+    "mysql_host" : "192.168.1.201",
+    "mysql_user" : "root",
+    "mysql_passwd" : "123456",
+    "mysql_db_lists" : [{
+            "db_name" : "sgs",
+            "connections" : 1
+        }
+    ]
+}
