@@ -5,6 +5,7 @@
 #include <vector>
 #include <cstring>
 #include <cassert>
+#include <numeric>
 
 namespace dbproxy
 {
@@ -62,7 +63,7 @@ namespace dbproxy
 		{
 			size_t index = 0;
 			size_t use_size = 0;
-			std::array<const char*, 65535> extrabuf;
+			std::array<const char*, std::numeric_limits<uint16_t>::max()> extrabuf;
 			while (use_size < size)
 			{
 				size_t field_size = strlen(data + use_size) + 1;
@@ -78,7 +79,6 @@ namespace dbproxy
 						rows_.reserve(new_use_size >= size ? index + 1 : (index + 1) * 2);
 						rows_.resize(index + 1);
 						memcpy(rows_.data(), extrabuf.data(), index * sizeof(decltype(extrabuf)::value_type));
-						rows_[index] = data + use_size;
 					}
 					else
 					{
@@ -87,8 +87,8 @@ namespace dbproxy
 							rows_.reserve((index + 1) * 2);
 						}
 						rows_.resize(index + 1);
-						rows_[index] = data + use_size;
 					}
+					rows_[index] = data + use_size;
 				}
 				use_size = new_use_size;
 				++index;

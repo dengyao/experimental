@@ -3,6 +3,7 @@
 #include <iostream>
 #include <proto/MessageHelper.h>
 #include <proto/internal.protocol.pb.h>
+#include <eddy.h>
 
 namespace dbproxy
 {
@@ -29,11 +30,11 @@ namespace dbproxy
 		return true;
 	}
 
-	ProxyManager::ProxyManager(eddy::IOServiceThreadManager &threads, dbproxy::ProxyImpl<dbproxy::MySQL> &mysql)
+	ProxyManager::ProxyManager(eddy::IOServiceThreadManager &threads, dbproxy::ProxyImpl<dbproxy::MySQL> &mysql, unsigned int backlog)
 		: threads_(threads)
 		, mysql_proxy_(mysql)
+		, generator_(backlog)
 		, timer_(threads.MainThread()->IOService())
-		, generator_(std::numeric_limits<uint16_t>::max())
 	{
 		timer_.async_wait(std::bind(&ProxyManager::UpdateHandleResult, this, std::placeholders::_1));
 	}

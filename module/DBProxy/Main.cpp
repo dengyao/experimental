@@ -1,11 +1,11 @@
-﻿#include <iostream>
-#include <vector>
+﻿#include <vector>
 #include <memory>
+#include <iostream>
 #include <base.h>
 #include "ProxyImpl.h"
-#include "ConnectorMySQL.h"
-#include "SessionHandle.h"
 #include "ProxyManager.h"
+#include "SessionHandle.h"
+#include "ConnectorMySQL.h"
 
 // 创建MySQL连接器
 std::vector<std::unique_ptr<dbproxy::ConnectorMySQL>> CreateConnectorMySQL(const size_t num)
@@ -49,11 +49,11 @@ int main(int argc, char *argv[])
 	TaskPools pools(std::thread::hardware_concurrency() / 2);
 	eddy::IOServiceThreadManager threads(std::thread::hardware_concurrency() / 2);
 
-	dbproxy::ProxyImpl<dbproxy::MySQL> mysql_proxy(CreateConnectorMySQL(8), pools, 1000000);
-	dbproxy::ProxyManager handler(threads, mysql_proxy);
+	dbproxy::ProxyImpl<dbproxy::MySQL> mysql_proxy(CreateConnectorMySQL(8), pools, 1000000);	// 最后个参数为单个连接最大积压数量
+	dbproxy::ProxyManager manager(threads, mysql_proxy, 102400);    // 最后个参数为服务器最大积压数量
 
 	asio::ip::tcp::endpoint endpoint(asio::ip::address_v4(), 4235);
-	eddy::TCPServer server(endpoint, threads, std::bind(dbproxy::CreateSessionHandle, std::ref(handler)), dbproxy::CreateMessageFilter);
+	eddy::TCPServer server(endpoint, threads, std::bind(dbproxy::CreateSessionHandle, std::ref(manager)), dbproxy::CreateMessageFilter);
 	threads.Run();
 	
 	return 0;

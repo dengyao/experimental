@@ -4,7 +4,6 @@
 #include <set>
 #include <vector>
 #include <base.h>
-#include "Types.h"
 #include "Connector.h"
 #include "ContainerSafe.h"
 
@@ -76,9 +75,9 @@ namespace dbproxy
 		typedef std::unique_ptr<Connector<Database>> ConnectorPointer;
 
 	public:
-		ProxyImpl(std::vector<ConnectorPointer> &&connectors, TaskPools &pools, unsigned int bocklog)
+		ProxyImpl(std::vector<ConnectorPointer> &&connectors, TaskPools &pools, unsigned int backlog)
 			: pools_(pools)
-			, bocklog_(bocklog)
+			, bocklog_(backlog)
 			, complete_notify_(std::bind(&ProxyImpl::OnCompletionTask, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3))
 		{
 			for (size_t i = 0; i < connectors.size(); ++i)

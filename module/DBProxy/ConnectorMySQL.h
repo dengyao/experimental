@@ -4,6 +4,7 @@
 #include <array>
 #include <vector>
 #include <memory>
+#include <numeric>
 #include <cassert>
 #include <mysql.h>
 #include <mysqld_error.h>
@@ -73,7 +74,7 @@ namespace dbproxy
 			if (result != nullptr)
 			{
 				size_t use_size = 0;
-				std::array<char, 65535> extrabuf;
+				std::array<char, std::numeric_limits<uint16_t>::max()> extrabuf;
 				const my_ulonglong num_rows = mysql_num_rows(result);
 				const my_ulonglong num_fields = mysql_num_fields(result);
 				use_size += snprintf(extrabuf.data(), extrabuf.size(), "%lld", num_rows) + 1;
@@ -91,9 +92,8 @@ namespace dbproxy
 							if (data_.empty())
 							{
 								data_.reserve(row == num_rows - 1 && field == num_fields - 1 ? new_use_size : new_use_size * 2);
-								data_.resize(new_use_size);
+								data_.resize(use_size);
 								memcpy(data_.data(), extrabuf.data(), use_size);
-								memcpy(data_.data() + use_size, row_data[field], field_size);
 							}
 							else
 							{
@@ -101,9 +101,9 @@ namespace dbproxy
 								{
 									data_.reserve(new_use_size * 2);
 								}
-								data_.resize(new_use_size);
-								memcpy(data_.data() + use_size, row_data[field], field_size);
 							}
+							data_.resize(new_use_size);
+							memcpy(data_.data() + use_size, row_data[field], field_size);
 						}
 						else
 						{
