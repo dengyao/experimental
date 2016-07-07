@@ -1,7 +1,7 @@
 ﻿#include <iostream>
 #include "DBClient.h"
 #include <google/protobuf/message.h>
-#include "proto/dbproxy/dbproxy.Response.pb.h"
+#include <proto/internal.protocol.pb.h>
 
 int main(int argc, char *argv[])
 {
@@ -11,7 +11,8 @@ int main(int argc, char *argv[])
 	std::unique_ptr<DBClient> db_client;
 	try
 	{
-		db_client = std::make_unique<DBClient>(threads, endpoint, 4);
+		db_client = std::make_unique<DBClient>(threads, endpoint, 1);
+		db_client->Login(std::chrono::seconds(1));
 	}
 	catch (std::exception &)
 	{
@@ -20,7 +21,7 @@ int main(int argc, char *argv[])
 
 	db_client->AsyncSelect(DatabaseType::kMySQL, "sgs", "SELECT * FROM `actor`;", [&](google::protobuf::Message *message)
 	{
-		auto response = dynamic_cast<proto_dbproxy::Response*>(message);
+		//auto response = dynamic_cast<proto_dbproxy::Response*>(message);
 	});
 
 	threads.Run();

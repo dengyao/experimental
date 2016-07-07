@@ -17,8 +17,8 @@ namespace dbproxy
 
 	void SessionHandle::OnMessage(eddy::NetMessage &message)
 	{
-		auto request = UnpackageMessage(message);
-		if (request == nullptr)
+		auto respond = UnpackageMessage(message);
+		if (respond == nullptr)
 		{
 			proxy_manager_.RespondErrorCode(*this, 0, internal::DBProxyErrorRsp::kInvalidProtocol);
 		}
@@ -26,9 +26,9 @@ namespace dbproxy
 		if (!is_logged_)
 		{
 			// 首先必须登录
-			if (dynamic_cast<internal::PingReq*>(request.get()) == nullptr)
+			if (dynamic_cast<internal::PingReq*>(respond.get()) == nullptr)
 			{
-				if (dynamic_cast<internal::LoginDBProxyReq*>(request.get()) == nullptr)
+				if (dynamic_cast<internal::LoginDBProxyReq*>(respond.get()) == nullptr)
 				{
 					proxy_manager_.RespondErrorCode(*this, 0, internal::DBProxyErrorRsp::kNotLogged);
 				}
@@ -43,7 +43,7 @@ namespace dbproxy
 				}
 			}
 		}
-		else if (dynamic_cast<internal::PingReq*>(request.get()))
+		else if (dynamic_cast<internal::PingReq*>(respond.get()) != nullptr)
 		{
 			// 处理心跳
 			internal::PongRsp pong;
@@ -53,7 +53,7 @@ namespace dbproxy
 		}
 		else
 		{
-			proxy_manager_.HandleMessage(*this, request.get());
+			proxy_manager_.HandleMessage(*this, respond.get());
 		}
 	}
 

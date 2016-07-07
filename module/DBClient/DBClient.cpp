@@ -2,16 +2,16 @@
 #include <limits>
 #include <iostream>
 #include <proto/MessageHelper.h>
-#include <proto/dbproxy/dbproxy.Request.pb.h>
-#include <proto/dbproxy/dbproxy.Response.pb.h>
+#include <proto/internal.protocol.pb.h>
 
-class DBClientHanle : public eddy::TCPSessionHandler
+class DBClientHandle : public eddy::TCPSessionHandler
 {
 	friend class DBClient;
 
 public:
-	DBClientHanle(DBClient *client, std::shared_ptr<bool> &shared)
+	DBClientHandle(DBClient *client, std::shared_ptr<bool> &shared)
 		: client_(client)
+		, is_logged_(false)
 		, client_shared_(shared)
 	{
 	}
@@ -21,32 +21,71 @@ public:
 		return client_shared_;
 	}
 
+	// 连接成功
 	virtual void OnConnect() override
 	{
-		if (!client_shared_.unique())
+		if (!is_logged_)
 		{
-			client_->OnConnected(this);
+			// 发送登录请求
+			eddy::NetMessage message;
+			internal::LoginDBProxyReq login;
+			PackageMessage(&login, message);
+			Send(message);
 		}
 	}
 
+	// 接收消息
 	virtual void OnMessage(eddy::NetMessage &message) override
 	{
-		if (!client_shared_.unique())
+		auto respond = UnpackageMessage(message);
+		if (respond == nullptr)
 		{
-			client_->OnMessage(this, message);
+			assert(false);
+			return;
+		}
+
+		if (!is_logged_)
+		{
+			// 是否登录成功
+			if (dynamic_cast<internal::PongRsp*>(respond.get()) == nullptr)
+			{
+				if (dynamic_cast<internal::LoginDBProxyRsp*>(respond.get()) == nullptr)
+				{
+					assert(false);
+					return;
+				}
+				is_logged_ = true;
+				if (!client_shared_.unique())
+				{
+					client_->OnConnected(this);
+				}
+			}
+		}
+		else if (dynamic_cast<internal::PongRsp*>(respond.get()) == nullptr)
+		{
+			if (!client_shared_.unique())
+			{
+				client_->OnMessage(this, respond.get());
+			}
 		}
 	}
 
+	// 连接关闭
 	virtual void OnClose() override
 	{
-		if (!client_shared_.unique())
+		if (is_logged_)
 		{
-			client_->OnDisconnect(this);
+			is_logged_ = false;
+			if (!client_shared_.unique())
+			{
+				client_->OnDisconnect(this);
+			}
 		}
 	}
 
 private:
 	DBClient*             client_;
+	bool                  is_logged_;
 	std::shared_ptr<bool> client_shared_;
 };
 
@@ -61,7 +100,7 @@ DBClient::DBClient(eddy::IOServiceThreadManager &threads, asio::ip::tcp::endpoin
 	, next_client_index_(0)
 	, connection_num_(connection_num)
 	, generator_(std::numeric_limits<uint16_t>::max())
-	, client_creator_(threads_, std::bind(&DBClient::CreateClient, this), std::bind(CreaterMessageFilter))
+	, client_creator_(threads_, std::bind(&DBClient::CreateClientHandle, this), std::bind(CreaterMessageFilter))
 {
 	InitConnections();
 }
@@ -71,13 +110,15 @@ DBClient::~DBClient()
 	Clear();
 }
 
-eddy::SessionHandlePointer DBClient::CreateClient()
+// 创建会话处理器
+eddy::SessionHandlePointer DBClient::CreateClientHandle()
 {
 	auto life = std::make_shared<bool>();
 	lifetimes_.insert(life);
-	return std::make_shared<DBClientHanle>(this, life);
+	return std::make_shared<DBClientHandle>(this, life);
 }
 
+// 清理所有连接
 void DBClient::Clear()
 {
 	lifetimes_.clear();
@@ -91,6 +132,7 @@ void DBClient::Clear()
 	client_lists_.clear();
 }
 
+// 初始化连接
 void DBClient::InitConnections()
 {
 	asio::error_code error_code;
@@ -105,7 +147,8 @@ void DBClient::InitConnections()
 	}
 }
 
-void DBClient::OnConnected(DBClientHanle *client)
+// 连接事件
+void DBClient::OnConnected(DBClientHandle *client)
 {
 	if (client_lists_.size() >= connection_num_)
 	{
@@ -120,7 +163,8 @@ void DBClient::OnConnected(DBClientHanle *client)
 	}
 }
 
-void DBClient::OnDisconnect(DBClientHanle *client)
+// 断开连接事件
+void DBClient::OnDisconnect(DBClientHandle *client)
 {
 	lifetimes_.erase(client->GetShared());
 
@@ -146,9 +190,9 @@ void DBClient::OnDisconnect(DBClientHanle *client)
 
 				if (callback != nullptr)
 				{
-					proto_dbproxy::ProxyError error;
-					error.set_identifier(0);
-					error.set_error_code(proto_dbproxy::ProxyError::kDisconnect);
+					internal::DBProxyErrorRsp error;
+					error.set_sequence(0);
+					error.set_error_code(internal::DBProxyErrorRsp::kDisconnect);
 					callback(&error);
 				}	
 			}
@@ -157,23 +201,21 @@ void DBClient::OnDisconnect(DBClientHanle *client)
 	}
 }
 
-void DBClient::OnMessage(DBClientHanle *client, eddy::NetMessage &message)
+// 接受消息事件
+void DBClient::OnMessage(DBClientHandle *client, google::protobuf::Message *message)
 {
-	uint32_t identifier = 0;
-	MessagePointer msg = UnpackageMessage(message);
-	if (dynamic_cast<proto_dbproxy::Response*>(msg.get()) != nullptr)
+	uint32_t sequence = 0;
+	if (dynamic_cast<internal::QueryDBProxyRsp*>(message) != nullptr)
 	{
-		identifier = dynamic_cast<proto_dbproxy::Response*>(msg.get())->identifier();
+		sequence = dynamic_cast<internal::QueryDBProxyRsp*>(message)->sequence();
 	}
-	else if (dynamic_cast<proto_dbproxy::DBError*>(msg.get()) != nullptr)
+	else if (dynamic_cast<internal::DBErrorRsp*>(message) != nullptr)
 	{
-		proto_dbproxy::DBError *instance = dynamic_cast<proto_dbproxy::DBError*>(msg.get());
-		instance->identifier();
+		sequence = dynamic_cast<internal::DBErrorRsp*>(message)->sequence();
 	}
-	else if (dynamic_cast<proto_dbproxy::ProxyError*>(msg.get()) != nullptr)
+	else if (dynamic_cast<internal::DBProxyErrorRsp*>(message) != nullptr)
 	{
-		proto_dbproxy::ProxyError *instance = dynamic_cast<proto_dbproxy::ProxyError*>(msg.get());
-		instance->identifier();
+		sequence = dynamic_cast<internal::DBProxyErrorRsp*>(message)->sequence();
 	}
 	else
 	{
@@ -184,70 +226,85 @@ void DBClient::OnMessage(DBClientHanle *client, eddy::NetMessage &message)
 	auto set_iter = assigned_lists_.find(client);
 	if (set_iter != assigned_lists_.end())
 	{
-		set_iter->second.erase(identifier);
+		set_iter->second.erase(sequence);
 	}
 
 	QueryCallBack callback;
-	auto callback_iter = ongoing_lists_.find(identifier);
+	auto callback_iter = ongoing_lists_.find(sequence);
 	if (callback_iter != ongoing_lists_.end())
 	{
 		callback = std::move(callback_iter->second);
 		ongoing_lists_.erase(callback_iter);
 	}
 
-	generator_.Put(identifier);
+	if (sequence > 0)
+	{
+		generator_.Put(sequence);
+	}
 
 	if (callback != nullptr)
 	{
-		callback(msg.get());
+		callback(message);
 	}
 }
 
+// 执行登录
+bool DBClient::Login(std::chrono::seconds timeout)
+{
+	while (connection_num_ != client_lists_.size())
+	{
+		std::this_thread::yield();
+	}
+	return false;
+}
+
+// 获取有效连接数量
 size_t DBClient::GetKeepAliveConnectionNum() const
 {
 	return client_lists_.size();
 }
 
+// 异步操作
 void DBClient::AsyncQuery(DatabaseType dbtype, const char *dbname, DatabaseActionType action, const char *statement, QueryCallBack &&callback)
 {
-	static_assert(DatabaseType::kRedis == proto_dbproxy::Request::kRedis &&
-		DatabaseType::kMySQL == proto_dbproxy::Request::kMySQL, "type mismatch");
+	static_assert(DatabaseType::kRedis == internal::QueryDBProxyReq::kRedis &&
+		DatabaseType::kMySQL == internal::QueryDBProxyReq::kMySQL, "type mismatch");
 
-	static_assert(DatabaseActionType::kSelect == proto_dbproxy::Request::kSelect &&
-		DatabaseActionType::kInsert == proto_dbproxy::Request::kInsert &&
-		DatabaseActionType::kUpdate == proto_dbproxy::Request::kUpdate &&
-		DatabaseActionType::kDelete == proto_dbproxy::Request::kDelete, "type mismatch");
+	static_assert(DatabaseActionType::kSelect == internal::QueryDBProxyReq::kSelect &&
+		DatabaseActionType::kInsert == internal::QueryDBProxyReq::kInsert &&
+		DatabaseActionType::kUpdate == internal::QueryDBProxyReq::kUpdate &&
+		DatabaseActionType::kDelete == internal::QueryDBProxyReq::kDelete, "type mismatch");
 
 	if (client_lists_.size() < connection_num_)
 	{
 		if (client_lists_.empty())
 		{
-			proto_dbproxy::ProxyError error;
-			error.set_identifier(0);
-			error.set_error_code(proto_dbproxy::ProxyError::kNotConnected);
+			internal::DBProxyErrorRsp error;
+			error.set_sequence(0);
+			error.set_error_code(internal::DBProxyErrorRsp::kNotConnected);
 			callback(&error);
 			return;
 		}
 	}
 
-	uint32_t identifier = 0;
-	if (generator_.Get(identifier))
+	uint32_t sequence = 0;
+	if (generator_.Get(sequence))
 	{
 		if (next_client_index_ >= client_lists_.size())
 		{
 			next_client_index_ = 0;
 		}
 
-		proto_dbproxy::Request request;
+		internal::QueryDBProxyReq request;
 		request.set_dbname(dbname);
 		request.set_statement(statement);
-		request.set_identifier(identifier);
-		request.set_action(static_cast<proto_dbproxy::Request::ActoinType>(action));
-		request.set_dbtype(static_cast<proto_dbproxy::Request::DatabaseType>(dbtype));
+		request.set_sequence(sequence);
+		request.set_action(static_cast<internal::QueryDBProxyReq::ActoinType>(action));
+		request.set_dbtype(static_cast<internal::QueryDBProxyReq::DatabaseType>(dbtype));
 
-		DBClientHanle *client = client_lists_[next_client_index_++];
-		assigned_lists_[client].insert(identifier);
-		ongoing_lists_.insert(std::make_pair(identifier, std::forward<QueryCallBack>(callback)));
+		DBClientHandle *client = client_lists_[next_client_index_++];
+		assigned_lists_[client].insert(sequence);
+		ongoing_lists_.insert(std::make_pair(sequence, std::forward<QueryCallBack>(callback)));
 		
 		eddy::NetMessage message;
 		PackageMessage(&request, message);
@@ -255,21 +312,25 @@ void DBClient::AsyncQuery(DatabaseType dbtype, const char *dbname, DatabaseActio
 	}
 }
 
+// 异步查询
 void DBClient::AsyncSelect(DatabaseType dbtype, const char *dbname, const char *statement, QueryCallBack &&callback)
 {
 	AsyncQuery(dbtype, dbname, DatabaseActionType::kSelect, statement, std::forward<QueryCallBack>(callback));
 }
 
+// 异步插入
 void DBClient::AsyncInsert(DatabaseType dbtype, const char *dbname, const char *statement, QueryCallBack &&callback)
 {
 	AsyncQuery(dbtype, dbname, DatabaseActionType::kInsert, statement, std::forward<QueryCallBack>(callback));
 }
 
+// 异步更新
 void DBClient::AsyncUpdate(DatabaseType dbtype, const char *dbname, const char *statement, QueryCallBack &&callback)
 {
 	AsyncQuery(dbtype, dbname, DatabaseActionType::kUpdate, statement, std::forward<QueryCallBack>(callback));
 }
 
+// 异步删除
 void DBClient::AsyncDelete(DatabaseType dbtype, const char *dbname, const char *statement, QueryCallBack &&callback)
 {
 	AsyncQuery(dbtype, dbname, DatabaseActionType::kDelete, statement, std::forward<QueryCallBack>(callback));

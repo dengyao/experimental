@@ -37,12 +37,11 @@ public:
 	}
 };
 
-class DBClient;
-class DBClientHanle;
+class DBClientHandle;
 
 class DBClient final
 {
-	friend class DBClientHanle;
+	friend class DBClientHandle;
 
 public:
 	typedef std::function<void(google::protobuf::Message*)> QueryCallBack;
@@ -53,43 +52,58 @@ public:
 	~DBClient();
 
 public:
+	// 执行登录
+	bool Login(std::chrono::seconds timeout);
+
+	// 获取有效连接数量
 	size_t GetKeepAliveConnectionNum() const;
 
+	// 异步查询
 	void AsyncSelect(DatabaseType dbtype, const char *dbname, const char *statement, QueryCallBack &&callback);
 
+	// 异步插入
 	void AsyncInsert(DatabaseType dbtype, const char *dbname, const char *statement, QueryCallBack &&callback);
 
+	// 异步更新
 	void AsyncUpdate(DatabaseType dbtype, const char *dbname, const char *statement, QueryCallBack &&callback);
 
+	// 异步删除
 	void AsyncDelete(DatabaseType dbtype, const char *dbname, const char *statement, QueryCallBack &&callback);
 
 private:
-	void OnConnected(DBClientHanle *client);
+	// 连接事件
+	void OnConnected(DBClientHandle *client);
 
-	void OnDisconnect(DBClientHanle *client);
+	// 断开连接事件
+	void OnDisconnect(DBClientHandle *client);
 
-	void OnMessage(DBClientHanle *client, eddy::NetMessage &message);
+	// 接受消息事件
+	void OnMessage(DBClientHandle *client, google::protobuf::Message *message);
 
 private:
+	// 清理所有连接
 	void Clear();
 
+	// 初始化连接
 	void InitConnections();
 
-	eddy::SessionHandlePointer CreateClient();
+	// 创建会话处理器
+	eddy::SessionHandlePointer CreateClientHandle();
 
+	// 异步操作
 	void AsyncQuery(DatabaseType dbtype, const char *dbname, DatabaseActionType action, const char *statement, QueryCallBack &&callback);
 
 private:
-	const size_t                                  connection_num_;
-	eddy::IOServiceThreadManager&                 threads_;
-	eddy::IDGenerator                             generator_;
-	std::set<std::shared_ptr<bool> >              lifetimes_;
-	eddy::TCPClient					              client_creator_;
-	std::vector<DBClientHanle*>                   client_lists_;
-	std::map<uint32_t, QueryCallBack>             ongoing_lists_;
-	std::map<DBClientHanle*, std::set<uint32_t> > assigned_lists_;
-	asio::ip::tcp::endpoint                       endpoint_;
-	size_t                                        next_client_index_;
+	const size_t                                   connection_num_;
+	eddy::IOServiceThreadManager&                  threads_;
+	eddy::IDGenerator                              generator_;
+	std::set<std::shared_ptr<bool> >               lifetimes_;
+	eddy::TCPClient					               client_creator_;
+	std::vector<DBClientHandle*>                   client_lists_;
+	std::map<uint32_t, QueryCallBack>              ongoing_lists_;
+	std::map<DBClientHandle*, std::set<uint32_t> > assigned_lists_;
+	asio::ip::tcp::endpoint                        endpoint_;
+	size_t                                         next_client_index_;
 };
 
 #endif
