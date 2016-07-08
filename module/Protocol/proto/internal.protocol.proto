@@ -20,7 +20,7 @@ message LoginDBProxyReq {
 
 // 登录DB代理返回
 message LoginDBProxyRsp {
-    optional uint32 heartbeat_interval = 1; // 心跳包间隔
+    required uint32 heartbeat_interval = 1; // 心跳包间隔
 }
 
 // 查询DB代理请求
@@ -72,4 +72,51 @@ message DBProxyErrorRsp {
 
     required ErrorCode error_code = 1; // 错误码
     optional uint32 sequence = 2; // 序列号
+}
+
+/////////////////////////////////////////////////////
+// 到GatewayServer的协议
+/////////////////////////////////////////////////////
+
+// 服务器节点类型
+enum ServerType {
+    kLicenceServer = 1; // 验证服务器
+    kLinkerServer = 2; // 链接服务器
+    kMainLogicSever = 3; // 主逻辑服务器
+}
+
+// 登录网关请求
+message LoginGatewayReq {
+    ServerType type = 1; // 服务器节点类型
+    optional uint32 node_id = 2; // 服务器节点id
+}
+
+// 登录网关返回
+message LoginGatewayRsp {
+    required uint32 heartbeat_interval = 1; // 心跳包间隔
+}
+
+// 暂停工作请求
+message SuspendWorkReq {
+    optional uint32 duration = 1; // 暂停时长
+}
+
+// 继续工作请求
+message ContinueWorkReq {
+}
+
+// 请求转发消息
+message ForwardMessageReq {
+    ServerType src_type = 1; // 来源服务器类型
+    optional uint32 src_node_id = 2; // 来源服务器节点id
+    ServerType dst_type = 3; // 目标服务器类型
+    optional uint32 dst_node_id = 4; // 目标服务器节点id
+}
+
+// 回复转发消息
+message ForwardMessageRsp {
+    ServerType src_type = 1; // 来源服务器类型
+    optional uint32 src_node_id = 2; // 来源服务器节点id
+    ServerType dst_type = 3; // 目标服务器类型
+    optional uint32 dst_node_id = 4; // 目标服务器节点id
 }
