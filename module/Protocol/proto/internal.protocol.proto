@@ -88,7 +88,7 @@ enum ServerType {
 // 登录网关请求
 message LoginGatewayReq {
     ServerType type = 1; // 服务器节点类型
-    optional uint32 node_id = 2; // 服务器节点id
+    optional uint32 child_id = 2 [default = 1]; // 服务器子节点id
 }
 
 // 登录网关返回
@@ -105,18 +105,31 @@ message SuspendWorkReq {
 message ContinueWorkReq {
 }
 
-// 请求转发消息
+// 转发消息请求
 message ForwardMessageReq {
     ServerType src_type = 1; // 来源服务器类型
-    optional uint32 src_node_id = 2; // 来源服务器节点id
+    optional uint32 src_child_id = 2 [default = 1]; // 来源服务器子节点id
     ServerType dst_type = 3; // 目标服务器类型
-    optional uint32 dst_node_id = 4; // 目标服务器节点id
+    optional uint32 dst_child_id = 4 [default = 1]; // 目标服务器子节点id
 }
 
-// 回复转发消息
+// 转发消息返回
 message ForwardMessageRsp {
     ServerType src_type = 1; // 来源服务器类型
-    optional uint32 src_node_id = 2; // 来源服务器节点id
+    optional uint32 src_child_id = 2 [default = 1]; // 来源服务器子节点id
     ServerType dst_type = 3; // 目标服务器类型
-    optional uint32 dst_node_id = 4; // 目标服务器节点id
+    optional uint32 dst_child_id = 4 [default = 1]; // 目标服务器子节点id
+}
+
+// 广播消息请求
+message BroadcastMessageReq {
+    ServerType src_type = 1; // 来源服务器类型
+    optional uint32 src_child_id = 2 [default = 1]; // 来源服务器子节点id
+    repeated ServerType dst_lists = 3; // 目标服务器列表
+}
+
+// 广播消息返回
+message BroadcastMessageRsp {
+    ServerType src_type = 1; // 来源服务器类型
+    optional uint32 src_child_id = 2 [default = 1]; // 来源服务器子节点id
 }
