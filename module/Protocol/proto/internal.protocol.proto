@@ -97,8 +97,8 @@ message LoginGatewayRsp {
 }
 
 // 暂停工作请求
-message SuspendWorkReq {
-    optional uint32 duration = 1; // 暂停时长
+message PauseWorkReq {
+    optional uint32 duration = 1 [default = 0]; // 暂停时长
 }
 
 // 继续工作请求
