@@ -38,10 +38,12 @@ public:
 };
 
 class DBClientHandle;
+class AsyncReconnectHandle;
 
 class DBClient final
 {
 	friend class DBClientHandle;
+	friend class AsyncReconnectHandle;
 
 public:
 	typedef std::function<void(google::protobuf::Message*)> QueryCallBack;
@@ -84,6 +86,12 @@ private:
 	// 初始化连接
 	void InitConnections();
 
+	// 异步重连
+	void AsyncReconnect();
+
+	// 异步重连结果
+	void AsyncReconnectResult(AsyncReconnectHandle &handler, asio::error_code error_code);
+
 	// 更新计时器
 	void UpdateTimer(asio::error_code error_code);
 
@@ -95,6 +103,7 @@ private:
 
 private:
 	const size_t                                   connection_num_;
+	unsigned short                                 connecting_num_;
 	eddy::IOServiceThreadManager&                  threads_;
 	eddy::IDGenerator                              generator_;
 	std::set<std::shared_ptr<bool> >               lifetimes_;

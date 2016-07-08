@@ -4,23 +4,26 @@
 #include <proto/MessageHelper.h>
 #include <proto/internal.protocol.pb.h>
 
+/************************************************************************/
+
 class DBClientHandle : public eddy::TCPSessionHandler
 {
 	friend class DBClient;
 
 public:
-	DBClientHandle(DBClient *client, std::shared_ptr<bool> &shared)
+	DBClientHandle(DBClient *client, std::shared_ptr<bool> &life)
 		: counter_(0)
 		, client_(client)
 		, is_logged_(false)
-		, client_shared_(shared)
+		, client_life_(life)
 		, heartbeat_interval_(0)
 	{
 	}
 
+	// 获取计数器
 	std::shared_ptr<bool>& GetShared()
 	{
-		return client_shared_;
+		return client_life_;
 	}
 
 	// 连接成功
@@ -31,7 +34,7 @@ public:
 		PackageMessage(&login, message);
 		Send(message);
 
-		if (!client_shared_.unique())
+		if (!client_life_.unique())
 		{
 			client_->OnConnected(this);
 		}
@@ -65,7 +68,7 @@ public:
 		}
 		else if (dynamic_cast<internal::PongRsp*>(respond.get()) == nullptr)
 		{
-			if (!client_shared_.unique())
+			if (!client_life_.unique())
 			{
 				client_->OnMessage(this, respond.get());
 			}
@@ -80,7 +83,7 @@ public:
 	virtual void OnClose() override
 	{
 		is_logged_ = false;
-		if (!client_shared_.unique())
+		if (!client_life_.unique())
 		{
 			client_->OnDisconnect(this);
 		}
@@ -105,10 +108,45 @@ public:
 private:
 	DBClient*             client_;
 	bool                  is_logged_;
-	std::shared_ptr<bool> client_shared_;
+	std::shared_ptr<bool> client_life_;
 	uint32_t              counter_;
 	uint32_t              heartbeat_interval_;
 };
+
+/************************************************************************/
+/************************************************************************/
+
+class AsyncReconnectHandle : public std::enable_shared_from_this< AsyncReconnectHandle >
+{
+public:
+	AsyncReconnectHandle(DBClient *client, std::shared_ptr<bool> &life)
+		: client_(client)
+		, client_life_(life)
+	{
+	}
+
+	// 获取计数器
+	std::shared_ptr<bool>& GetShared()
+	{
+		return client_life_;
+	}
+
+	// 连接结果回调
+	void ConnectCallback(asio::error_code error_code)
+	{
+		if (!client_life_.unique())
+		{
+			client_->AsyncReconnectResult(*this, error_code);
+		}
+	}
+
+private:
+	DBClient*             client_;
+	std::shared_ptr<bool> client_life_;
+};
+
+/************************************************************************/
+/************************************************************************/
 
 eddy::MessageFilterPointer CreaterMessageFilter()
 {
@@ -117,6 +155,7 @@ eddy::MessageFilterPointer CreaterMessageFilter()
 
 DBClient::DBClient(eddy::IOServiceThreadManager &threads, asio::ip::tcp::endpoint &endpoint, size_t connection_num)
 	: threads_(threads)
+	, connecting_num_(0)
 	, endpoint_(endpoint)
 	, next_client_index_(0)
 	, connection_num_(connection_num)
@@ -163,7 +202,17 @@ void DBClient::InitConnections()
 	asio::error_code error_code;
 	for (size_t i = 0; i < connection_num_; ++i)
 	{
-		eddy::TCPSessionID id = client_creator_.Connect(endpoint_, error_code);
+		try
+		{
+			client_creator_.Connect(endpoint_, error_code);
+
+		}
+		catch (const std::exception&)
+		{
+			Clear();
+			throw ConnectDBSFailed(error_code.message().c_str());
+		}
+		
 		if (error_code)
 		{
 			Clear();
@@ -172,9 +221,57 @@ void DBClient::InitConnections()
 	}
 }
 
+// 重新连接
+void DBClient::AsyncReconnect()
+{
+	if (client_lists_.size() < connection_num_)
+	{
+		const int diff = connection_num_ - client_lists_.size();
+		assert(connecting_num_ <= diff);
+		if (connecting_num_ < diff)
+		{
+			const int lack = diff - connecting_num_;
+			for (int i = 0; i < lack; ++i)
+			{
+				++connecting_num_;
+
+				auto life = std::make_shared<bool>();
+				lifetimes_.insert(life);
+
+				auto handler = std::make_shared<AsyncReconnectHandle>(this, life);
+				client_creator_.AsyncConnect(endpoint_, std::bind(&AsyncReconnectHandle::ConnectCallback, std::move(handler), std::placeholders::_1));
+			}
+		}
+	}
+}
+
+// 异步重连结果
+void DBClient::AsyncReconnectResult(AsyncReconnectHandle &handler, asio::error_code error_code)
+{
+	if (error_code)
+	{
+		assert(connecting_num_ > 0);
+		if (connecting_num_ > 0)
+		{
+			--connecting_num_;
+		}
+	}
+	else
+	{
+		++connecting_num_;
+	}
+	lifetimes_.erase(handler.GetShared());
+}
+
 // 更新计时器
 void DBClient::UpdateTimer(asio::error_code error_code)
 {
+	if (error_code)
+	{
+		std::cerr << error_code.message() << std::endl;
+		return;
+	}
+
 	for (auto handle : client_lists_)
 	{
 		handle->HeartbeatCountdown();
@@ -303,6 +400,8 @@ void DBClient::AsyncQuery(DatabaseType dbtype, const char *dbname, DatabaseActio
 
 	if (client_lists_.size() < connection_num_)
 	{
+		AsyncReconnect();
+
 		if (client_lists_.empty())
 		{
 			internal::DBProxyErrorRsp error;
@@ -361,3 +460,5 @@ void DBClient::AsyncDelete(DatabaseType dbtype, const char *dbname, const char *
 {
 	AsyncQuery(dbtype, dbname, DatabaseActionType::kDelete, statement, std::forward<QueryCallBack>(callback));
 }
+
+/************************************************************************/

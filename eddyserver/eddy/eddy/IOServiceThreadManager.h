@@ -4,7 +4,7 @@
 #include <map>
 #include <vector>
 #include <unordered_map>
-#include "Types.h"
+#include "EddyTypes.h"
 #include "IDGenerator.h"
 
 namespace eddy

@@ -2,7 +2,7 @@
 #define __TCP_SESSION_H__
 
 #include <asio/ip/tcp.hpp>
-#include "Types.h"
+#include "EddyTypes.h"
 #include "NetMessage.h"
 
 namespace eddy

@@ -2,7 +2,7 @@
 #define __TCP_SERVER_H__
 
 #include <asio.hpp>
-#include "Types.h"
+#include "EddyTypes.h"
 
 namespace eddy
 {

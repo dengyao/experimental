@@ -2,7 +2,7 @@
 #define __TCP_CLIENT_H__
 
 #include <asio.hpp>
-#include "Types.h"
+#include "EddyTypes.h"
 
 namespace eddy
 {
@@ -20,9 +20,9 @@ namespace eddy
 	public:
 		asio::io_service& IOService();
 
-		void AsyncConnect(asio::ip::tcp::endpoint &endpoint);
+		void Connect(asio::ip::tcp::endpoint &endpoint, asio::error_code &error_code);
 
-		TCPSessionID Connect(asio::ip::tcp::endpoint &endpoint, asio::error_code &error_code);
+		void AsyncConnect(asio::ip::tcp::endpoint &endpoint, const std::function<void(asio::error_code)> &connect_handler);
 
 	protected:
 		TCPClient(const TCPClient&) = delete;
@@ -30,6 +30,8 @@ namespace eddy
 
 	private:
 		void HandleConnect(SessionPointer session_ptr, asio::error_code error_code);
+
+		void HandleAsyncConnect(SessionPointer session_ptr, std::function<void(asio::error_code)> connect_handler, asio::error_code error_code);
 
 	private:
 		IOServiceThreadManager&			io_thread_manager_;

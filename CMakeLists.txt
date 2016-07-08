@@ -12,7 +12,10 @@ add_definitions(-DASIO_STANDALONE)
 if(CMAKE_COMPILER_IS_GNUCXX)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -pthread")
 endif()
+set(COMPILE_STATIC_LIBRARY true)
 message("CMAKE_CXX_FLAGS: " ${CMAKE_CXX_FLAGS})
+
+option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 
 # 设置类库名称
 set(BASE_LIBRARY_NAME base)

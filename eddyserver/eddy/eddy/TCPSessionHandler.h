@@ -1,7 +1,7 @@
 ﻿#ifndef __TCP_SESSION_HANDLE_H__
 #define __TCP_SESSION_HANDLE_H__
 
-#include "Types.h"
+#include "EddyTypes.h"
 #include "NetMessage.h"
 #include "TCPSession.h"
 #include "IOServiceThread.h"
