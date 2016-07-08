@@ -1,7 +1,7 @@
 ﻿#ifndef __PROXY_MANAGER_H__
 #define __PROXY_MANAGER_H__
 
-#include <eddy.h>
+#include <eddyserver.h>
 #include "ProxyImpl.h"
 #include "ConnectorMySQL.h"
 

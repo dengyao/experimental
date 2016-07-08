@@ -1,4 +1,6 @@
-set(PROTOBUF_SRC_LISTS
+set(CURRENT_PROJECT_NAME Protobuf)
+
+set(CURRENT_PROJECT_SRC_LISTS
   google/protobuf/compiler/importer.cc
   google/protobuf/compiler/parser.cc
   google/protobuf/descriptor.cc
@@ -39,26 +41,13 @@ include_directories(
   ${PROTOBUF_INCLUDE_DIRS}
 )
 
-if(BUILD_SHARED_LIBS)
-  add_library(Protobuf SHARED
-    ${PROTOBUF_SRC_LISTS}
-  )
+add_library(${CURRENT_PROJECT_NAME} ${COMPOLE_LIBRARY_TYPE}
+  ${CURRENT_PROJECT_SRC_LISTS}
+)
 
-  set_target_properties(Protobuf
-    PROPERTIES
-    OUTPUT_NAME ${PROTOBUF_LIBRARY_NAME}
-    ARCHIVE_OUTPUT_DIRECTORY ${BINARY_OUTPUT_DIR}
-    LIBRARY_OUTPUT_DIRECTORY ${BINARY_OUTPUT_DIR}
-  )
-else()
-  add_library(Protobuf STATIC
-    ${PROTOBUF_SRC_LISTS}
-  )
-
-  set_target_properties(Protobuf
-    PROPERTIES
-    OUTPUT_NAME ${PROTOBUF_LIBRARY_NAME}
-    ARCHIVE_OUTPUT_DIRECTORY ${BINARY_OUTPUT_DIR}
-    LIBRARY_OUTPUT_DIRECTORY ${BINARY_OUTPUT_DIR}
-  )
-endif()
+set_target_properties(${CURRENT_PROJECT_NAME}
+  PROPERTIES
+  OUTPUT_NAME ${PROTOBUF_LIBRARY_NAME}
+  ARCHIVE_OUTPUT_DIRECTORY ${BINARY_OUTPUT_DIR}
+  LIBRARY_OUTPUT_DIRECTORY ${BINARY_OUTPUT_DIR}
+)

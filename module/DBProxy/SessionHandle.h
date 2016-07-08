@@ -1,7 +1,7 @@
 ﻿#ifndef __DBPROXY_SESSION_HANDLE_H__
 #define __DBPROXY_SESSION_HANDLE_H__
 
-#include <eddy.h>
+#include <eddyserver.h>
 
 namespace dbproxy
 {

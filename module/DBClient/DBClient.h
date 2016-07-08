@@ -4,7 +4,7 @@
 #include <set>
 #include <map>
 #include <vector>
-#include <eddy.h>
+#include <eddyserver.h>
 
 namespace google
 {

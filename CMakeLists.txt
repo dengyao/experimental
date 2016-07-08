@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 2.8)
 
 # 设置宏
 if (WIN32)
-add_definitions(-DASIO_MSVC)
+  add_definitions(-DASIO_MSVC)
 endif()
 add_definitions(-DASIO_STANDALONE)
 
@@ -12,42 +12,54 @@ add_definitions(-DASIO_STANDALONE)
 if(CMAKE_COMPILER_IS_GNUCXX)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -pthread")
 endif()
-set(COMPILE_STATIC_LIBRARY true)
 message("CMAKE_CXX_FLAGS: " ${CMAKE_CXX_FLAGS})
 
-option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
+if (WIN32)
+  option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
+else()
+  option(BUILD_SHARED_LIBS "Build shared libraries" ON)
+endif()
+
+if(BUILD_SHARED_LIBS)
+  set(COMPOLE_LIBRARY_TYPE SHARED)
+else()
+  set(COMPOLE_LIBRARY_TYPE STATIC)
+endif()
 
 # 设置类库名称
 set(BASE_LIBRARY_NAME base)
-set(EDDY_LIBRARY_NAME eddy)
 set(PROTOBUF_LIBRARY_NAME protobuf)
+set(EDDYSERVER_LIBRARY_NAME eddyserver)
+
 set(PROTOCOL_LIBRARY_NAME protocol)
+set(DBCLIENT_LIBRARY_NAME dbclient)
 
 # 选择MySQL链接库
 if (WIN32)
-set(MYSQL_LIBRARY_NAME libmysql)
+  set(MYSQL_LIBRARY_NAME libmysql)
 else()
-set(MYSQL_LIBRARY_NAME mysqlclient)
+  set(MYSQL_LIBRARY_NAME mysqlclient)
 endif()
 
 # 设置类库头文件包含目录
-set(ASIO_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/eddyserver/asio)
-set(BASE_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/eddyserver/base)
-set(EDDY_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/eddyserver/eddy)
-set(PROTOBUF_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/eddyserver/external/protobuf)
-set(RAPIDJSON_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/eddyserver/external/rapidjson)
-set(MYSQL_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/eddyserver/external/mysql/include)
-set(EASYLOGGINGPP_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/eddyserver/external/easyloggingpp)
+set(ASIO_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/core/asio)
+set(BASE_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/core/base)
+set(EDDYSERVER_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/core/eddy)
+set(PROTOBUF_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/core/external/protobuf)
+set(RAPIDJSON_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/core/external/rapidjson)
+set(MYSQL_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/core/external/mysql/include)
+set(EASYLOGGINGPP_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/core/external/easyloggingpp)
 
-set(PROTOCOL_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/module/Protocol/cpp/)
+set(PROTOCOL_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/module/Protocol/cpp)
+set(DBCLIENT_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/module/DBClient)
 
 # 设置二进制输出目录
 set(BINARY_OUTPUT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
 # 添加编译项目
-add_subdirectory(eddyserver/base)
-add_subdirectory(eddyserver/eddy)
-add_subdirectory(eddyserver/external/protobuf)
+add_subdirectory(core/base)
+add_subdirectory(core/eddy)
+add_subdirectory(core/external/protobuf)
 
 add_subdirectory(module/Protocol)
 add_subdirectory(module/DBProxy)
