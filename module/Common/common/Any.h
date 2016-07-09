@@ -161,7 +161,6 @@ private:
 	std::unique_ptr<Base> data_;
 };
 
-
 template <typename T> T& AnyCast(Any &a)
 {
 	return a.CastTo<T>();

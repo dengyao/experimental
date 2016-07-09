@@ -27,10 +27,10 @@ else()
 endif()
 
 # 设置类库名称
-set(BASE_LIBRARY_NAME base)
 set(PROTOBUF_LIBRARY_NAME protobuf)
 set(EDDYSERVER_LIBRARY_NAME eddyserver)
 
+set(COMMON_LIBRARY_NAME common)
 set(PROTOCOL_LIBRARY_NAME protocol)
 set(DBCLIENT_LIBRARY_NAME dbclient)
 
@@ -43,13 +43,13 @@ endif()
 
 # 设置类库头文件包含目录
 set(ASIO_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/core/asio)
-set(BASE_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/core/base)
 set(EDDYSERVER_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/core/eddy)
 set(PROTOBUF_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/core/external/protobuf)
 set(RAPIDJSON_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/core/external/rapidjson)
 set(MYSQL_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/core/external/mysql/include)
 set(EASYLOGGINGPP_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/core/external/easyloggingpp)
 
+set(COMMON_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/module/Common)
 set(PROTOCOL_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/module/Protocol/cpp)
 set(DBCLIENT_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/module/DBClient)
 
@@ -57,10 +57,10 @@ set(DBCLIENT_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/module/DBClient)
 set(BINARY_OUTPUT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
 # 添加编译项目
-add_subdirectory(core/base)
 add_subdirectory(core/eddy)
 add_subdirectory(core/external/protobuf)
 
+add_subdirectory(module/Common)
 add_subdirectory(module/Protocol)
 add_subdirectory(module/DBProxy)
 add_subdirectory(module/DBClient)

@@ -1,0 +1,12 @@
+﻿#ifndef __COMMON_H__
+#define __COMMON_H__
+
+#include "common/Any.h"
+#include "common/Singleton"
+#include "common/TaskPools.h"
+#include "common/TaskQueue.h"
+#include "common/StringHelper.h"
+#include "common/ConfigManager.h"
+#include "common/ConfigInterface.h"
+
+#endif
