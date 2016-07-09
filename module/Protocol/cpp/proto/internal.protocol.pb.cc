@@ -46,7 +46,9 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* DBProxyErrorRsp_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   DBProxyErrorRsp_reflection_ = NULL;
-const ::google::protobuf::EnumDescriptor* DBProxyErrorRsp_ErrorCode_descriptor_ = NULL;
+const ::google::protobuf::Descriptor* GatewayErrorRsp_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  GatewayErrorRsp_reflection_ = NULL;
 const ::google::protobuf::Descriptor* LoginGatewayReq_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   LoginGatewayReq_reflection_ = NULL;
@@ -56,9 +58,15 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* PauseWorkReq_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   PauseWorkReq_reflection_ = NULL;
+const ::google::protobuf::Descriptor* PauseWorkRsp_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  PauseWorkRsp_reflection_ = NULL;
 const ::google::protobuf::Descriptor* ContinueWorkReq_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   ContinueWorkReq_reflection_ = NULL;
+const ::google::protobuf::Descriptor* ContinueWorkRsp_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  ContinueWorkRsp_reflection_ = NULL;
 const ::google::protobuf::Descriptor* ForwardMessageReq_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   ForwardMessageReq_reflection_ = NULL;
@@ -71,7 +79,8 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* BroadcastMessageRsp_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   BroadcastMessageRsp_reflection_ = NULL;
-const ::google::protobuf::EnumDescriptor* ServerType_descriptor_ = NULL;
+const ::google::protobuf::EnumDescriptor* ErrorCode_descriptor_ = NULL;
+const ::google::protobuf::EnumDescriptor* NodeType_descriptor_ = NULL;
 
 }  // namespace
 
@@ -209,8 +218,23 @@ void protobuf_AssignDesc_proto_2finternal_2eprotocol_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(DBProxyErrorRsp));
-  DBProxyErrorRsp_ErrorCode_descriptor_ = DBProxyErrorRsp_descriptor_->enum_type(0);
-  LoginGatewayReq_descriptor_ = file->message_type(8);
+  GatewayErrorRsp_descriptor_ = file->message_type(8);
+  static const int GatewayErrorRsp_offsets_[2] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GatewayErrorRsp, error_code_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GatewayErrorRsp, what_),
+  };
+  GatewayErrorRsp_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      GatewayErrorRsp_descriptor_,
+      GatewayErrorRsp::default_instance_,
+      GatewayErrorRsp_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GatewayErrorRsp, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(GatewayErrorRsp, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(GatewayErrorRsp));
+  LoginGatewayReq_descriptor_ = file->message_type(9);
   static const int LoginGatewayReq_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LoginGatewayReq, type_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LoginGatewayReq, child_id_),
@@ -226,7 +250,7 @@ void protobuf_AssignDesc_proto_2finternal_2eprotocol_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(LoginGatewayReq));
-  LoginGatewayRsp_descriptor_ = file->message_type(9);
+  LoginGatewayRsp_descriptor_ = file->message_type(10);
   static const int LoginGatewayRsp_offsets_[1] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LoginGatewayRsp, heartbeat_interval_),
   };
@@ -241,7 +265,7 @@ void protobuf_AssignDesc_proto_2finternal_2eprotocol_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(LoginGatewayRsp));
-  PauseWorkReq_descriptor_ = file->message_type(10);
+  PauseWorkReq_descriptor_ = file->message_type(11);
   static const int PauseWorkReq_offsets_[1] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PauseWorkReq, duration_),
   };
@@ -256,7 +280,21 @@ void protobuf_AssignDesc_proto_2finternal_2eprotocol_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(PauseWorkReq));
-  ContinueWorkReq_descriptor_ = file->message_type(11);
+  PauseWorkRsp_descriptor_ = file->message_type(12);
+  static const int PauseWorkRsp_offsets_[1] = {
+  };
+  PauseWorkRsp_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      PauseWorkRsp_descriptor_,
+      PauseWorkRsp::default_instance_,
+      PauseWorkRsp_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PauseWorkRsp, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PauseWorkRsp, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(PauseWorkRsp));
+  ContinueWorkReq_descriptor_ = file->message_type(13);
   static const int ContinueWorkReq_offsets_[1] = {
   };
   ContinueWorkReq_reflection_ =
@@ -270,7 +308,21 @@ void protobuf_AssignDesc_proto_2finternal_2eprotocol_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(ContinueWorkReq));
-  ForwardMessageReq_descriptor_ = file->message_type(12);
+  ContinueWorkRsp_descriptor_ = file->message_type(14);
+  static const int ContinueWorkRsp_offsets_[1] = {
+  };
+  ContinueWorkRsp_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      ContinueWorkRsp_descriptor_,
+      ContinueWorkRsp::default_instance_,
+      ContinueWorkRsp_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ContinueWorkRsp, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ContinueWorkRsp, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(ContinueWorkRsp));
+  ForwardMessageReq_descriptor_ = file->message_type(15);
   static const int ForwardMessageReq_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ForwardMessageReq, dst_type_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ForwardMessageReq, dst_child_id_),
@@ -286,7 +338,7 @@ void protobuf_AssignDesc_proto_2finternal_2eprotocol_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(ForwardMessageReq));
-  ForwardMessageRsp_descriptor_ = file->message_type(13);
+  ForwardMessageRsp_descriptor_ = file->message_type(16);
   static const int ForwardMessageRsp_offsets_[4] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ForwardMessageRsp, src_type_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ForwardMessageRsp, src_child_id_),
@@ -304,7 +356,7 @@ void protobuf_AssignDesc_proto_2finternal_2eprotocol_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(ForwardMessageRsp));
-  BroadcastMessageReq_descriptor_ = file->message_type(14);
+  BroadcastMessageReq_descriptor_ = file->message_type(17);
   static const int BroadcastMessageReq_offsets_[1] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BroadcastMessageReq, dst_lists_),
   };
@@ -319,7 +371,7 @@ void protobuf_AssignDesc_proto_2finternal_2eprotocol_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(BroadcastMessageReq));
-  BroadcastMessageRsp_descriptor_ = file->message_type(15);
+  BroadcastMessageRsp_descriptor_ = file->message_type(18);
   static const int BroadcastMessageRsp_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BroadcastMessageRsp, src_type_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BroadcastMessageRsp, src_child_id_),
@@ -335,7 +387,8 @@ void protobuf_AssignDesc_proto_2finternal_2eprotocol_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(BroadcastMessageRsp));
-  ServerType_descriptor_ = file->enum_type(0);
+  ErrorCode_descriptor_ = file->enum_type(0);
+  NodeType_descriptor_ = file->enum_type(1);
 }
 
 namespace {
@@ -365,13 +418,19 @@ void protobuf_RegisterTypes(const ::std::string&) {
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     DBProxyErrorRsp_descriptor_, &DBProxyErrorRsp::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    GatewayErrorRsp_descriptor_, &GatewayErrorRsp::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     LoginGatewayReq_descriptor_, &LoginGatewayReq::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     LoginGatewayRsp_descriptor_, &LoginGatewayRsp::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     PauseWorkReq_descriptor_, &PauseWorkReq::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    PauseWorkRsp_descriptor_, &PauseWorkRsp::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     ContinueWorkReq_descriptor_, &ContinueWorkReq::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    ContinueWorkRsp_descriptor_, &ContinueWorkRsp::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     ForwardMessageReq_descriptor_, &ForwardMessageReq::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
@@ -401,14 +460,20 @@ void protobuf_ShutdownFile_proto_2finternal_2eprotocol_2eproto() {
   delete DBErrorRsp_reflection_;
   delete DBProxyErrorRsp::default_instance_;
   delete DBProxyErrorRsp_reflection_;
+  delete GatewayErrorRsp::default_instance_;
+  delete GatewayErrorRsp_reflection_;
   delete LoginGatewayReq::default_instance_;
   delete LoginGatewayReq_reflection_;
   delete LoginGatewayRsp::default_instance_;
   delete LoginGatewayRsp_reflection_;
   delete PauseWorkReq::default_instance_;
   delete PauseWorkReq_reflection_;
+  delete PauseWorkRsp::default_instance_;
+  delete PauseWorkRsp_reflection_;
   delete ContinueWorkReq::default_instance_;
   delete ContinueWorkReq_reflection_;
+  delete ContinueWorkRsp::default_instance_;
+  delete ContinueWorkRsp_reflection_;
   delete ForwardMessageReq::default_instance_;
   delete ForwardMessageReq_reflection_;
   delete ForwardMessageRsp::default_instance_;
@@ -439,29 +504,31 @@ void protobuf_AddDesc_proto_2finternal_2eprotocol_2eproto() {
     "edis\020\001\022\n\n\006kMySQL\020\002\"3\n\017QueryDBProxyRsp\022\020\n"
     "\010sequence\030\001 \002(\r\022\016\n\006result\030\002 \001(\t\"@\n\nDBErr"
     "orRsp\022\020\n\010sequence\030\001 \002(\r\022\022\n\nerror_code\030\002 "
-    "\002(\005\022\014\n\004what\030\003 \001(\t\"\373\001\n\017DBProxyErrorRsp\0227\n"
-    "\nerror_code\030\001 \002(\0162#.internal.DBProxyErro"
-    "rRsp.ErrorCode\022\020\n\010sequence\030\002 \001(\r\"\234\001\n\tErr"
-    "orCode\022\016\n\nkNotLogged\020\001\022\017\n\013kDisconnect\020\002\022"
-    "\021\n\rkNotConnected\020\003\022\024\n\020kInvalidProtocol\020\004"
-    "\022\022\n\016kInvalidAction\020\005\022\025\n\021kNotFoundDatabas"
-    "e\020\006\022\032\n\026kResourceInsufficiency\020\007\"J\n\017Login"
-    "GatewayReq\022\"\n\004type\030\001 \002(\0162\024.internal.Serv"
-    "erType\022\023\n\010child_id\030\002 \001(\r:\0011\"-\n\017LoginGate"
-    "wayRsp\022\032\n\022heartbeat_interval\030\001 \002(\r\"#\n\014Pa"
-    "useWorkReq\022\023\n\010duration\030\001 \001(\r:\0010\"\021\n\017Conti"
-    "nueWorkReq\"T\n\021ForwardMessageReq\022&\n\010dst_t"
-    "ype\030\001 \002(\0162\024.internal.ServerType\022\027\n\014dst_c"
-    "hild_id\030\002 \001(\r:\0011\"\225\001\n\021ForwardMessageRsp\022&"
-    "\n\010src_type\030\001 \002(\0162\024.internal.ServerType\022\027"
-    "\n\014src_child_id\030\002 \001(\r:\0011\022&\n\010dst_type\030\003 \002("
-    "\0162\024.internal.ServerType\022\027\n\014dst_child_id\030"
-    "\004 \001(\r:\0011\">\n\023BroadcastMessageReq\022\'\n\tdst_l"
-    "ists\030\001 \003(\0162\024.internal.ServerType\"V\n\023Broa"
-    "dcastMessageRsp\022&\n\010src_type\030\001 \002(\0162\024.inte"
-    "rnal.ServerType\022\027\n\014src_child_id\030\002 \001(\r:\0011"
-    "*H\n\nServerType\022\022\n\016kLicenceServer\020\001\022\021\n\rkL"
-    "inkerServer\020\002\022\023\n\017kMainLogicSever\020\003", 1434);
+    "\002(\005\022\014\n\004what\030\003 \001(\t\"L\n\017DBProxyErrorRsp\022\'\n\n"
+    "error_code\030\001 \002(\0162\023.internal.ErrorCode\022\020\n"
+    "\010sequence\030\002 \001(\r\"H\n\017GatewayErrorRsp\022\'\n\ner"
+    "ror_code\030\001 \002(\0162\023.internal.ErrorCode\022\014\n\004w"
+    "hat\030\002 \001(\t\"H\n\017LoginGatewayReq\022 \n\004type\030\001 \002"
+    "(\0162\022.internal.NodeType\022\023\n\010child_id\030\002 \001(\r"
+    ":\0011\"-\n\017LoginGatewayRsp\022\032\n\022heartbeat_inte"
+    "rval\030\001 \002(\r\"#\n\014PauseWorkReq\022\023\n\010duration\030\001"
+    " \001(\r:\0010\"\016\n\014PauseWorkRsp\"\021\n\017ContinueWorkR"
+    "eq\"\021\n\017ContinueWorkRsp\"R\n\021ForwardMessageR"
+    "eq\022$\n\010dst_type\030\001 \002(\0162\022.internal.NodeType"
+    "\022\027\n\014dst_child_id\030\002 \001(\r:\0011\"\221\001\n\021ForwardMes"
+    "sageRsp\022$\n\010src_type\030\001 \002(\0162\022.internal.Nod"
+    "eType\022\027\n\014src_child_id\030\002 \001(\r:\0011\022$\n\010dst_ty"
+    "pe\030\003 \002(\0162\022.internal.NodeType\022\027\n\014dst_chil"
+    "d_id\030\004 \001(\r:\0011\"<\n\023BroadcastMessageReq\022%\n\t"
+    "dst_lists\030\001 \003(\0162\022.internal.NodeType\"T\n\023B"
+    "roadcastMessageRsp\022$\n\010src_type\030\001 \002(\0162\022.i"
+    "nternal.NodeType\022\027\n\014src_child_id\030\002 \001(\r:\001"
+    "1*\241\001\n\tErrorCode\022\020\n\014kNotLoggedIn\020\001\022\017\n\013kDi"
+    "sconnect\020\002\022\021\n\rkNotConnected\020\003\022\024\n\020kInvali"
+    "dProtocol\020\004\022\025\n\021kInvalidOperation\020\005\022\025\n\021kN"
+    "otFoundDatabase\020\006\022\032\n\026kResourceInsufficie"
+    "ncy\020\007*F\n\010NodeType\022\022\n\016kLicenceServer\020\001\022\021\n"
+    "\rkLinkerServer\020\002\022\023\n\017kMainLogicSever\020\003", 1517);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "proto/internal.protocol.proto", &protobuf_RegisterTypes);
   PingReq::default_instance_ = new PingReq();
@@ -472,10 +539,13 @@ void protobuf_AddDesc_proto_2finternal_2eprotocol_2eproto() {
   QueryDBProxyRsp::default_instance_ = new QueryDBProxyRsp();
   DBErrorRsp::default_instance_ = new DBErrorRsp();
   DBProxyErrorRsp::default_instance_ = new DBProxyErrorRsp();
+  GatewayErrorRsp::default_instance_ = new GatewayErrorRsp();
   LoginGatewayReq::default_instance_ = new LoginGatewayReq();
   LoginGatewayRsp::default_instance_ = new LoginGatewayRsp();
   PauseWorkReq::default_instance_ = new PauseWorkReq();
+  PauseWorkRsp::default_instance_ = new PauseWorkRsp();
   ContinueWorkReq::default_instance_ = new ContinueWorkReq();
+  ContinueWorkRsp::default_instance_ = new ContinueWorkRsp();
   ForwardMessageReq::default_instance_ = new ForwardMessageReq();
   ForwardMessageRsp::default_instance_ = new ForwardMessageRsp();
   BroadcastMessageReq::default_instance_ = new BroadcastMessageReq();
@@ -488,10 +558,13 @@ void protobuf_AddDesc_proto_2finternal_2eprotocol_2eproto() {
   QueryDBProxyRsp::default_instance_->InitAsDefaultInstance();
   DBErrorRsp::default_instance_->InitAsDefaultInstance();
   DBProxyErrorRsp::default_instance_->InitAsDefaultInstance();
+  GatewayErrorRsp::default_instance_->InitAsDefaultInstance();
   LoginGatewayReq::default_instance_->InitAsDefaultInstance();
   LoginGatewayRsp::default_instance_->InitAsDefaultInstance();
   PauseWorkReq::default_instance_->InitAsDefaultInstance();
+  PauseWorkRsp::default_instance_->InitAsDefaultInstance();
   ContinueWorkReq::default_instance_->InitAsDefaultInstance();
+  ContinueWorkRsp::default_instance_->InitAsDefaultInstance();
   ForwardMessageReq::default_instance_->InitAsDefaultInstance();
   ForwardMessageRsp::default_instance_->InitAsDefaultInstance();
   BroadcastMessageReq::default_instance_->InitAsDefaultInstance();
@@ -505,11 +578,30 @@ struct StaticDescriptorInitializer_proto_2finternal_2eprotocol_2eproto {
     protobuf_AddDesc_proto_2finternal_2eprotocol_2eproto();
   }
 } static_descriptor_initializer_proto_2finternal_2eprotocol_2eproto_;
-const ::google::protobuf::EnumDescriptor* ServerType_descriptor() {
+const ::google::protobuf::EnumDescriptor* ErrorCode_descriptor() {
   protobuf_AssignDescriptorsOnce();
-  return ServerType_descriptor_;
+  return ErrorCode_descriptor_;
 }
-bool ServerType_IsValid(int value) {
+bool ErrorCode_IsValid(int value) {
+  switch(value) {
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+      return true;
+    default:
+      return false;
+  }
+}
+
+const ::google::protobuf::EnumDescriptor* NodeType_descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return NodeType_descriptor_;
+}
+bool NodeType_IsValid(int value) {
   switch(value) {
     case 1:
     case 2:
@@ -2370,37 +2462,6 @@ void DBErrorRsp::Swap(DBErrorRsp* other) {
 
 // ===================================================================
 
-const ::google::protobuf::EnumDescriptor* DBProxyErrorRsp_ErrorCode_descriptor() {
-  protobuf_AssignDescriptorsOnce();
-  return DBProxyErrorRsp_ErrorCode_descriptor_;
-}
-bool DBProxyErrorRsp_ErrorCode_IsValid(int value) {
-  switch(value) {
-    case 1:
-    case 2:
-    case 3:
-    case 4:
-    case 5:
-    case 6:
-    case 7:
-      return true;
-    default:
-      return false;
-  }
-}
-
-#ifndef _MSC_VER
-const DBProxyErrorRsp_ErrorCode DBProxyErrorRsp::kNotLogged;
-const DBProxyErrorRsp_ErrorCode DBProxyErrorRsp::kDisconnect;
-const DBProxyErrorRsp_ErrorCode DBProxyErrorRsp::kNotConnected;
-const DBProxyErrorRsp_ErrorCode DBProxyErrorRsp::kInvalidProtocol;
-const DBProxyErrorRsp_ErrorCode DBProxyErrorRsp::kInvalidAction;
-const DBProxyErrorRsp_ErrorCode DBProxyErrorRsp::kNotFoundDatabase;
-const DBProxyErrorRsp_ErrorCode DBProxyErrorRsp::kResourceInsufficiency;
-const DBProxyErrorRsp_ErrorCode DBProxyErrorRsp::ErrorCode_MIN;
-const DBProxyErrorRsp_ErrorCode DBProxyErrorRsp::ErrorCode_MAX;
-const int DBProxyErrorRsp::ErrorCode_ARRAYSIZE;
-#endif  // _MSC_VER
 #ifndef _MSC_VER
 const int DBProxyErrorRsp::kErrorCodeFieldNumber;
 const int DBProxyErrorRsp::kSequenceFieldNumber;
@@ -2479,15 +2540,15 @@ bool DBProxyErrorRsp::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required .internal.DBProxyErrorRsp.ErrorCode error_code = 1;
+      // required .internal.ErrorCode error_code = 1;
       case 1: {
         if (tag == 8) {
           int value;
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          if (::internal::DBProxyErrorRsp_ErrorCode_IsValid(value)) {
-            set_error_code(static_cast< ::internal::DBProxyErrorRsp_ErrorCode >(value));
+          if (::internal::ErrorCode_IsValid(value)) {
+            set_error_code(static_cast< ::internal::ErrorCode >(value));
           } else {
             mutable_unknown_fields()->AddVarint(1, value);
           }
@@ -2538,7 +2599,7 @@ failure:
 void DBProxyErrorRsp::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:internal.DBProxyErrorRsp)
-  // required .internal.DBProxyErrorRsp.ErrorCode error_code = 1;
+  // required .internal.ErrorCode error_code = 1;
   if (has_error_code()) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->error_code(), output);
@@ -2559,7 +2620,7 @@ void DBProxyErrorRsp::SerializeWithCachedSizes(
 ::google::protobuf::uint8* DBProxyErrorRsp::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // @@protoc_insertion_point(serialize_to_array_start:internal.DBProxyErrorRsp)
-  // required .internal.DBProxyErrorRsp.ErrorCode error_code = 1;
+  // required .internal.ErrorCode error_code = 1;
   if (has_error_code()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       1, this->error_code(), target);
@@ -2582,7 +2643,7 @@ int DBProxyErrorRsp::ByteSize() const {
   int total_size = 0;
 
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // required .internal.DBProxyErrorRsp.ErrorCode error_code = 1;
+    // required .internal.ErrorCode error_code = 1;
     if (has_error_code()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->error_code());
@@ -2672,6 +2733,297 @@ void DBProxyErrorRsp::Swap(DBProxyErrorRsp* other) {
 // ===================================================================
 
 #ifndef _MSC_VER
+const int GatewayErrorRsp::kErrorCodeFieldNumber;
+const int GatewayErrorRsp::kWhatFieldNumber;
+#endif  // !_MSC_VER
+
+GatewayErrorRsp::GatewayErrorRsp()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:internal.GatewayErrorRsp)
+}
+
+void GatewayErrorRsp::InitAsDefaultInstance() {
+}
+
+GatewayErrorRsp::GatewayErrorRsp(const GatewayErrorRsp& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:internal.GatewayErrorRsp)
+}
+
+void GatewayErrorRsp::SharedCtor() {
+  ::google::protobuf::internal::GetEmptyString();
+  _cached_size_ = 0;
+  error_code_ = 1;
+  what_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+GatewayErrorRsp::~GatewayErrorRsp() {
+  // @@protoc_insertion_point(destructor:internal.GatewayErrorRsp)
+  SharedDtor();
+}
+
+void GatewayErrorRsp::SharedDtor() {
+  if (what_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete what_;
+  }
+  if (this != default_instance_) {
+  }
+}
+
+void GatewayErrorRsp::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* GatewayErrorRsp::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return GatewayErrorRsp_descriptor_;
+}
+
+const GatewayErrorRsp& GatewayErrorRsp::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_proto_2finternal_2eprotocol_2eproto();
+  return *default_instance_;
+}
+
+GatewayErrorRsp* GatewayErrorRsp::default_instance_ = NULL;
+
+GatewayErrorRsp* GatewayErrorRsp::New() const {
+  return new GatewayErrorRsp;
+}
+
+void GatewayErrorRsp::Clear() {
+  if (_has_bits_[0 / 32] & 3) {
+    error_code_ = 1;
+    if (has_what()) {
+      if (what_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+        what_->clear();
+      }
+    }
+  }
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool GatewayErrorRsp::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:internal.GatewayErrorRsp)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required .internal.ErrorCode error_code = 1;
+      case 1: {
+        if (tag == 8) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          if (::internal::ErrorCode_IsValid(value)) {
+            set_error_code(static_cast< ::internal::ErrorCode >(value));
+          } else {
+            mutable_unknown_fields()->AddVarint(1, value);
+          }
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(18)) goto parse_what;
+        break;
+      }
+
+      // optional string what = 2;
+      case 2: {
+        if (tag == 18) {
+         parse_what:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_what()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+            this->what().data(), this->what().length(),
+            ::google::protobuf::internal::WireFormat::PARSE,
+            "what");
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:internal.GatewayErrorRsp)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:internal.GatewayErrorRsp)
+  return false;
+#undef DO_
+}
+
+void GatewayErrorRsp::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:internal.GatewayErrorRsp)
+  // required .internal.ErrorCode error_code = 1;
+  if (has_error_code()) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      1, this->error_code(), output);
+  }
+
+  // optional string what = 2;
+  if (has_what()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->what().data(), this->what().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "what");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      2, this->what(), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:internal.GatewayErrorRsp)
+}
+
+::google::protobuf::uint8* GatewayErrorRsp::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:internal.GatewayErrorRsp)
+  // required .internal.ErrorCode error_code = 1;
+  if (has_error_code()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
+      1, this->error_code(), target);
+  }
+
+  // optional string what = 2;
+  if (has_what()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->what().data(), this->what().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "what");
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        2, this->what(), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:internal.GatewayErrorRsp)
+  return target;
+}
+
+int GatewayErrorRsp::ByteSize() const {
+  int total_size = 0;
+
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required .internal.ErrorCode error_code = 1;
+    if (has_error_code()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::EnumSize(this->error_code());
+    }
+
+    // optional string what = 2;
+    if (has_what()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->what());
+    }
+
+  }
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void GatewayErrorRsp::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const GatewayErrorRsp* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const GatewayErrorRsp*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void GatewayErrorRsp::MergeFrom(const GatewayErrorRsp& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_error_code()) {
+      set_error_code(from.error_code());
+    }
+    if (from.has_what()) {
+      set_what(from.what());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void GatewayErrorRsp::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void GatewayErrorRsp::CopyFrom(const GatewayErrorRsp& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool GatewayErrorRsp::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
+
+  return true;
+}
+
+void GatewayErrorRsp::Swap(GatewayErrorRsp* other) {
+  if (other != this) {
+    std::swap(error_code_, other->error_code_);
+    std::swap(what_, other->what_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata GatewayErrorRsp::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = GatewayErrorRsp_descriptor_;
+  metadata.reflection = GatewayErrorRsp_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
 const int LoginGatewayReq::kTypeFieldNumber;
 const int LoginGatewayReq::kChildIdFieldNumber;
 #endif  // !_MSC_VER
@@ -2749,15 +3101,15 @@ bool LoginGatewayReq::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required .internal.ServerType type = 1;
+      // required .internal.NodeType type = 1;
       case 1: {
         if (tag == 8) {
           int value;
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          if (::internal::ServerType_IsValid(value)) {
-            set_type(static_cast< ::internal::ServerType >(value));
+          if (::internal::NodeType_IsValid(value)) {
+            set_type(static_cast< ::internal::NodeType >(value));
           } else {
             mutable_unknown_fields()->AddVarint(1, value);
           }
@@ -2808,7 +3160,7 @@ failure:
 void LoginGatewayReq::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:internal.LoginGatewayReq)
-  // required .internal.ServerType type = 1;
+  // required .internal.NodeType type = 1;
   if (has_type()) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->type(), output);
@@ -2829,7 +3181,7 @@ void LoginGatewayReq::SerializeWithCachedSizes(
 ::google::protobuf::uint8* LoginGatewayReq::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // @@protoc_insertion_point(serialize_to_array_start:internal.LoginGatewayReq)
-  // required .internal.ServerType type = 1;
+  // required .internal.NodeType type = 1;
   if (has_type()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       1, this->type(), target);
@@ -2852,7 +3204,7 @@ int LoginGatewayReq::ByteSize() const {
   int total_size = 0;
 
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // required .internal.ServerType type = 1;
+    // required .internal.NodeType type = 1;
     if (has_type()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->type());
@@ -3389,6 +3741,180 @@ void PauseWorkReq::Swap(PauseWorkReq* other) {
 #ifndef _MSC_VER
 #endif  // !_MSC_VER
 
+PauseWorkRsp::PauseWorkRsp()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:internal.PauseWorkRsp)
+}
+
+void PauseWorkRsp::InitAsDefaultInstance() {
+}
+
+PauseWorkRsp::PauseWorkRsp(const PauseWorkRsp& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:internal.PauseWorkRsp)
+}
+
+void PauseWorkRsp::SharedCtor() {
+  _cached_size_ = 0;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+PauseWorkRsp::~PauseWorkRsp() {
+  // @@protoc_insertion_point(destructor:internal.PauseWorkRsp)
+  SharedDtor();
+}
+
+void PauseWorkRsp::SharedDtor() {
+  if (this != default_instance_) {
+  }
+}
+
+void PauseWorkRsp::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* PauseWorkRsp::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return PauseWorkRsp_descriptor_;
+}
+
+const PauseWorkRsp& PauseWorkRsp::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_proto_2finternal_2eprotocol_2eproto();
+  return *default_instance_;
+}
+
+PauseWorkRsp* PauseWorkRsp::default_instance_ = NULL;
+
+PauseWorkRsp* PauseWorkRsp::New() const {
+  return new PauseWorkRsp;
+}
+
+void PauseWorkRsp::Clear() {
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool PauseWorkRsp::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:internal.PauseWorkRsp)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+  handle_unusual:
+    if (tag == 0 ||
+        ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+        ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+      goto success;
+    }
+    DO_(::google::protobuf::internal::WireFormat::SkipField(
+          input, tag, mutable_unknown_fields()));
+  }
+success:
+  // @@protoc_insertion_point(parse_success:internal.PauseWorkRsp)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:internal.PauseWorkRsp)
+  return false;
+#undef DO_
+}
+
+void PauseWorkRsp::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:internal.PauseWorkRsp)
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:internal.PauseWorkRsp)
+}
+
+::google::protobuf::uint8* PauseWorkRsp::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:internal.PauseWorkRsp)
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:internal.PauseWorkRsp)
+  return target;
+}
+
+int PauseWorkRsp::ByteSize() const {
+  int total_size = 0;
+
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void PauseWorkRsp::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const PauseWorkRsp* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const PauseWorkRsp*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void PauseWorkRsp::MergeFrom(const PauseWorkRsp& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void PauseWorkRsp::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void PauseWorkRsp::CopyFrom(const PauseWorkRsp& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool PauseWorkRsp::IsInitialized() const {
+
+  return true;
+}
+
+void PauseWorkRsp::Swap(PauseWorkRsp* other) {
+  if (other != this) {
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata PauseWorkRsp::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = PauseWorkRsp_descriptor_;
+  metadata.reflection = PauseWorkRsp_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
+#endif  // !_MSC_VER
+
 ContinueWorkReq::ContinueWorkReq()
   : ::google::protobuf::Message() {
   SharedCtor();
@@ -3561,6 +4087,180 @@ void ContinueWorkReq::Swap(ContinueWorkReq* other) {
 // ===================================================================
 
 #ifndef _MSC_VER
+#endif  // !_MSC_VER
+
+ContinueWorkRsp::ContinueWorkRsp()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:internal.ContinueWorkRsp)
+}
+
+void ContinueWorkRsp::InitAsDefaultInstance() {
+}
+
+ContinueWorkRsp::ContinueWorkRsp(const ContinueWorkRsp& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:internal.ContinueWorkRsp)
+}
+
+void ContinueWorkRsp::SharedCtor() {
+  _cached_size_ = 0;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+ContinueWorkRsp::~ContinueWorkRsp() {
+  // @@protoc_insertion_point(destructor:internal.ContinueWorkRsp)
+  SharedDtor();
+}
+
+void ContinueWorkRsp::SharedDtor() {
+  if (this != default_instance_) {
+  }
+}
+
+void ContinueWorkRsp::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* ContinueWorkRsp::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return ContinueWorkRsp_descriptor_;
+}
+
+const ContinueWorkRsp& ContinueWorkRsp::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_proto_2finternal_2eprotocol_2eproto();
+  return *default_instance_;
+}
+
+ContinueWorkRsp* ContinueWorkRsp::default_instance_ = NULL;
+
+ContinueWorkRsp* ContinueWorkRsp::New() const {
+  return new ContinueWorkRsp;
+}
+
+void ContinueWorkRsp::Clear() {
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool ContinueWorkRsp::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:internal.ContinueWorkRsp)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+  handle_unusual:
+    if (tag == 0 ||
+        ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+        ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+      goto success;
+    }
+    DO_(::google::protobuf::internal::WireFormat::SkipField(
+          input, tag, mutable_unknown_fields()));
+  }
+success:
+  // @@protoc_insertion_point(parse_success:internal.ContinueWorkRsp)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:internal.ContinueWorkRsp)
+  return false;
+#undef DO_
+}
+
+void ContinueWorkRsp::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:internal.ContinueWorkRsp)
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:internal.ContinueWorkRsp)
+}
+
+::google::protobuf::uint8* ContinueWorkRsp::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:internal.ContinueWorkRsp)
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:internal.ContinueWorkRsp)
+  return target;
+}
+
+int ContinueWorkRsp::ByteSize() const {
+  int total_size = 0;
+
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void ContinueWorkRsp::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const ContinueWorkRsp* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const ContinueWorkRsp*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void ContinueWorkRsp::MergeFrom(const ContinueWorkRsp& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void ContinueWorkRsp::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void ContinueWorkRsp::CopyFrom(const ContinueWorkRsp& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool ContinueWorkRsp::IsInitialized() const {
+
+  return true;
+}
+
+void ContinueWorkRsp::Swap(ContinueWorkRsp* other) {
+  if (other != this) {
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata ContinueWorkRsp::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = ContinueWorkRsp_descriptor_;
+  metadata.reflection = ContinueWorkRsp_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
 const int ForwardMessageReq::kDstTypeFieldNumber;
 const int ForwardMessageReq::kDstChildIdFieldNumber;
 #endif  // !_MSC_VER
@@ -3638,15 +4338,15 @@ bool ForwardMessageReq::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required .internal.ServerType dst_type = 1;
+      // required .internal.NodeType dst_type = 1;
       case 1: {
         if (tag == 8) {
           int value;
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          if (::internal::ServerType_IsValid(value)) {
-            set_dst_type(static_cast< ::internal::ServerType >(value));
+          if (::internal::NodeType_IsValid(value)) {
+            set_dst_type(static_cast< ::internal::NodeType >(value));
           } else {
             mutable_unknown_fields()->AddVarint(1, value);
           }
@@ -3697,7 +4397,7 @@ failure:
 void ForwardMessageReq::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:internal.ForwardMessageReq)
-  // required .internal.ServerType dst_type = 1;
+  // required .internal.NodeType dst_type = 1;
   if (has_dst_type()) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->dst_type(), output);
@@ -3718,7 +4418,7 @@ void ForwardMessageReq::SerializeWithCachedSizes(
 ::google::protobuf::uint8* ForwardMessageReq::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // @@protoc_insertion_point(serialize_to_array_start:internal.ForwardMessageReq)
-  // required .internal.ServerType dst_type = 1;
+  // required .internal.NodeType dst_type = 1;
   if (has_dst_type()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       1, this->dst_type(), target);
@@ -3741,7 +4441,7 @@ int ForwardMessageReq::ByteSize() const {
   int total_size = 0;
 
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // required .internal.ServerType dst_type = 1;
+    // required .internal.NodeType dst_type = 1;
     if (has_dst_type()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->dst_type());
@@ -3914,15 +4614,15 @@ bool ForwardMessageRsp::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required .internal.ServerType src_type = 1;
+      // required .internal.NodeType src_type = 1;
       case 1: {
         if (tag == 8) {
           int value;
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          if (::internal::ServerType_IsValid(value)) {
-            set_src_type(static_cast< ::internal::ServerType >(value));
+          if (::internal::NodeType_IsValid(value)) {
+            set_src_type(static_cast< ::internal::NodeType >(value));
           } else {
             mutable_unknown_fields()->AddVarint(1, value);
           }
@@ -3948,7 +4648,7 @@ bool ForwardMessageRsp::MergePartialFromCodedStream(
         break;
       }
 
-      // required .internal.ServerType dst_type = 3;
+      // required .internal.NodeType dst_type = 3;
       case 3: {
         if (tag == 24) {
          parse_dst_type:
@@ -3956,8 +4656,8 @@ bool ForwardMessageRsp::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          if (::internal::ServerType_IsValid(value)) {
-            set_dst_type(static_cast< ::internal::ServerType >(value));
+          if (::internal::NodeType_IsValid(value)) {
+            set_dst_type(static_cast< ::internal::NodeType >(value));
           } else {
             mutable_unknown_fields()->AddVarint(3, value);
           }
@@ -4008,7 +4708,7 @@ failure:
 void ForwardMessageRsp::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:internal.ForwardMessageRsp)
-  // required .internal.ServerType src_type = 1;
+  // required .internal.NodeType src_type = 1;
   if (has_src_type()) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->src_type(), output);
@@ -4019,7 +4719,7 @@ void ForwardMessageRsp::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->src_child_id(), output);
   }
 
-  // required .internal.ServerType dst_type = 3;
+  // required .internal.NodeType dst_type = 3;
   if (has_dst_type()) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       3, this->dst_type(), output);
@@ -4040,7 +4740,7 @@ void ForwardMessageRsp::SerializeWithCachedSizes(
 ::google::protobuf::uint8* ForwardMessageRsp::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // @@protoc_insertion_point(serialize_to_array_start:internal.ForwardMessageRsp)
-  // required .internal.ServerType src_type = 1;
+  // required .internal.NodeType src_type = 1;
   if (has_src_type()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       1, this->src_type(), target);
@@ -4051,7 +4751,7 @@ void ForwardMessageRsp::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(2, this->src_child_id(), target);
   }
 
-  // required .internal.ServerType dst_type = 3;
+  // required .internal.NodeType dst_type = 3;
   if (has_dst_type()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       3, this->dst_type(), target);
@@ -4074,7 +4774,7 @@ int ForwardMessageRsp::ByteSize() const {
   int total_size = 0;
 
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // required .internal.ServerType src_type = 1;
+    // required .internal.NodeType src_type = 1;
     if (has_src_type()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->src_type());
@@ -4087,7 +4787,7 @@ int ForwardMessageRsp::ByteSize() const {
           this->src_child_id());
     }
 
-    // required .internal.ServerType dst_type = 3;
+    // required .internal.NodeType dst_type = 3;
     if (has_dst_type()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->dst_type());
@@ -4256,7 +4956,7 @@ bool BroadcastMessageReq::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .internal.ServerType dst_lists = 1;
+      // repeated .internal.NodeType dst_lists = 1;
       case 1: {
         if (tag == 8) {
          parse_dst_lists:
@@ -4264,15 +4964,15 @@ bool BroadcastMessageReq::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          if (::internal::ServerType_IsValid(value)) {
-            add_dst_lists(static_cast< ::internal::ServerType >(value));
+          if (::internal::NodeType_IsValid(value)) {
+            add_dst_lists(static_cast< ::internal::NodeType >(value));
           } else {
             mutable_unknown_fields()->AddVarint(1, value);
           }
         } else if (tag == 10) {
           DO_((::google::protobuf::internal::WireFormatLite::ReadPackedEnumNoInline(
                  input,
-                 &::internal::ServerType_IsValid,
+                 &::internal::NodeType_IsValid,
                  this->mutable_dst_lists())));
         } else {
           goto handle_unusual;
@@ -4307,7 +5007,7 @@ failure:
 void BroadcastMessageReq::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:internal.BroadcastMessageReq)
-  // repeated .internal.ServerType dst_lists = 1;
+  // repeated .internal.NodeType dst_lists = 1;
   for (int i = 0; i < this->dst_lists_size(); i++) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->dst_lists(i), output);
@@ -4323,7 +5023,7 @@ void BroadcastMessageReq::SerializeWithCachedSizes(
 ::google::protobuf::uint8* BroadcastMessageReq::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // @@protoc_insertion_point(serialize_to_array_start:internal.BroadcastMessageReq)
-  // repeated .internal.ServerType dst_lists = 1;
+  // repeated .internal.NodeType dst_lists = 1;
   for (int i = 0; i < this->dst_lists_size(); i++) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       1, this->dst_lists(i), target);
@@ -4340,7 +5040,7 @@ void BroadcastMessageReq::SerializeWithCachedSizes(
 int BroadcastMessageReq::ByteSize() const {
   int total_size = 0;
 
-  // repeated .internal.ServerType dst_lists = 1;
+  // repeated .internal.NodeType dst_lists = 1;
   {
     int data_size = 0;
     for (int i = 0; i < this->dst_lists_size(); i++) {
@@ -4494,15 +5194,15 @@ bool BroadcastMessageRsp::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // required .internal.ServerType src_type = 1;
+      // required .internal.NodeType src_type = 1;
       case 1: {
         if (tag == 8) {
           int value;
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          if (::internal::ServerType_IsValid(value)) {
-            set_src_type(static_cast< ::internal::ServerType >(value));
+          if (::internal::NodeType_IsValid(value)) {
+            set_src_type(static_cast< ::internal::NodeType >(value));
           } else {
             mutable_unknown_fields()->AddVarint(1, value);
           }
@@ -4553,7 +5253,7 @@ failure:
 void BroadcastMessageRsp::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:internal.BroadcastMessageRsp)
-  // required .internal.ServerType src_type = 1;
+  // required .internal.NodeType src_type = 1;
   if (has_src_type()) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->src_type(), output);
@@ -4574,7 +5274,7 @@ void BroadcastMessageRsp::SerializeWithCachedSizes(
 ::google::protobuf::uint8* BroadcastMessageRsp::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // @@protoc_insertion_point(serialize_to_array_start:internal.BroadcastMessageRsp)
-  // required .internal.ServerType src_type = 1;
+  // required .internal.NodeType src_type = 1;
   if (has_src_type()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       1, this->src_type(), target);
@@ -4597,7 +5297,7 @@ int BroadcastMessageRsp::ByteSize() const {
   int total_size = 0;
 
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
-    // required .internal.ServerType src_type = 1;
+    // required .internal.NodeType src_type = 1;
     if (has_src_type()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->src_type());

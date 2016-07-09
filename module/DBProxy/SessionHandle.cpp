@@ -20,7 +20,7 @@ namespace dbproxy
 		auto respond = UnpackageMessage(message);
 		if (respond == nullptr)
 		{
-			proxy_manager_.RespondErrorCode(*this, 0, internal::DBProxyErrorRsp::kInvalidProtocol);
+			proxy_manager_.RespondErrorCode(*this, 0, internal::kInvalidProtocol);
 		}
 
 		if (!is_logged_)
@@ -30,7 +30,7 @@ namespace dbproxy
 			{
 				if (dynamic_cast<internal::LoginDBProxyReq*>(respond.get()) == nullptr)
 				{
-					proxy_manager_.RespondErrorCode(*this, 0, internal::DBProxyErrorRsp::kNotLogged);
+					proxy_manager_.RespondErrorCode(*this, 0, internal::kNotLoggedIn);
 				}
 				else
 				{

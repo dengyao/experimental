@@ -2,6 +2,17 @@
 
 package internal;
 
+// 错误码
+enum ErrorCode {
+    kNotLoggedIn = 1; // 未登录
+    kDisconnect = 2; // 断开连接
+    kNotConnected = 3; // 未连接
+    kInvalidProtocol = 4; // 无效协议
+    kInvalidOperation = 5; // 无效操作
+    kNotFoundDatabase = 6; // 不存在的数据库
+    kResourceInsufficiency = 7; // 服务器资源不足
+}
+
 // 心跳上行包
 message PingReq {
 }
@@ -55,21 +66,11 @@ message DBErrorRsp
 {
     required uint32 sequence = 1; // 序列号
     required int32 error_code = 2; // 错误码
-    optional string what = 3; // 错误详情
+    optional string what = 3; // 错误原因
 }
 
 // DB代理错误返回
 message DBProxyErrorRsp {
-    enum ErrorCode {
-        kNotLogged = 1; // 未登录
-        kDisconnect = 2; // 断开连接
-        kNotConnected = 3; // 未连接到DB代理
-        kInvalidProtocol = 4; // 无效协议
-        kInvalidAction = 5; // 无效操作
-        kNotFoundDatabase = 6; // 不存在的数据库
-        kResourceInsufficiency = 7; // 服务器资源不足
-    }
-
     required ErrorCode error_code = 1; // 错误码
     optional uint32 sequence = 2; // 序列号
 }
@@ -79,15 +80,21 @@ message DBProxyErrorRsp {
 /////////////////////////////////////////////////////
 
 // 服务器节点类型
-enum ServerType {
+enum NodeType {
     kLicenceServer = 1; // 验证服务器
     kLinkerServer = 2; // 链接服务器
     kMainLogicSever = 3; // 主逻辑服务器
 }
 
+// 网关错误返回
+message GatewayErrorRsp {
+    required ErrorCode error_code = 1; // 错误码
+    optional string what = 2; // 错误原因
+}
+
 // 登录网关请求
 message LoginGatewayReq {
-    required ServerType type = 1; // 服务器节点类型
+    required NodeType type = 1; // 服务器节点类型
     optional uint32 child_id = 2 [default = 1]; // 服务器子节点id
 }
 
@@ -101,31 +108,39 @@ message PauseWorkReq {
     optional uint32 duration = 1 [default = 0]; // 暂停时长
 }
 
+// 暂停工作返回
+message PauseWorkRsp {
+}
+
 // 继续工作请求
 message ContinueWorkReq {
 }
 
+// 继续工作返回
+message ContinueWorkRsp {
+}
+
 // 转发消息请求
 message ForwardMessageReq {
-    required ServerType dst_type = 1; // 目标服务器类型
+    required NodeType dst_type = 1; // 目标服务器类型
     optional uint32 dst_child_id = 2 [default = 1]; // 目标服务器子节点id
 }
 
 // 转发消息返回
 message ForwardMessageRsp {
-    required ServerType src_type = 1; // 来源服务器类型
+    required NodeType src_type = 1; // 来源服务器类型
     optional uint32 src_child_id = 2 [default = 1]; // 来源服务器子节点id
-    required ServerType dst_type = 3; // 目标服务器类型
+    required NodeType dst_type = 3; // 目标服务器类型
     optional uint32 dst_child_id = 4 [default = 1]; // 目标服务器子节点id
 }
 
 // 广播消息请求
 message BroadcastMessageReq {
-    repeated ServerType dst_lists = 1; // 目标服务器列表
+    repeated NodeType dst_lists = 1; // 目标服务器列表
 }
 
 // 广播消息返回
 message BroadcastMessageRsp {
-    required ServerType src_type = 1; // 来源服务器类型
+    required NodeType src_type = 1; // 来源服务器类型
     optional uint32 src_child_id = 2 [default = 1]; // 来源服务器子节点id
 }

@@ -325,7 +325,7 @@ void DBClient::OnDisconnect(DBClientHandle *client)
 				{
 					internal::DBProxyErrorRsp error;
 					error.set_sequence(0);
-					error.set_error_code(internal::DBProxyErrorRsp::kDisconnect);
+					error.set_error_code(internal::kDisconnect);
 					callback(&error);
 				}	
 			}
@@ -406,7 +406,7 @@ void DBClient::AsyncQuery(DatabaseType dbtype, const char *dbname, DatabaseActio
 		{
 			internal::DBProxyErrorRsp error;
 			error.set_sequence(0);
-			error.set_error_code(internal::DBProxyErrorRsp::kNotConnected);
+			error.set_error_code(internal::kNotConnected);
 			callback(&error);
 			return;
 		}

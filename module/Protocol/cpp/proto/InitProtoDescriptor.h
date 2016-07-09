@@ -17,10 +17,13 @@ public:
         internal::QueryDBProxyRsp::descriptor();
         internal::DBErrorRsp::descriptor();
         internal::DBProxyErrorRsp::descriptor();
+        internal::GatewayErrorRsp::descriptor();
         internal::LoginGatewayReq::descriptor();
         internal::LoginGatewayRsp::descriptor();
         internal::PauseWorkReq::descriptor();
+        internal::PauseWorkRsp::descriptor();
         internal::ContinueWorkReq::descriptor();
+        internal::ContinueWorkRsp::descriptor();
         internal::ForwardMessageReq::descriptor();
         internal::ForwardMessageRsp::descriptor();
         internal::BroadcastMessageReq::descriptor();

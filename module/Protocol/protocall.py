@@ -91,16 +91,15 @@ if __name__ == '__main__':
     handle = open('CMakeLists.txt', 'r')
     content = handle.read()
     handle.close()
-    result = re.search('set\s*\((\w+)\s+', content)
 
-    text = 'set({0} \r\n'.format(result.groups()[0])
+    text = 'set(CURRENT_PROJECT_SRC_LISTS \r\n'
     for filename in cppfiles:
         text += '  '
         text += filename
         text += '\r\n'
     text += ')'
 
-    new_content = re.sub('set\s*\([^)]+\)', text, content)
+    new_content = re.sub('set\s*\(\s*CURRENT_PROJECT_SRC_LISTS[^)]+\)', text, content)
     with codecs.open('CMakeLists.txt', 'w', 'utf8') as handle:
         handle.write(new_content)
         handle.close()

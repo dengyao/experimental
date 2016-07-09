@@ -18,7 +18,7 @@ void PackageMessage(google::protobuf::Message *in_message, eddy::NetMessage &out
 	out_message.EnsureWritableBytes(sizeof(uint8_t) + name_size + byte_size);
 	out_message.WriteUInt8(name_size);
 	out_message.Write(full_name.data(), name_size);
-	in_message->SerializePartialToArray(out_message.Data() + out_message.Readable(), byte_size);
+	in_message->SerializePartialToArray(out_message.Data() + sizeof(uint8_t) + name_size, byte_size);
 	out_message.HasWritten(byte_size);
 }
 

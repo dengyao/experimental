@@ -42,10 +42,13 @@ class QueryDBProxyReq;
 class QueryDBProxyRsp;
 class DBErrorRsp;
 class DBProxyErrorRsp;
+class GatewayErrorRsp;
 class LoginGatewayReq;
 class LoginGatewayRsp;
 class PauseWorkReq;
+class PauseWorkRsp;
 class ContinueWorkReq;
+class ContinueWorkRsp;
 class ForwardMessageReq;
 class ForwardMessageRsp;
 class BroadcastMessageReq;
@@ -91,49 +94,49 @@ inline bool QueryDBProxyReq_DatabaseType_Parse(
   return ::google::protobuf::internal::ParseNamedEnum<QueryDBProxyReq_DatabaseType>(
     QueryDBProxyReq_DatabaseType_descriptor(), name, value);
 }
-enum DBProxyErrorRsp_ErrorCode {
-  DBProxyErrorRsp_ErrorCode_kNotLogged = 1,
-  DBProxyErrorRsp_ErrorCode_kDisconnect = 2,
-  DBProxyErrorRsp_ErrorCode_kNotConnected = 3,
-  DBProxyErrorRsp_ErrorCode_kInvalidProtocol = 4,
-  DBProxyErrorRsp_ErrorCode_kInvalidAction = 5,
-  DBProxyErrorRsp_ErrorCode_kNotFoundDatabase = 6,
-  DBProxyErrorRsp_ErrorCode_kResourceInsufficiency = 7
+enum ErrorCode {
+  kNotLoggedIn = 1,
+  kDisconnect = 2,
+  kNotConnected = 3,
+  kInvalidProtocol = 4,
+  kInvalidOperation = 5,
+  kNotFoundDatabase = 6,
+  kResourceInsufficiency = 7
 };
-bool DBProxyErrorRsp_ErrorCode_IsValid(int value);
-const DBProxyErrorRsp_ErrorCode DBProxyErrorRsp_ErrorCode_ErrorCode_MIN = DBProxyErrorRsp_ErrorCode_kNotLogged;
-const DBProxyErrorRsp_ErrorCode DBProxyErrorRsp_ErrorCode_ErrorCode_MAX = DBProxyErrorRsp_ErrorCode_kResourceInsufficiency;
-const int DBProxyErrorRsp_ErrorCode_ErrorCode_ARRAYSIZE = DBProxyErrorRsp_ErrorCode_ErrorCode_MAX + 1;
+bool ErrorCode_IsValid(int value);
+const ErrorCode ErrorCode_MIN = kNotLoggedIn;
+const ErrorCode ErrorCode_MAX = kResourceInsufficiency;
+const int ErrorCode_ARRAYSIZE = ErrorCode_MAX + 1;
 
-const ::google::protobuf::EnumDescriptor* DBProxyErrorRsp_ErrorCode_descriptor();
-inline const ::std::string& DBProxyErrorRsp_ErrorCode_Name(DBProxyErrorRsp_ErrorCode value) {
+const ::google::protobuf::EnumDescriptor* ErrorCode_descriptor();
+inline const ::std::string& ErrorCode_Name(ErrorCode value) {
   return ::google::protobuf::internal::NameOfEnum(
-    DBProxyErrorRsp_ErrorCode_descriptor(), value);
+    ErrorCode_descriptor(), value);
 }
-inline bool DBProxyErrorRsp_ErrorCode_Parse(
-    const ::std::string& name, DBProxyErrorRsp_ErrorCode* value) {
-  return ::google::protobuf::internal::ParseNamedEnum<DBProxyErrorRsp_ErrorCode>(
-    DBProxyErrorRsp_ErrorCode_descriptor(), name, value);
+inline bool ErrorCode_Parse(
+    const ::std::string& name, ErrorCode* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<ErrorCode>(
+    ErrorCode_descriptor(), name, value);
 }
-enum ServerType {
+enum NodeType {
   kLicenceServer = 1,
   kLinkerServer = 2,
   kMainLogicSever = 3
 };
-bool ServerType_IsValid(int value);
-const ServerType ServerType_MIN = kLicenceServer;
-const ServerType ServerType_MAX = kMainLogicSever;
-const int ServerType_ARRAYSIZE = ServerType_MAX + 1;
+bool NodeType_IsValid(int value);
+const NodeType NodeType_MIN = kLicenceServer;
+const NodeType NodeType_MAX = kMainLogicSever;
+const int NodeType_ARRAYSIZE = NodeType_MAX + 1;
 
-const ::google::protobuf::EnumDescriptor* ServerType_descriptor();
-inline const ::std::string& ServerType_Name(ServerType value) {
+const ::google::protobuf::EnumDescriptor* NodeType_descriptor();
+inline const ::std::string& NodeType_Name(NodeType value) {
   return ::google::protobuf::internal::NameOfEnum(
-    ServerType_descriptor(), value);
+    NodeType_descriptor(), value);
 }
-inline bool ServerType_Parse(
-    const ::std::string& name, ServerType* value) {
-  return ::google::protobuf::internal::ParseNamedEnum<ServerType>(
-    ServerType_descriptor(), name, value);
+inline bool NodeType_Parse(
+    const ::std::string& name, NodeType* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<NodeType>(
+    NodeType_descriptor(), name, value);
 }
 // ===================================================================
 
@@ -851,43 +854,14 @@ class DBProxyErrorRsp : public ::google::protobuf::Message {
 
   // nested types ----------------------------------------------------
 
-  typedef DBProxyErrorRsp_ErrorCode ErrorCode;
-  static const ErrorCode kNotLogged = DBProxyErrorRsp_ErrorCode_kNotLogged;
-  static const ErrorCode kDisconnect = DBProxyErrorRsp_ErrorCode_kDisconnect;
-  static const ErrorCode kNotConnected = DBProxyErrorRsp_ErrorCode_kNotConnected;
-  static const ErrorCode kInvalidProtocol = DBProxyErrorRsp_ErrorCode_kInvalidProtocol;
-  static const ErrorCode kInvalidAction = DBProxyErrorRsp_ErrorCode_kInvalidAction;
-  static const ErrorCode kNotFoundDatabase = DBProxyErrorRsp_ErrorCode_kNotFoundDatabase;
-  static const ErrorCode kResourceInsufficiency = DBProxyErrorRsp_ErrorCode_kResourceInsufficiency;
-  static inline bool ErrorCode_IsValid(int value) {
-    return DBProxyErrorRsp_ErrorCode_IsValid(value);
-  }
-  static const ErrorCode ErrorCode_MIN =
-    DBProxyErrorRsp_ErrorCode_ErrorCode_MIN;
-  static const ErrorCode ErrorCode_MAX =
-    DBProxyErrorRsp_ErrorCode_ErrorCode_MAX;
-  static const int ErrorCode_ARRAYSIZE =
-    DBProxyErrorRsp_ErrorCode_ErrorCode_ARRAYSIZE;
-  static inline const ::google::protobuf::EnumDescriptor*
-  ErrorCode_descriptor() {
-    return DBProxyErrorRsp_ErrorCode_descriptor();
-  }
-  static inline const ::std::string& ErrorCode_Name(ErrorCode value) {
-    return DBProxyErrorRsp_ErrorCode_Name(value);
-  }
-  static inline bool ErrorCode_Parse(const ::std::string& name,
-      ErrorCode* value) {
-    return DBProxyErrorRsp_ErrorCode_Parse(name, value);
-  }
-
   // accessors -------------------------------------------------------
 
-  // required .internal.DBProxyErrorRsp.ErrorCode error_code = 1;
+  // required .internal.ErrorCode error_code = 1;
   inline bool has_error_code() const;
   inline void clear_error_code();
   static const int kErrorCodeFieldNumber = 1;
-  inline ::internal::DBProxyErrorRsp_ErrorCode error_code() const;
-  inline void set_error_code(::internal::DBProxyErrorRsp_ErrorCode value);
+  inline ::internal::ErrorCode error_code() const;
+  inline void set_error_code(::internal::ErrorCode value);
 
   // optional uint32 sequence = 2;
   inline bool has_sequence() const;
@@ -915,6 +889,100 @@ class DBProxyErrorRsp : public ::google::protobuf::Message {
 
   void InitAsDefaultInstance();
   static DBProxyErrorRsp* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class GatewayErrorRsp : public ::google::protobuf::Message {
+ public:
+  GatewayErrorRsp();
+  virtual ~GatewayErrorRsp();
+
+  GatewayErrorRsp(const GatewayErrorRsp& from);
+
+  inline GatewayErrorRsp& operator=(const GatewayErrorRsp& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GatewayErrorRsp& default_instance();
+
+  void Swap(GatewayErrorRsp* other);
+
+  // implements Message ----------------------------------------------
+
+  GatewayErrorRsp* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const GatewayErrorRsp& from);
+  void MergeFrom(const GatewayErrorRsp& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required .internal.ErrorCode error_code = 1;
+  inline bool has_error_code() const;
+  inline void clear_error_code();
+  static const int kErrorCodeFieldNumber = 1;
+  inline ::internal::ErrorCode error_code() const;
+  inline void set_error_code(::internal::ErrorCode value);
+
+  // optional string what = 2;
+  inline bool has_what() const;
+  inline void clear_what();
+  static const int kWhatFieldNumber = 2;
+  inline const ::std::string& what() const;
+  inline void set_what(const ::std::string& value);
+  inline void set_what(const char* value);
+  inline void set_what(const char* value, size_t size);
+  inline ::std::string* mutable_what();
+  inline ::std::string* release_what();
+  inline void set_allocated_what(::std::string* what);
+
+  // @@protoc_insertion_point(class_scope:internal.GatewayErrorRsp)
+ private:
+  inline void set_has_error_code();
+  inline void clear_has_error_code();
+  inline void set_has_what();
+  inline void clear_has_what();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::std::string* what_;
+  int error_code_;
+  friend void  protobuf_AddDesc_proto_2finternal_2eprotocol_2eproto();
+  friend void protobuf_AssignDesc_proto_2finternal_2eprotocol_2eproto();
+  friend void protobuf_ShutdownFile_proto_2finternal_2eprotocol_2eproto();
+
+  void InitAsDefaultInstance();
+  static GatewayErrorRsp* default_instance_;
 };
 // -------------------------------------------------------------------
 
@@ -971,12 +1039,12 @@ class LoginGatewayReq : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // required .internal.ServerType type = 1;
+  // required .internal.NodeType type = 1;
   inline bool has_type() const;
   inline void clear_type();
   static const int kTypeFieldNumber = 1;
-  inline ::internal::ServerType type() const;
-  inline void set_type(::internal::ServerType value);
+  inline ::internal::NodeType type() const;
+  inline void set_type(::internal::NodeType value);
 
   // optional uint32 child_id = 2 [default = 1];
   inline bool has_child_id() const;
@@ -1165,6 +1233,75 @@ class PauseWorkReq : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
+class PauseWorkRsp : public ::google::protobuf::Message {
+ public:
+  PauseWorkRsp();
+  virtual ~PauseWorkRsp();
+
+  PauseWorkRsp(const PauseWorkRsp& from);
+
+  inline PauseWorkRsp& operator=(const PauseWorkRsp& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const PauseWorkRsp& default_instance();
+
+  void Swap(PauseWorkRsp* other);
+
+  // implements Message ----------------------------------------------
+
+  PauseWorkRsp* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const PauseWorkRsp& from);
+  void MergeFrom(const PauseWorkRsp& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:internal.PauseWorkRsp)
+ private:
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  friend void  protobuf_AddDesc_proto_2finternal_2eprotocol_2eproto();
+  friend void protobuf_AssignDesc_proto_2finternal_2eprotocol_2eproto();
+  friend void protobuf_ShutdownFile_proto_2finternal_2eprotocol_2eproto();
+
+  void InitAsDefaultInstance();
+  static PauseWorkRsp* default_instance_;
+};
+// -------------------------------------------------------------------
+
 class ContinueWorkReq : public ::google::protobuf::Message {
  public:
   ContinueWorkReq();
@@ -1234,6 +1371,75 @@ class ContinueWorkReq : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
+class ContinueWorkRsp : public ::google::protobuf::Message {
+ public:
+  ContinueWorkRsp();
+  virtual ~ContinueWorkRsp();
+
+  ContinueWorkRsp(const ContinueWorkRsp& from);
+
+  inline ContinueWorkRsp& operator=(const ContinueWorkRsp& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const ContinueWorkRsp& default_instance();
+
+  void Swap(ContinueWorkRsp* other);
+
+  // implements Message ----------------------------------------------
+
+  ContinueWorkRsp* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const ContinueWorkRsp& from);
+  void MergeFrom(const ContinueWorkRsp& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:internal.ContinueWorkRsp)
+ private:
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  friend void  protobuf_AddDesc_proto_2finternal_2eprotocol_2eproto();
+  friend void protobuf_AssignDesc_proto_2finternal_2eprotocol_2eproto();
+  friend void protobuf_ShutdownFile_proto_2finternal_2eprotocol_2eproto();
+
+  void InitAsDefaultInstance();
+  static ContinueWorkRsp* default_instance_;
+};
+// -------------------------------------------------------------------
+
 class ForwardMessageReq : public ::google::protobuf::Message {
  public:
   ForwardMessageReq();
@@ -1287,12 +1493,12 @@ class ForwardMessageReq : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // required .internal.ServerType dst_type = 1;
+  // required .internal.NodeType dst_type = 1;
   inline bool has_dst_type() const;
   inline void clear_dst_type();
   static const int kDstTypeFieldNumber = 1;
-  inline ::internal::ServerType dst_type() const;
-  inline void set_dst_type(::internal::ServerType value);
+  inline ::internal::NodeType dst_type() const;
+  inline void set_dst_type(::internal::NodeType value);
 
   // optional uint32 dst_child_id = 2 [default = 1];
   inline bool has_dst_child_id() const;
@@ -1376,12 +1582,12 @@ class ForwardMessageRsp : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // required .internal.ServerType src_type = 1;
+  // required .internal.NodeType src_type = 1;
   inline bool has_src_type() const;
   inline void clear_src_type();
   static const int kSrcTypeFieldNumber = 1;
-  inline ::internal::ServerType src_type() const;
-  inline void set_src_type(::internal::ServerType value);
+  inline ::internal::NodeType src_type() const;
+  inline void set_src_type(::internal::NodeType value);
 
   // optional uint32 src_child_id = 2 [default = 1];
   inline bool has_src_child_id() const;
@@ -1390,12 +1596,12 @@ class ForwardMessageRsp : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 src_child_id() const;
   inline void set_src_child_id(::google::protobuf::uint32 value);
 
-  // required .internal.ServerType dst_type = 3;
+  // required .internal.NodeType dst_type = 3;
   inline bool has_dst_type() const;
   inline void clear_dst_type();
   static const int kDstTypeFieldNumber = 3;
-  inline ::internal::ServerType dst_type() const;
-  inline void set_dst_type(::internal::ServerType value);
+  inline ::internal::NodeType dst_type() const;
+  inline void set_dst_type(::internal::NodeType value);
 
   // optional uint32 dst_child_id = 4 [default = 1];
   inline bool has_dst_child_id() const;
@@ -1485,13 +1691,13 @@ class BroadcastMessageReq : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // repeated .internal.ServerType dst_lists = 1;
+  // repeated .internal.NodeType dst_lists = 1;
   inline int dst_lists_size() const;
   inline void clear_dst_lists();
   static const int kDstListsFieldNumber = 1;
-  inline ::internal::ServerType dst_lists(int index) const;
-  inline void set_dst_lists(int index, ::internal::ServerType value);
-  inline void add_dst_lists(::internal::ServerType value);
+  inline ::internal::NodeType dst_lists(int index) const;
+  inline void set_dst_lists(int index, ::internal::NodeType value);
+  inline void add_dst_lists(::internal::NodeType value);
   inline const ::google::protobuf::RepeatedField<int>& dst_lists() const;
   inline ::google::protobuf::RepeatedField<int>* mutable_dst_lists();
 
@@ -1565,12 +1771,12 @@ class BroadcastMessageRsp : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // required .internal.ServerType src_type = 1;
+  // required .internal.NodeType src_type = 1;
   inline bool has_src_type() const;
   inline void clear_src_type();
   static const int kSrcTypeFieldNumber = 1;
-  inline ::internal::ServerType src_type() const;
-  inline void set_src_type(::internal::ServerType value);
+  inline ::internal::NodeType src_type() const;
+  inline void set_src_type(::internal::NodeType value);
 
   // optional uint32 src_child_id = 2 [default = 1];
   inline bool has_src_child_id() const;
@@ -2108,7 +2314,7 @@ inline void DBErrorRsp::set_allocated_what(::std::string* what) {
 
 // DBProxyErrorRsp
 
-// required .internal.DBProxyErrorRsp.ErrorCode error_code = 1;
+// required .internal.ErrorCode error_code = 1;
 inline bool DBProxyErrorRsp::has_error_code() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
@@ -2122,12 +2328,12 @@ inline void DBProxyErrorRsp::clear_error_code() {
   error_code_ = 1;
   clear_has_error_code();
 }
-inline ::internal::DBProxyErrorRsp_ErrorCode DBProxyErrorRsp::error_code() const {
+inline ::internal::ErrorCode DBProxyErrorRsp::error_code() const {
   // @@protoc_insertion_point(field_get:internal.DBProxyErrorRsp.error_code)
-  return static_cast< ::internal::DBProxyErrorRsp_ErrorCode >(error_code_);
+  return static_cast< ::internal::ErrorCode >(error_code_);
 }
-inline void DBProxyErrorRsp::set_error_code(::internal::DBProxyErrorRsp_ErrorCode value) {
-  assert(::internal::DBProxyErrorRsp_ErrorCode_IsValid(value));
+inline void DBProxyErrorRsp::set_error_code(::internal::ErrorCode value) {
+  assert(::internal::ErrorCode_IsValid(value));
   set_has_error_code();
   error_code_ = value;
   // @@protoc_insertion_point(field_set:internal.DBProxyErrorRsp.error_code)
@@ -2159,9 +2365,114 @@ inline void DBProxyErrorRsp::set_sequence(::google::protobuf::uint32 value) {
 
 // -------------------------------------------------------------------
 
+// GatewayErrorRsp
+
+// required .internal.ErrorCode error_code = 1;
+inline bool GatewayErrorRsp::has_error_code() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void GatewayErrorRsp::set_has_error_code() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void GatewayErrorRsp::clear_has_error_code() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void GatewayErrorRsp::clear_error_code() {
+  error_code_ = 1;
+  clear_has_error_code();
+}
+inline ::internal::ErrorCode GatewayErrorRsp::error_code() const {
+  // @@protoc_insertion_point(field_get:internal.GatewayErrorRsp.error_code)
+  return static_cast< ::internal::ErrorCode >(error_code_);
+}
+inline void GatewayErrorRsp::set_error_code(::internal::ErrorCode value) {
+  assert(::internal::ErrorCode_IsValid(value));
+  set_has_error_code();
+  error_code_ = value;
+  // @@protoc_insertion_point(field_set:internal.GatewayErrorRsp.error_code)
+}
+
+// optional string what = 2;
+inline bool GatewayErrorRsp::has_what() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void GatewayErrorRsp::set_has_what() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void GatewayErrorRsp::clear_has_what() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void GatewayErrorRsp::clear_what() {
+  if (what_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    what_->clear();
+  }
+  clear_has_what();
+}
+inline const ::std::string& GatewayErrorRsp::what() const {
+  // @@protoc_insertion_point(field_get:internal.GatewayErrorRsp.what)
+  return *what_;
+}
+inline void GatewayErrorRsp::set_what(const ::std::string& value) {
+  set_has_what();
+  if (what_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    what_ = new ::std::string;
+  }
+  what_->assign(value);
+  // @@protoc_insertion_point(field_set:internal.GatewayErrorRsp.what)
+}
+inline void GatewayErrorRsp::set_what(const char* value) {
+  set_has_what();
+  if (what_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    what_ = new ::std::string;
+  }
+  what_->assign(value);
+  // @@protoc_insertion_point(field_set_char:internal.GatewayErrorRsp.what)
+}
+inline void GatewayErrorRsp::set_what(const char* value, size_t size) {
+  set_has_what();
+  if (what_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    what_ = new ::std::string;
+  }
+  what_->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:internal.GatewayErrorRsp.what)
+}
+inline ::std::string* GatewayErrorRsp::mutable_what() {
+  set_has_what();
+  if (what_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    what_ = new ::std::string;
+  }
+  // @@protoc_insertion_point(field_mutable:internal.GatewayErrorRsp.what)
+  return what_;
+}
+inline ::std::string* GatewayErrorRsp::release_what() {
+  clear_has_what();
+  if (what_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    return NULL;
+  } else {
+    ::std::string* temp = what_;
+    what_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    return temp;
+  }
+}
+inline void GatewayErrorRsp::set_allocated_what(::std::string* what) {
+  if (what_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete what_;
+  }
+  if (what) {
+    set_has_what();
+    what_ = what;
+  } else {
+    clear_has_what();
+    what_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  }
+  // @@protoc_insertion_point(field_set_allocated:internal.GatewayErrorRsp.what)
+}
+
+// -------------------------------------------------------------------
+
 // LoginGatewayReq
 
-// required .internal.ServerType type = 1;
+// required .internal.NodeType type = 1;
 inline bool LoginGatewayReq::has_type() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
@@ -2175,12 +2486,12 @@ inline void LoginGatewayReq::clear_type() {
   type_ = 1;
   clear_has_type();
 }
-inline ::internal::ServerType LoginGatewayReq::type() const {
+inline ::internal::NodeType LoginGatewayReq::type() const {
   // @@protoc_insertion_point(field_get:internal.LoginGatewayReq.type)
-  return static_cast< ::internal::ServerType >(type_);
+  return static_cast< ::internal::NodeType >(type_);
 }
-inline void LoginGatewayReq::set_type(::internal::ServerType value) {
-  assert(::internal::ServerType_IsValid(value));
+inline void LoginGatewayReq::set_type(::internal::NodeType value) {
+  assert(::internal::NodeType_IsValid(value));
   set_has_type();
   type_ = value;
   // @@protoc_insertion_point(field_set:internal.LoginGatewayReq.type)
@@ -2268,13 +2579,21 @@ inline void PauseWorkReq::set_duration(::google::protobuf::uint32 value) {
 
 // -------------------------------------------------------------------
 
+// PauseWorkRsp
+
+// -------------------------------------------------------------------
+
 // ContinueWorkReq
+
+// -------------------------------------------------------------------
+
+// ContinueWorkRsp
 
 // -------------------------------------------------------------------
 
 // ForwardMessageReq
 
-// required .internal.ServerType dst_type = 1;
+// required .internal.NodeType dst_type = 1;
 inline bool ForwardMessageReq::has_dst_type() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
@@ -2288,12 +2607,12 @@ inline void ForwardMessageReq::clear_dst_type() {
   dst_type_ = 1;
   clear_has_dst_type();
 }
-inline ::internal::ServerType ForwardMessageReq::dst_type() const {
+inline ::internal::NodeType ForwardMessageReq::dst_type() const {
   // @@protoc_insertion_point(field_get:internal.ForwardMessageReq.dst_type)
-  return static_cast< ::internal::ServerType >(dst_type_);
+  return static_cast< ::internal::NodeType >(dst_type_);
 }
-inline void ForwardMessageReq::set_dst_type(::internal::ServerType value) {
-  assert(::internal::ServerType_IsValid(value));
+inline void ForwardMessageReq::set_dst_type(::internal::NodeType value) {
+  assert(::internal::NodeType_IsValid(value));
   set_has_dst_type();
   dst_type_ = value;
   // @@protoc_insertion_point(field_set:internal.ForwardMessageReq.dst_type)
@@ -2327,7 +2646,7 @@ inline void ForwardMessageReq::set_dst_child_id(::google::protobuf::uint32 value
 
 // ForwardMessageRsp
 
-// required .internal.ServerType src_type = 1;
+// required .internal.NodeType src_type = 1;
 inline bool ForwardMessageRsp::has_src_type() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
@@ -2341,12 +2660,12 @@ inline void ForwardMessageRsp::clear_src_type() {
   src_type_ = 1;
   clear_has_src_type();
 }
-inline ::internal::ServerType ForwardMessageRsp::src_type() const {
+inline ::internal::NodeType ForwardMessageRsp::src_type() const {
   // @@protoc_insertion_point(field_get:internal.ForwardMessageRsp.src_type)
-  return static_cast< ::internal::ServerType >(src_type_);
+  return static_cast< ::internal::NodeType >(src_type_);
 }
-inline void ForwardMessageRsp::set_src_type(::internal::ServerType value) {
-  assert(::internal::ServerType_IsValid(value));
+inline void ForwardMessageRsp::set_src_type(::internal::NodeType value) {
+  assert(::internal::NodeType_IsValid(value));
   set_has_src_type();
   src_type_ = value;
   // @@protoc_insertion_point(field_set:internal.ForwardMessageRsp.src_type)
@@ -2376,7 +2695,7 @@ inline void ForwardMessageRsp::set_src_child_id(::google::protobuf::uint32 value
   // @@protoc_insertion_point(field_set:internal.ForwardMessageRsp.src_child_id)
 }
 
-// required .internal.ServerType dst_type = 3;
+// required .internal.NodeType dst_type = 3;
 inline bool ForwardMessageRsp::has_dst_type() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
@@ -2390,12 +2709,12 @@ inline void ForwardMessageRsp::clear_dst_type() {
   dst_type_ = 1;
   clear_has_dst_type();
 }
-inline ::internal::ServerType ForwardMessageRsp::dst_type() const {
+inline ::internal::NodeType ForwardMessageRsp::dst_type() const {
   // @@protoc_insertion_point(field_get:internal.ForwardMessageRsp.dst_type)
-  return static_cast< ::internal::ServerType >(dst_type_);
+  return static_cast< ::internal::NodeType >(dst_type_);
 }
-inline void ForwardMessageRsp::set_dst_type(::internal::ServerType value) {
-  assert(::internal::ServerType_IsValid(value));
+inline void ForwardMessageRsp::set_dst_type(::internal::NodeType value) {
+  assert(::internal::NodeType_IsValid(value));
   set_has_dst_type();
   dst_type_ = value;
   // @@protoc_insertion_point(field_set:internal.ForwardMessageRsp.dst_type)
@@ -2429,24 +2748,24 @@ inline void ForwardMessageRsp::set_dst_child_id(::google::protobuf::uint32 value
 
 // BroadcastMessageReq
 
-// repeated .internal.ServerType dst_lists = 1;
+// repeated .internal.NodeType dst_lists = 1;
 inline int BroadcastMessageReq::dst_lists_size() const {
   return dst_lists_.size();
 }
 inline void BroadcastMessageReq::clear_dst_lists() {
   dst_lists_.Clear();
 }
-inline ::internal::ServerType BroadcastMessageReq::dst_lists(int index) const {
+inline ::internal::NodeType BroadcastMessageReq::dst_lists(int index) const {
   // @@protoc_insertion_point(field_get:internal.BroadcastMessageReq.dst_lists)
-  return static_cast< ::internal::ServerType >(dst_lists_.Get(index));
+  return static_cast< ::internal::NodeType >(dst_lists_.Get(index));
 }
-inline void BroadcastMessageReq::set_dst_lists(int index, ::internal::ServerType value) {
-  assert(::internal::ServerType_IsValid(value));
+inline void BroadcastMessageReq::set_dst_lists(int index, ::internal::NodeType value) {
+  assert(::internal::NodeType_IsValid(value));
   dst_lists_.Set(index, value);
   // @@protoc_insertion_point(field_set:internal.BroadcastMessageReq.dst_lists)
 }
-inline void BroadcastMessageReq::add_dst_lists(::internal::ServerType value) {
-  assert(::internal::ServerType_IsValid(value));
+inline void BroadcastMessageReq::add_dst_lists(::internal::NodeType value) {
+  assert(::internal::NodeType_IsValid(value));
   dst_lists_.Add(value);
   // @@protoc_insertion_point(field_add:internal.BroadcastMessageReq.dst_lists)
 }
@@ -2465,7 +2784,7 @@ BroadcastMessageReq::mutable_dst_lists() {
 
 // BroadcastMessageRsp
 
-// required .internal.ServerType src_type = 1;
+// required .internal.NodeType src_type = 1;
 inline bool BroadcastMessageRsp::has_src_type() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
@@ -2479,12 +2798,12 @@ inline void BroadcastMessageRsp::clear_src_type() {
   src_type_ = 1;
   clear_has_src_type();
 }
-inline ::internal::ServerType BroadcastMessageRsp::src_type() const {
+inline ::internal::NodeType BroadcastMessageRsp::src_type() const {
   // @@protoc_insertion_point(field_get:internal.BroadcastMessageRsp.src_type)
-  return static_cast< ::internal::ServerType >(src_type_);
+  return static_cast< ::internal::NodeType >(src_type_);
 }
-inline void BroadcastMessageRsp::set_src_type(::internal::ServerType value) {
-  assert(::internal::ServerType_IsValid(value));
+inline void BroadcastMessageRsp::set_src_type(::internal::NodeType value) {
+  assert(::internal::NodeType_IsValid(value));
   set_has_src_type();
   src_type_ = value;
   // @@protoc_insertion_point(field_set:internal.BroadcastMessageRsp.src_type)
@@ -2533,15 +2852,15 @@ template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::internal::QueryDBProxyReq_DatabaseType>() {
   return ::internal::QueryDBProxyReq_DatabaseType_descriptor();
 }
-template <> struct is_proto_enum< ::internal::DBProxyErrorRsp_ErrorCode> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::internal::ErrorCode> : ::google::protobuf::internal::true_type {};
 template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::internal::DBProxyErrorRsp_ErrorCode>() {
-  return ::internal::DBProxyErrorRsp_ErrorCode_descriptor();
+inline const EnumDescriptor* GetEnumDescriptor< ::internal::ErrorCode>() {
+  return ::internal::ErrorCode_descriptor();
 }
-template <> struct is_proto_enum< ::internal::ServerType> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::internal::NodeType> : ::google::protobuf::internal::true_type {};
 template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::internal::ServerType>() {
-  return ::internal::ServerType_descriptor();
+inline const EnumDescriptor* GetEnumDescriptor< ::internal::NodeType>() {
+  return ::internal::NodeType_descriptor();
 }
 
 }  // namespace google

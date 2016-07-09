@@ -73,33 +73,33 @@ namespace dbproxy
 						// 不存在的目标数据库
 						requests_.erase(sequence_native);
 						generator_.Put(sequence_native);
-						RespondErrorCode(session, request->sequence(), internal::DBProxyErrorRsp::kNotFoundDatabase);
+						RespondErrorCode(session, request->sequence(), internal::kNotFoundDatabase);
 					}
 					catch (dbproxy::ResourceInsufficiency&)
 					{
 						// 服务器资源达到上限
 						requests_.erase(sequence_native);
 						generator_.Put(sequence_native);
-						RespondErrorCode(session, request->sequence(), internal::DBProxyErrorRsp::kResourceInsufficiency);
+						RespondErrorCode(session, request->sequence(), internal::kResourceInsufficiency);
 					}
 				}
 				else
 				{
 					// 无效的操作类型
 					generator_.Put(sequence_native);
-					RespondErrorCode(session, request->sequence(), internal::DBProxyErrorRsp::kInvalidAction);
+					RespondErrorCode(session, request->sequence(), internal::kInvalidOperation);
 				}
 			}
 			else
 			{
 				// 生成序列号失败
-				RespondErrorCode(session, request->sequence(), internal::DBProxyErrorRsp::kResourceInsufficiency);
+				RespondErrorCode(session, request->sequence(), internal::kResourceInsufficiency);
 			}
 		}
 		else
 		{
 			// 无效的协议
-			RespondErrorCode(session, 0, internal::DBProxyErrorRsp::kInvalidProtocol);
+			RespondErrorCode(session, 0, internal::kInvalidProtocol);
 		}
 	}
 
@@ -135,7 +135,7 @@ namespace dbproxy
 	{
 		internal::DBProxyErrorRsp error;
 		error.set_sequence(sequence);
-		error.set_error_code(static_cast<internal::DBProxyErrorRsp::ErrorCode>(error_code));
+		error.set_error_code(static_cast<internal::ErrorCode>(error_code));
 
 		eddy::NetMessage message;
 		PackageMessage(&error, message);

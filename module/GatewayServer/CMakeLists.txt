@@ -1,6 +1,7 @@
 set(CURRENT_PROJECT_NAME GatewayServer)
 
 set(CURRENT_PROJECT_SRC_LISTS
+  Main.cpp
   ServerManager.cpp
 )
 
