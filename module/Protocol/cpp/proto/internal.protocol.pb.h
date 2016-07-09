@@ -101,11 +101,12 @@ enum ErrorCode {
   kInvalidProtocol = 4,
   kInvalidOperation = 5,
   kNotFoundDatabase = 6,
-  kResourceInsufficiency = 7
+  kResourceInsufficiency = 7,
+  kDestinationUnreachable = 8
 };
 bool ErrorCode_IsValid(int value);
 const ErrorCode ErrorCode_MIN = kNotLoggedIn;
-const ErrorCode ErrorCode_MAX = kResourceInsufficiency;
+const ErrorCode ErrorCode_MAX = kDestinationUnreachable;
 const int ErrorCode_ARRAYSIZE = ErrorCode_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* ErrorCode_descriptor();
@@ -1596,30 +1597,12 @@ class ForwardMessageRsp : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 src_child_id() const;
   inline void set_src_child_id(::google::protobuf::uint32 value);
 
-  // required .internal.NodeType dst_type = 3;
-  inline bool has_dst_type() const;
-  inline void clear_dst_type();
-  static const int kDstTypeFieldNumber = 3;
-  inline ::internal::NodeType dst_type() const;
-  inline void set_dst_type(::internal::NodeType value);
-
-  // optional uint32 dst_child_id = 4 [default = 1];
-  inline bool has_dst_child_id() const;
-  inline void clear_dst_child_id();
-  static const int kDstChildIdFieldNumber = 4;
-  inline ::google::protobuf::uint32 dst_child_id() const;
-  inline void set_dst_child_id(::google::protobuf::uint32 value);
-
   // @@protoc_insertion_point(class_scope:internal.ForwardMessageRsp)
  private:
   inline void set_has_src_type();
   inline void clear_has_src_type();
   inline void set_has_src_child_id();
   inline void clear_has_src_child_id();
-  inline void set_has_dst_type();
-  inline void clear_has_dst_type();
-  inline void set_has_dst_child_id();
-  inline void clear_has_dst_child_id();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -1627,8 +1610,6 @@ class ForwardMessageRsp : public ::google::protobuf::Message {
   mutable int _cached_size_;
   int src_type_;
   ::google::protobuf::uint32 src_child_id_;
-  int dst_type_;
-  ::google::protobuf::uint32 dst_child_id_;
   friend void  protobuf_AddDesc_proto_2finternal_2eprotocol_2eproto();
   friend void protobuf_AssignDesc_proto_2finternal_2eprotocol_2eproto();
   friend void protobuf_ShutdownFile_proto_2finternal_2eprotocol_2eproto();
@@ -2693,55 +2674,6 @@ inline void ForwardMessageRsp::set_src_child_id(::google::protobuf::uint32 value
   set_has_src_child_id();
   src_child_id_ = value;
   // @@protoc_insertion_point(field_set:internal.ForwardMessageRsp.src_child_id)
-}
-
-// required .internal.NodeType dst_type = 3;
-inline bool ForwardMessageRsp::has_dst_type() const {
-  return (_has_bits_[0] & 0x00000004u) != 0;
-}
-inline void ForwardMessageRsp::set_has_dst_type() {
-  _has_bits_[0] |= 0x00000004u;
-}
-inline void ForwardMessageRsp::clear_has_dst_type() {
-  _has_bits_[0] &= ~0x00000004u;
-}
-inline void ForwardMessageRsp::clear_dst_type() {
-  dst_type_ = 1;
-  clear_has_dst_type();
-}
-inline ::internal::NodeType ForwardMessageRsp::dst_type() const {
-  // @@protoc_insertion_point(field_get:internal.ForwardMessageRsp.dst_type)
-  return static_cast< ::internal::NodeType >(dst_type_);
-}
-inline void ForwardMessageRsp::set_dst_type(::internal::NodeType value) {
-  assert(::internal::NodeType_IsValid(value));
-  set_has_dst_type();
-  dst_type_ = value;
-  // @@protoc_insertion_point(field_set:internal.ForwardMessageRsp.dst_type)
-}
-
-// optional uint32 dst_child_id = 4 [default = 1];
-inline bool ForwardMessageRsp::has_dst_child_id() const {
-  return (_has_bits_[0] & 0x00000008u) != 0;
-}
-inline void ForwardMessageRsp::set_has_dst_child_id() {
-  _has_bits_[0] |= 0x00000008u;
-}
-inline void ForwardMessageRsp::clear_has_dst_child_id() {
-  _has_bits_[0] &= ~0x00000008u;
-}
-inline void ForwardMessageRsp::clear_dst_child_id() {
-  dst_child_id_ = 1u;
-  clear_has_dst_child_id();
-}
-inline ::google::protobuf::uint32 ForwardMessageRsp::dst_child_id() const {
-  // @@protoc_insertion_point(field_get:internal.ForwardMessageRsp.dst_child_id)
-  return dst_child_id_;
-}
-inline void ForwardMessageRsp::set_dst_child_id(::google::protobuf::uint32 value) {
-  set_has_dst_child_id();
-  dst_child_id_ = value;
-  // @@protoc_insertion_point(field_set:internal.ForwardMessageRsp.dst_child_id)
 }
 
 // -------------------------------------------------------------------

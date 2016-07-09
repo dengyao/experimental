@@ -14,6 +14,20 @@ ServerManager::~ServerManager()
 {
 }
 
+// 回复错误码
+void ServerManager::RespondErrorCode(eddy::TCPSessionHandler &session, int error_code, const char *what)
+{
+	internal::GatewayErrorRsp error;
+	error.set_error_code(static_cast<internal::ErrorCode>(error_code));
+	if (what != nullptr)
+	{
+		error.set_what(what);
+	}
+	eddy::NetMessage message;
+	PackageMessage(&error, message);
+	session.Send(message);
+}
+
 // 查找服务器节点
 bool ServerManager::FindServerNodeBySessionID(eddy::TCPSessionID session_id, ChildNode *&out_child_node)
 {
@@ -46,6 +60,39 @@ bool ServerManager::FindServerNodeBySessionID(eddy::TCPSessionID session_id, Chi
 	return true;
 }
 
+// 查找节点会话
+bool ServerManager::FindServerNodeSession(int node_type, int child_id, eddy::SessionHandlePointer &out_session)
+{
+	auto node_found = server_lists_.find(node_type);
+	if (node_found == server_lists_.end())
+	{
+		return false;
+	}
+
+	auto child_found = node_found->second.child_lists.find(child_id);
+	if (child_found == node_found->second.child_lists.end())
+	{
+		return false;
+	}
+
+	if (child_found->second.session_lists.empty())
+	{
+		return false;
+	}
+
+	eddy::TCPSessionID session_id = 0;
+	if (child_found->second.session_lists.size() == 1)
+	{
+		session_id = child_found->second.session_lists.front();
+	}
+	else
+	{
+		session_id = child_found->second.session_lists[rand() % child_found->second.session_lists.size()];
+	}
+	out_session = threads_.SessionHandler(session_id);
+	return out_session != nullptr;
+}
+
 // 服务器登录
 void ServerManager::OnServerLogin(eddy::TCPSessionHandler &session, google::protobuf::Message *message)
 {
@@ -55,6 +102,8 @@ void ServerManager::OnServerLogin(eddy::TCPSessionHandler &session, google::prot
 	{
 		return;
 	}
+
+	/* 记得检查服务器类型是否合法 */
 
 	// 是否重复登录
 	auto found = node_index_.find(session.SessionID());
@@ -72,6 +121,7 @@ void ServerManager::OnServerLogin(eddy::TCPSessionHandler &session, google::prot
 
 		ChildNode &child_node_lists = node_lists.child_lists[request->child_id()];
 		child_node_lists.working = true;
+		child_node_lists.node_type = request->type();
 		child_node_lists.child_id = request->child_id();
 		child_node_lists.session_lists.push_back(session.SessionID());
 	}
@@ -82,6 +132,7 @@ void ServerManager::OnServerLogin(eddy::TCPSessionHandler &session, google::prot
 		{
 			ChildNode &child_node_lists = node_found->second.child_lists[request->child_id()];
 			child_node_lists.working = true;
+			child_node_lists.node_type = request->type();
 			child_node_lists.child_id = request->child_id();
 			child_node_lists.session_lists.push_back(session.SessionID());
 		}
@@ -96,74 +147,127 @@ void ServerManager::OnServerLogin(eddy::TCPSessionHandler &session, google::prot
 	index.node_type = request->type();
 	index.child_id = request->child_id();
 	node_index_.insert(std::make_pair(session.SessionID(), index));
+
+	// 返回结果
+	eddy::NetMessage msg;
+	internal::LoginGatewayRsp rsp;
+	rsp.set_heartbeat_interval(60);
+	PackageMessage(&rsp, msg);
+	session.Send(msg);
 }
 
 // 服务器暂停服务
-void ServerManager::OnServerPauseWork(eddy::TCPSessionHandler &session, int node_type, int child_id, google::protobuf::Message *message)
+void ServerManager::OnServerPauseWork(eddy::TCPSessionHandler &session, google::protobuf::Message *message)
 {
 	auto request = dynamic_cast<internal::PauseWorkReq*>(message);
 	assert(request != nullptr);
 	if (request == nullptr)
 	{
+		RespondErrorCode(session, internal::kInvalidProtocol);
 		return;
 	}
 
 	ChildNode *child_node = nullptr;
 	if (!FindServerNodeBySessionID(session.SessionID(), child_node))
 	{
-		// 服务器子节点未登录
+		RespondErrorCode(session, internal::kNotLoggedIn, request->GetTypeName().c_str());
 	}
 	else
 	{
 		child_node->working = false;
+
+		// 返回结果
+		eddy::NetMessage msg;
+		internal::PauseWorkRsp rsp;
+		PackageMessage(&rsp, msg);
+		session.Send(msg);
 	}
 }
 
 // 服务器继续服务器
-void ServerManager::OnServerContinueWor(eddy::TCPSessionHandler &session, int node_type, int child_id, google::protobuf::Message *message)
+void ServerManager::OnServerContinueWork(eddy::TCPSessionHandler &session, google::protobuf::Message *message)
 {
 	auto request = dynamic_cast<internal::ContinueWorkReq*>(message);
 	assert(request != nullptr);
 	if (request == nullptr)
 	{
+		RespondErrorCode(session, internal::kInvalidProtocol);
 		return;
 	}
 
 	ChildNode *child_node = nullptr;
 	if (!FindServerNodeBySessionID(session.SessionID(), child_node))
 	{
-		// 服务器子节点未登录
+		RespondErrorCode(session, internal::kNotLoggedIn, request->GetTypeName().c_str());
 	}
 	else
 	{
 		child_node->working = true;
+
+		// 返回结果
+		eddy::NetMessage msg;
+		internal::ContinueWorkRsp rsp;
+		PackageMessage(&rsp, msg);
+		session.Send(msg);
 	}
 }
 
 // 转发服务器消息
-void ServerManager::OnForwardServerMessage(eddy::TCPSessionHandler &session, int dst_node_type, int dst_child_id, google::protobuf::Message *message)
+void ServerManager::OnForwardServerMessage(eddy::TCPSessionHandler &session, google::protobuf::Message *message)
 {
+	auto request = dynamic_cast<internal::ForwardMessageReq*>(message);
+	assert(request != nullptr);
+	if (request == nullptr)
+	{
+		RespondErrorCode(session, internal::kInvalidProtocol);
+		return;
+	}
+
 	ChildNode *child_node = nullptr;
 	if (!FindServerNodeBySessionID(session.SessionID(), child_node))
 	{
-		// 服务器子节点未登录
+		RespondErrorCode(session, internal::kNotLoggedIn, request->GetTypeName().c_str());
 	}
 	else
 	{
-		child_node->working = true;
+		eddy::SessionHandlePointer dst_session;
+		if (!FindServerNodeSession(request->dst_type(), request->dst_child_id(), dst_session))
+		{
+			RespondErrorCode(session, internal::kDestinationUnreachable, request->GetTypeName().c_str());
+		}
+		else
+		{
+			eddy::NetMessage msg;
+			internal::ForwardMessageRsp rsp;
+			rsp.set_src_type(static_cast<internal::NodeType>(child_node->node_type));
+			rsp.set_src_child_id(child_node->child_id);
+			PackageMessage(&rsp, msg);
+
+
+
+			dst_session->Send(msg);
+		}
 	}
 }
 
 // 广播服务器消息
-void ServerManager::OnBroadcastServerMessage(eddy::TCPSessionHandler &session, const std::vector<NodeIndex> &dst_lists, google::protobuf::Message *message)
+void ServerManager::OnBroadcastServerMessage(eddy::TCPSessionHandler &session, google::protobuf::Message *message)
 {
+	auto request = dynamic_cast<internal::BroadcastMessageReq*>(message);
+	assert(request != nullptr);
+	if (request == nullptr)
+	{
+		RespondErrorCode(session, internal::kInvalidProtocol);
+		return;
+	}
+
 	ChildNode *child_node = nullptr;
 	if (!FindServerNodeBySessionID(session.SessionID(), child_node))
 	{
-		// 服务器子节点未登录
+		RespondErrorCode(session, internal::kNotLoggedIn, request->GetTypeName().c_str());
 	}
 	else
 	{
-		child_node->working = true;
+
 	}
 }

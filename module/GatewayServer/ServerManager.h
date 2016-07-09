@@ -31,12 +31,13 @@ class ServerManager
 	// 子节点信息
 	struct ChildNode
 	{
+		int node_type;
 		int child_id;
 		bool working;
 		std::vector<eddy::TCPSessionID> session_lists;
 
 		ChildNode()
-			: child_id(0), working(false)
+			: node_type(0), child_id(0), working(false)
 		{
 		}
 	};
@@ -63,20 +64,26 @@ private:
 	void OnServerLogin(eddy::TCPSessionHandler &session, google::protobuf::Message *message);
 
 	// 服务器暂停服务
-	void OnServerPauseWork(eddy::TCPSessionHandler &session, int node_type, int child_id, google::protobuf::Message *message);
+	void OnServerPauseWork(eddy::TCPSessionHandler &session, google::protobuf::Message *message);
 
 	// 服务器继续服务器
-	void OnServerContinueWor(eddy::TCPSessionHandler &session, int node_type, int child_id, google::protobuf::Message *message);
+	void OnServerContinueWork(eddy::TCPSessionHandler &session, google::protobuf::Message *message);
 
 	// 转发服务器消息
-	void OnForwardServerMessage(eddy::TCPSessionHandler &session, int dst_node_type, int dst_child_id, google::protobuf::Message *message);
+	void OnForwardServerMessage(eddy::TCPSessionHandler &session, google::protobuf::Message *message);
 
 	// 广播服务器消息
-	void OnBroadcastServerMessage(eddy::TCPSessionHandler &session, const std::vector<NodeIndex> &dst_lists, google::protobuf::Message *message);
+	void OnBroadcastServerMessage(eddy::TCPSessionHandler &session, google::protobuf::Message *message);
 
 private:
 	// 查找服务器节点
 	bool FindServerNodeBySessionID(eddy::TCPSessionID session_id, ChildNode *&out_child_node);
+
+	// 查找服务器节点会话
+	bool FindServerNodeSession(int node_type, int child_id, eddy::SessionHandlePointer &out_session);
+
+	// 回复错误码
+	void RespondErrorCode(eddy::TCPSessionHandler &session, int error_code, const char *what = nullptr);
 
 private:
 	eddy::IOServiceThreadManager& threads_;

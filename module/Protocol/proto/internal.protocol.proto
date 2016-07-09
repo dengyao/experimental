@@ -11,6 +11,7 @@ enum ErrorCode {
     kInvalidOperation = 5; // 无效操作
     kNotFoundDatabase = 6; // 不存在的数据库
     kResourceInsufficiency = 7; // 服务器资源不足
+    kDestinationUnreachable = 8; // 目的地不可到达
 }
 
 // 心跳上行包
@@ -130,8 +131,6 @@ message ForwardMessageReq {
 message ForwardMessageRsp {
     required NodeType src_type = 1; // 来源服务器类型
     optional uint32 src_child_id = 2 [default = 1]; // 来源服务器子节点id
-    required NodeType dst_type = 3; // 目标服务器类型
-    optional uint32 dst_child_id = 4 [default = 1]; // 目标服务器子节点id
 }
 
 // 广播消息请求

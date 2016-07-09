@@ -339,11 +339,9 @@ void protobuf_AssignDesc_proto_2finternal_2eprotocol_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(ForwardMessageReq));
   ForwardMessageRsp_descriptor_ = file->message_type(16);
-  static const int ForwardMessageRsp_offsets_[4] = {
+  static const int ForwardMessageRsp_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ForwardMessageRsp, src_type_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ForwardMessageRsp, src_child_id_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ForwardMessageRsp, dst_type_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ForwardMessageRsp, dst_child_id_),
   };
   ForwardMessageRsp_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -515,20 +513,20 @@ void protobuf_AddDesc_proto_2finternal_2eprotocol_2eproto() {
     " \001(\r:\0010\"\016\n\014PauseWorkRsp\"\021\n\017ContinueWorkR"
     "eq\"\021\n\017ContinueWorkRsp\"R\n\021ForwardMessageR"
     "eq\022$\n\010dst_type\030\001 \002(\0162\022.internal.NodeType"
-    "\022\027\n\014dst_child_id\030\002 \001(\r:\0011\"\221\001\n\021ForwardMes"
-    "sageRsp\022$\n\010src_type\030\001 \002(\0162\022.internal.Nod"
-    "eType\022\027\n\014src_child_id\030\002 \001(\r:\0011\022$\n\010dst_ty"
-    "pe\030\003 \002(\0162\022.internal.NodeType\022\027\n\014dst_chil"
-    "d_id\030\004 \001(\r:\0011\"<\n\023BroadcastMessageReq\022%\n\t"
-    "dst_lists\030\001 \003(\0162\022.internal.NodeType\"T\n\023B"
-    "roadcastMessageRsp\022$\n\010src_type\030\001 \002(\0162\022.i"
-    "nternal.NodeType\022\027\n\014src_child_id\030\002 \001(\r:\001"
-    "1*\241\001\n\tErrorCode\022\020\n\014kNotLoggedIn\020\001\022\017\n\013kDi"
-    "sconnect\020\002\022\021\n\rkNotConnected\020\003\022\024\n\020kInvali"
-    "dProtocol\020\004\022\025\n\021kInvalidOperation\020\005\022\025\n\021kN"
-    "otFoundDatabase\020\006\022\032\n\026kResourceInsufficie"
-    "ncy\020\007*F\n\010NodeType\022\022\n\016kLicenceServer\020\001\022\021\n"
-    "\rkLinkerServer\020\002\022\023\n\017kMainLogicSever\020\003", 1517);
+    "\022\027\n\014dst_child_id\030\002 \001(\r:\0011\"R\n\021ForwardMess"
+    "ageRsp\022$\n\010src_type\030\001 \002(\0162\022.internal.Node"
+    "Type\022\027\n\014src_child_id\030\002 \001(\r:\0011\"<\n\023Broadca"
+    "stMessageReq\022%\n\tdst_lists\030\001 \003(\0162\022.intern"
+    "al.NodeType\"T\n\023BroadcastMessageRsp\022$\n\010sr"
+    "c_type\030\001 \002(\0162\022.internal.NodeType\022\027\n\014src_"
+    "child_id\030\002 \001(\r:\0011*\276\001\n\tErrorCode\022\020\n\014kNotL"
+    "oggedIn\020\001\022\017\n\013kDisconnect\020\002\022\021\n\rkNotConnec"
+    "ted\020\003\022\024\n\020kInvalidProtocol\020\004\022\025\n\021kInvalidO"
+    "peration\020\005\022\025\n\021kNotFoundDatabase\020\006\022\032\n\026kRe"
+    "sourceInsufficiency\020\007\022\033\n\027kDestinationUnr"
+    "eachable\020\010*F\n\010NodeType\022\022\n\016kLicenceServer"
+    "\020\001\022\021\n\rkLinkerServer\020\002\022\023\n\017kMainLogicSever"
+    "\020\003", 1482);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "proto/internal.protocol.proto", &protobuf_RegisterTypes);
   PingReq::default_instance_ = new PingReq();
@@ -591,6 +589,7 @@ bool ErrorCode_IsValid(int value) {
     case 5:
     case 6:
     case 7:
+    case 8:
       return true;
     default:
       return false;
@@ -4533,8 +4532,6 @@ void ForwardMessageReq::Swap(ForwardMessageReq* other) {
 #ifndef _MSC_VER
 const int ForwardMessageRsp::kSrcTypeFieldNumber;
 const int ForwardMessageRsp::kSrcChildIdFieldNumber;
-const int ForwardMessageRsp::kDstTypeFieldNumber;
-const int ForwardMessageRsp::kDstChildIdFieldNumber;
 #endif  // !_MSC_VER
 
 ForwardMessageRsp::ForwardMessageRsp()
@@ -4557,8 +4554,6 @@ void ForwardMessageRsp::SharedCtor() {
   _cached_size_ = 0;
   src_type_ = 1;
   src_child_id_ = 1u;
-  dst_type_ = 1;
-  dst_child_id_ = 1u;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -4594,11 +4589,9 @@ ForwardMessageRsp* ForwardMessageRsp::New() const {
 }
 
 void ForwardMessageRsp::Clear() {
-  if (_has_bits_[0 / 32] & 15) {
+  if (_has_bits_[0 / 32] & 3) {
     src_type_ = 1;
     src_child_id_ = 1u;
-    dst_type_ = 1;
-    dst_child_id_ = 1u;
   }
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
@@ -4644,41 +4637,6 @@ bool ForwardMessageRsp::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(24)) goto parse_dst_type;
-        break;
-      }
-
-      // required .internal.NodeType dst_type = 3;
-      case 3: {
-        if (tag == 24) {
-         parse_dst_type:
-          int value;
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          if (::internal::NodeType_IsValid(value)) {
-            set_dst_type(static_cast< ::internal::NodeType >(value));
-          } else {
-            mutable_unknown_fields()->AddVarint(3, value);
-          }
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(32)) goto parse_dst_child_id;
-        break;
-      }
-
-      // optional uint32 dst_child_id = 4 [default = 1];
-      case 4: {
-        if (tag == 32) {
-         parse_dst_child_id:
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
-                 input, &dst_child_id_)));
-          set_has_dst_child_id();
-        } else {
-          goto handle_unusual;
-        }
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -4719,17 +4677,6 @@ void ForwardMessageRsp::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->src_child_id(), output);
   }
 
-  // required .internal.NodeType dst_type = 3;
-  if (has_dst_type()) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
-      3, this->dst_type(), output);
-  }
-
-  // optional uint32 dst_child_id = 4 [default = 1];
-  if (has_dst_child_id()) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(4, this->dst_child_id(), output);
-  }
-
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -4749,17 +4696,6 @@ void ForwardMessageRsp::SerializeWithCachedSizes(
   // optional uint32 src_child_id = 2 [default = 1];
   if (has_src_child_id()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(2, this->src_child_id(), target);
-  }
-
-  // required .internal.NodeType dst_type = 3;
-  if (has_dst_type()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
-      3, this->dst_type(), target);
-  }
-
-  // optional uint32 dst_child_id = 4 [default = 1];
-  if (has_dst_child_id()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(4, this->dst_child_id(), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -4785,19 +4721,6 @@ int ForwardMessageRsp::ByteSize() const {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::UInt32Size(
           this->src_child_id());
-    }
-
-    // required .internal.NodeType dst_type = 3;
-    if (has_dst_type()) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::EnumSize(this->dst_type());
-    }
-
-    // optional uint32 dst_child_id = 4 [default = 1];
-    if (has_dst_child_id()) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::UInt32Size(
-          this->dst_child_id());
     }
 
   }
@@ -4833,12 +4756,6 @@ void ForwardMessageRsp::MergeFrom(const ForwardMessageRsp& from) {
     if (from.has_src_child_id()) {
       set_src_child_id(from.src_child_id());
     }
-    if (from.has_dst_type()) {
-      set_dst_type(from.dst_type());
-    }
-    if (from.has_dst_child_id()) {
-      set_dst_child_id(from.dst_child_id());
-    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -4856,7 +4773,7 @@ void ForwardMessageRsp::CopyFrom(const ForwardMessageRsp& from) {
 }
 
 bool ForwardMessageRsp::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000005) != 0x00000005) return false;
+  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
 
   return true;
 }
@@ -4865,8 +4782,6 @@ void ForwardMessageRsp::Swap(ForwardMessageRsp* other) {
   if (other != this) {
     std::swap(src_type_, other->src_type_);
     std::swap(src_child_id_, other->src_child_id_);
-    std::swap(dst_type_, other->dst_type_);
-    std::swap(dst_child_id_, other->dst_child_id_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
