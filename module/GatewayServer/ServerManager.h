@@ -6,6 +6,7 @@
 #include <map>
 #include <vector>
 #include <memory>
+#include <eddyserver.h>
 
 namespace google
 {
@@ -15,13 +16,13 @@ namespace google
 	}
 }
 
-class SessionHandlePoint;
+typedef std::weak_ptr<eddy::TCPSessionHandler> WeakSession;
 
 struct ChildNode
 {
 	int child_id;
 	bool working;
-	std::vector<SessionHandlePoint*> session_lists;
+	std::vector<WeakSession> session_lists;
 };
 
 #if (USE_DICT_STRUCTURE)
@@ -57,19 +58,19 @@ public:
 
 private:
 	// 服务器登录
-	void OnServerLogin(sads asdsa, google::protobuf::Message *message);
+	void OnServerLogin(eddy::SessionHandlePointer &session, google::protobuf::Message *message);
 
 	// 服务器暂停服务
-	void OnServerPauseWork(int node_type, int child_id, google::protobuf::Message *message);
+	void OnServerPauseWork(eddy::SessionHandlePointer &session, int node_type, int child_id, google::protobuf::Message *message);
 
 	// 服务器继续服务器
-	void OnServerContinueWor(int node_type, int child_id, google::protobuf::Message *message);
+	void OnServerContinueWor(eddy::SessionHandlePointer &session, int node_type, int child_id, google::protobuf::Message *message);
 
 	// 转发服务器消息
-	void OnForwardServerMessage(int src_node_type, int src_child_id, int dst_node_type, int dst_child_id, google::protobuf::Message *message);
+	void OnForwardServerMessage(eddy::SessionHandlePointer &session, int src_node_type, int src_child_id, int dst_node_type, int dst_child_id, google::protobuf::Message *message);
 
 	// 广播服务器消息
-	void OnBroadcastServerMessage(int src_node_type, int src_child_id, const std::vector<FindChild> &dst_lists, google::protobuf::Message *message);
+	void OnBroadcastServerMessage(eddy::SessionHandlePointer &session, int src_node_type, int src_child_id, const std::vector<FindChild> &dst_lists, google::protobuf::Message *message);
 
 private:
 	ServerNodeContainer node_lists_;

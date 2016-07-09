@@ -1,6 +1,10 @@
-set(CURRENT_PROJECT_NAME Protocol)
+set(CURRENT_PROJECT_NAME 
+  cpp/proto/externall.protocol.pb.cc
+  cpp/proto/internal.protocol.pb.cc
+  cpp/proto/MessageHelper.cpp
+)
 
-set(CURRENT_PROJECT_SRC_LISTS 
+set(CURRENT_PROJECT_NAME 
   cpp/proto/externall.protocol.pb.cc
   cpp/proto/internal.protocol.pb.cc
   cpp/proto/MessageHelper.cpp

@@ -17,6 +17,14 @@ public:
         internal::QueryDBProxyRsp::descriptor();
         internal::DBErrorRsp::descriptor();
         internal::DBProxyErrorRsp::descriptor();
+        internal::LoginGatewayReq::descriptor();
+        internal::LoginGatewayRsp::descriptor();
+        internal::PauseWorkReq::descriptor();
+        internal::ContinueWorkReq::descriptor();
+        internal::ForwardMessageReq::descriptor();
+        internal::ForwardMessageRsp::descriptor();
+        internal::BroadcastMessageReq::descriptor();
+        internal::BroadcastMessageRsp::descriptor();
     }
 };
 

@@ -42,6 +42,14 @@ class QueryDBProxyReq;
 class QueryDBProxyRsp;
 class DBErrorRsp;
 class DBProxyErrorRsp;
+class LoginGatewayReq;
+class LoginGatewayRsp;
+class PauseWorkReq;
+class ContinueWorkReq;
+class ForwardMessageReq;
+class ForwardMessageRsp;
+class BroadcastMessageReq;
+class BroadcastMessageRsp;
 
 enum QueryDBProxyReq_ActoinType {
   QueryDBProxyReq_ActoinType_kSelect = 1,
@@ -106,6 +114,26 @@ inline bool DBProxyErrorRsp_ErrorCode_Parse(
     const ::std::string& name, DBProxyErrorRsp_ErrorCode* value) {
   return ::google::protobuf::internal::ParseNamedEnum<DBProxyErrorRsp_ErrorCode>(
     DBProxyErrorRsp_ErrorCode_descriptor(), name, value);
+}
+enum ServerType {
+  kLicenceServer = 1,
+  kLinkerServer = 2,
+  kMainLogicSever = 3
+};
+bool ServerType_IsValid(int value);
+const ServerType ServerType_MIN = kLicenceServer;
+const ServerType ServerType_MAX = kMainLogicSever;
+const int ServerType_ARRAYSIZE = ServerType_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* ServerType_descriptor();
+inline const ::std::string& ServerType_Name(ServerType value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    ServerType_descriptor(), value);
+}
+inline bool ServerType_Parse(
+    const ::std::string& name, ServerType* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<ServerType>(
+    ServerType_descriptor(), name, value);
 }
 // ===================================================================
 
@@ -369,7 +397,7 @@ class LoginDBProxyRsp : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // optional uint32 heartbeat_interval = 1;
+  // required uint32 heartbeat_interval = 1;
   inline bool has_heartbeat_interval() const;
   inline void clear_heartbeat_interval();
   static const int kHeartbeatIntervalFieldNumber = 1;
@@ -888,6 +916,689 @@ class DBProxyErrorRsp : public ::google::protobuf::Message {
   void InitAsDefaultInstance();
   static DBProxyErrorRsp* default_instance_;
 };
+// -------------------------------------------------------------------
+
+class LoginGatewayReq : public ::google::protobuf::Message {
+ public:
+  LoginGatewayReq();
+  virtual ~LoginGatewayReq();
+
+  LoginGatewayReq(const LoginGatewayReq& from);
+
+  inline LoginGatewayReq& operator=(const LoginGatewayReq& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const LoginGatewayReq& default_instance();
+
+  void Swap(LoginGatewayReq* other);
+
+  // implements Message ----------------------------------------------
+
+  LoginGatewayReq* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const LoginGatewayReq& from);
+  void MergeFrom(const LoginGatewayReq& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required .internal.ServerType type = 1;
+  inline bool has_type() const;
+  inline void clear_type();
+  static const int kTypeFieldNumber = 1;
+  inline ::internal::ServerType type() const;
+  inline void set_type(::internal::ServerType value);
+
+  // optional uint32 child_id = 2 [default = 1];
+  inline bool has_child_id() const;
+  inline void clear_child_id();
+  static const int kChildIdFieldNumber = 2;
+  inline ::google::protobuf::uint32 child_id() const;
+  inline void set_child_id(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:internal.LoginGatewayReq)
+ private:
+  inline void set_has_type();
+  inline void clear_has_type();
+  inline void set_has_child_id();
+  inline void clear_has_child_id();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  int type_;
+  ::google::protobuf::uint32 child_id_;
+  friend void  protobuf_AddDesc_proto_2finternal_2eprotocol_2eproto();
+  friend void protobuf_AssignDesc_proto_2finternal_2eprotocol_2eproto();
+  friend void protobuf_ShutdownFile_proto_2finternal_2eprotocol_2eproto();
+
+  void InitAsDefaultInstance();
+  static LoginGatewayReq* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class LoginGatewayRsp : public ::google::protobuf::Message {
+ public:
+  LoginGatewayRsp();
+  virtual ~LoginGatewayRsp();
+
+  LoginGatewayRsp(const LoginGatewayRsp& from);
+
+  inline LoginGatewayRsp& operator=(const LoginGatewayRsp& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const LoginGatewayRsp& default_instance();
+
+  void Swap(LoginGatewayRsp* other);
+
+  // implements Message ----------------------------------------------
+
+  LoginGatewayRsp* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const LoginGatewayRsp& from);
+  void MergeFrom(const LoginGatewayRsp& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required uint32 heartbeat_interval = 1;
+  inline bool has_heartbeat_interval() const;
+  inline void clear_heartbeat_interval();
+  static const int kHeartbeatIntervalFieldNumber = 1;
+  inline ::google::protobuf::uint32 heartbeat_interval() const;
+  inline void set_heartbeat_interval(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:internal.LoginGatewayRsp)
+ private:
+  inline void set_has_heartbeat_interval();
+  inline void clear_has_heartbeat_interval();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 heartbeat_interval_;
+  friend void  protobuf_AddDesc_proto_2finternal_2eprotocol_2eproto();
+  friend void protobuf_AssignDesc_proto_2finternal_2eprotocol_2eproto();
+  friend void protobuf_ShutdownFile_proto_2finternal_2eprotocol_2eproto();
+
+  void InitAsDefaultInstance();
+  static LoginGatewayRsp* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class PauseWorkReq : public ::google::protobuf::Message {
+ public:
+  PauseWorkReq();
+  virtual ~PauseWorkReq();
+
+  PauseWorkReq(const PauseWorkReq& from);
+
+  inline PauseWorkReq& operator=(const PauseWorkReq& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const PauseWorkReq& default_instance();
+
+  void Swap(PauseWorkReq* other);
+
+  // implements Message ----------------------------------------------
+
+  PauseWorkReq* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const PauseWorkReq& from);
+  void MergeFrom(const PauseWorkReq& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional uint32 duration = 1 [default = 0];
+  inline bool has_duration() const;
+  inline void clear_duration();
+  static const int kDurationFieldNumber = 1;
+  inline ::google::protobuf::uint32 duration() const;
+  inline void set_duration(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:internal.PauseWorkReq)
+ private:
+  inline void set_has_duration();
+  inline void clear_has_duration();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 duration_;
+  friend void  protobuf_AddDesc_proto_2finternal_2eprotocol_2eproto();
+  friend void protobuf_AssignDesc_proto_2finternal_2eprotocol_2eproto();
+  friend void protobuf_ShutdownFile_proto_2finternal_2eprotocol_2eproto();
+
+  void InitAsDefaultInstance();
+  static PauseWorkReq* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class ContinueWorkReq : public ::google::protobuf::Message {
+ public:
+  ContinueWorkReq();
+  virtual ~ContinueWorkReq();
+
+  ContinueWorkReq(const ContinueWorkReq& from);
+
+  inline ContinueWorkReq& operator=(const ContinueWorkReq& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const ContinueWorkReq& default_instance();
+
+  void Swap(ContinueWorkReq* other);
+
+  // implements Message ----------------------------------------------
+
+  ContinueWorkReq* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const ContinueWorkReq& from);
+  void MergeFrom(const ContinueWorkReq& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:internal.ContinueWorkReq)
+ private:
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  friend void  protobuf_AddDesc_proto_2finternal_2eprotocol_2eproto();
+  friend void protobuf_AssignDesc_proto_2finternal_2eprotocol_2eproto();
+  friend void protobuf_ShutdownFile_proto_2finternal_2eprotocol_2eproto();
+
+  void InitAsDefaultInstance();
+  static ContinueWorkReq* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class ForwardMessageReq : public ::google::protobuf::Message {
+ public:
+  ForwardMessageReq();
+  virtual ~ForwardMessageReq();
+
+  ForwardMessageReq(const ForwardMessageReq& from);
+
+  inline ForwardMessageReq& operator=(const ForwardMessageReq& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const ForwardMessageReq& default_instance();
+
+  void Swap(ForwardMessageReq* other);
+
+  // implements Message ----------------------------------------------
+
+  ForwardMessageReq* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const ForwardMessageReq& from);
+  void MergeFrom(const ForwardMessageReq& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required .internal.ServerType dst_type = 1;
+  inline bool has_dst_type() const;
+  inline void clear_dst_type();
+  static const int kDstTypeFieldNumber = 1;
+  inline ::internal::ServerType dst_type() const;
+  inline void set_dst_type(::internal::ServerType value);
+
+  // optional uint32 dst_child_id = 2 [default = 1];
+  inline bool has_dst_child_id() const;
+  inline void clear_dst_child_id();
+  static const int kDstChildIdFieldNumber = 2;
+  inline ::google::protobuf::uint32 dst_child_id() const;
+  inline void set_dst_child_id(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:internal.ForwardMessageReq)
+ private:
+  inline void set_has_dst_type();
+  inline void clear_has_dst_type();
+  inline void set_has_dst_child_id();
+  inline void clear_has_dst_child_id();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  int dst_type_;
+  ::google::protobuf::uint32 dst_child_id_;
+  friend void  protobuf_AddDesc_proto_2finternal_2eprotocol_2eproto();
+  friend void protobuf_AssignDesc_proto_2finternal_2eprotocol_2eproto();
+  friend void protobuf_ShutdownFile_proto_2finternal_2eprotocol_2eproto();
+
+  void InitAsDefaultInstance();
+  static ForwardMessageReq* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class ForwardMessageRsp : public ::google::protobuf::Message {
+ public:
+  ForwardMessageRsp();
+  virtual ~ForwardMessageRsp();
+
+  ForwardMessageRsp(const ForwardMessageRsp& from);
+
+  inline ForwardMessageRsp& operator=(const ForwardMessageRsp& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const ForwardMessageRsp& default_instance();
+
+  void Swap(ForwardMessageRsp* other);
+
+  // implements Message ----------------------------------------------
+
+  ForwardMessageRsp* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const ForwardMessageRsp& from);
+  void MergeFrom(const ForwardMessageRsp& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required .internal.ServerType src_type = 1;
+  inline bool has_src_type() const;
+  inline void clear_src_type();
+  static const int kSrcTypeFieldNumber = 1;
+  inline ::internal::ServerType src_type() const;
+  inline void set_src_type(::internal::ServerType value);
+
+  // optional uint32 src_child_id = 2 [default = 1];
+  inline bool has_src_child_id() const;
+  inline void clear_src_child_id();
+  static const int kSrcChildIdFieldNumber = 2;
+  inline ::google::protobuf::uint32 src_child_id() const;
+  inline void set_src_child_id(::google::protobuf::uint32 value);
+
+  // required .internal.ServerType dst_type = 3;
+  inline bool has_dst_type() const;
+  inline void clear_dst_type();
+  static const int kDstTypeFieldNumber = 3;
+  inline ::internal::ServerType dst_type() const;
+  inline void set_dst_type(::internal::ServerType value);
+
+  // optional uint32 dst_child_id = 4 [default = 1];
+  inline bool has_dst_child_id() const;
+  inline void clear_dst_child_id();
+  static const int kDstChildIdFieldNumber = 4;
+  inline ::google::protobuf::uint32 dst_child_id() const;
+  inline void set_dst_child_id(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:internal.ForwardMessageRsp)
+ private:
+  inline void set_has_src_type();
+  inline void clear_has_src_type();
+  inline void set_has_src_child_id();
+  inline void clear_has_src_child_id();
+  inline void set_has_dst_type();
+  inline void clear_has_dst_type();
+  inline void set_has_dst_child_id();
+  inline void clear_has_dst_child_id();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  int src_type_;
+  ::google::protobuf::uint32 src_child_id_;
+  int dst_type_;
+  ::google::protobuf::uint32 dst_child_id_;
+  friend void  protobuf_AddDesc_proto_2finternal_2eprotocol_2eproto();
+  friend void protobuf_AssignDesc_proto_2finternal_2eprotocol_2eproto();
+  friend void protobuf_ShutdownFile_proto_2finternal_2eprotocol_2eproto();
+
+  void InitAsDefaultInstance();
+  static ForwardMessageRsp* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class BroadcastMessageReq : public ::google::protobuf::Message {
+ public:
+  BroadcastMessageReq();
+  virtual ~BroadcastMessageReq();
+
+  BroadcastMessageReq(const BroadcastMessageReq& from);
+
+  inline BroadcastMessageReq& operator=(const BroadcastMessageReq& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const BroadcastMessageReq& default_instance();
+
+  void Swap(BroadcastMessageReq* other);
+
+  // implements Message ----------------------------------------------
+
+  BroadcastMessageReq* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const BroadcastMessageReq& from);
+  void MergeFrom(const BroadcastMessageReq& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated .internal.ServerType dst_lists = 1;
+  inline int dst_lists_size() const;
+  inline void clear_dst_lists();
+  static const int kDstListsFieldNumber = 1;
+  inline ::internal::ServerType dst_lists(int index) const;
+  inline void set_dst_lists(int index, ::internal::ServerType value);
+  inline void add_dst_lists(::internal::ServerType value);
+  inline const ::google::protobuf::RepeatedField<int>& dst_lists() const;
+  inline ::google::protobuf::RepeatedField<int>* mutable_dst_lists();
+
+  // @@protoc_insertion_point(class_scope:internal.BroadcastMessageReq)
+ private:
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::RepeatedField<int> dst_lists_;
+  friend void  protobuf_AddDesc_proto_2finternal_2eprotocol_2eproto();
+  friend void protobuf_AssignDesc_proto_2finternal_2eprotocol_2eproto();
+  friend void protobuf_ShutdownFile_proto_2finternal_2eprotocol_2eproto();
+
+  void InitAsDefaultInstance();
+  static BroadcastMessageReq* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class BroadcastMessageRsp : public ::google::protobuf::Message {
+ public:
+  BroadcastMessageRsp();
+  virtual ~BroadcastMessageRsp();
+
+  BroadcastMessageRsp(const BroadcastMessageRsp& from);
+
+  inline BroadcastMessageRsp& operator=(const BroadcastMessageRsp& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const BroadcastMessageRsp& default_instance();
+
+  void Swap(BroadcastMessageRsp* other);
+
+  // implements Message ----------------------------------------------
+
+  BroadcastMessageRsp* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const BroadcastMessageRsp& from);
+  void MergeFrom(const BroadcastMessageRsp& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required .internal.ServerType src_type = 1;
+  inline bool has_src_type() const;
+  inline void clear_src_type();
+  static const int kSrcTypeFieldNumber = 1;
+  inline ::internal::ServerType src_type() const;
+  inline void set_src_type(::internal::ServerType value);
+
+  // optional uint32 src_child_id = 2 [default = 1];
+  inline bool has_src_child_id() const;
+  inline void clear_src_child_id();
+  static const int kSrcChildIdFieldNumber = 2;
+  inline ::google::protobuf::uint32 src_child_id() const;
+  inline void set_src_child_id(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:internal.BroadcastMessageRsp)
+ private:
+  inline void set_has_src_type();
+  inline void clear_has_src_type();
+  inline void set_has_src_child_id();
+  inline void clear_has_src_child_id();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  int src_type_;
+  ::google::protobuf::uint32 src_child_id_;
+  friend void  protobuf_AddDesc_proto_2finternal_2eprotocol_2eproto();
+  friend void protobuf_AssignDesc_proto_2finternal_2eprotocol_2eproto();
+  friend void protobuf_ShutdownFile_proto_2finternal_2eprotocol_2eproto();
+
+  void InitAsDefaultInstance();
+  static BroadcastMessageRsp* default_instance_;
+};
 // ===================================================================
 
 
@@ -907,7 +1618,7 @@ class DBProxyErrorRsp : public ::google::protobuf::Message {
 
 // LoginDBProxyRsp
 
-// optional uint32 heartbeat_interval = 1;
+// required uint32 heartbeat_interval = 1;
 inline bool LoginDBProxyRsp::has_heartbeat_interval() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
@@ -1446,6 +2157,363 @@ inline void DBProxyErrorRsp::set_sequence(::google::protobuf::uint32 value) {
   // @@protoc_insertion_point(field_set:internal.DBProxyErrorRsp.sequence)
 }
 
+// -------------------------------------------------------------------
+
+// LoginGatewayReq
+
+// required .internal.ServerType type = 1;
+inline bool LoginGatewayReq::has_type() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void LoginGatewayReq::set_has_type() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void LoginGatewayReq::clear_has_type() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void LoginGatewayReq::clear_type() {
+  type_ = 1;
+  clear_has_type();
+}
+inline ::internal::ServerType LoginGatewayReq::type() const {
+  // @@protoc_insertion_point(field_get:internal.LoginGatewayReq.type)
+  return static_cast< ::internal::ServerType >(type_);
+}
+inline void LoginGatewayReq::set_type(::internal::ServerType value) {
+  assert(::internal::ServerType_IsValid(value));
+  set_has_type();
+  type_ = value;
+  // @@protoc_insertion_point(field_set:internal.LoginGatewayReq.type)
+}
+
+// optional uint32 child_id = 2 [default = 1];
+inline bool LoginGatewayReq::has_child_id() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void LoginGatewayReq::set_has_child_id() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void LoginGatewayReq::clear_has_child_id() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void LoginGatewayReq::clear_child_id() {
+  child_id_ = 1u;
+  clear_has_child_id();
+}
+inline ::google::protobuf::uint32 LoginGatewayReq::child_id() const {
+  // @@protoc_insertion_point(field_get:internal.LoginGatewayReq.child_id)
+  return child_id_;
+}
+inline void LoginGatewayReq::set_child_id(::google::protobuf::uint32 value) {
+  set_has_child_id();
+  child_id_ = value;
+  // @@protoc_insertion_point(field_set:internal.LoginGatewayReq.child_id)
+}
+
+// -------------------------------------------------------------------
+
+// LoginGatewayRsp
+
+// required uint32 heartbeat_interval = 1;
+inline bool LoginGatewayRsp::has_heartbeat_interval() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void LoginGatewayRsp::set_has_heartbeat_interval() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void LoginGatewayRsp::clear_has_heartbeat_interval() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void LoginGatewayRsp::clear_heartbeat_interval() {
+  heartbeat_interval_ = 0u;
+  clear_has_heartbeat_interval();
+}
+inline ::google::protobuf::uint32 LoginGatewayRsp::heartbeat_interval() const {
+  // @@protoc_insertion_point(field_get:internal.LoginGatewayRsp.heartbeat_interval)
+  return heartbeat_interval_;
+}
+inline void LoginGatewayRsp::set_heartbeat_interval(::google::protobuf::uint32 value) {
+  set_has_heartbeat_interval();
+  heartbeat_interval_ = value;
+  // @@protoc_insertion_point(field_set:internal.LoginGatewayRsp.heartbeat_interval)
+}
+
+// -------------------------------------------------------------------
+
+// PauseWorkReq
+
+// optional uint32 duration = 1 [default = 0];
+inline bool PauseWorkReq::has_duration() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void PauseWorkReq::set_has_duration() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void PauseWorkReq::clear_has_duration() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void PauseWorkReq::clear_duration() {
+  duration_ = 0u;
+  clear_has_duration();
+}
+inline ::google::protobuf::uint32 PauseWorkReq::duration() const {
+  // @@protoc_insertion_point(field_get:internal.PauseWorkReq.duration)
+  return duration_;
+}
+inline void PauseWorkReq::set_duration(::google::protobuf::uint32 value) {
+  set_has_duration();
+  duration_ = value;
+  // @@protoc_insertion_point(field_set:internal.PauseWorkReq.duration)
+}
+
+// -------------------------------------------------------------------
+
+// ContinueWorkReq
+
+// -------------------------------------------------------------------
+
+// ForwardMessageReq
+
+// required .internal.ServerType dst_type = 1;
+inline bool ForwardMessageReq::has_dst_type() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void ForwardMessageReq::set_has_dst_type() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void ForwardMessageReq::clear_has_dst_type() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void ForwardMessageReq::clear_dst_type() {
+  dst_type_ = 1;
+  clear_has_dst_type();
+}
+inline ::internal::ServerType ForwardMessageReq::dst_type() const {
+  // @@protoc_insertion_point(field_get:internal.ForwardMessageReq.dst_type)
+  return static_cast< ::internal::ServerType >(dst_type_);
+}
+inline void ForwardMessageReq::set_dst_type(::internal::ServerType value) {
+  assert(::internal::ServerType_IsValid(value));
+  set_has_dst_type();
+  dst_type_ = value;
+  // @@protoc_insertion_point(field_set:internal.ForwardMessageReq.dst_type)
+}
+
+// optional uint32 dst_child_id = 2 [default = 1];
+inline bool ForwardMessageReq::has_dst_child_id() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void ForwardMessageReq::set_has_dst_child_id() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void ForwardMessageReq::clear_has_dst_child_id() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void ForwardMessageReq::clear_dst_child_id() {
+  dst_child_id_ = 1u;
+  clear_has_dst_child_id();
+}
+inline ::google::protobuf::uint32 ForwardMessageReq::dst_child_id() const {
+  // @@protoc_insertion_point(field_get:internal.ForwardMessageReq.dst_child_id)
+  return dst_child_id_;
+}
+inline void ForwardMessageReq::set_dst_child_id(::google::protobuf::uint32 value) {
+  set_has_dst_child_id();
+  dst_child_id_ = value;
+  // @@protoc_insertion_point(field_set:internal.ForwardMessageReq.dst_child_id)
+}
+
+// -------------------------------------------------------------------
+
+// ForwardMessageRsp
+
+// required .internal.ServerType src_type = 1;
+inline bool ForwardMessageRsp::has_src_type() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void ForwardMessageRsp::set_has_src_type() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void ForwardMessageRsp::clear_has_src_type() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void ForwardMessageRsp::clear_src_type() {
+  src_type_ = 1;
+  clear_has_src_type();
+}
+inline ::internal::ServerType ForwardMessageRsp::src_type() const {
+  // @@protoc_insertion_point(field_get:internal.ForwardMessageRsp.src_type)
+  return static_cast< ::internal::ServerType >(src_type_);
+}
+inline void ForwardMessageRsp::set_src_type(::internal::ServerType value) {
+  assert(::internal::ServerType_IsValid(value));
+  set_has_src_type();
+  src_type_ = value;
+  // @@protoc_insertion_point(field_set:internal.ForwardMessageRsp.src_type)
+}
+
+// optional uint32 src_child_id = 2 [default = 1];
+inline bool ForwardMessageRsp::has_src_child_id() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void ForwardMessageRsp::set_has_src_child_id() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void ForwardMessageRsp::clear_has_src_child_id() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void ForwardMessageRsp::clear_src_child_id() {
+  src_child_id_ = 1u;
+  clear_has_src_child_id();
+}
+inline ::google::protobuf::uint32 ForwardMessageRsp::src_child_id() const {
+  // @@protoc_insertion_point(field_get:internal.ForwardMessageRsp.src_child_id)
+  return src_child_id_;
+}
+inline void ForwardMessageRsp::set_src_child_id(::google::protobuf::uint32 value) {
+  set_has_src_child_id();
+  src_child_id_ = value;
+  // @@protoc_insertion_point(field_set:internal.ForwardMessageRsp.src_child_id)
+}
+
+// required .internal.ServerType dst_type = 3;
+inline bool ForwardMessageRsp::has_dst_type() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void ForwardMessageRsp::set_has_dst_type() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void ForwardMessageRsp::clear_has_dst_type() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void ForwardMessageRsp::clear_dst_type() {
+  dst_type_ = 1;
+  clear_has_dst_type();
+}
+inline ::internal::ServerType ForwardMessageRsp::dst_type() const {
+  // @@protoc_insertion_point(field_get:internal.ForwardMessageRsp.dst_type)
+  return static_cast< ::internal::ServerType >(dst_type_);
+}
+inline void ForwardMessageRsp::set_dst_type(::internal::ServerType value) {
+  assert(::internal::ServerType_IsValid(value));
+  set_has_dst_type();
+  dst_type_ = value;
+  // @@protoc_insertion_point(field_set:internal.ForwardMessageRsp.dst_type)
+}
+
+// optional uint32 dst_child_id = 4 [default = 1];
+inline bool ForwardMessageRsp::has_dst_child_id() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void ForwardMessageRsp::set_has_dst_child_id() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void ForwardMessageRsp::clear_has_dst_child_id() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void ForwardMessageRsp::clear_dst_child_id() {
+  dst_child_id_ = 1u;
+  clear_has_dst_child_id();
+}
+inline ::google::protobuf::uint32 ForwardMessageRsp::dst_child_id() const {
+  // @@protoc_insertion_point(field_get:internal.ForwardMessageRsp.dst_child_id)
+  return dst_child_id_;
+}
+inline void ForwardMessageRsp::set_dst_child_id(::google::protobuf::uint32 value) {
+  set_has_dst_child_id();
+  dst_child_id_ = value;
+  // @@protoc_insertion_point(field_set:internal.ForwardMessageRsp.dst_child_id)
+}
+
+// -------------------------------------------------------------------
+
+// BroadcastMessageReq
+
+// repeated .internal.ServerType dst_lists = 1;
+inline int BroadcastMessageReq::dst_lists_size() const {
+  return dst_lists_.size();
+}
+inline void BroadcastMessageReq::clear_dst_lists() {
+  dst_lists_.Clear();
+}
+inline ::internal::ServerType BroadcastMessageReq::dst_lists(int index) const {
+  // @@protoc_insertion_point(field_get:internal.BroadcastMessageReq.dst_lists)
+  return static_cast< ::internal::ServerType >(dst_lists_.Get(index));
+}
+inline void BroadcastMessageReq::set_dst_lists(int index, ::internal::ServerType value) {
+  assert(::internal::ServerType_IsValid(value));
+  dst_lists_.Set(index, value);
+  // @@protoc_insertion_point(field_set:internal.BroadcastMessageReq.dst_lists)
+}
+inline void BroadcastMessageReq::add_dst_lists(::internal::ServerType value) {
+  assert(::internal::ServerType_IsValid(value));
+  dst_lists_.Add(value);
+  // @@protoc_insertion_point(field_add:internal.BroadcastMessageReq.dst_lists)
+}
+inline const ::google::protobuf::RepeatedField<int>&
+BroadcastMessageReq::dst_lists() const {
+  // @@protoc_insertion_point(field_list:internal.BroadcastMessageReq.dst_lists)
+  return dst_lists_;
+}
+inline ::google::protobuf::RepeatedField<int>*
+BroadcastMessageReq::mutable_dst_lists() {
+  // @@protoc_insertion_point(field_mutable_list:internal.BroadcastMessageReq.dst_lists)
+  return &dst_lists_;
+}
+
+// -------------------------------------------------------------------
+
+// BroadcastMessageRsp
+
+// required .internal.ServerType src_type = 1;
+inline bool BroadcastMessageRsp::has_src_type() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void BroadcastMessageRsp::set_has_src_type() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void BroadcastMessageRsp::clear_has_src_type() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void BroadcastMessageRsp::clear_src_type() {
+  src_type_ = 1;
+  clear_has_src_type();
+}
+inline ::internal::ServerType BroadcastMessageRsp::src_type() const {
+  // @@protoc_insertion_point(field_get:internal.BroadcastMessageRsp.src_type)
+  return static_cast< ::internal::ServerType >(src_type_);
+}
+inline void BroadcastMessageRsp::set_src_type(::internal::ServerType value) {
+  assert(::internal::ServerType_IsValid(value));
+  set_has_src_type();
+  src_type_ = value;
+  // @@protoc_insertion_point(field_set:internal.BroadcastMessageRsp.src_type)
+}
+
+// optional uint32 src_child_id = 2 [default = 1];
+inline bool BroadcastMessageRsp::has_src_child_id() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void BroadcastMessageRsp::set_has_src_child_id() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void BroadcastMessageRsp::clear_has_src_child_id() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void BroadcastMessageRsp::clear_src_child_id() {
+  src_child_id_ = 1u;
+  clear_has_src_child_id();
+}
+inline ::google::protobuf::uint32 BroadcastMessageRsp::src_child_id() const {
+  // @@protoc_insertion_point(field_get:internal.BroadcastMessageRsp.src_child_id)
+  return src_child_id_;
+}
+inline void BroadcastMessageRsp::set_src_child_id(::google::protobuf::uint32 value) {
+  set_has_src_child_id();
+  src_child_id_ = value;
+  // @@protoc_insertion_point(field_set:internal.BroadcastMessageRsp.src_child_id)
+}
+
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -1469,6 +2537,11 @@ template <> struct is_proto_enum< ::internal::DBProxyErrorRsp_ErrorCode> : ::goo
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::internal::DBProxyErrorRsp_ErrorCode>() {
   return ::internal::DBProxyErrorRsp_ErrorCode_descriptor();
+}
+template <> struct is_proto_enum< ::internal::ServerType> : ::google::protobuf::internal::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::internal::ServerType>() {
+  return ::internal::ServerType_descriptor();
 }
 
 }  // namespace google
