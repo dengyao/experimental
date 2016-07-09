@@ -14,7 +14,6 @@ include_directories(
 
 link_directories(${BINARY_OUTPUT_DIR})
 
-
 add_library(${CURRENT_PROJECT_NAME} ${COMPOLE_LIBRARY_TYPE}
   ${CURRENT_PROJECT_SRC_LISTS}
 )

@@ -1,11 +1,10 @@
 ﻿#include <vector>
 #include <memory>
 #include <iostream>
-#include <base.h>
+#include <common.h>
 #include "ProxyImpl.h"
 #include "ProxyManager.h"
 #include "SessionHandle.h"
-#include "ConnectorMySQL.h"
 
 // 创建MySQL连接器
 std::vector<std::unique_ptr<dbproxy::ConnectorMySQL>> CreateConnectorMySQL(const size_t num)

@@ -2,33 +2,16 @@
 #define __CONFIG_MANAGER_H__
 
 #include <vector>
+#include <memory>
 #include <unordered_map>
 #include "Singleton.h"
 #include "ConfigInterface.h"
 
-#if defined(_WIN32)
-#include <windows.h>
-typedef FILETIME FileTimeType;
-#else
-#include <sys/stat.h>
-typedef time_t   FileTimeType;
-#endif
+struct ConfigInfo;
 
 class ConfigManager : public Singleton< ConfigManager >
 {
-	struct ConfigInfo
-	{
-		std::string filename;
-		FileTimeType last_write_time;
-		ConfigInterface* instance;
-
-		ConfigInfo(const std::string &file, ConfigInterface *object)
-			: filename(file)
-			, instance(object)
-		{
-			memset(&last_write_time, 0, sizeof(last_write_time));
-		}
-	};
+	typedef std::unique_ptr<ConfigInfo> ConfigInfoPointer;
 
 public:
 	ConfigManager() = default;
@@ -50,12 +33,9 @@ public:
 private:
 	void CheckUpdateConfigFiles();
 
-	bool GetConfigFileLastWriteTime(const std::string &filename, FileTimeType &out_last_write_time);
-
 private:
 	std::vector<std::string> load_error_files_;
-	std::unordered_map<std::string, ConfigInfo> config_files_;
-
+	std::unordered_map<std::string, ConfigInfoPointer> config_files_;
 };
 
 #endif

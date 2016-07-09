@@ -61,6 +61,6 @@ add_subdirectory(core/eddy)
 add_subdirectory(core/external/protobuf)
 
 add_subdirectory(module/Common)
-add_subdirectory(module/Protocol)
 add_subdirectory(module/DBProxy)
 add_subdirectory(module/DBClient)
+add_subdirectory(module/Protocol)
