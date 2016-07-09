@@ -1,8 +1,11 @@
 ﻿#ifndef __SERVER_MANAGER_H__
 #define __SERVER_MANAGER_H__
 
+#define USE_DICT_STRUCTURE 1
+
 #include <map>
 #include <vector>
+#include <memory>
 
 namespace google
 {
@@ -11,8 +14,6 @@ namespace google
 		class Message;
 	}
 }
-
-#define USE_DICT_STRUCTURE 1
 
 class SessionHandlePoint;
 
@@ -43,6 +44,12 @@ typedef std::map<int, ServerNode> ServerNodeContainer;
 
 class ServerManager
 {
+	struct FindChild
+	{
+		int node_type;
+		int child_id;
+	};
+
 public:
 	ServerManager();
 
@@ -58,11 +65,11 @@ private:
 	// 服务器继续服务器
 	void OnServerContinueWor(int node_type, int child_id, google::protobuf::Message *message);
 
-	// 转发服务器服务器消息
+	// 转发服务器消息
 	void OnForwardServerMessage(int src_node_type, int src_child_id, int dst_node_type, int dst_child_id, google::protobuf::Message *message);
 
 	// 广播服务器消息
-	void OnBroadcastServerMessage(int src_node_type, int src_child_id, int dst_node_type, int dst_child_id, google::protobuf::Message *message);
+	void OnBroadcastServerMessage(int src_node_type, int src_child_id, const std::vector<FindChild> &dst_lists, google::protobuf::Message *message);
 
 private:
 	ServerNodeContainer node_lists_;

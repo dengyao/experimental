@@ -31,6 +31,7 @@ namespace dbproxy
 	public:
 		ProxyManager(eddy::IOServiceThreadManager &threads, dbproxy::ProxyImpl<dbproxy::MySQL> &mysql, unsigned int backlog);
 
+	public:
 		// 接受处理请求
 		void HandleMessage(eddy::TCPSessionHandler &session, google::protobuf::Message *message);
 
