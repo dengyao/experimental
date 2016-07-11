@@ -1,5 +1,5 @@
 ﻿#include <iostream>
-#include "ServerManager.h"
+#include "GatewayManager.h"
 
 
 int main(int argc, char *argv[])
