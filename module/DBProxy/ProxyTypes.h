@@ -5,90 +5,87 @@
 #include <string>
 #include <stdexcept>
 
-namespace dbproxy
+typedef std::vector<char> ByteArray;
+
+enum class ActionType
 {
-	typedef std::vector<char> ByteArray;
+	kSelect = 1,
+	kInsert = 2,
+	kUpdate = 3,
+	kDelete = 4,
+};
 
-	enum class ActionType
+class ErrorCode
+{
+public:
+	ErrorCode()
+		: error_code_(0)
 	{
-		kSelect = 1,
-		kInsert = 2,
-		kUpdate = 3,
-		kDelete = 4,
-	};
+	}
 
-	class ErrorCode
+	ErrorCode(ErrorCode &&other)
 	{
-	public:
-		ErrorCode()
-			: error_code_(0)
-		{
-		}
+		error_code_ = other.error_code_;
+		message_ = std::move(other.message_);
+		other.error_code_ = 0;
+	}
 
-		ErrorCode(ErrorCode &&other)
-		{
-			error_code_ = other.error_code_;
-			message_ = std::move(other.message_);
-			other.error_code_ = 0;
-		}
-
-		ErrorCode& operator= (ErrorCode &&other)
-		{
-			error_code_ = other.error_code_;
-			message_ = std::move(other.message_);
-			other.error_code_ = 0;
-			return *this;
-		}
-
-		int Value() const
-		{
-			return error_code_;
-		}
-
-		const char* Message() const
-		{
-			return message_.c_str();
-		}
-
-		void SetError(int error_code, const char *message)
-		{
-			error_code_ = error_code;
-			message_ = message;
-		}
-
-		operator bool() const
-		{
-			return error_code_ != 0;
-		}
-
-	private:
-		int error_code_;
-		std::string message_;
-	};
-
-	class NotConnected : public std::logic_error
+	ErrorCode& operator= (ErrorCode &&other)
 	{
-	public:
-		NotConnected() : std::logic_error("database not connected") {}
-	};
+		error_code_ = other.error_code_;
+		message_ = std::move(other.message_);
+		other.error_code_ = 0;
+		return *this;
+	}
 
-	class ConnectionError : public std::runtime_error
+	int Value() const
 	{
-	public:
-		ConnectionError() : std::runtime_error("database connection error") {}
-	};
+		return error_code_;
+	}
 
-	class NotFoundDatabase : public std::logic_error
+	const char* Message() const
 	{
-	public:
-		NotFoundDatabase() : std::logic_error("database not found") {}
-	};
+		return message_.c_str();
+	}
 
-	class ResourceInsufficiency : public std::runtime_error
+	void SetError(int error_code, const char *message)
 	{
-	public:
-		ResourceInsufficiency() : std::runtime_error("system resource insufficiency") {}
-	};
-}
+		error_code_ = error_code;
+		message_ = message;
+	}
+
+	operator bool() const
+	{
+		return error_code_ != 0;
+	}
+
+private:
+	int error_code_;
+	std::string message_;
+};
+
+class NotConnected : public std::logic_error
+{
+public:
+	NotConnected() : std::logic_error("database not connected") {}
+};
+
+class ConnectionError : public std::runtime_error
+{
+public:
+	ConnectionError() : std::runtime_error("database connection error") {}
+};
+
+class NotFoundDatabase : public std::logic_error
+{
+public:
+	NotFoundDatabase() : std::logic_error("database not found") {}
+};
+
+class ResourceInsufficiency : public std::runtime_error
+{
+public:
+	ResourceInsufficiency() : std::runtime_error("system resource insufficiency") {}
+};
 
 #endif

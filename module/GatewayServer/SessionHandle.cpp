@@ -1,11 +1,12 @@
 ﻿#include "SessionHandle.h"
+#include "GatewayManager.h"
 #include <proto/MessageHelper.h>
 #include <proto/internal.protocol.pb.h>
-#include "ProxyManager.h"
 
-SessionHandle::SessionHandle(ProxyManager &manager)
+
+SessionHandle::SessionHandle(GatewayManager &gw_manager)
 	: is_logged_(false)
-	, proxy_manager_(manager)
+	, gw_manager_(gw_manager)
 {
 }
 
@@ -18,7 +19,7 @@ void SessionHandle::OnMessage(eddy::NetMessage &message)
 	auto respond = UnpackageMessage(message);
 	if (respond == nullptr)
 	{
-		proxy_manager_.RespondErrorCode(*this, 0, internal::kInvalidProtocol);
+		//gw_manager_.RespondErrorCode(*this, 0, internal::kInvalidProtocol);
 	}
 
 	if (!is_logged_)
@@ -28,7 +29,7 @@ void SessionHandle::OnMessage(eddy::NetMessage &message)
 		{
 			if (dynamic_cast<internal::LoginDBProxyReq*>(respond.get()) == nullptr)
 			{
-				proxy_manager_.RespondErrorCode(*this, 0, internal::kNotLoggedIn);
+				//gw_manager_.RespondErrorCode(*this, 0, internal::kNotLoggedIn);
 			}
 			else
 			{
@@ -51,7 +52,7 @@ void SessionHandle::OnMessage(eddy::NetMessage &message)
 	}
 	else
 	{
-		proxy_manager_.HandleMessage(*this, respond.get());
+		//gw_manager_.HandleMessage(*this, respond.get());
 	}
 }
 
@@ -64,7 +65,7 @@ eddy::MessageFilterPointer CreateMessageFilter()
 	return std::make_shared<eddy::DefaultMessageFilter>();
 }
 
-eddy::SessionHandlePointer CreateSessionHandle(ProxyManager &proxy_manager)
+eddy::SessionHandlePointer CreateSessionHandle(GatewayManager &gw_manager)
 {
-	return std::make_shared<SessionHandle>(proxy_manager);
+	return std::make_shared<SessionHandle>(gw_manager);
 }

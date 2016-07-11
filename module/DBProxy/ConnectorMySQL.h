@@ -10,344 +10,341 @@
 #include <mysqld_error.h>
 #include "Connector.h"
 
-namespace dbproxy
+class MySQL;
+
+template <>
+class DatabaseResult<MySQL>
 {
-	class MySQL;
+public:
+	DatabaseResult() = default;
 
-	template <>
-	class DatabaseResult<MySQL>
+	DatabaseResult(MYSQL_RES *result)
 	{
-	public:
-		DatabaseResult() = default;
+		Serialize(result);
+	}
 
-		DatabaseResult(MYSQL_RES *result)
-		{
-			Serialize(result);
-		}
+	DatabaseResult(const char *data, size_t size)
+	{
+		data_.resize(size);
+		memcpy(data_.data(), data, size);
+	}
 
-		DatabaseResult(const char *data, size_t size)
-		{
-			data_.resize(size);
-			memcpy(data_.data(), data, size);
-		}
+	ByteArray& GetData()
+	{
+		return data_;
+	}
 
-		ByteArray& GetData()
-		{
-			return data_;
-		}
+	const ByteArray& GetData() const
+	{
+		return data_;
+	}
 
-		const ByteArray& GetData() const
-		{
-			return data_;
-		}
+	WrapResult ToWrapResult() const
+	{
+		return WrapResult(data_.data(), data_.size());
+	}
 
-		WrapResult ToWrapResult() const
-		{
-			return WrapResult(data_.data(), data_.size());
-		}
+	DatabaseResult(DatabaseResult &&other)
+	{
+		data_ = std::move(other.data_);
+	}
 
-		DatabaseResult(DatabaseResult &&other)
-		{
-			data_ = std::move(other.data_);
-		}
+	DatabaseResult& operator= (DatabaseResult &&other)
+	{
+		data_ = std::move(other.data_);
+		return *this;
+	}
 
-		DatabaseResult& operator= (DatabaseResult &&other)
-		{
-			data_ = std::move(other.data_);
-			return *this;
-		}
+public:
+	size_t Size() const
+	{
+		return data_.size();
+	}
 
-	public:
-		size_t Size() const
-		{
-			return data_.size();
-		}
+	const char* Binary() const
+	{
+		return data_.data();
+	}
 
-		const char* Binary() const
+private:
+	void Serialize(MYSQL_RES *result)
+	{
+		if (result != nullptr)
 		{
-			return data_.data();
-		}
-
-	private:
-		void Serialize(MYSQL_RES *result)
-		{
-			if (result != nullptr)
+			size_t use_size = 0;
+			std::array<char, std::numeric_limits<uint16_t>::max()> extrabuf;
+			const my_ulonglong num_rows = mysql_num_rows(result);
+			const my_ulonglong num_fields = mysql_num_fields(result);
+			use_size += snprintf(extrabuf.data(), extrabuf.size(), "%lld", num_rows) + 1;
+			use_size += snprintf(extrabuf.data() + use_size, extrabuf.size() - use_size, "%lld", num_fields) + 1;
+			for (unsigned int row = 0; row < num_rows; ++row)
 			{
-				size_t use_size = 0;
-				std::array<char, std::numeric_limits<uint16_t>::max()> extrabuf;
-				const my_ulonglong num_rows = mysql_num_rows(result);
-				const my_ulonglong num_fields = mysql_num_fields(result);
-				use_size += snprintf(extrabuf.data(), extrabuf.size(), "%lld", num_rows) + 1;
-				use_size += snprintf(extrabuf.data() + use_size, extrabuf.size() - use_size, "%lld", num_fields) + 1;
-				for (unsigned int row = 0; row < num_rows; ++row)
+				MYSQL_ROW row_data = mysql_fetch_row(result);
+				assert(row_data != nullptr);
+				for (unsigned int field = 0; field < num_fields; ++field)
 				{
-					MYSQL_ROW row_data = mysql_fetch_row(result);
-					assert(row_data != nullptr);
-					for (unsigned int field = 0; field < num_fields; ++field)
+					size_t field_size = strlen(row_data[field]) + 1;
+					size_t new_use_size = use_size + field_size;
+					if (new_use_size > extrabuf.size())
 					{
-						size_t field_size = strlen(row_data[field]) + 1;
-						size_t new_use_size = use_size + field_size;
-						if (new_use_size > extrabuf.size())
+						if (data_.empty())
 						{
-							if (data_.empty())
-							{
-								data_.reserve(row == num_rows - 1 && field == num_fields - 1 ? new_use_size : new_use_size * 2);
-								data_.resize(use_size);
-								memcpy(data_.data(), extrabuf.data(), use_size);
-							}
-							else
-							{
-								while (new_use_size > data_.capacity())
-								{
-									data_.reserve(new_use_size * 2);
-								}
-							}
-							data_.resize(new_use_size);
-							memcpy(data_.data() + use_size, row_data[field], field_size);
+							data_.reserve(row == num_rows - 1 && field == num_fields - 1 ? new_use_size : new_use_size * 2);
+							data_.resize(use_size);
+							memcpy(data_.data(), extrabuf.data(), use_size);
 						}
 						else
 						{
-							memcpy(extrabuf.data() + use_size, row_data[field], field_size);
+							while (new_use_size > data_.capacity())
+							{
+								data_.reserve(new_use_size * 2);
+							}
 						}
-						use_size = new_use_size;
+						data_.resize(new_use_size);
+						memcpy(data_.data() + use_size, row_data[field], field_size);
 					}
-				}
-
-				if (data_.empty())
-				{
-					data_.resize(use_size);
-					memcpy(data_.data(), extrabuf.data(), use_size);
+					else
+					{
+						memcpy(extrabuf.data() + use_size, row_data[field], field_size);
+					}
+					use_size = new_use_size;
 				}
 			}
+
+			if (data_.empty())
+			{
+				data_.resize(use_size);
+				memcpy(data_.data(), extrabuf.data(), use_size);
+			}
 		}
+	}
 
-	private:
-		DatabaseResult(const DatabaseResult&) = delete;
-		DatabaseResult& operator= (const DatabaseResult&) = delete;
+private:
+	DatabaseResult(const DatabaseResult&) = delete;
+	DatabaseResult& operator= (const DatabaseResult&) = delete;
 
-	private:
-		ByteArray data_;
-	};
+private:
+	ByteArray data_;
+};
 
-	typedef DatabaseResult<MySQL> MySQLResult;
+typedef DatabaseResult<MySQL> MySQLResult;
 
-	template <>
-	class Connector<MySQL>
+template <>
+class Connector<MySQL>
+{
+public:
+	Connector(const std::string &host, unsigned short port, const std::string &user, const std::string &passwd)
+		: host_(host)
+		, port_(port)
+		, user_(user)
+		, passwd_(passwd)
+		, connected_(false)
 	{
-	public:
-		Connector(const std::string &host, unsigned short port, const std::string &user, const std::string &passwd)
-			: host_(host)
-			, port_(port)
-			, user_(user)
-			, passwd_(passwd)
-			, connected_(false)
-		{
-			Connect();
-		}
+		Connect();
+	}
 
-		Connector(const std::string &host, unsigned short port, const std::string &user, const std::string &passwd, int timeout)
-			: host_(host)
-			, port_(port)
-			, user_(user)
-			, passwd_(passwd)
-			, connected_(false)
-		{
-			Connect(timeout);
-		}
+	Connector(const std::string &host, unsigned short port, const std::string &user, const std::string &passwd, int timeout)
+		: host_(host)
+		, port_(port)
+		, user_(user)
+		, passwd_(passwd)
+		, connected_(false)
+	{
+		Connect(timeout);
+	}
 
-		~Connector()
-		{
-			Disconnect();
-		}
+	~Connector()
+	{
+		Disconnect();
+	}
 
-		const char* Name() const
-		{
-			return select_db_.c_str();
-		}
+	const char* Name() const
+	{
+		return select_db_.c_str();
+	}
 
-		void SelectDatabase(const char *db, ErrorCode &error_code)
+	void SelectDatabase(const char *db, ErrorCode &error_code)
+	{
+		if (IsConnected())
 		{
-			if (IsConnected())
+			mysql_select_db(&mysql_, db);
+			int error = mysql_errno(&mysql_);
+			if (error == 0)
 			{
-				mysql_select_db(&mysql_, db);
-				int error = mysql_errno(&mysql_);
-				if (error == 0)
-				{
-					select_db_ = db;
-				}
-				else
-				{
-					error_code.SetError(error, mysql_error(&mysql_));
-				}
+				select_db_ = db;
 			}
 			else
 			{
-				throw NotConnected();
+				error_code.SetError(error, mysql_error(&mysql_));
 			}
 		}
-
-		void SetCharacterSet(const char *csname, ErrorCode &error_code)
+		else
 		{
-			if (IsConnected())
-			{
-				mysql_set_character_set(&mysql_, csname);
-				int error = mysql_errno(&mysql_);
-				if (error != 0)
-				{
-					error_code.SetError(error, mysql_error(&mysql_));
-				}
-			}
-			else
-			{
-				throw NotConnected();
-			}
+			throw NotConnected();
 		}
+	}
 
-		MySQLResult Select(const ByteArray &command, ErrorCode &error_code)
+	void SetCharacterSet(const char *csname, ErrorCode &error_code)
+	{
+		if (IsConnected())
 		{
-			if (IsConnected())
+			mysql_set_character_set(&mysql_, csname);
+			int error = mysql_errno(&mysql_);
+			if (error != 0)
 			{
-				mysql_real_query(&mysql_, command.data(), command.size());
-				int error = mysql_errno(&mysql_);
-				if (error != 0)
-				{
-					error_code.SetError(error, mysql_error(&mysql_));
-					return MySQLResult();
-				}
-
-				MYSQL_RES *sql_result = mysql_store_result(&mysql_);
-				MySQLResult result(sql_result);
-				mysql_free_result(sql_result);
-				return result;
-			}
-			else
-			{
-				throw NotConnected();
+				error_code.SetError(error, mysql_error(&mysql_));
 			}
 		}
-
-		MySQLResult Insert(const ByteArray &command, ErrorCode &error_code)
+		else
 		{
-			if (IsConnected())
-			{
-				mysql_real_query(&mysql_, command.data(), command.size());
-				int error = mysql_errno(&mysql_);
-				if (error != 0)
-				{
-					error_code.SetError(error, mysql_error(&mysql_));
-					return MySQLResult();
-				}
+			throw NotConnected();
+		}
+	}
 
-				size_t use_size = 4;
-				my_ulonglong id = mysql_insert_id(&mysql_);
-				my_ulonglong rows = mysql_affected_rows(&mysql_);
-				std::array<char, 64> extrabuf = { '1', '\0', '2', '\0' };
-				use_size += snprintf(extrabuf.data() + use_size, extrabuf.size() - use_size, "%lld", id) + 1;
-				use_size += snprintf(extrabuf.data() + use_size, extrabuf.size() - use_size, "%lld", rows) + 1;
-				return MySQLResult(extrabuf.data(), use_size);
+	MySQLResult Select(const ByteArray &command, ErrorCode &error_code)
+	{
+		if (IsConnected())
+		{
+			mysql_real_query(&mysql_, command.data(), command.size());
+			int error = mysql_errno(&mysql_);
+			if (error != 0)
+			{
+				error_code.SetError(error, mysql_error(&mysql_));
+				return MySQLResult();
 			}
-			else
+
+			MYSQL_RES *sql_result = mysql_store_result(&mysql_);
+			MySQLResult result(sql_result);
+			mysql_free_result(sql_result);
+			return result;
+		}
+		else
+		{
+			throw NotConnected();
+		}
+	}
+
+	MySQLResult Insert(const ByteArray &command, ErrorCode &error_code)
+	{
+		if (IsConnected())
+		{
+			mysql_real_query(&mysql_, command.data(), command.size());
+			int error = mysql_errno(&mysql_);
+			if (error != 0)
 			{
-				throw NotConnected();
+				error_code.SetError(error, mysql_error(&mysql_));
+				return MySQLResult();
 			}
-		}
 
-		MySQLResult Update(const ByteArray &command, ErrorCode &error_code)
-		{
-			return AffectedRows(command, error_code);
+			size_t use_size = 4;
+			my_ulonglong id = mysql_insert_id(&mysql_);
+			my_ulonglong rows = mysql_affected_rows(&mysql_);
+			std::array<char, 64> extrabuf = { '1', '\0', '2', '\0' };
+			use_size += snprintf(extrabuf.data() + use_size, extrabuf.size() - use_size, "%lld", id) + 1;
+			use_size += snprintf(extrabuf.data() + use_size, extrabuf.size() - use_size, "%lld", rows) + 1;
+			return MySQLResult(extrabuf.data(), use_size);
 		}
-
-		MySQLResult Delete(const ByteArray &command, ErrorCode &error_code)
+		else
 		{
-			return AffectedRows(command, error_code);
+			throw NotConnected();
 		}
+	}
 
-	private:
-		void Connect()
+	MySQLResult Update(const ByteArray &command, ErrorCode &error_code)
+	{
+		return AffectedRows(command, error_code);
+	}
+
+	MySQLResult Delete(const ByteArray &command, ErrorCode &error_code)
+	{
+		return AffectedRows(command, error_code);
+	}
+
+private:
+	void Connect()
+	{
+		if (!IsConnected())
 		{
-			if (!IsConnected())
+			int reconnect = 1;
+			mysql_init(&mysql_);
+			mysql_options(&mysql_, MYSQL_OPT_RECONNECT, &reconnect);
+			connected_ = mysql_real_connect(&mysql_, host_.c_str(), user_.c_str(), passwd_.c_str(), nullptr, port_, nullptr, 0) != nullptr;
+			if (mysql_errno(&mysql_) != 0)
 			{
-				int reconnect = 1;
-				mysql_init(&mysql_);
-				mysql_options(&mysql_, MYSQL_OPT_RECONNECT, &reconnect);
-				connected_ = mysql_real_connect(&mysql_, host_.c_str(), user_.c_str(), passwd_.c_str(), nullptr, port_, nullptr, 0) != nullptr;
-				if (mysql_errno(&mysql_) != 0)
-				{
-					throw ConnectionError();
-				}
-			}
-		}
-
-		void Connect(int timeout)
-		{
-			if (!IsConnected())
-			{
-				int reconnect = 1;
-				mysql_init(&mysql_);
-				mysql_options(&mysql_, MYSQL_OPT_RECONNECT, &reconnect);
-				mysql_options(&mysql_, MYSQL_OPT_CONNECT_TIMEOUT, &timeout);
-				connected_ = mysql_real_connect(&mysql_, host_.c_str(), user_.c_str(), passwd_.c_str(), nullptr, port_, nullptr, 0) != nullptr;
-				if (mysql_errno(&mysql_) != 0)
-				{
-					throw ConnectionError();
-				}
-			}
-		}
-
-		void Disconnect()
-		{
-			if (connected_)
-			{
-				mysql_close(&mysql_);
-				connected_ = false;
-			}
-		}
-
-		bool IsConnected() const
-		{
-			return connected_;
-		}
-
-		MySQLResult AffectedRows(const ByteArray &command, ErrorCode &error_code)
-		{
-			if (IsConnected())
-			{
-				mysql_real_query(&mysql_, command.data(), command.size());
-				int error = mysql_errno(&mysql_);
-				if (error != 0)
-				{
-					error_code.SetError(error, mysql_error(&mysql_));
-					return MySQLResult();
-				}
-
-				size_t use_size = 4;
-				my_ulonglong rows = mysql_affected_rows(&mysql_);
-				std::array<char, 64> extrabuf = { '1', '\0', '1', '\0' };
-				use_size += snprintf(extrabuf.data() + use_size, extrabuf.size() - use_size, "%lld", rows) + 1;
-				return MySQLResult(extrabuf.data(), use_size);
-			}
-			else
-			{
-				throw NotConnected();
+				throw ConnectionError();
 			}
 		}
+	}
 
-	private:
-		Connector(const Connector&) = delete;
-		Connector& operator= (const Connector&) = delete;
+	void Connect(int timeout)
+	{
+		if (!IsConnected())
+		{
+			int reconnect = 1;
+			mysql_init(&mysql_);
+			mysql_options(&mysql_, MYSQL_OPT_RECONNECT, &reconnect);
+			mysql_options(&mysql_, MYSQL_OPT_CONNECT_TIMEOUT, &timeout);
+			connected_ = mysql_real_connect(&mysql_, host_.c_str(), user_.c_str(), passwd_.c_str(), nullptr, port_, nullptr, 0) != nullptr;
+			if (mysql_errno(&mysql_) != 0)
+			{
+				throw ConnectionError();
+			}
+		}
+	}
 
-	private:
-		MYSQL					mysql_;
-		const std::string		host_;
-		const unsigned short	port_;
-		const std::string		user_;
-		const std::string		passwd_;
-		std::string				select_db_;
-		bool					connected_;
-	};
+	void Disconnect()
+	{
+		if (connected_)
+		{
+			mysql_close(&mysql_);
+			connected_ = false;
+		}
+	}
 
-	typedef Connector<MySQL> ConnectorMySQL;
-	typedef std::unique_ptr<ConnectorMySQL> ConnectorMySQLPointer;
-}
+	bool IsConnected() const
+	{
+		return connected_;
+	}
+
+	MySQLResult AffectedRows(const ByteArray &command, ErrorCode &error_code)
+	{
+		if (IsConnected())
+		{
+			mysql_real_query(&mysql_, command.data(), command.size());
+			int error = mysql_errno(&mysql_);
+			if (error != 0)
+			{
+				error_code.SetError(error, mysql_error(&mysql_));
+				return MySQLResult();
+			}
+
+			size_t use_size = 4;
+			my_ulonglong rows = mysql_affected_rows(&mysql_);
+			std::array<char, 64> extrabuf = { '1', '\0', '1', '\0' };
+			use_size += snprintf(extrabuf.data() + use_size, extrabuf.size() - use_size, "%lld", rows) + 1;
+			return MySQLResult(extrabuf.data(), use_size);
+		}
+		else
+		{
+			throw NotConnected();
+		}
+	}
+
+private:
+	Connector(const Connector&) = delete;
+	Connector& operator= (const Connector&) = delete;
+
+private:
+	MYSQL					mysql_;
+	const std::string		host_;
+	const unsigned short	port_;
+	const std::string		user_;
+	const std::string		passwd_;
+	std::string				select_db_;
+	bool					connected_;
+};
+
+typedef Connector<MySQL> ConnectorMySQL;
+typedef std::unique_ptr<ConnectorMySQL> ConnectorMySQLPointer;
 
 #endif
