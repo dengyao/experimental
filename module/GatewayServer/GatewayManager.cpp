@@ -255,19 +255,22 @@ void GatewayManager::OnForwardServerMessage(eddy::TCPSessionHandler &session, go
 	}
 	else
 	{
-		eddy::SessionHandlePointer dst_session;
-		if (!FindServerNodeSession(request->dst_type(), request->dst_child_id(), dst_session))
+		if (child_node->working)
 		{
-			RespondErrorCode(session, internal::kDestinationUnreachable, request->GetTypeName().c_str());
-		}
-		else
-		{
-			eddy::NetMessage msg;
-			internal::ForwardMessageRsp rsp;
-			rsp.set_src_type(static_cast<internal::NodeType>(child_node->node_type));
-			rsp.set_src_child_id(child_node->child_id);
-			PackageMessage(&rsp, msg);
-			dst_session->Send(msg);
+			eddy::SessionHandlePointer dst_session;
+			if (!FindServerNodeSession(request->dst_type(), request->dst_child_id(), dst_session))
+			{
+				RespondErrorCode(session, internal::kDestinationUnreachable, request->GetTypeName().c_str());
+			}
+			else
+			{
+				eddy::NetMessage msg;
+				internal::ForwardMessageRsp rsp;
+				rsp.set_src_type(static_cast<internal::NodeType>(child_node->node_type));
+				rsp.set_src_child_id(child_node->child_id);
+				PackageMessage(&rsp, msg);
+				dst_session->Send(msg);
+			}
 		}
 	}
 }
