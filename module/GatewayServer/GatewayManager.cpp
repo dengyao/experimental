@@ -267,9 +267,6 @@ void GatewayManager::OnForwardServerMessage(eddy::TCPSessionHandler &session, go
 			rsp.set_src_type(static_cast<internal::NodeType>(child_node->node_type));
 			rsp.set_src_child_id(child_node->child_id);
 			PackageMessage(&rsp, msg);
-
-
-
 			dst_session->Send(msg);
 		}
 	}
