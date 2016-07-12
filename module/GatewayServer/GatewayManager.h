@@ -30,11 +30,10 @@ class GatewayManager
 	{
 		int node_type;
 		int child_id;
-		bool working;
 		std::vector<eddy::TCPSessionID> session_lists;
 
 		ChildNode()
-			: node_type(0), child_id(0), working(false)
+			: node_type(0), child_id(0)
 		{
 		}
 	};
@@ -58,18 +57,15 @@ public:
 	~GatewayManager();
 
 public:
-	// 收到消息
-	void OnMessage(eddy::TCPSessionHandler &session, google::protobuf::Message *message, eddy::NetMessage &buffer);
+	// 处理消息
+	void HandleMessage(eddy::TCPSessionHandler &session, google::protobuf::Message *message, eddy::NetMessage &buffer);
+
+	// 处理服务器下线
+	void HandleServerOffline(eddy::TCPSessionHandler &session);
 
 private:
 	// 服务器登录
 	void OnServerLogin(eddy::TCPSessionHandler &session, google::protobuf::Message *message, eddy::NetMessage &buffer);
-
-	// 服务器暂停服务
-	void OnServerPauseWork(eddy::TCPSessionHandler &session, google::protobuf::Message *message, eddy::NetMessage &buffer);
-
-	// 服务器继续服务器
-	void OnServerContinueWork(eddy::TCPSessionHandler &session, google::protobuf::Message *message, eddy::NetMessage &buffer);
 
 	// 转发服务器消息
 	void OnForwardServerMessage(eddy::TCPSessionHandler &session, google::protobuf::Message *message, eddy::NetMessage &buffer);
@@ -83,16 +79,16 @@ public:
 
 private:
 	// 查找服务器节点
+	bool FindServerNode(int node_type, int child_id, ChildNode *&out_child_node);
 	bool FindServerNodeBySessionID(eddy::TCPSessionID session_id, ChildNode *&out_child_node);
 
 	// 查找服务器节点会话
 	bool FindServerNodeSession(int node_type, int child_id, eddy::SessionHandlePointer &out_session);
 
 private:
-	eddy::IOServiceThreadManager&                         threads_;
-	std::unordered_map<int, ServerNode>                   server_lists_;
-	std::unordered_map<eddy::TCPSessionID, NodeIndex>     node_index_;
-	std::unordered_map<std::string, const MessageHandler> msg_handler_;
+	eddy::IOServiceThreadManager&                     threads_;
+	std::unordered_map<int, ServerNode>               server_lists_;
+	std::unordered_map<eddy::TCPSessionID, NodeIndex> node_index_;
 };
 
 #endif

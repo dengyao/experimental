@@ -12,6 +12,9 @@ enum ErrorCode {
     kNotFoundDatabase = 6; // 不存在的数据库
     kResourceInsufficiency = 7; // 服务器资源不足
     kDestinationUnreachable = 8; // 目的地不可到达
+    kInvalidNodeType = 9; // 无效的节点类型
+    kRepeatLogin = 10; // 重复登录
+    kInvalidDataPacket = 11; // 无效数据包
 }
 
 // 心跳上行包
@@ -104,42 +107,29 @@ message LoginGatewayRsp {
     required uint32 heartbeat_interval = 1; // 心跳包间隔
 }
 
-// 暂停工作请求
-message PauseWorkReq {
-    optional uint32 duration = 1 [default = 0]; // 暂停时长
-}
-
-// 暂停工作返回
-message PauseWorkRsp {
-}
-
-// 继续工作请求
-message ContinueWorkReq {
-}
-
-// 继续工作返回
-message ContinueWorkRsp {
-}
-
 // 转发消息请求
 message ForwardMessageReq {
     required NodeType dst_type = 1; // 目标服务器类型
     optional uint32 dst_child_id = 2 [default = 1]; // 目标服务器子节点id
+    required uint32 message_length = 3; // 消息长度
 }
 
 // 转发消息返回
 message ForwardMessageRsp {
     required NodeType src_type = 1; // 来源服务器类型
     optional uint32 src_child_id = 2 [default = 1]; // 来源服务器子节点id
+    required uint32 message_length = 3; // 消息长度
 }
 
 // 广播消息请求
 message BroadcastMessageReq {
     repeated NodeType dst_lists = 1; // 目标服务器列表
+    required uint32 message_length = 3; // 消息长度
 }
 
 // 广播消息返回
 message BroadcastMessageRsp {
     required NodeType src_type = 1; // 来源服务器类型
     optional uint32 src_child_id = 2 [default = 1]; // 来源服务器子节点id
+    required uint32 message_length = 3; // 消息长度
 }

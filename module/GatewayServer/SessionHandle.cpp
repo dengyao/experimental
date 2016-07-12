@@ -19,7 +19,8 @@ void SessionHandle::OnMessage(eddy::NetMessage &message)
 	auto respond = UnpackageMessage(message);
 	if (respond == nullptr)
 	{
-		//gw_manager_.RespondErrorCode(*this, 0, internal::kInvalidProtocol);
+		gw_manager_.RespondErrorCode(*this, internal::kInvalidProtocol);
+		return;
 	}
 
 	if (!is_logged_)
@@ -27,15 +28,15 @@ void SessionHandle::OnMessage(eddy::NetMessage &message)
 		// 首先必须登录
 		if (dynamic_cast<internal::PingReq*>(respond.get()) == nullptr)
 		{
-			if (dynamic_cast<internal::LoginDBProxyReq*>(respond.get()) == nullptr)
+			if (dynamic_cast<internal::LoginGatewayReq*>(respond.get()) == nullptr)
 			{
-				//gw_manager_.RespondErrorCode(*this, 0, internal::kNotLoggedIn);
+				gw_manager_.RespondErrorCode(*this, internal::kNotLoggedIn);
 			}
 			else
 			{
 				is_logged_ = true;
 				eddy::NetMessage message;
-				internal::LoginDBProxyRsp login_rsp;
+				internal::LoginGatewayRsp login_rsp;
 				login_rsp.set_heartbeat_interval(60);
 				PackageMessage(&login_rsp, message);
 				Send(message);
@@ -52,12 +53,13 @@ void SessionHandle::OnMessage(eddy::NetMessage &message)
 	}
 	else
 	{
-		//gw_manager_.HandleMessage(*this, respond.get());
+		gw_manager_.HandleMessage(*this, respond.get(), message);
 	}
 }
 
 void SessionHandle::OnClose()
 {
+	gw_manager_.HandleServerOffline(*this);
 }
 
 eddy::MessageFilterPointer CreateMessageFilter()

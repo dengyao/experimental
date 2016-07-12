@@ -20,10 +20,6 @@ public:
         internal::GatewayErrorRsp::descriptor();
         internal::LoginGatewayReq::descriptor();
         internal::LoginGatewayRsp::descriptor();
-        internal::PauseWorkReq::descriptor();
-        internal::PauseWorkRsp::descriptor();
-        internal::ContinueWorkReq::descriptor();
-        internal::ContinueWorkRsp::descriptor();
         internal::ForwardMessageReq::descriptor();
         internal::ForwardMessageRsp::descriptor();
         internal::BroadcastMessageReq::descriptor();

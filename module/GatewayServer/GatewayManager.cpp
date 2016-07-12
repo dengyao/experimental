@@ -2,25 +2,9 @@
 #include <proto/MessageHelper.h>
 #include <proto/internal.protocol.pb.h>
 
-template <typename T>
-struct Protocol
-{
-	static std::string name()
-	{
-		return T::descriptor()->full_name();
-	}
-};
-
-#define make_handler(func_ptr, obj_ptr) (std::bind(func_ptr, obj_ptr, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3))
-
 GatewayManager::GatewayManager(eddy::IOServiceThreadManager &threads)
 	: threads_(threads)
 {
-	msg_handler_.insert(std::make_pair(Protocol<internal::LoginDBProxyReq>::name(), make_handler(&GatewayManager::OnServerLogin, this)));
-	msg_handler_.insert(std::make_pair(Protocol<internal::PauseWorkReq>::name(), make_handler(&GatewayManager::OnServerPauseWork, this)));
-	msg_handler_.insert(std::make_pair(Protocol<internal::ContinueWorkReq>::name(), make_handler(&GatewayManager::OnServerContinueWork, this)));
-	msg_handler_.insert(std::make_pair(Protocol<internal::ForwardMessageReq>::name(), make_handler(&GatewayManager::OnForwardServerMessage, this)));
-	msg_handler_.insert(std::make_pair(Protocol<internal::BroadcastMessageReq>::name(), make_handler(&GatewayManager::OnBroadcastServerMessage, this)));
 }
 
 GatewayManager::~GatewayManager()
@@ -42,35 +26,32 @@ void GatewayManager::RespondErrorCode(eddy::TCPSessionHandler &session, int erro
 }
 
 // 查找服务器节点
-bool GatewayManager::FindServerNodeBySessionID(eddy::TCPSessionID session_id, ChildNode *&out_child_node)
+bool GatewayManager::FindServerNode(int node_type, int child_id, ChildNode *&out_child_node)
 {
 	out_child_node = nullptr;
-	auto found = node_index_.find(session_id);
-	if (found != node_index_.end())
-	{
-		return false;
-	}
-
-	auto node_found = server_lists_.find(found->second.node_type);
+	auto node_found = server_lists_.find(node_type);
 	if (node_found == server_lists_.end())
 	{
 		return false;
 	}
 
-	auto child_found = node_found->second.child_lists.find(found->second.child_id);
+	auto child_found = node_found->second.child_lists.find(child_id);
 	if (child_found == node_found->second.child_lists.end())
 	{
 		return false;
 	}
+	out_child_node = &child_found->second;
+	return true;
+}
 
-	auto session_found = std::find(child_found->second.session_lists.begin(), child_found->second.session_lists.end(), session_id);
-	if (session_found == child_found->second.session_lists.end())
+bool GatewayManager::FindServerNodeBySessionID(eddy::TCPSessionID session_id, ChildNode *&out_child_node)
+{
+	auto found = node_index_.find(session_id);
+	if (found == node_index_.end())
 	{
 		return false;
 	}
-
-	out_child_node = &child_found->second;
-	return true;
+	return FindServerNode(found->second.node_type, found->second.child_id, out_child_node);
 }
 
 // 查找节点会话
@@ -106,15 +87,66 @@ bool GatewayManager::FindServerNodeSession(int node_type, int child_id, eddy::Se
 	return out_session != nullptr;
 }
 
-// 收到消息
-void GatewayManager::OnMessage(eddy::TCPSessionHandler &session, google::protobuf::Message *message, eddy::NetMessage &buffer)
+// 处理收到消息
+void GatewayManager::HandleMessage(eddy::TCPSessionHandler &session, google::protobuf::Message *message, eddy::NetMessage &buffer)
 {
-	auto found = msg_handler_.find(message->GetTypeName());
-	if (found == msg_handler_.end())
+	if (dynamic_cast<internal::LoginGatewayReq*>(message) != nullptr)
 	{
-		RespondErrorCode(session, internal::kInvalidProtocol);
+		OnServerLogin(session, message, buffer);
 	}
-	found->second(session, message, buffer);
+	else if (dynamic_cast<internal::ForwardMessageReq*>(message) != nullptr)
+	{
+		OnForwardServerMessage(session, message, buffer);
+	}
+	else if (dynamic_cast<internal::BroadcastMessageReq*>(message) != nullptr)
+	{
+		OnBroadcastServerMessage(session, message, buffer);
+	}
+	else
+	{
+		RespondErrorCode(session, internal::kInvalidProtocol, message->GetTypeName().c_str());
+	}
+}
+
+// 处理服务器下线
+void GatewayManager::HandleServerOffline(eddy::TCPSessionHandler &session)
+{
+	auto found = node_index_.find(session.SessionID());
+	if (found == node_index_.end())
+	{
+		return;
+	}
+
+	auto node_found = server_lists_.find(found->second.node_type);
+	if (node_found == server_lists_.end())
+	{
+		return;
+	}
+
+	auto child_found = node_found->second.child_lists.find(found->second.child_id);
+	if (child_found == node_found->second.child_lists.end())
+	{
+		return;
+	}
+
+	auto &session_lists = child_found->second.session_lists;
+	auto iter = std::find(session_lists.begin(), session_lists.end(), session.SessionID());
+	if (iter != session_lists.end())
+	{
+		session_lists.erase(iter);
+	}
+
+	if (session_lists.empty())
+	{
+		node_found->second.child_lists.erase(child_found);
+	}
+
+	if (node_found->second.child_lists.empty())
+	{
+		server_lists_.erase(node_found);
+	}
+
+	node_index_.erase(session.SessionID());
 }
 
 // 服务器登录
@@ -128,12 +160,18 @@ void GatewayManager::OnServerLogin(eddy::TCPSessionHandler &session, google::pro
 		return;
 	}
 
-	/* 记得检查服务器类型是否合法 */
+	// 检查服务器类型是否合法
+	if (request->type() < internal::NodeType_MIN || request->type() > internal::NodeType_MAX)
+	{
+		RespondErrorCode(session, internal::kInvalidNodeType, request->GetTypeName().c_str());
+		return;
+	}
 
 	// 是否重复登录
 	auto found = node_index_.find(session.SessionID());
 	if (found != node_index_.end())
 	{
+		RespondErrorCode(session, internal::kInvalidNodeType, request->GetTypeName().c_str());
 		return;
 	}
 
@@ -144,8 +182,7 @@ void GatewayManager::OnServerLogin(eddy::TCPSessionHandler &session, google::pro
 		ServerNode &node_lists = server_lists_[request->type()];
 		node_lists.node_type = request->type();
 
-		ChildNode &child_node_lists = node_lists.child_lists[request->child_id()];
-		child_node_lists.working = true;
+		ChildNode &child_node_lists = node_lists.child_lists[request->child_id()];;
 		child_node_lists.node_type = request->type();
 		child_node_lists.child_id = request->child_id();
 		child_node_lists.session_lists.push_back(session.SessionID());
@@ -156,7 +193,6 @@ void GatewayManager::OnServerLogin(eddy::TCPSessionHandler &session, google::pro
 		if (child_found == node_found->second.child_lists.end())
 		{
 			ChildNode &child_node_lists = node_found->second.child_lists[request->child_id()];
-			child_node_lists.working = true;
 			child_node_lists.node_type = request->type();
 			child_node_lists.child_id = request->child_id();
 			child_node_lists.session_lists.push_back(session.SessionID());
@@ -181,62 +217,6 @@ void GatewayManager::OnServerLogin(eddy::TCPSessionHandler &session, google::pro
 	session.Send(msg);
 }
 
-// 服务器暂停服务
-void GatewayManager::OnServerPauseWork(eddy::TCPSessionHandler &session, google::protobuf::Message *message, eddy::NetMessage &buffer)
-{
-	auto request = dynamic_cast<internal::PauseWorkReq*>(message);
-	assert(request != nullptr);
-	if (request == nullptr)
-	{
-		RespondErrorCode(session, internal::kInvalidProtocol);
-		return;
-	}
-
-	ChildNode *child_node = nullptr;
-	if (!FindServerNodeBySessionID(session.SessionID(), child_node))
-	{
-		RespondErrorCode(session, internal::kNotLoggedIn, request->GetTypeName().c_str());
-	}
-	else
-	{
-		child_node->working = false;
-
-		// 返回结果
-		eddy::NetMessage msg;
-		internal::PauseWorkRsp rsp;
-		PackageMessage(&rsp, msg);
-		session.Send(msg);
-	}
-}
-
-// 服务器继续服务器
-void GatewayManager::OnServerContinueWork(eddy::TCPSessionHandler &session, google::protobuf::Message *message, eddy::NetMessage &buffer)
-{
-	auto request = dynamic_cast<internal::ContinueWorkReq*>(message);
-	assert(request != nullptr);
-	if (request == nullptr)
-	{
-		RespondErrorCode(session, internal::kInvalidProtocol);
-		return;
-	}
-
-	ChildNode *child_node = nullptr;
-	if (!FindServerNodeBySessionID(session.SessionID(), child_node))
-	{
-		RespondErrorCode(session, internal::kNotLoggedIn, request->GetTypeName().c_str());
-	}
-	else
-	{
-		child_node->working = true;
-
-		// 返回结果
-		eddy::NetMessage msg;
-		internal::ContinueWorkRsp rsp;
-		PackageMessage(&rsp, msg);
-		session.Send(msg);
-	}
-}
-
 // 转发服务器消息
 void GatewayManager::OnForwardServerMessage(eddy::TCPSessionHandler &session, google::protobuf::Message *message, eddy::NetMessage &buffer)
 {
@@ -248,6 +228,12 @@ void GatewayManager::OnForwardServerMessage(eddy::TCPSessionHandler &session, go
 		return;
 	}
 
+	if (request->message_length() != buffer.Readable())
+	{
+		RespondErrorCode(session, internal::kInvalidDataPacket);
+		return;
+	}
+
 	ChildNode *child_node = nullptr;
 	if (!FindServerNodeBySessionID(session.SessionID(), child_node))
 	{
@@ -255,23 +241,20 @@ void GatewayManager::OnForwardServerMessage(eddy::TCPSessionHandler &session, go
 	}
 	else
 	{
-		if (child_node->working)
+		eddy::SessionHandlePointer dst_session;
+		if (!FindServerNodeSession(request->dst_type(), request->dst_child_id(), dst_session))
 		{
-			eddy::SessionHandlePointer dst_session;
-			if (!FindServerNodeSession(request->dst_type(), request->dst_child_id(), dst_session))
-			{
-				RespondErrorCode(session, internal::kDestinationUnreachable, request->GetTypeName().c_str());
-			}
-			else
-			{
-				eddy::NetMessage msg;
-				internal::ForwardMessageRsp rsp;
-				rsp.set_src_type(static_cast<internal::NodeType>(child_node->node_type));
-				rsp.set_src_child_id(child_node->child_id);
-				PackageMessage(&rsp, msg);
-				dst_session->Send(msg);
-			}
+			RespondErrorCode(session, internal::kDestinationUnreachable, request->GetTypeName().c_str());
 		}
+
+		eddy::NetMessage msg;
+		internal::ForwardMessageRsp rsp;
+		rsp.set_src_type(static_cast<internal::NodeType>(child_node->node_type));
+		rsp.set_src_child_id(child_node->child_id);
+		rsp.set_message_length(buffer.Readable());
+		PackageMessage(&rsp, msg);
+		msg.Write(buffer.Data(), buffer.Readable());
+		dst_session->Send(msg);
 	}
 }
 
@@ -286,6 +269,12 @@ void GatewayManager::OnBroadcastServerMessage(eddy::TCPSessionHandler &session, 
 		return;
 	}
 
+	if (request->message_length() != buffer.Readable())
+	{
+		RespondErrorCode(session, internal::kInvalidDataPacket);
+		return;
+	}
+
 	ChildNode *child_node = nullptr;
 	if (!FindServerNodeBySessionID(session.SessionID(), child_node))
 	{
@@ -293,6 +282,45 @@ void GatewayManager::OnBroadcastServerMessage(eddy::TCPSessionHandler &session, 
 	}
 	else
 	{
+		eddy::NetMessage msg;
+		internal::ForwardMessageRsp rsp;
+		eddy::SessionHandlePointer dst_session;
+		for (int i = 0; i < request->dst_lists().size(); ++i)
+		{
+			auto node_found = server_lists_.find(request->dst_lists(i));
+			if (node_found != server_lists_.end())
+			{
+				for (auto &pair : node_found->second.child_lists)
+				{
+					eddy::TCPSessionID session_id = 0;
+					auto &session_lists = pair.second.session_lists;
+					if (session_lists.empty())
+					{
+						continue;
+					}
 
+					if (session_lists.size() == 1)
+					{
+						session_id = session_lists.front();
+					}
+					else
+					{
+						session_id = session_lists[rand() % session_lists.size()];
+					}
+
+					dst_session = threads_.SessionHandler(session_id);
+					if (dst_session != nullptr)
+					{	
+						rsp.set_src_type(static_cast<internal::NodeType>(child_node->node_type));
+						rsp.set_src_child_id(child_node->child_id);
+						rsp.set_message_length(buffer.Readable());
+						PackageMessage(&rsp, msg);
+						msg.Write(buffer.Data(), buffer.Readable());
+						dst_session->Send(msg);
+						msg.Clear();
+					}
+				}
+			}
+		}
 	}
 }

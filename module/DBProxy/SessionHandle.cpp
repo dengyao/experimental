@@ -19,6 +19,7 @@ void SessionHandle::OnMessage(eddy::NetMessage &message)
 	if (respond == nullptr)
 	{
 		proxy_manager_.RespondErrorCode(*this, 0, internal::kInvalidProtocol);
+		return;
 	}
 
 	if (!is_logged_)
