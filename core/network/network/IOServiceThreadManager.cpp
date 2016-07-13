@@ -5,7 +5,7 @@
 #include "IOServiceThread.h"
 #include "TCPSessionHandler.h"
 
-namespace eddy
+namespace network
 {
 	static const size_t kMainThreadIndex = 0;
 

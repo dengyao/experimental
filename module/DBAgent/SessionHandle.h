@@ -1,11 +1,11 @@
 ﻿#ifndef __DBPROXY_SESSION_HANDLE_H__
 #define __DBPROXY_SESSION_HANDLE_H__
 
-#include <eddyserver.h>
+#include <network.h>
 
 class AgentManager;
 
-class SessionHandle : public eddy::TCPSessionHandler
+class SessionHandle : public network::TCPSessionHandler
 {
 public:
 	SessionHandle(AgentManager &manager);
@@ -13,7 +13,7 @@ public:
 private:
 	virtual void OnConnect() override;
 
-	virtual void OnMessage(eddy::NetMessage &message) override;
+	virtual void OnMessage(network::NetMessage &message) override;
 
 	virtual void OnClose() override;
 
@@ -22,7 +22,7 @@ private:
 	AgentManager& agent_manager_;
 };
 
-eddy::MessageFilterPointer CreateMessageFilter();
-eddy::SessionHandlePointer CreateSessionHandle(AgentManager &agent_manager);
+network::MessageFilterPointer CreateMessageFilter();
+network::SessionHandlePointer CreateSessionHandle(AgentManager &agent_manager);
 
 #endif

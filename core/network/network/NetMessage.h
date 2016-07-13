@@ -7,7 +7,7 @@
 #include <string>
 #include <cstdint>
 
-namespace eddy
+namespace network
 {
 	class NetMessage final
 	{

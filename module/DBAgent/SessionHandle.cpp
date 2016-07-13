@@ -13,7 +13,7 @@ void SessionHandle::OnConnect()
 {
 }
 
-void SessionHandle::OnMessage(eddy::NetMessage &message)
+void SessionHandle::OnMessage(network::NetMessage &message)
 {
 	auto respond = UnpackageMessage(message);
 	if (respond == nullptr)
@@ -60,12 +60,12 @@ void SessionHandle::OnClose()
 {
 }
 
-eddy::MessageFilterPointer CreateMessageFilter()
+network::MessageFilterPointer CreateMessageFilter()
 {
-	return std::make_shared<eddy::DefaultMessageFilter>();
+	return std::make_shared<network::DefaultMessageFilter>();
 }
 
-eddy::SessionHandlePointer CreateSessionHandle(AgentManager &agent_manager)
+network::SessionHandlePointer CreateSessionHandle(AgentManager &agent_manager)
 {
 	return std::make_shared<SessionHandle>(agent_manager);
 }

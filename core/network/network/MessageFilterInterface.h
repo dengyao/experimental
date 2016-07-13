@@ -5,7 +5,7 @@
 #include <numeric>
 #include "NetMessage.h"
 
-namespace eddy
+namespace network
 {
 	class MessageFilterInterface
 	{

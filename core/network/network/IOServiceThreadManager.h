@@ -4,10 +4,10 @@
 #include <map>
 #include <vector>
 #include <unordered_map>
-#include "EddyTypes.h"
+#include "Types.h"
 #include "IDGenerator.h"
 
-namespace eddy
+namespace network
 {
 	class IOServiceThreadManager final
 	{

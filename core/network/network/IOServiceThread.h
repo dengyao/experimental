@@ -6,7 +6,7 @@
 #include <asio/steady_timer.hpp>
 #include "TCPSessionQueue.h"
 
-namespace eddy
+namespace network
 {
 	class IOServiceThreadManager;
 

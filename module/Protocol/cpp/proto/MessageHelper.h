@@ -3,7 +3,7 @@
 
 #include <memory>
 
-namespace eddy
+namespace network
 {
 	class NetMessage;
 }
@@ -18,8 +18,8 @@ namespace google
 
 typedef std::unique_ptr<google::protobuf::Message> MessagePointer;
 
-void PackageMessage(google::protobuf::Message *in_message, eddy::NetMessage &out_message);
+void PackageMessage(google::protobuf::Message *in_message, network::NetMessage &out_message);
 
-MessagePointer UnpackageMessage(eddy::NetMessage &in_message);
+MessagePointer UnpackageMessage(network::NetMessage &in_message);
 
 #endif

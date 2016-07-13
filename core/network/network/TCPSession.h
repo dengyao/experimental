@@ -2,10 +2,10 @@
 #define __TCP_SESSION_H__
 
 #include <asio/ip/tcp.hpp>
-#include "EddyTypes.h"
+#include "Types.h"
 #include "NetMessage.h"
 
-namespace eddy
+namespace network
 {
 	class TCPSession final : public std::enable_shared_from_this < TCPSession >
 	{

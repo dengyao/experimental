@@ -3,7 +3,7 @@
 
 #include "MessageFilterInterface.h"
 
-namespace eddy
+namespace network
 {
 	class DefaultMessageFilter final : public MessageFilterInterface
 	{

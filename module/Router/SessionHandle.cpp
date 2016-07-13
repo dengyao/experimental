@@ -1,10 +1,10 @@
 ﻿#include "SessionHandle.h"
-#include "GatewayManager.h"
+#include "RouterManager.h"
 #include <proto/MessageHelper.h>
 #include <proto/internal.protocol.pb.h>
 
 
-SessionHandle::SessionHandle(GatewayManager &gw_manager)
+SessionHandle::SessionHandle(RouterManager &gw_manager)
 	: is_logged_(false)
 	, gw_manager_(gw_manager)
 {
@@ -14,7 +14,7 @@ void SessionHandle::OnConnect()
 {
 }
 
-void SessionHandle::OnMessage(eddy::NetMessage &message)
+void SessionHandle::OnMessage(network::NetMessage &message)
 {
 	auto respond = UnpackageMessage(message);
 	if (respond == nullptr)
@@ -28,15 +28,15 @@ void SessionHandle::OnMessage(eddy::NetMessage &message)
 		// 首先必须登录
 		if (dynamic_cast<internal::PingReq*>(respond.get()) == nullptr)
 		{
-			if (dynamic_cast<internal::LoginGatewayReq*>(respond.get()) == nullptr)
+			if (dynamic_cast<internal::LoginRouterReq*>(respond.get()) == nullptr)
 			{
 				gw_manager_.RespondErrorCode(*this, internal::kNotLoggedIn);
 			}
 			else
 			{
+				message.Clear();
 				is_logged_ = true;
-				eddy::NetMessage message;
-				internal::LoginGatewayRsp login_rsp;
+				internal::LoginRouterRsp login_rsp;
 				login_rsp.set_heartbeat_interval(60);
 				PackageMessage(&login_rsp, message);
 				Send(message);
@@ -46,8 +46,8 @@ void SessionHandle::OnMessage(eddy::NetMessage &message)
 	else if (dynamic_cast<internal::PingReq*>(respond.get()) != nullptr)
 	{
 		// 处理心跳
+		message.Clear();
 		internal::PongRsp pong;
-		eddy::NetMessage message;
 		PackageMessage(&pong, message);
 		Send(message);
 	}
@@ -62,12 +62,12 @@ void SessionHandle::OnClose()
 	gw_manager_.HandleServerOffline(*this);
 }
 
-eddy::MessageFilterPointer CreateMessageFilter()
+network::MessageFilterPointer CreateMessageFilter()
 {
-	return std::make_shared<eddy::DefaultMessageFilter>();
+	return std::make_shared<network::DefaultMessageFilter>();
 }
 
-eddy::SessionHandlePointer CreateSessionHandle(GatewayManager &gw_manager)
+network::SessionHandlePointer CreateSessionHandle(RouterManager &gw_manager)
 {
 	return std::make_shared<SessionHandle>(gw_manager);
 }

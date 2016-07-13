@@ -6,7 +6,7 @@
 #include "TCPSessionHandler.h"
 #include "IOServiceThreadManager.h"
 
-namespace eddy
+namespace network
 {
 	TCPServer::TCPServer(asio::ip::tcp::endpoint &endpoint,
 		IOServiceThreadManager &io_thread_manager,

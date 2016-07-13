@@ -4,7 +4,7 @@
 #include <set>
 #include <map>
 #include <vector>
-#include <eddyserver.h>
+#include <network.h>
 
 namespace google
 {
@@ -49,7 +49,7 @@ public:
 	typedef std::function<void(google::protobuf::Message*)> QueryCallBack;
 
 public:
-	DBClient(eddy::IOServiceThreadManager &threads, asio::ip::tcp::endpoint &endpoint, size_t connection_num = 0);
+	DBClient(network::IOServiceThreadManager &threads, asio::ip::tcp::endpoint &endpoint, size_t connection_num = 0);
 
 	~DBClient();
 
@@ -96,7 +96,7 @@ private:
 	void UpdateTimer(asio::error_code error_code);
 
 	// 创建会话处理器
-	eddy::SessionHandlePointer CreateClientHandle();
+	network::SessionHandlePointer CreateClientHandle();
 
 	// 异步操作
 	void AsyncQuery(DatabaseType dbtype, const char *dbname, DatabaseActionType action, const char *statement, QueryCallBack &&callback);
@@ -104,10 +104,10 @@ private:
 private:
 	const size_t                                   connection_num_;
 	unsigned short                                 connecting_num_;
-	eddy::IOServiceThreadManager&                  threads_;
-	eddy::IDGenerator                              generator_;
+	network::IOServiceThreadManager&                  threads_;
+	network::IDGenerator                              generator_;
 	std::set<std::shared_ptr<bool> >               lifetimes_;
-	eddy::TCPClient					               client_creator_;
+	network::TCPClient					               client_creator_;
 	std::vector<DBClientHandle*>                   client_lists_;
 	std::map<uint32_t, QueryCallBack>              ongoing_lists_;
 	std::map<DBClientHandle*, std::set<uint32_t> > assigned_lists_;

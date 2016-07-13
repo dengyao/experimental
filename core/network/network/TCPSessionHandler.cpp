@@ -2,7 +2,7 @@
 #include "IOServiceThread.h"
 #include "IOServiceThreadManager.h"
 
-namespace eddy
+namespace network
 {
 	namespace
 	{

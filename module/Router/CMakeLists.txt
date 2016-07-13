@@ -3,14 +3,14 @@ set(CURRENT_PROJECT_NAME Router)
 set(CURRENT_PROJECT_SRC_LISTS
   Main.cpp
   SessionHandle.cpp
-  GatewayManager.cpp
+  RouterManager.cpp
 )
 
 include_directories(
   ${ASIO_INCLUDE_DIRS}
+  ${NETWORK_INCLUDE_DIRS}
   ${PROTOBUF_INCLUDE_DIRS}
   ${PROTOCOL_INCLUDE_DIRS}
-  ${EDDYSERVER_INCLUDE_DIRS}
 )
 
 link_directories(${BINARY_OUTPUT_DIR})
@@ -24,7 +24,7 @@ set_target_properties(${CURRENT_PROJECT_NAME}
 )
 
 target_link_libraries(${CURRENT_PROJECT_NAME}
+  ${NETWORK_LIBRARY_NAME}
   ${PROTOBUF_LIBRARY_NAME}
   ${PROTOCOL_LIBRARY_NAME}
-  ${EDDYSERVER_LIBRARY_NAME}
 )

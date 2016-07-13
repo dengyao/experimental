@@ -1,13 +1,13 @@
 ﻿#ifndef __TCP_SESSION_HANDLE_H__
 #define __TCP_SESSION_HANDLE_H__
 
-#include "EddyTypes.h"
+#include "Types.h"
 #include "NetMessage.h"
 #include "TCPSession.h"
 #include "IOServiceThread.h"
 #include "IOServiceThreadManager.h"
 
-namespace eddy
+namespace network
 {
 	class TCPSessionHandler : public std::enable_shared_from_this < TCPSessionHandler >
 	{

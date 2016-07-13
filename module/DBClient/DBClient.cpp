@@ -6,7 +6,7 @@
 
 /************************************************************************/
 
-class DBClientHandle : public eddy::TCPSessionHandler
+class DBClientHandle : public network::TCPSessionHandler
 {
 	friend class DBClient;
 
@@ -29,7 +29,7 @@ public:
 	// 连接成功
 	virtual void OnConnect() override
 	{
-		eddy::NetMessage message;
+		network::NetMessage message;
 		internal::LoginDBAgentReq login;
 		PackageMessage(&login, message);
 		Send(message);
@@ -41,7 +41,7 @@ public:
 	}
 
 	// 接收消息
-	virtual void OnMessage(eddy::NetMessage &message) override
+	virtual void OnMessage(network::NetMessage &message) override
 	{
 		auto respond = UnpackageMessage(message);
 		if (respond == nullptr)
@@ -97,7 +97,7 @@ public:
 			if (--counter_ == 0)
 			{
 				internal::PingReq req;
-				eddy::NetMessage message;
+				network::NetMessage message;
 				PackageMessage(&req, message);
 				Send(message);
 				counter_ = heartbeat_interval_;
@@ -148,12 +148,12 @@ private:
 /************************************************************************/
 /************************************************************************/
 
-eddy::MessageFilterPointer CreaterMessageFilter()
+network::MessageFilterPointer CreaterMessageFilter()
 {
-	return std::make_shared<eddy::DefaultMessageFilter>();
+	return std::make_shared<network::DefaultMessageFilter>();
 }
 
-DBClient::DBClient(eddy::IOServiceThreadManager &threads, asio::ip::tcp::endpoint &endpoint, size_t connection_num)
+DBClient::DBClient(network::IOServiceThreadManager &threads, asio::ip::tcp::endpoint &endpoint, size_t connection_num)
 	: threads_(threads)
 	, connecting_num_(0)
 	, endpoint_(endpoint)
@@ -175,7 +175,7 @@ DBClient::~DBClient()
 }
 
 // 创建会话处理器
-eddy::SessionHandlePointer DBClient::CreateClientHandle()
+network::SessionHandlePointer DBClient::CreateClientHandle()
 {
 	auto life = std::make_shared<bool>();
 	lifetimes_.insert(life);
@@ -431,7 +431,7 @@ void DBClient::AsyncQuery(DatabaseType dbtype, const char *dbname, DatabaseActio
 		assigned_lists_[client].insert(sequence);
 		ongoing_lists_.insert(std::make_pair(sequence, std::forward<QueryCallBack>(callback)));
 		
-		eddy::NetMessage message;
+		network::NetMessage message;
 		PackageMessage(&request, message);
 		client->Send(message);
 	}

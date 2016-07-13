@@ -4,7 +4,7 @@
 #include <vector>
 #include <cstdint>
 
-namespace eddy
+namespace network
 {
 	class IDGenerator final
 	{

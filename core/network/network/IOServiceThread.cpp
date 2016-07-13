@@ -2,7 +2,7 @@
 #include <iostream>
 #include "TCPSession.h"
 
-namespace eddy
+namespace network
 {
 	IOServiceThread::IOServiceThread(IOThreadID id, IOServiceThreadManager &manager)
 		: timeout_(0)

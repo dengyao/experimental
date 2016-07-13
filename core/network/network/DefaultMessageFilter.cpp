@@ -1,7 +1,7 @@
 ﻿#include "DefaultMessageFilter.h"
 #include <asio/ip/address_v4.hpp>
 
-namespace eddy
+namespace network
 {
 	const size_t DefaultMessageFilter::s_header_size_ = sizeof(DefaultMessageFilter::MessageHeader);
 

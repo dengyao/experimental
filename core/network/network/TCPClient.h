@@ -2,9 +2,9 @@
 #define __TCP_CLIENT_H__
 
 #include <asio.hpp>
-#include "EddyTypes.h"
+#include "Types.h"
 
-namespace eddy
+namespace network
 {
 	class IOServiceThreadManager;
 

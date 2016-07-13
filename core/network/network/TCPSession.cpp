@@ -8,7 +8,7 @@
 #include "IOServiceThreadManager.h"
 #include "MessageFilterInterface.h"
 
-namespace eddy
+namespace network
 {
 	namespace
 	{

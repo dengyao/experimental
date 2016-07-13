@@ -2,7 +2,7 @@
 #include <cassert>
 #include <cstring>
 
-namespace eddy
+namespace network
 {
 	NetMessage::NetMessage()
 		: reader_pos_(0)

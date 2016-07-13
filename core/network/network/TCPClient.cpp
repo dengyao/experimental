@@ -5,7 +5,7 @@
 #include "TCPSessionHandler.h"
 #include "IOServiceThreadManager.h"
 
-namespace eddy
+namespace network
 {
 	TCPClient::TCPClient(IOServiceThreadManager &io_thread_manager,
 		const SessionHandlerCreator &handler_creator,

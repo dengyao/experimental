@@ -27,7 +27,7 @@ inline bool ToNativeActionType(internal::QueryDBAgentReq::ActoinType type, Actio
 	return true;
 }
 
-AgentManager::AgentManager(eddy::IOServiceThreadManager &threads, AgentImpl<MySQL> &mysql, unsigned int backlog)
+AgentManager::AgentManager(network::IOServiceThreadManager &threads, AgentImpl<MySQL> &mysql, unsigned int backlog)
 	: threads_(threads)
 	, mysql_proxy_(mysql)
 	, generator_(backlog)
@@ -38,7 +38,7 @@ AgentManager::AgentManager(eddy::IOServiceThreadManager &threads, AgentImpl<MySQ
 }
 
 // 接受处理请求
-void AgentManager::HandleMessage(eddy::TCPSessionHandler &session, google::protobuf::Message *message)
+void AgentManager::HandleMessage(network::TCPSessionHandler &session, google::protobuf::Message *message)
 {
 	internal::QueryDBAgentReq *request = dynamic_cast<internal::QueryDBAgentReq*>(message);
 	if (request != nullptr)
@@ -129,24 +129,24 @@ void AgentManager::UpdateHandleResult(asio::error_code error_code)
 }
 
 // 回复错误码
-void AgentManager::RespondErrorCode(eddy::TCPSessionHandler &session, uint32_t sequence, int error_code)
+void AgentManager::RespondErrorCode(network::TCPSessionHandler &session, uint32_t sequence, int error_code)
 {
 	internal::DBAgentErrorRsp error;
 	error.set_sequence(sequence);
 	error.set_error_code(static_cast<internal::ErrorCode>(error_code));
 
-	eddy::NetMessage message;
+	network::NetMessage message;
 	PackageMessage(&error, message);
 	session.Send(message);
 }
 
 // 回复处理结果
-void AgentManager::RespondHandleResult(eddy::TCPSessionID id, uint32_t sequence, const Result &result)
+void AgentManager::RespondHandleResult(network::TCPSessionID id, uint32_t sequence, const Result &result)
 {
-	eddy::SessionHandlePointer session = threads_.SessionHandler(id);
+	network::SessionHandlePointer session = threads_.SessionHandler(id);
 	if (session != nullptr)
 	{
-		eddy::NetMessage message;
+		network::NetMessage message;
 		if (result.GetErrorCode())
 		{
 			internal::DBErrorRsp error;

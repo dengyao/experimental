@@ -2,9 +2,9 @@
 #define __TCP_SESSION_QUEUE_H__
 
 #include <unordered_map>
-#include "EddyTypes.h"
+#include "Types.h"
 
-namespace eddy
+namespace network
 {
 	class TCPSessionQueue final
 	{

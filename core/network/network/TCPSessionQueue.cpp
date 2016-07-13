@@ -1,7 +1,7 @@
 ﻿#include "TCPSessionQueue.h"
 #include "TCPSession.h"
 
-namespace eddy
+namespace network
 {
 	TCPSessionQueue::TCPSessionQueue()
 	{

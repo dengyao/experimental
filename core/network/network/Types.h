@@ -1,12 +1,12 @@
-﻿#ifndef __EDDY_TYPES_H__
-#define __EDDY_TYPES_H__
+﻿#ifndef __NETWORK_TYPES_H__
+#define __NETWORK_TYPES_H__
 
 #include <chrono>
 #include <memory>
 #include <cstdint>
 #include <functional>
 
-namespace eddy
+namespace network
 {
 	typedef uint32_t								IOThreadID;
 	typedef uint32_t								TCPSessionID;

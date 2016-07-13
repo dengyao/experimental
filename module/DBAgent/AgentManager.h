@@ -1,7 +1,7 @@
 ﻿#ifndef __AGENT_MANAGER_H__
 #define __AGENT_MANAGER_H__
 
-#include <eddyserver.h>
+#include <network.h>
 #include "AgentImpl.h"
 #include "ConnectorMySQL.h"
 
@@ -19,25 +19,25 @@ class AgentManager
 	struct SSourceInfo
 	{
 		uint32_t sequence;
-		eddy::TCPSessionID session_id;
-		SSourceInfo(uint32_t seq, eddy::TCPSessionID id)
+		network::TCPSessionID session_id;
+		SSourceInfo(uint32_t seq, network::TCPSessionID id)
 			: sequence(seq), session_id(id)
 		{
 		}
 	};
 
 public:
-	AgentManager(eddy::IOServiceThreadManager &threads, AgentImpl<MySQL> &mysql, unsigned int backlog);
+	AgentManager(network::IOServiceThreadManager &threads, AgentImpl<MySQL> &mysql, unsigned int backlog);
 
 public:
 	// 接受处理请求
-	void HandleMessage(eddy::TCPSessionHandler &session, google::protobuf::Message *message);
+	void HandleMessage(network::TCPSessionHandler &session, google::protobuf::Message *message);
 
 	// 回复错误码
-	void RespondErrorCode(eddy::TCPSessionHandler &session, uint32_t sequence, int error_code);
+	void RespondErrorCode(network::TCPSessionHandler &session, uint32_t sequence, int error_code);
 
 	// 回复处理结果
-	void RespondHandleResult(eddy::TCPSessionID id, uint32_t sequence, const Result &result);
+	void RespondHandleResult(network::TCPSessionID id, uint32_t sequence, const Result &result);
 
 private:
 	// 更新处理结果
@@ -46,9 +46,9 @@ private:
 private:
 	asio::steady_timer                          timer_;
 	const std::function<void(asio::error_code)> wait_handler_;
-	eddy::IOServiceThreadManager&               threads_;
+	network::IOServiceThreadManager&               threads_;
 	std::map<uint32_t, SSourceInfo>             requests_;
-	eddy::IDGenerator                           generator_;
+	network::IDGenerator                           generator_;
 	AgentImpl<MySQL>&                           mysql_proxy_;
 	std::vector<Result>                         completion_list_;
 };
