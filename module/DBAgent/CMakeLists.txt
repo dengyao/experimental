@@ -1,8 +1,8 @@
-set(CURRENT_PROJECT_NAME DBProxy)
+set(CURRENT_PROJECT_NAME DBAgent)
 
 set(CURRENT_PROJECT_SRC_LISTS 
   Main.cpp
-  ProxyManager.cpp
+  AgentManager.cpp
   SessionHandle.cpp
 )
 

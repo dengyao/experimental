@@ -1,5 +1,5 @@
-﻿#ifndef __DBPROXY_TYPES_H__
-#define __DBPROXY_TYPES_H__
+﻿#ifndef __AGENT_TYPES_H__
+#define __AGENT_TYPES_H__
 
 #include <vector>
 #include <string>

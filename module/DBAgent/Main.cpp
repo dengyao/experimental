@@ -2,8 +2,8 @@
 #include <memory>
 #include <iostream>
 #include <common.h>
-#include "ProxyImpl.h"
-#include "ProxyManager.h"
+#include "AgentImpl.h"
+#include "AgentManager.h"
 #include "SessionHandle.h"
 
 // 创建MySQL连接器
@@ -48,8 +48,8 @@ int main(int argc, char *argv[])
 	TaskPools pools(std::thread::hardware_concurrency() / 2);
 	eddy::IOServiceThreadManager threads(std::thread::hardware_concurrency() / 2);
 
-	ProxyImpl<MySQL> mysql_proxy(CreateConnectorMySQL(8), pools, 1000000);	// 最后个参数为单个连接最大积压数量
-	ProxyManager manager(threads, mysql_proxy, 102400);    // 最后个参数为服务器最大积压数量
+	AgentImpl<MySQL> mysql_proxy(CreateConnectorMySQL(8), pools, 1000000);	// 最后个参数为单个连接最大积压数量
+	AgentManager manager(threads, mysql_proxy, 102400);    // 最后个参数为服务器最大积压数量
 
 	asio::ip::tcp::endpoint endpoint(asio::ip::address_v4(), 4235);
 	eddy::TCPServer server(endpoint, threads, std::bind(CreateSessionHandle, std::ref(manager)), CreateMessageFilter);

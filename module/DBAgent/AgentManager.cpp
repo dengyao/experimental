@@ -1,24 +1,24 @@
-﻿#include "ProxyManager.h"
+﻿#include "AgentManager.h"
 #include <limits>
 #include <iostream>
 #include <proto/MessageHelper.h>
 #include <proto/internal.protocol.pb.h>
 
 // 类型转换
-inline bool ToNativeActionType(internal::QueryDBProxyReq::ActoinType type, ActionType &local_type)
+inline bool ToNativeActionType(internal::QueryDBAgentReq::ActoinType type, ActionType &local_type)
 {
 	switch (type)
 	{
-	case internal::QueryDBProxyReq::kSelect:
+	case internal::QueryDBAgentReq::kSelect:
 		local_type = ActionType::kSelect;
 		break;
-	case internal::QueryDBProxyReq::kInsert:
+	case internal::QueryDBAgentReq::kInsert:
 		local_type = ActionType::kInsert;
 		break;
-	case internal::QueryDBProxyReq::kUpdate:
+	case internal::QueryDBAgentReq::kUpdate:
 		local_type = ActionType::kUpdate;
 		break;
-	case internal::QueryDBProxyReq::kDelete:
+	case internal::QueryDBAgentReq::kDelete:
 		local_type = ActionType::kDelete;
 		break;
 	default:
@@ -27,20 +27,20 @@ inline bool ToNativeActionType(internal::QueryDBProxyReq::ActoinType type, Actio
 	return true;
 }
 
-ProxyManager::ProxyManager(eddy::IOServiceThreadManager &threads, ProxyImpl<MySQL> &mysql, unsigned int backlog)
+AgentManager::AgentManager(eddy::IOServiceThreadManager &threads, AgentImpl<MySQL> &mysql, unsigned int backlog)
 	: threads_(threads)
 	, mysql_proxy_(mysql)
 	, generator_(backlog)
 	, timer_(threads.MainThread()->IOService())
-	, wait_handler_(std::bind(&ProxyManager::UpdateHandleResult, this, std::placeholders::_1))
+	, wait_handler_(std::bind(&AgentManager::UpdateHandleResult, this, std::placeholders::_1))
 {
 	timer_.async_wait(wait_handler_);
 }
 
 // 接受处理请求
-void ProxyManager::HandleMessage(eddy::TCPSessionHandler &session, google::protobuf::Message *message)
+void AgentManager::HandleMessage(eddy::TCPSessionHandler &session, google::protobuf::Message *message)
 {
-	internal::QueryDBProxyReq *request = dynamic_cast<internal::QueryDBProxyReq*>(message);
+	internal::QueryDBAgentReq *request = dynamic_cast<internal::QueryDBAgentReq*>(message);
 	if (request != nullptr)
 	{
 		// 为这个任务生成唯一序列号
@@ -53,9 +53,9 @@ void ProxyManager::HandleMessage(eddy::TCPSessionHandler &session, google::proto
 				try
 				{
 					// 添加新的数据库任务
-					internal::QueryDBProxyReq::DatabaseType dbtype = request->dbtype();
+					internal::QueryDBAgentReq::DatabaseType dbtype = request->dbtype();
 					requests_.insert(std::make_pair(sequence_native, SSourceInfo(request->sequence(), session.SessionID())));
-					if (dbtype == internal::QueryDBProxyReq::kMySQL)
+					if (dbtype == internal::QueryDBAgentReq::kMySQL)
 					{
 						mysql_proxy_.Append(sequence_native, type_native, request->dbname().c_str(), request->statement().c_str(), request->statement().size());
 					}
@@ -102,7 +102,7 @@ void ProxyManager::HandleMessage(eddy::TCPSessionHandler &session, google::proto
 }
 
 // 更新处理结果
-void ProxyManager::UpdateHandleResult(asio::error_code error_code)
+void AgentManager::UpdateHandleResult(asio::error_code error_code)
 {
 	if (error_code)
 	{
@@ -129,9 +129,9 @@ void ProxyManager::UpdateHandleResult(asio::error_code error_code)
 }
 
 // 回复错误码
-void ProxyManager::RespondErrorCode(eddy::TCPSessionHandler &session, uint32_t sequence, int error_code)
+void AgentManager::RespondErrorCode(eddy::TCPSessionHandler &session, uint32_t sequence, int error_code)
 {
-	internal::DBProxyErrorRsp error;
+	internal::DBAgentErrorRsp error;
 	error.set_sequence(sequence);
 	error.set_error_code(static_cast<internal::ErrorCode>(error_code));
 
@@ -141,7 +141,7 @@ void ProxyManager::RespondErrorCode(eddy::TCPSessionHandler &session, uint32_t s
 }
 
 // 回复处理结果
-void ProxyManager::RespondHandleResult(eddy::TCPSessionID id, uint32_t sequence, const Result &result)
+void AgentManager::RespondHandleResult(eddy::TCPSessionID id, uint32_t sequence, const Result &result)
 {
 	eddy::SessionHandlePointer session = threads_.SessionHandler(id);
 	if (session != nullptr)
@@ -157,7 +157,7 @@ void ProxyManager::RespondHandleResult(eddy::TCPSessionID id, uint32_t sequence,
 		}
 		else
 		{
-			internal::QueryDBProxyRsp response;
+			internal::QueryDBAgentRsp response;
 			response.set_sequence(sequence);
 			response.set_result(result.GetResult().data(), result.GetResult().size());
 			PackageMessage(&response, message);

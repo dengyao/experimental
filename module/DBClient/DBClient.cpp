@@ -30,7 +30,7 @@ public:
 	virtual void OnConnect() override
 	{
 		eddy::NetMessage message;
-		internal::LoginDBProxyReq login;
+		internal::LoginDBAgentReq login;
 		PackageMessage(&login, message);
 		Send(message);
 
@@ -54,10 +54,10 @@ public:
 		{
 			if (dynamic_cast<internal::PongRsp*>(respond.get()) == nullptr)
 			{
-				if (dynamic_cast<internal::LoginDBProxyRsp*>(respond.get()) != nullptr)
+				if (dynamic_cast<internal::LoginDBAgentRsp*>(respond.get()) != nullptr)
 				{
 					is_logged_ = true;
-					counter_ = heartbeat_interval_ = dynamic_cast<internal::LoginDBProxyRsp*>(respond.get())->heartbeat_interval();
+					counter_ = heartbeat_interval_ = dynamic_cast<internal::LoginDBAgentRsp*>(respond.get())->heartbeat_interval();
 				}
 				else
 				{
@@ -323,7 +323,7 @@ void DBClient::OnDisconnect(DBClientHandle *client)
 
 				if (callback != nullptr)
 				{
-					internal::DBProxyErrorRsp error;
+					internal::DBAgentErrorRsp error;
 					error.set_sequence(0);
 					error.set_error_code(internal::kDisconnect);
 					callback(&error);
@@ -338,17 +338,17 @@ void DBClient::OnDisconnect(DBClientHandle *client)
 void DBClient::OnMessage(DBClientHandle *client, google::protobuf::Message *message)
 {
 	uint32_t sequence = 0;
-	if (dynamic_cast<internal::QueryDBProxyRsp*>(message) != nullptr)
+	if (dynamic_cast<internal::QueryDBAgentRsp*>(message) != nullptr)
 	{
-		sequence = dynamic_cast<internal::QueryDBProxyRsp*>(message)->sequence();
+		sequence = dynamic_cast<internal::QueryDBAgentRsp*>(message)->sequence();
 	}
 	else if (dynamic_cast<internal::DBErrorRsp*>(message) != nullptr)
 	{
 		sequence = dynamic_cast<internal::DBErrorRsp*>(message)->sequence();
 	}
-	else if (dynamic_cast<internal::DBProxyErrorRsp*>(message) != nullptr)
+	else if (dynamic_cast<internal::DBAgentErrorRsp*>(message) != nullptr)
 	{
-		sequence = dynamic_cast<internal::DBProxyErrorRsp*>(message)->sequence();
+		sequence = dynamic_cast<internal::DBAgentErrorRsp*>(message)->sequence();
 	}
 	else
 	{
@@ -390,13 +390,13 @@ size_t DBClient::GetKeepAliveConnectionNum() const
 // 异步操作
 void DBClient::AsyncQuery(DatabaseType dbtype, const char *dbname, DatabaseActionType action, const char *statement, QueryCallBack &&callback)
 {
-	static_assert(DatabaseType::kRedis == internal::QueryDBProxyReq::kRedis &&
-		DatabaseType::kMySQL == internal::QueryDBProxyReq::kMySQL, "type mismatch");
+	static_assert(DatabaseType::kRedis == internal::QueryDBAgentReq::kRedis &&
+		DatabaseType::kMySQL == internal::QueryDBAgentReq::kMySQL, "type mismatch");
 
-	static_assert(DatabaseActionType::kSelect == internal::QueryDBProxyReq::kSelect &&
-		DatabaseActionType::kInsert == internal::QueryDBProxyReq::kInsert &&
-		DatabaseActionType::kUpdate == internal::QueryDBProxyReq::kUpdate &&
-		DatabaseActionType::kDelete == internal::QueryDBProxyReq::kDelete, "type mismatch");
+	static_assert(DatabaseActionType::kSelect == internal::QueryDBAgentReq::kSelect &&
+		DatabaseActionType::kInsert == internal::QueryDBAgentReq::kInsert &&
+		DatabaseActionType::kUpdate == internal::QueryDBAgentReq::kUpdate &&
+		DatabaseActionType::kDelete == internal::QueryDBAgentReq::kDelete, "type mismatch");
 
 	if (client_lists_.size() < connection_num_)
 	{
@@ -404,7 +404,7 @@ void DBClient::AsyncQuery(DatabaseType dbtype, const char *dbname, DatabaseActio
 
 		if (client_lists_.empty())
 		{
-			internal::DBProxyErrorRsp error;
+			internal::DBAgentErrorRsp error;
 			error.set_sequence(0);
 			error.set_error_code(internal::kNotConnected);
 			callback(&error);
@@ -420,12 +420,12 @@ void DBClient::AsyncQuery(DatabaseType dbtype, const char *dbname, DatabaseActio
 			next_client_index_ = 0;
 		}
 
-		internal::QueryDBProxyReq request;
+		internal::QueryDBAgentReq request;
 		request.set_dbname(dbname);
 		request.set_statement(statement);
 		request.set_sequence(sequence);
-		request.set_action(static_cast<internal::QueryDBProxyReq::ActoinType>(action));
-		request.set_dbtype(static_cast<internal::QueryDBProxyReq::DatabaseType>(dbtype));
+		request.set_action(static_cast<internal::QueryDBAgentReq::ActoinType>(action));
+		request.set_dbtype(static_cast<internal::QueryDBAgentReq::DatabaseType>(dbtype));
 
 		DBClientHandle *client = client_lists_[next_client_index_++];
 		assigned_lists_[client].insert(sequence);

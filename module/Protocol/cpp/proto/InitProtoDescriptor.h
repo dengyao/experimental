@@ -11,15 +11,15 @@ public:
     {
         internal::PingReq::descriptor();
         internal::PongRsp::descriptor();
-        internal::LoginDBProxyReq::descriptor();
-        internal::LoginDBProxyRsp::descriptor();
-        internal::QueryDBProxyReq::descriptor();
-        internal::QueryDBProxyRsp::descriptor();
+        internal::LoginDBAgentReq::descriptor();
+        internal::LoginDBAgentRsp::descriptor();
+        internal::QueryDBAgentReq::descriptor();
+        internal::QueryDBAgentRsp::descriptor();
         internal::DBErrorRsp::descriptor();
-        internal::DBProxyErrorRsp::descriptor();
-        internal::GatewayErrorRsp::descriptor();
-        internal::LoginGatewayReq::descriptor();
-        internal::LoginGatewayRsp::descriptor();
+        internal::DBAgentErrorRsp::descriptor();
+        internal::RouterErrorRsp::descriptor();
+        internal::LoginRouterReq::descriptor();
+        internal::LoginRouterRsp::descriptor();
         internal::ForwardMessageReq::descriptor();
         internal::ForwardMessageRsp::descriptor();
         internal::BroadcastMessageReq::descriptor();

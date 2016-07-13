@@ -1,5 +1,5 @@
-﻿#ifndef __WRAP_RESULT_H__
-#define __WRAP_RESULT_H__
+﻿#ifndef __DBRESULT_H__
+#define __DBRESULT_H__
 
 #include <array>
 #include <vector>
@@ -7,20 +7,20 @@
 #include <cassert>
 #include <numeric>
 
-class WrapResult
+class DBResult
 {
 	static const size_t kNumRowsIndex = 0;
 	static const size_t kNumFieldIndex = 1;
 
 public:
-	WrapResult(const char *data, size_t size)
+	DBResult(const char *data, size_t size)
 		: num_rows_(0)
 		, num_fields_(0)
 	{
 		Deserialize(data, size);
 	}
 
-	WrapResult(WrapResult &&other)
+	DBResult(DBResult &&other)
 		: num_rows_(other.num_rows_)
 		, num_fields_(other.num_fields_)
 	{
@@ -104,8 +104,8 @@ private:
 	}
 
 private:
-	WrapResult(const WrapResult&) = delete;
-	WrapResult operator= (const WrapResult&) = delete;
+	DBResult(const DBResult&) = delete;
+	DBResult operator= (const DBResult&) = delete;
 
 private:
 	size_t num_rows_;

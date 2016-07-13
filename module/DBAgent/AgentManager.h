@@ -1,8 +1,8 @@
-﻿#ifndef __PROXY_MANAGER_H__
-#define __PROXY_MANAGER_H__
+﻿#ifndef __AGENT_MANAGER_H__
+#define __AGENT_MANAGER_H__
 
 #include <eddyserver.h>
-#include "ProxyImpl.h"
+#include "AgentImpl.h"
 #include "ConnectorMySQL.h"
 
 namespace google
@@ -13,7 +13,7 @@ namespace google
 	}
 }
 
-class ProxyManager
+class AgentManager
 {
 	// 请求来源信息
 	struct SSourceInfo
@@ -27,7 +27,7 @@ class ProxyManager
 	};
 
 public:
-	ProxyManager(eddy::IOServiceThreadManager &threads, ProxyImpl<MySQL> &mysql, unsigned int backlog);
+	AgentManager(eddy::IOServiceThreadManager &threads, AgentImpl<MySQL> &mysql, unsigned int backlog);
 
 public:
 	// 接受处理请求
@@ -49,7 +49,7 @@ private:
 	eddy::IOServiceThreadManager&               threads_;
 	std::map<uint32_t, SSourceInfo>             requests_;
 	eddy::IDGenerator                           generator_;
-	ProxyImpl<MySQL>&                           mysql_proxy_;
+	AgentImpl<MySQL>&                           mysql_proxy_;
 	std::vector<Result>                         completion_list_;
 };
 

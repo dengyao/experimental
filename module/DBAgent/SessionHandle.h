@@ -3,12 +3,12 @@
 
 #include <eddyserver.h>
 
-class ProxyManager;
+class AgentManager;
 
 class SessionHandle : public eddy::TCPSessionHandler
 {
 public:
-	SessionHandle(ProxyManager &manager);
+	SessionHandle(AgentManager &manager);
 
 private:
 	virtual void OnConnect() override;
@@ -19,10 +19,10 @@ private:
 
 private:
 	bool          is_logged_;
-	ProxyManager& proxy_manager_;
+	AgentManager& agent_manager_;
 };
 
 eddy::MessageFilterPointer CreateMessageFilter();
-eddy::SessionHandlePointer CreateSessionHandle(ProxyManager &proxy_manager);
+eddy::SessionHandlePointer CreateSessionHandle(AgentManager &agent_manager);
 
 #endif

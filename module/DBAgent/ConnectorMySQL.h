@@ -13,17 +13,17 @@
 class MySQL;
 
 template <>
-class DatabaseResult<MySQL>
+class DBResult<MySQL>
 {
 public:
-	DatabaseResult() = default;
+	DBResult() = default;
 
-	DatabaseResult(MYSQL_RES *result)
+	DBResult(MYSQL_RES *result)
 	{
 		Serialize(result);
 	}
 
-	DatabaseResult(const char *data, size_t size)
+	DBResult(const char *data, size_t size)
 	{
 		data_.resize(size);
 		memcpy(data_.data(), data, size);
@@ -39,17 +39,12 @@ public:
 		return data_;
 	}
 
-	WrapResult ToWrapResult() const
-	{
-		return WrapResult(data_.data(), data_.size());
-	}
-
-	DatabaseResult(DatabaseResult &&other)
+	DBResult(DBResult &&other)
 	{
 		data_ = std::move(other.data_);
 	}
 
-	DatabaseResult& operator= (DatabaseResult &&other)
+	DBResult& operator= (DBResult &&other)
 	{
 		data_ = std::move(other.data_);
 		return *this;
@@ -120,14 +115,14 @@ private:
 	}
 
 private:
-	DatabaseResult(const DatabaseResult&) = delete;
-	DatabaseResult& operator= (const DatabaseResult&) = delete;
+	DBResult(const DBResult&) = delete;
+	DBResult& operator= (const DBResult&) = delete;
 
 private:
 	ByteArray data_;
 };
 
-typedef DatabaseResult<MySQL> MySQLResult;
+typedef DBResult<MySQL> MySQLResult;
 
 template <>
 class Connector<MySQL>

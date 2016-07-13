@@ -1,8 +1,9 @@
-﻿#ifndef __PROXY_IMPL_H__
-#define __PROXY_IMPL_H__
+﻿#ifndef __AGENT_IMPL_H__
+#define __AGENT_IMPL_H__
 
 #include <set>
 #include <vector>
+#include <cassert>
 #include <common.h>
 #include "Connector.h"
 #include "ContainerSafe.h"
@@ -63,20 +64,20 @@ private:
 
 // 处理数据库的操作请求
 template <typename Database>
-class ProxyImpl
+class AgentImpl
 {
 	class Actor;
 	typedef std::shared_ptr<Actor> ActorPointer;
-	typedef std::function<void(ActorPointer &actor, ErrorCode&&, DatabaseResult<Database>&&)> CompleteNotify;
+	typedef std::function<void(ActorPointer &actor, ErrorCode&&, DBResult<Database>&&)> CompleteNotify;
 
 public:
 	typedef std::unique_ptr<Connector<Database>> ConnectorPointer;
 
 public:
-	ProxyImpl(std::vector<ConnectorPointer> &&connectors, TaskPools &pools, unsigned int backlog)
+	AgentImpl(std::vector<ConnectorPointer> &&connectors, TaskPools &pools, unsigned int backlog)
 		: pools_(pools)
 		, bocklog_(backlog)
-		, complete_notify_(std::bind(&ProxyImpl::OnCompletionTask, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3))
+		, complete_notify_(std::bind(&AgentImpl::OnCompletionTask, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3))
 	{
 		for (size_t i = 0; i < connectors.size(); ++i)
 		{
@@ -131,7 +132,7 @@ public:
 
 private:
 	// 处理完成回调
-	void OnCompletionTask(ActorPointer &actor, ErrorCode &&code, DatabaseResult<Database> &&result)
+	void OnCompletionTask(ActorPointer &actor, ErrorCode &&code, DBResult<Database> &&result)
 	{
 		ConnectorPointer connector(std::move(actor->GetConnector()));
 		completion_queue_.Append(Result(actor->GetSequence(), std::forward<ErrorCode>(code), std::move(result.GetData())));
@@ -203,7 +204,7 @@ private:
 		void Processing()
 		{
 			ErrorCode error_code;
-			DatabaseResult<Database> result;
+			DBResult<Database> result;
 			assert(connector_ != nullptr);
 			if (connector_ != nullptr)
 			{

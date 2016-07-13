@@ -1,27 +1,24 @@
 ﻿#ifndef __CONNECTOR_H__
 #define __CONNECTOR_H__
 
-#include "WrapResult.h"
-#include "ProxyTypes.h"
+#include "AgentTypes.h"
 
 // Database Result Interface
 template <typename Database>
-class DatabaseResult
+class DBResult
 {
 public:
 	ByteArray& GetData();
 
 	const ByteArray& GetData() const;
 
-	WrapResult ToWrapResult() const;
+	DBResult(DBResult&&);
 
-	DatabaseResult(DatabaseResult&&);
-
-	DatabaseResult& operator= (DatabaseResult&&);
+	DBResult& operator= (DBResult&&);
 
 private:
-	DatabaseResult(const DatabaseResult&) = delete;
-	DatabaseResult& operator= (const DatabaseResult&) = delete;
+	DBResult(const DBResult&) = delete;
+	DBResult& operator= (const DBResult&) = delete;
 };
 
 // Database Connector Interface
@@ -35,13 +32,13 @@ public:
 
 	const char* Name() const;
 
-	DatabaseResult<Database> Select(const ByteArray &command, ErrorCode &error_code);
+	DBResult<Database> Select(const ByteArray &command, ErrorCode &error_code);
 
-	DatabaseResult<Database> Insert(const ByteArray &command, ErrorCode &error_code);
+	DBResult<Database> Insert(const ByteArray &command, ErrorCode &error_code);
 
-	DatabaseResult<Database> Update(const ByteArray &command, ErrorCode &error_code);
+	DBResult<Database> Update(const ByteArray &command, ErrorCode &error_code);
 
-	DatabaseResult<Database> Delete(const ByteArray &command, ErrorCode &error_code);
+	DBResult<Database> Delete(const ByteArray &command, ErrorCode &error_code);
 
 private:
 	Connector(const Connector&) = delete;
