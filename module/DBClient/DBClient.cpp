@@ -6,12 +6,12 @@
 
 /************************************************************************/
 
-class DBClientHandle : public network::TCPSessionHandler
+class DBSessionHandle : public network::TCPSessionHandler
 {
 	friend class DBClient;
 
 public:
-	DBClientHandle(DBClient *client, std::shared_ptr<bool> &life)
+	DBSessionHandle(DBClient *client, std::shared_ptr<bool> &life)
 		: counter_(0)
 		, client_(client)
 		, is_logged_(false)
@@ -29,13 +29,16 @@ public:
 	// 连接成功
 	virtual void OnConnect() override
 	{
-		network::NetMessage message;
-		internal::LoginDBAgentReq login;
-		PackageMessage(&login, message);
-		Send(message);
-
-		if (!client_life_.unique())
+		if (client_life_.unique())
 		{
+			Close();
+		}
+		else
+		{
+			network::NetMessage message;
+			internal::LoginDBAgentReq request;
+			PackageMessage(&request, message);
+			Send(message);
 			client_->OnConnected(this);
 		}
 	}
@@ -43,6 +46,12 @@ public:
 	// 接收消息
 	virtual void OnMessage(network::NetMessage &message) override
 	{
+		if (client_life_.unique())
+		{
+			Close();
+			return;
+		}
+
 		auto response = UnpackageMessage(message);
 		if (response == nullptr)
 		{
@@ -57,7 +66,7 @@ public:
 				if (dynamic_cast<internal::LoginDBAgentRsp*>(response.get()) != nullptr)
 				{
 					is_logged_ = true;
-					counter_ = heartbeat_interval_ = dynamic_cast<internal::LoginDBAgentRsp*>(response.get())->heartbeat_interval();
+					counter_ = heartbeat_interval_ = static_cast<internal::LoginDBAgentRsp*>(response.get())->heartbeat_interval();
 				}
 				else
 				{
@@ -68,10 +77,7 @@ public:
 		}
 		else if (dynamic_cast<internal::PongRsp*>(response.get()) == nullptr)
 		{
-			if (!client_life_.unique())
-			{
-				client_->OnMessage(this, response.get());
-			}
+			client_->OnMessage(this, response.get());
 		}
 		else
 		{
@@ -96,9 +102,9 @@ public:
 		{
 			if (--counter_ == 0)
 			{
-				internal::PingReq req;
+				internal::PingReq request;
 				network::NetMessage message;
-				PackageMessage(&req, message);
+				PackageMessage(&request, message);
 				Send(message);
 				counter_ = heartbeat_interval_;
 			}		
@@ -159,13 +165,13 @@ DBClient::DBClient(network::IOServiceThreadManager &threads, asio::ip::tcp::endp
 	, endpoint_(endpoint)
 	, next_client_index_(0)
 	, connection_num_(connection_num)
-	, timer_(threads.MainThread()->IOService())
 	, generator_(std::numeric_limits<uint16_t>::max())
+	, timer_(threads.MainThread()->IOService(), std::chrono::seconds(1))
 	, wait_handler_(std::bind(&DBClient::UpdateTimer, this, std::placeholders::_1))
-	, client_creator_(threads_, std::bind(&DBClient::CreateClientHandle, this), std::bind(CreaterMessageFilter))
+	, session_handle_creator_(threads_, std::bind(&DBClient::CreateSessionHandle, this), std::bind(CreaterMessageFilter))
 {
+	assert(connection_num > 0);
 	InitConnections();
-	timer_.expires_from_now(std::chrono::seconds(1));
 	timer_.async_wait(wait_handler_);
 }
 
@@ -175,25 +181,25 @@ DBClient::~DBClient()
 }
 
 // 创建会话处理器
-network::SessionHandlePointer DBClient::CreateClientHandle()
+network::SessionHandlePointer DBClient::CreateSessionHandle()
 {
 	auto life = std::make_shared<bool>();
 	lifetimes_.insert(life);
-	return std::make_shared<DBClientHandle>(this, life);
+	return std::make_shared<DBSessionHandle>(this, life);
 }
 
 // 清理所有连接
 void DBClient::Clear()
 {
 	lifetimes_.clear();
-	for (auto handle : client_lists_)
+	for (auto session : session_handle_lists_)
 	{
-		if (handle != nullptr)
+		if (session != nullptr)
 		{
-			handle->Close();
+			session->Close();
 		}
 	}
-	client_lists_.clear();
+	session_handle_lists_.clear();
 }
 
 // 初始化连接
@@ -204,8 +210,7 @@ void DBClient::InitConnections()
 	{
 		try
 		{
-			client_creator_.Connect(endpoint_, error_code);
-
+			session_handle_creator_.Connect(endpoint_, error_code);
 		}
 		catch (const std::exception&)
 		{
@@ -224,9 +229,9 @@ void DBClient::InitConnections()
 // 重新连接
 void DBClient::AsyncReconnect()
 {
-	if (client_lists_.size() < connection_num_)
+	if (session_handle_lists_.size() < connection_num_)
 	{
-		const int diff = connection_num_ - client_lists_.size();
+		const int diff = connection_num_ - session_handle_lists_.size();
 		assert(connecting_num_ <= diff);
 		if (connecting_num_ < diff)
 		{
@@ -239,7 +244,7 @@ void DBClient::AsyncReconnect()
 				lifetimes_.insert(life);
 
 				auto handler = std::make_shared<AsyncReconnectHandle>(this, life);
-				client_creator_.AsyncConnect(endpoint_, std::bind(&AsyncReconnectHandle::ConnectCallback, std::move(handler), std::placeholders::_1));
+				session_handle_creator_.AsyncConnect(endpoint_, std::bind(&AsyncReconnectHandle::ConnectCallback, std::move(handler), std::placeholders::_1));
 			}
 		}
 	}
@@ -272,70 +277,72 @@ void DBClient::UpdateTimer(asio::error_code error_code)
 		return;
 	}
 
-	for (auto handle : client_lists_)
+	for (auto session : session_handle_lists_)
 	{
-		handle->HeartbeatCountdown();
+		session->HeartbeatCountdown();
 	}
 	timer_.expires_from_now(std::chrono::seconds(1));
 	timer_.async_wait(wait_handler_);
 }
 
 // 连接事件
-void DBClient::OnConnected(DBClientHandle *client)
+void DBClient::OnConnected(DBSessionHandle *session)
 {
-	if (client_lists_.size() >= connection_num_)
+	if (session_handle_lists_.size() >= connection_num_)
 	{
 		assert(false);
-		client->Close();
+		session->Close();
 		return;
 	}
 
-	if (std::find(client_lists_.begin(), client_lists_.end(), client) == client_lists_.end())
+	if (std::find(session_handle_lists_.begin(), session_handle_lists_.end(), session) == session_handle_lists_.end())
 	{
-		client_lists_.push_back(client);
+		session_handle_lists_.push_back(session);
 	}
 }
 
 // 断开连接事件
-void DBClient::OnDisconnect(DBClientHandle *client)
+void DBClient::OnDisconnect(DBSessionHandle *session)
 {
-	lifetimes_.erase(client->GetShared());
+	lifetimes_.erase(session->GetShared());
 
-	auto client_iter = std::find(client_lists_.begin(), client_lists_.end(), client);
-	if (client_iter != client_lists_.end())
+	auto client_iter = std::find(session_handle_lists_.begin(), session_handle_lists_.end(), session);
+	if (client_iter != session_handle_lists_.end())
 	{
-		client_lists_.erase(client_iter);
+		session_handle_lists_.erase(client_iter);
 	}
 
-	auto found = assigned_lists_.find(client);
+	std::set<uint32_t> lists;
+	auto found = assigned_lists_.find(session);
 	if (found != assigned_lists_.end())
 	{
-		std::set<uint32_t> &lists = found->second;
-		for (auto iter = lists.begin(); iter != lists.end(); ++iter)
-		{
-			generator_.Put(*iter);
-			auto callback_iter = ongoing_lists_.find(*iter);
-			assert(callback_iter != ongoing_lists_.end());
-			if (callback_iter != ongoing_lists_.end())
-			{
-				QueryCallBack callback = std::move(callback_iter->second);
-				ongoing_lists_.erase(callback_iter);
+		lists.swap(found->second);
+		assigned_lists_.erase(found);
+	}
 
-				if (callback != nullptr)
-				{
-					internal::DBAgentErrorRsp error;
-					error.set_sequence(0);
-					error.set_error_code(internal::kDisconnect);
-					callback(&error);
-				}	
+	for (auto iter = lists.begin(); iter != lists.end(); ++iter)
+	{
+		generator_.Put(*iter);
+		auto callback_iter = ongoing_lists_.find(*iter);
+		assert(callback_iter != ongoing_lists_.end());
+		if (callback_iter != ongoing_lists_.end())
+		{
+			QueryCallBack callback = std::move(callback_iter->second);
+			ongoing_lists_.erase(callback_iter);
+
+			if (callback != nullptr)
+			{
+				internal::DBAgentErrorRsp response;
+				response.set_sequence(0);
+				response.set_error_code(internal::kDisconnect);
+				callback(&response);
 			}
 		}
-		assigned_lists_.erase(found);
 	}
 }
 
 // 接受消息事件
-void DBClient::OnMessage(DBClientHandle *client, google::protobuf::Message *message)
+void DBClient::OnMessage(DBSessionHandle *session, google::protobuf::Message *message)
 {
 	uint32_t sequence = 0;
 	if (dynamic_cast<internal::QueryDBAgentRsp*>(message) != nullptr)
@@ -356,7 +363,7 @@ void DBClient::OnMessage(DBClientHandle *client, google::protobuf::Message *mess
 		return;
 	}
 
-	auto set_iter = assigned_lists_.find(client);
+	auto set_iter = assigned_lists_.find(session);
 	if (set_iter != assigned_lists_.end())
 	{
 		set_iter->second.erase(sequence);
@@ -384,7 +391,7 @@ void DBClient::OnMessage(DBClientHandle *client, google::protobuf::Message *mess
 // 获取有效连接数量
 size_t DBClient::GetKeepAliveConnectionNum() const
 {
-	return client_lists_.size();
+	return session_handle_lists_.size();
 }
 
 // 异步操作
@@ -398,16 +405,15 @@ void DBClient::AsyncQuery(DatabaseType dbtype, const char *dbname, DatabaseActio
 		DatabaseActionType::kUpdate == internal::QueryDBAgentReq::kUpdate &&
 		DatabaseActionType::kDelete == internal::QueryDBAgentReq::kDelete, "type mismatch");
 
-	if (client_lists_.size() < connection_num_)
+	if (session_handle_lists_.size() < connection_num_)
 	{
 		AsyncReconnect();
-
-		if (client_lists_.empty())
+		if (session_handle_lists_.empty())
 		{
-			internal::DBAgentErrorRsp error;
-			error.set_sequence(0);
-			error.set_error_code(internal::kNotConnected);
-			callback(&error);
+			internal::DBAgentErrorRsp response;
+			response.set_sequence(0);
+			response.set_error_code(internal::kNotConnected);
+			callback(&response);
 			return;
 		}
 	}
@@ -415,7 +421,7 @@ void DBClient::AsyncQuery(DatabaseType dbtype, const char *dbname, DatabaseActio
 	uint32_t sequence = 0;
 	if (generator_.Get(sequence))
 	{
-		if (next_client_index_ >= client_lists_.size())
+		if (next_client_index_ >= session_handle_lists_.size())
 		{
 			next_client_index_ = 0;
 		}
@@ -427,13 +433,13 @@ void DBClient::AsyncQuery(DatabaseType dbtype, const char *dbname, DatabaseActio
 		request.set_action(static_cast<internal::QueryDBAgentReq::ActoinType>(action));
 		request.set_dbtype(static_cast<internal::QueryDBAgentReq::DatabaseType>(dbtype));
 
-		DBClientHandle *client = client_lists_[next_client_index_++];
-		assigned_lists_[client].insert(sequence);
+		DBSessionHandle *session = session_handle_lists_[next_client_index_++];
+		assigned_lists_[session].insert(sequence);
 		ongoing_lists_.insert(std::make_pair(sequence, std::forward<QueryCallBack>(callback)));
 		
 		network::NetMessage message;
 		PackageMessage(&request, message);
-		client->Send(message);
+		session->Send(message);
 	}
 }
 

@@ -37,20 +37,19 @@ public:
 	}
 };
 
-class DBClientHandle;
+class DBSessionHandle;
 class AsyncReconnectHandle;
 
 class DBClient final
 {
-	friend class DBClientHandle;
+	friend class DBSessionHandle;
 	friend class AsyncReconnectHandle;
 
 public:
 	typedef std::function<void(google::protobuf::Message*)> QueryCallBack;
 
 public:
-	DBClient(network::IOServiceThreadManager &threads, asio::ip::tcp::endpoint &endpoint, size_t connection_num = 0);
-
+	DBClient(network::IOServiceThreadManager &threads, asio::ip::tcp::endpoint &endpoint, size_t connection_num);
 	~DBClient();
 
 public:
@@ -71,13 +70,13 @@ public:
 
 private:
 	// 连接事件
-	void OnConnected(DBClientHandle *client);
+	void OnConnected(DBSessionHandle *session);
 
 	// 断开连接事件
-	void OnDisconnect(DBClientHandle *client);
+	void OnDisconnect(DBSessionHandle *session);
 
 	// 接受消息事件
-	void OnMessage(DBClientHandle *client, google::protobuf::Message *message);
+	void OnMessage(DBSessionHandle *session, google::protobuf::Message *message);
 
 private:
 	// 清理所有连接
@@ -96,25 +95,25 @@ private:
 	void UpdateTimer(asio::error_code error_code);
 
 	// 创建会话处理器
-	network::SessionHandlePointer CreateClientHandle();
+	network::SessionHandlePointer CreateSessionHandle();
 
 	// 异步操作
 	void AsyncQuery(DatabaseType dbtype, const char *dbname, DatabaseActionType action, const char *statement, QueryCallBack &&callback);
 
 private:
-	const size_t                                   connection_num_;
-	unsigned short                                 connecting_num_;
-	network::IOServiceThreadManager&                  threads_;
-	network::IDGenerator                              generator_;
-	std::set<std::shared_ptr<bool> >               lifetimes_;
-	network::TCPClient					               client_creator_;
-	std::vector<DBClientHandle*>                   client_lists_;
-	std::map<uint32_t, QueryCallBack>              ongoing_lists_;
-	std::map<DBClientHandle*, std::set<uint32_t> > assigned_lists_;
-	asio::ip::tcp::endpoint                        endpoint_;
-	asio::steady_timer                             timer_;
-	const std::function<void(asio::error_code)>    wait_handler_;
-	size_t                                         next_client_index_;
+	const size_t                                    connection_num_;
+	unsigned short                                  connecting_num_;
+	network::IOServiceThreadManager&                threads_;
+	network::IDGenerator                            generator_;
+	std::set<std::shared_ptr<bool> >                lifetimes_;
+	network::TCPClient					            session_handle_creator_;
+	std::vector<DBSessionHandle*>                   session_handle_lists_;
+	std::map<uint32_t, QueryCallBack>               ongoing_lists_;
+	std::map<DBSessionHandle*, std::set<uint32_t> > assigned_lists_;
+	asio::ip::tcp::endpoint                         endpoint_;
+	asio::steady_timer                              timer_;
+	const std::function<void(asio::error_code)>     wait_handler_;
+	size_t                                          next_client_index_;
 };
 
 #endif
