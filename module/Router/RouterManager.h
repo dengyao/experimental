@@ -11,6 +11,8 @@ namespace google
 	}
 }
 
+class SessionHandle;
+
 class RouterManager
 {
 	// 节点索引(快速查找)
@@ -50,32 +52,30 @@ class RouterManager
 		}
 	};
 
-	typedef std::function<void(network::TCPSessionHandler &session, google::protobuf::Message *message, network::NetMessage &added)> MessageHandler;
-
 public:
 	RouterManager(network::IOServiceThreadManager &threads);
 	~RouterManager();
 
 public:
 	// 处理消息
-	void HandleMessage(network::TCPSessionHandler &session, google::protobuf::Message *message, network::NetMessage &buffer);
+	void HandleMessage(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer);
 
 	// 处理服务器下线
-	void HandleServerOffline(network::TCPSessionHandler &session);
+	void HandleServerOffline(SessionHandle &session);
 
 private:
 	// 服务器登录
-	void OnServerLogin(network::TCPSessionHandler &session, google::protobuf::Message *message, network::NetMessage &buffer);
+	void OnServerLogin(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer);
 
 	// 转发服务器消息
-	void OnForwardServerMessage(network::TCPSessionHandler &session, google::protobuf::Message *message, network::NetMessage &buffer);
+	void OnForwardServerMessage(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer);
 
 	// 广播服务器消息
-	void OnBroadcastServerMessage(network::TCPSessionHandler &session, google::protobuf::Message *message, network::NetMessage &buffer);
+	void OnBroadcastServerMessage(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer);
 
 public:
 	// 回复错误码
-	void RespondErrorCode(network::TCPSessionHandler &session, int error_code, const char *what = nullptr);
+	void RespondErrorCode(SessionHandle &session, network::NetMessage &buffer, int error_code, const char *what = nullptr);
 
 private:
 	// 查找服务器节点
@@ -86,8 +86,8 @@ private:
 	bool FindServerNodeSession(int node_type, int child_id, network::SessionHandlePointer &out_session);
 
 private:
-	network::IOServiceThreadManager&                     threads_;
-	std::unordered_map<int, ServerNode>               server_lists_;
+	network::IOServiceThreadManager& threads_;
+	std::unordered_map<int, ServerNode> server_lists_;
 	std::unordered_map<network::TCPSessionID, NodeIndex> node_index_;
 };
 

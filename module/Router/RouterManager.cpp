@@ -1,6 +1,7 @@
 ﻿#include "RouterManager.h"
 #include <proto/MessageHelper.h>
 #include <proto/internal.protocol.pb.h>
+#include "SessionHandle.h"
 
 RouterManager::RouterManager(network::IOServiceThreadManager &threads)
 	: threads_(threads)
@@ -9,20 +10,6 @@ RouterManager::RouterManager(network::IOServiceThreadManager &threads)
 
 RouterManager::~RouterManager()
 {
-}
-
-// 回复错误码
-void RouterManager::RespondErrorCode(network::TCPSessionHandler &session, int error_code, const char *what)
-{
-	internal::RouterErrorRsp error;
-	error.set_error_code(static_cast<internal::ErrorCode>(error_code));
-	if (what != nullptr)
-	{
-		error.set_what(what);
-	}
-	network::NetMessage message;
-	PackageMessage(&error, message);
-	session.Send(message);
 }
 
 // 查找服务器节点
@@ -87,8 +74,22 @@ bool RouterManager::FindServerNodeSession(int node_type, int child_id, network::
 	return out_session != nullptr;
 }
 
+// 回复错误码
+void RouterManager::RespondErrorCode(SessionHandle &session, network::NetMessage &buffer, int error_code, const char *what)
+{
+	buffer.Clear();
+	internal::RouterErrorRsp response;
+	response.set_error_code(static_cast<internal::ErrorCode>(error_code));
+	if (what != nullptr)
+	{
+		response.set_what(what);
+	}
+	PackageMessage(&response, buffer);
+	session.Respond(buffer);
+}
+
 // 处理收到消息
-void RouterManager::HandleMessage(network::TCPSessionHandler &session, google::protobuf::Message *message, network::NetMessage &buffer)
+void RouterManager::HandleMessage(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
 	if (dynamic_cast<internal::LoginRouterReq*>(message) != nullptr)
 	{
@@ -104,12 +105,12 @@ void RouterManager::HandleMessage(network::TCPSessionHandler &session, google::p
 	}
 	else
 	{
-		RespondErrorCode(session, internal::kInvalidProtocol, message->GetTypeName().c_str());
+		RespondErrorCode(session, buffer, internal::kInvalidProtocol, message->GetTypeName().c_str());
 	}
 }
 
 // 处理服务器下线
-void RouterManager::HandleServerOffline(network::TCPSessionHandler &session)
+void RouterManager::HandleServerOffline(SessionHandle &session)
 {
 	auto found = node_index_.find(session.SessionID());
 	if (found == node_index_.end())
@@ -150,13 +151,13 @@ void RouterManager::HandleServerOffline(network::TCPSessionHandler &session)
 }
 
 // 服务器登录
-void RouterManager::OnServerLogin(network::TCPSessionHandler &session, google::protobuf::Message *message, network::NetMessage &buffer)
+void RouterManager::OnServerLogin(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
 	// 检查服务器类型是否合法
 	auto request = static_cast<internal::LoginRouterReq*>(message);
 	if (request->type() < internal::NodeType_MIN || request->type() > internal::NodeType_MAX)
 	{
-		RespondErrorCode(session, internal::kInvalidNodeType, request->GetTypeName().c_str());
+		RespondErrorCode(session, buffer, internal::kInvalidNodeType, request->GetTypeName().c_str());
 		return;
 	}
 
@@ -164,7 +165,7 @@ void RouterManager::OnServerLogin(network::TCPSessionHandler &session, google::p
 	auto found = node_index_.find(session.SessionID());
 	if (found != node_index_.end())
 	{
-		RespondErrorCode(session, internal::kInvalidNodeType, request->GetTypeName().c_str());
+		RespondErrorCode(session, buffer, internal::kInvalidNodeType, request->GetTypeName().c_str());
 		return;
 	}
 
@@ -204,100 +205,98 @@ void RouterManager::OnServerLogin(network::TCPSessionHandler &session, google::p
 
 	// 返回结果
 	buffer.Clear();
-	internal::LoginRouterRsp rsp;
-	rsp.set_heartbeat_interval(60);
-	PackageMessage(&rsp, buffer);
-	session.Send(buffer);
+	internal::LoginRouterRsp response;
+	response.set_heartbeat_interval(60);
+	PackageMessage(&response, buffer);
+	session.Respond(buffer);
 }
 
 // 转发服务器消息
-void RouterManager::OnForwardServerMessage(network::TCPSessionHandler &session, google::protobuf::Message *message, network::NetMessage &buffer)
+void RouterManager::OnForwardServerMessage(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
 	auto request = static_cast<internal::ForwardMessageReq*>(message);
 	if (request->message_length() != buffer.Readable())
 	{
-		RespondErrorCode(session, internal::kInvalidDataPacket);
+		RespondErrorCode(session, buffer, internal::kInvalidDataPacket);
 		return;
 	}
 
 	ChildNode *child_node = nullptr;
 	if (!FindServerNodeBySessionID(session.SessionID(), child_node))
 	{
-		RespondErrorCode(session, internal::kNotLoggedIn, request->GetTypeName().c_str());
+		RespondErrorCode(session, buffer, internal::kNotLoggedIn, request->GetTypeName().c_str());
+		return;
 	}
-	else
-	{
-		network::SessionHandlePointer dst_session;
-		if (!FindServerNodeSession(request->dst_type(), request->dst_child_id(), dst_session))
-		{
-			RespondErrorCode(session, internal::kDestinationUnreachable, request->GetTypeName().c_str());
-		}
 
-		network::NetMessage msg;
-		internal::ForwardMessageRsp rsp;
-		rsp.set_src_type(static_cast<internal::NodeType>(child_node->node_type));
-		rsp.set_src_child_id(child_node->child_id);
-		rsp.set_message_length(buffer.Readable());
-		PackageMessage(&rsp, msg);
-		msg.Write(buffer.Data(), buffer.Readable());
-		dst_session->Send(msg);
+	network::SessionHandlePointer dst_session;
+	if (!FindServerNodeSession(request->dst_type(), request->dst_child_id(), dst_session))
+	{
+		RespondErrorCode(session, buffer, internal::kDestinationUnreachable, request->GetTypeName().c_str());
+		return;
 	}
+
+	network::NetMessage new_message;
+	internal::ForwardMessageRsp response;
+	response.set_src_type(static_cast<internal::NodeType>(child_node->node_type));
+	response.set_src_child_id(child_node->child_id);
+	response.set_message_length(buffer.Readable());
+	PackageMessage(&response, new_message);
+	new_message.Write(buffer.Data(), buffer.Readable());
+	static_cast<SessionHandle*>(dst_session.get())->Respond(new_message);
 }
 
 // 广播服务器消息
-void RouterManager::OnBroadcastServerMessage(network::TCPSessionHandler &session, google::protobuf::Message *message, network::NetMessage &buffer)
+void RouterManager::OnBroadcastServerMessage(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
 	auto request = static_cast<internal::BroadcastMessageReq*>(message);
 	if (request->message_length() != buffer.Readable())
 	{
-		RespondErrorCode(session, internal::kInvalidDataPacket);
+		RespondErrorCode(session, buffer, internal::kInvalidDataPacket);
 		return;
 	}
 
 	ChildNode *child_node = nullptr;
 	if (!FindServerNodeBySessionID(session.SessionID(), child_node))
 	{
-		RespondErrorCode(session, internal::kNotLoggedIn, request->GetTypeName().c_str());
+		RespondErrorCode(session, buffer, internal::kNotLoggedIn, request->GetTypeName().c_str());
 	}
-	else
+	
+	network::NetMessage new_message;
+	internal::BroadcastMessageRsp response;
+	response.set_src_type(static_cast<internal::NodeType>(child_node->node_type));
+	response.set_src_child_id(child_node->child_id);
+	response.set_message_length(buffer.Readable());
+	PackageMessage(&response, new_message);
+	new_message.Write(buffer.Data(), buffer.Readable());
+
+	network::SessionHandlePointer dst_session;
+	for (int i = 0; i < request->dst_lists().size(); ++i)
 	{
-		network::NetMessage msg;
-		internal::BroadcastMessageRsp rsp;
-		network::SessionHandlePointer dst_session;
-		for (int i = 0; i < request->dst_lists().size(); ++i)
+		auto node_found = server_lists_.find(request->dst_lists(i));
+		if (node_found != server_lists_.end())
 		{
-			auto node_found = server_lists_.find(request->dst_lists(i));
-			if (node_found != server_lists_.end())
+			for (auto &pair : node_found->second.child_lists)
 			{
-				for (auto &pair : node_found->second.child_lists)
+				network::TCPSessionID session_id = 0;
+				auto &session_lists = pair.second.session_lists;
+				if (session_lists.empty())
 				{
-					network::TCPSessionID session_id = 0;
-					auto &session_lists = pair.second.session_lists;
-					if (session_lists.empty())
-					{
-						continue;
-					}
+					continue;
+				}
 
-					if (session_lists.size() == 1)
-					{
-						session_id = session_lists.front();
-					}
-					else
-					{
-						session_id = session_lists[rand() % session_lists.size()];
-					}
+				if (session_lists.size() == 1)
+				{
+					session_id = session_lists.front();
+				}
+				else
+				{
+					session_id = session_lists[rand() % session_lists.size()];
+				}
 
-					dst_session = threads_.SessionHandler(session_id);
-					if (dst_session != nullptr)
-					{	
-						rsp.set_src_type(static_cast<internal::NodeType>(child_node->node_type));
-						rsp.set_src_child_id(child_node->child_id);
-						rsp.set_message_length(buffer.Readable());
-						PackageMessage(&rsp, msg);
-						msg.Write(buffer.Data(), buffer.Readable());
-						dst_session->Send(msg);
-						msg.Clear();
-					}
+				dst_session = threads_.SessionHandler(session_id);
+				if (dst_session != nullptr)
+				{
+					static_cast<SessionHandle*>(dst_session.get())->Respond(new_message);
 				}
 			}
 		}

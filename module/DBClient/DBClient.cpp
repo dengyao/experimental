@@ -43,8 +43,8 @@ public:
 	// 接收消息
 	virtual void OnMessage(network::NetMessage &message) override
 	{
-		auto respond = UnpackageMessage(message);
-		if (respond == nullptr)
+		auto response = UnpackageMessage(message);
+		if (response == nullptr)
 		{
 			assert(false);
 			return;
@@ -52,12 +52,12 @@ public:
 
 		if (!is_logged_)
 		{
-			if (dynamic_cast<internal::PongRsp*>(respond.get()) == nullptr)
+			if (dynamic_cast<internal::PongRsp*>(response.get()) == nullptr)
 			{
-				if (dynamic_cast<internal::LoginDBAgentRsp*>(respond.get()) != nullptr)
+				if (dynamic_cast<internal::LoginDBAgentRsp*>(response.get()) != nullptr)
 				{
 					is_logged_ = true;
-					counter_ = heartbeat_interval_ = dynamic_cast<internal::LoginDBAgentRsp*>(respond.get())->heartbeat_interval();
+					counter_ = heartbeat_interval_ = dynamic_cast<internal::LoginDBAgentRsp*>(response.get())->heartbeat_interval();
 				}
 				else
 				{
@@ -66,16 +66,16 @@ public:
 				}
 			}
 		}
-		else if (dynamic_cast<internal::PongRsp*>(respond.get()) == nullptr)
+		else if (dynamic_cast<internal::PongRsp*>(response.get()) == nullptr)
 		{
 			if (!client_life_.unique())
 			{
-				client_->OnMessage(this, respond.get());
+				client_->OnMessage(this, response.get());
 			}
 		}
 		else
 		{
-			assert(false);
+			assert(dynamic_cast<internal::PongRsp*>(response.get()) != nullptr);
 		}
 	}
 
