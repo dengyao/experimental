@@ -16,11 +16,11 @@ namespace google
 	}
 }
 
+typedef std::unique_ptr<google::protobuf::Message> MessagePointer;
+
 class ProtubufCodec
 {
 public:
-	typedef std::unique_ptr<google::protobuf::Message> MessagePointer;
-
 	static void Encode(google::protobuf::Message *in_message, network::NetMessage &out_message);
 
 	static MessagePointer Decode(network::NetMessage &in_message);

@@ -1,7 +1,7 @@
 ﻿#include "RouterClient.h"
 #include <iostream>
-#include <proto/MessageHelper.h>
-#include <proto/internal.protocol.pb.h>
+#include <ProtobufCodec.h>
+#include <proto/internal.pb.h>
 
 /************************************************************************/
 
@@ -38,7 +38,7 @@ public:
 			internal::LoginRouterReq request;
 			request.set_child_id(client_->GetChildNodeID());
 			request.set_type(static_cast<internal::NodeType>(client_->GetNodeType()));
-			PackageMessage(&request, message);
+			ProtubufCodec::Encode(&request, message);
 			Send(message);
 			client_->OnConnected(this);
 		}
@@ -53,7 +53,7 @@ public:
 			return;
 		}
 
-		auto response = UnpackageMessage(message);
+		auto response = ProtubufCodec::Decode(message);
 		if (response == nullptr)
 		{
 			assert(false);
@@ -105,7 +105,7 @@ public:
 			{
 				internal::PingReq request;
 				network::NetMessage message;
-				PackageMessage(&request, message);
+				ProtubufCodec::Encode(&request, message);
 				Send(message);
 				counter_ = heartbeat_interval_;
 			}
@@ -365,7 +365,7 @@ void RouterClient::OnMessage(RouterSessionHandle *session, google::protobuf::Mes
 		assert(response->message_length() == buffer.Readable());
 		if (response->message_length() == buffer.Readable())
 		{
-			auto forward_message = UnpackageMessage(buffer);
+			auto forward_message = ProtubufCodec::Decode(buffer);
 			assert(forward_message != nullptr);
 			if (forward_message != nullptr && message_cb_ != nullptr)
 			{
@@ -402,8 +402,8 @@ void RouterClient::Send(int dst_node_type, int dst_child_id, google::protobuf::M
 		header.set_dst_child_id(dst_child_id);
 		header.set_dst_type(static_cast<internal::NodeType>(dst_node_type));
 		header.set_message_length(message->ByteSize());
-		PackageMessage(&header, buffer);
-		PackageMessage(message, buffer);
+		ProtubufCodec::Encode(&header, buffer);
+		ProtubufCodec::Encode(message, buffer);
 		session->Send(buffer);
 	}
 }
@@ -423,8 +423,8 @@ void RouterClient::Broadcast(const std::vector<int> &dst_type_lists, google::pro
 			header.add_dst_lists(static_cast<internal::NodeType>(dst_node_type));
 		}
 		header.set_message_length(message->ByteSize());
-		PackageMessage(&header, buffer);
-		PackageMessage(message, buffer);
+		ProtubufCodec::Encode(&header, buffer);
+		ProtubufCodec::Encode(message, buffer);
 		session->Send(buffer);
 	}
 }

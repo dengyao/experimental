@@ -1,6 +1,6 @@
 ﻿#include "SessionHandle.h"
-#include <proto/MessageHelper.h>
-#include <proto/internal.protocol.pb.h>
+#include <ProtobufCodec.h>
+#include <proto/internal.pb.h>
 #include "AgentManager.h"
 #include "StatisticalTools.h"
 
@@ -22,7 +22,7 @@ void SessionHandle::OnMessage(network::NetMessage &message)
 	StatisticalTools::GetInstance()->AccumulateUpVolume(message.Readable() + sizeof(network::DefaultMessageFilter::MessageHeader));
 
 	// 处理请求
-	auto request = UnpackageMessage(message);
+	auto request = ProtubufCodec::Decode(message);
 	if (request == nullptr)
 	{
 		agent_manager_.RespondErrorCode(*this, 0, internal::kInvalidProtocol, message);
@@ -44,7 +44,7 @@ void SessionHandle::OnMessage(network::NetMessage &message)
 				is_logged_ = true;
 				internal::LoginDBAgentRsp response;
 				response.set_heartbeat_interval(60);
-				PackageMessage(&response, message);
+				ProtubufCodec::Encode(&response, message);
 				Respond(message);
 			}
 		}
@@ -54,7 +54,7 @@ void SessionHandle::OnMessage(network::NetMessage &message)
 	{
 		message.Clear();
 		internal::PongRsp response;
-		PackageMessage(&response, message);
+		ProtubufCodec::Encode(&response, message);
 		Respond(message);
 	}
 	else

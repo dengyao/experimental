@@ -1,8 +1,8 @@
 ﻿#include "DBClient.h"
 #include <limits>
 #include <iostream>
-#include <proto/MessageHelper.h>
-#include <proto/internal.protocol.pb.h>
+#include <ProtobufCodec.h>
+#include <proto/internal.pb.h>
 
 /************************************************************************/
 
@@ -37,7 +37,7 @@ public:
 		{
 			network::NetMessage message;
 			internal::LoginDBAgentReq request;
-			PackageMessage(&request, message);
+			ProtubufCodec::Encode(&request, message);
 			Send(message);
 			client_->OnConnected(this);
 		}
@@ -52,7 +52,7 @@ public:
 			return;
 		}
 
-		auto response = UnpackageMessage(message);
+		auto response = ProtubufCodec::Decode(message);
 		if (response == nullptr)
 		{
 			assert(false);
@@ -104,7 +104,7 @@ public:
 			{
 				internal::PingReq request;
 				network::NetMessage message;
-				PackageMessage(&request, message);
+				ProtubufCodec::Encode(&request, message);
 				Send(message);
 				counter_ = heartbeat_interval_;
 			}		
@@ -438,7 +438,7 @@ void DBClient::AsyncQuery(DatabaseType dbtype, const char *dbname, DatabaseActio
 		ongoing_lists_.insert(std::make_pair(sequence, std::forward<QueryCallBack>(callback)));
 		
 		network::NetMessage message;
-		PackageMessage(&request, message);
+		ProtubufCodec::Encode(&request, message);
 		session->Send(message);
 	}
 }

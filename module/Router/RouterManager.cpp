@@ -1,7 +1,7 @@
 ﻿#include "RouterManager.h"
 #include <iostream>
-#include <proto/MessageHelper.h>
-#include <proto/internal.protocol.pb.h>
+#include <ProtobufCodec.h>
+#include <proto/internal.pb.h>
 #include "SessionHandle.h"
 #include "StatisticalTools.h"
 
@@ -104,7 +104,7 @@ void RouterManager::RespondErrorCode(SessionHandle &session, network::NetMessage
 	{
 		response.set_what(what);
 	}
-	PackageMessage(&response, buffer);
+	ProtubufCodec::Encode(&response, buffer);
 	session.Respond(buffer);
 }
 
@@ -231,7 +231,7 @@ void RouterManager::OnServerLogin(SessionHandle &session, google::protobuf::Mess
 	buffer.Clear();
 	internal::LoginRouterRsp response;
 	response.set_heartbeat_interval(60);
-	PackageMessage(&response, buffer);
+	ProtubufCodec::Encode(&response, buffer);
 	session.Respond(buffer);
 }
 
@@ -242,7 +242,7 @@ void RouterManager::OnQueryRouterInfo(SessionHandle &session, google::protobuf::
 	internal::RouterInfoRsp response;
 	response.set_up_volume(StatisticalTools::GetInstance()->UpVolume());
 	response.set_down_volume(StatisticalTools::GetInstance()->DownVolume());
-	PackageMessage(&response, buffer);
+	ProtubufCodec::Encode(&response, buffer);
 	session.Respond(buffer);
 }
 
@@ -275,7 +275,7 @@ void RouterManager::OnForwardServerMessage(SessionHandle &session, google::proto
 	response.set_src_type(static_cast<internal::NodeType>(child_node->node_type));
 	response.set_src_child_id(child_node->child_id);
 	response.set_message_length(buffer.Readable());
-	PackageMessage(&response, new_message);
+	ProtubufCodec::Encode(&response, new_message);
 	new_message.Write(buffer.Data(), buffer.Readable());
 	static_cast<SessionHandle*>(dst_session.get())->Respond(new_message);
 }
@@ -301,7 +301,7 @@ void RouterManager::OnBroadcastServerMessage(SessionHandle &session, google::pro
 	response.set_src_type(static_cast<internal::NodeType>(child_node->node_type));
 	response.set_src_child_id(child_node->child_id);
 	response.set_message_length(buffer.Readable());
-	PackageMessage(&response, new_message);
+	ProtubufCodec::Encode(&response, new_message);
 	new_message.Write(buffer.Data(), buffer.Readable());
 
 	network::SessionHandlePointer dst_session;

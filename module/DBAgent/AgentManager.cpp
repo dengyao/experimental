@@ -1,8 +1,8 @@
 ﻿#include "AgentManager.h"
 #include <limits>
 #include <iostream>
-#include <proto/MessageHelper.h>
-#include <proto/internal.protocol.pb.h>
+#include <ProtobufCodec.h>
+#include <proto/internal.pb.h>
 #include "SessionHandle.h"
 #include "StatisticalTools.h"
 
@@ -130,7 +130,7 @@ void AgentManager::OnQueryAgentInfo(SessionHandle &session, google::protobuf::Me
 	response.set_handle_insert_count(StatisticalTools::GetInstance()->HandleInsertCount());
 	response.set_handle_update_count(StatisticalTools::GetInstance()->HandleUpdateCount());
 	response.set_handle_delete_count(StatisticalTools::GetInstance()->HandleDeleteCount());
-	PackageMessage(&response, buffer);
+	ProtubufCodec::Encode(&response, buffer);
 	session.Respond(buffer);
 }
 
@@ -196,7 +196,7 @@ void AgentManager::RespondErrorCode(SessionHandle &session, uint32_t sequence, i
 	internal::DBAgentErrorRsp response;
 	response.set_sequence(sequence);
 	response.set_error_code(static_cast<internal::ErrorCode>(error_code));
-	PackageMessage(&response, buffer);
+	ProtubufCodec::Encode(&response, buffer);
 	session.Respond(buffer);
 }
 
@@ -212,14 +212,14 @@ void AgentManager::RespondHandleResult(network::TCPSessionID id, uint32_t sequen
 			response.set_sequence(sequence);
 			response.set_error_code(result.GetErrorCode().Value());
 			response.set_what(result.GetErrorCode().Message());
-			PackageMessage(&response, buffer);
+			ProtubufCodec::Encode(&response, buffer);
 		}
 		else
 		{
 			internal::QueryDBAgentRsp response;
 			response.set_sequence(sequence);
 			response.set_result(result.GetResult().data(), result.GetResult().size());
-			PackageMessage(&response, buffer);
+			ProtubufCodec::Encode(&response, buffer);
 		}
 		static_cast<SessionHandle*>(session.get())->Respond(buffer);
 	}
