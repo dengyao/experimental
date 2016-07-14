@@ -38,6 +38,8 @@ class PingReq;
 class PongRsp;
 class LoginDBAgentReq;
 class LoginDBAgentRsp;
+class DBAgentInfoReq;
+class DBAgentInfoRsp;
 class QueryDBAgentReq;
 class QueryDBAgentRsp;
 class DBErrorRsp;
@@ -119,12 +121,12 @@ inline bool ErrorCode_Parse(
     ErrorCode_descriptor(), name, value);
 }
 enum NodeType {
-  kLicenceServer = 1,
-  kLinkerServer = 2,
+  kLoginServer = 1,
+  kProxyServer = 2,
   kMainLogicSever = 3
 };
 bool NodeType_IsValid(int value);
-const NodeType NodeType_MIN = kLicenceServer;
+const NodeType NodeType_MIN = kLoginServer;
 const NodeType NodeType_MAX = kMainLogicSever;
 const int NodeType_ARRAYSIZE = NodeType_MAX + 1;
 
@@ -423,6 +425,224 @@ class LoginDBAgentRsp : public ::google::protobuf::Message {
 
   void InitAsDefaultInstance();
   static LoginDBAgentRsp* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class DBAgentInfoReq : public ::google::protobuf::Message {
+ public:
+  DBAgentInfoReq();
+  virtual ~DBAgentInfoReq();
+
+  DBAgentInfoReq(const DBAgentInfoReq& from);
+
+  inline DBAgentInfoReq& operator=(const DBAgentInfoReq& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const DBAgentInfoReq& default_instance();
+
+  void Swap(DBAgentInfoReq* other);
+
+  // implements Message ----------------------------------------------
+
+  DBAgentInfoReq* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const DBAgentInfoReq& from);
+  void MergeFrom(const DBAgentInfoReq& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:internal.DBAgentInfoReq)
+ private:
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  friend void  protobuf_AddDesc_proto_2finternal_2eprotocol_2eproto();
+  friend void protobuf_AssignDesc_proto_2finternal_2eprotocol_2eproto();
+  friend void protobuf_ShutdownFile_proto_2finternal_2eprotocol_2eproto();
+
+  void InitAsDefaultInstance();
+  static DBAgentInfoReq* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class DBAgentInfoRsp : public ::google::protobuf::Message {
+ public:
+  DBAgentInfoRsp();
+  virtual ~DBAgentInfoRsp();
+
+  DBAgentInfoRsp(const DBAgentInfoRsp& from);
+
+  inline DBAgentInfoRsp& operator=(const DBAgentInfoRsp& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const DBAgentInfoRsp& default_instance();
+
+  void Swap(DBAgentInfoRsp* other);
+
+  // implements Message ----------------------------------------------
+
+  DBAgentInfoRsp* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const DBAgentInfoRsp& from);
+  void MergeFrom(const DBAgentInfoRsp& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required uint32 up_volume = 1;
+  inline bool has_up_volume() const;
+  inline void clear_up_volume();
+  static const int kUpVolumeFieldNumber = 1;
+  inline ::google::protobuf::uint32 up_volume() const;
+  inline void set_up_volume(::google::protobuf::uint32 value);
+
+  // required uint32 down_volume = 2;
+  inline bool has_down_volume() const;
+  inline void clear_down_volume();
+  static const int kDownVolumeFieldNumber = 2;
+  inline ::google::protobuf::uint32 down_volume() const;
+  inline void set_down_volume(::google::protobuf::uint32 value);
+
+  // required uint32 handle_select_count = 3;
+  inline bool has_handle_select_count() const;
+  inline void clear_handle_select_count();
+  static const int kHandleSelectCountFieldNumber = 3;
+  inline ::google::protobuf::uint32 handle_select_count() const;
+  inline void set_handle_select_count(::google::protobuf::uint32 value);
+
+  // required uint32 handle_insert_count = 4;
+  inline bool has_handle_insert_count() const;
+  inline void clear_handle_insert_count();
+  static const int kHandleInsertCountFieldNumber = 4;
+  inline ::google::protobuf::uint32 handle_insert_count() const;
+  inline void set_handle_insert_count(::google::protobuf::uint32 value);
+
+  // required uint32 handle_update_count = 5;
+  inline bool has_handle_update_count() const;
+  inline void clear_handle_update_count();
+  static const int kHandleUpdateCountFieldNumber = 5;
+  inline ::google::protobuf::uint32 handle_update_count() const;
+  inline void set_handle_update_count(::google::protobuf::uint32 value);
+
+  // required uint32 handle_delete_count = 6;
+  inline bool has_handle_delete_count() const;
+  inline void clear_handle_delete_count();
+  static const int kHandleDeleteCountFieldNumber = 6;
+  inline ::google::protobuf::uint32 handle_delete_count() const;
+  inline void set_handle_delete_count(::google::protobuf::uint32 value);
+
+  // required uint32 client_num = 7;
+  inline bool has_client_num() const;
+  inline void clear_client_num();
+  static const int kClientNumFieldNumber = 7;
+  inline ::google::protobuf::uint32 client_num() const;
+  inline void set_client_num(::google::protobuf::uint32 value);
+
+  // required uint32 queue_num = 8;
+  inline bool has_queue_num() const;
+  inline void clear_queue_num();
+  static const int kQueueNumFieldNumber = 8;
+  inline ::google::protobuf::uint32 queue_num() const;
+  inline void set_queue_num(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:internal.DBAgentInfoRsp)
+ private:
+  inline void set_has_up_volume();
+  inline void clear_has_up_volume();
+  inline void set_has_down_volume();
+  inline void clear_has_down_volume();
+  inline void set_has_handle_select_count();
+  inline void clear_has_handle_select_count();
+  inline void set_has_handle_insert_count();
+  inline void clear_has_handle_insert_count();
+  inline void set_has_handle_update_count();
+  inline void clear_has_handle_update_count();
+  inline void set_has_handle_delete_count();
+  inline void clear_has_handle_delete_count();
+  inline void set_has_client_num();
+  inline void clear_has_client_num();
+  inline void set_has_queue_num();
+  inline void clear_has_queue_num();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 up_volume_;
+  ::google::protobuf::uint32 down_volume_;
+  ::google::protobuf::uint32 handle_select_count_;
+  ::google::protobuf::uint32 handle_insert_count_;
+  ::google::protobuf::uint32 handle_update_count_;
+  ::google::protobuf::uint32 handle_delete_count_;
+  ::google::protobuf::uint32 client_num_;
+  ::google::protobuf::uint32 queue_num_;
+  friend void  protobuf_AddDesc_proto_2finternal_2eprotocol_2eproto();
+  friend void protobuf_AssignDesc_proto_2finternal_2eprotocol_2eproto();
+  friend void protobuf_ShutdownFile_proto_2finternal_2eprotocol_2eproto();
+
+  void InitAsDefaultInstance();
+  static DBAgentInfoRsp* default_instance_;
 };
 // -------------------------------------------------------------------
 
@@ -1580,6 +1800,206 @@ inline void LoginDBAgentRsp::set_heartbeat_interval(::google::protobuf::uint32 v
   set_has_heartbeat_interval();
   heartbeat_interval_ = value;
   // @@protoc_insertion_point(field_set:internal.LoginDBAgentRsp.heartbeat_interval)
+}
+
+// -------------------------------------------------------------------
+
+// DBAgentInfoReq
+
+// -------------------------------------------------------------------
+
+// DBAgentInfoRsp
+
+// required uint32 up_volume = 1;
+inline bool DBAgentInfoRsp::has_up_volume() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void DBAgentInfoRsp::set_has_up_volume() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void DBAgentInfoRsp::clear_has_up_volume() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void DBAgentInfoRsp::clear_up_volume() {
+  up_volume_ = 0u;
+  clear_has_up_volume();
+}
+inline ::google::protobuf::uint32 DBAgentInfoRsp::up_volume() const {
+  // @@protoc_insertion_point(field_get:internal.DBAgentInfoRsp.up_volume)
+  return up_volume_;
+}
+inline void DBAgentInfoRsp::set_up_volume(::google::protobuf::uint32 value) {
+  set_has_up_volume();
+  up_volume_ = value;
+  // @@protoc_insertion_point(field_set:internal.DBAgentInfoRsp.up_volume)
+}
+
+// required uint32 down_volume = 2;
+inline bool DBAgentInfoRsp::has_down_volume() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void DBAgentInfoRsp::set_has_down_volume() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void DBAgentInfoRsp::clear_has_down_volume() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void DBAgentInfoRsp::clear_down_volume() {
+  down_volume_ = 0u;
+  clear_has_down_volume();
+}
+inline ::google::protobuf::uint32 DBAgentInfoRsp::down_volume() const {
+  // @@protoc_insertion_point(field_get:internal.DBAgentInfoRsp.down_volume)
+  return down_volume_;
+}
+inline void DBAgentInfoRsp::set_down_volume(::google::protobuf::uint32 value) {
+  set_has_down_volume();
+  down_volume_ = value;
+  // @@protoc_insertion_point(field_set:internal.DBAgentInfoRsp.down_volume)
+}
+
+// required uint32 handle_select_count = 3;
+inline bool DBAgentInfoRsp::has_handle_select_count() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void DBAgentInfoRsp::set_has_handle_select_count() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void DBAgentInfoRsp::clear_has_handle_select_count() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void DBAgentInfoRsp::clear_handle_select_count() {
+  handle_select_count_ = 0u;
+  clear_has_handle_select_count();
+}
+inline ::google::protobuf::uint32 DBAgentInfoRsp::handle_select_count() const {
+  // @@protoc_insertion_point(field_get:internal.DBAgentInfoRsp.handle_select_count)
+  return handle_select_count_;
+}
+inline void DBAgentInfoRsp::set_handle_select_count(::google::protobuf::uint32 value) {
+  set_has_handle_select_count();
+  handle_select_count_ = value;
+  // @@protoc_insertion_point(field_set:internal.DBAgentInfoRsp.handle_select_count)
+}
+
+// required uint32 handle_insert_count = 4;
+inline bool DBAgentInfoRsp::has_handle_insert_count() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void DBAgentInfoRsp::set_has_handle_insert_count() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void DBAgentInfoRsp::clear_has_handle_insert_count() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void DBAgentInfoRsp::clear_handle_insert_count() {
+  handle_insert_count_ = 0u;
+  clear_has_handle_insert_count();
+}
+inline ::google::protobuf::uint32 DBAgentInfoRsp::handle_insert_count() const {
+  // @@protoc_insertion_point(field_get:internal.DBAgentInfoRsp.handle_insert_count)
+  return handle_insert_count_;
+}
+inline void DBAgentInfoRsp::set_handle_insert_count(::google::protobuf::uint32 value) {
+  set_has_handle_insert_count();
+  handle_insert_count_ = value;
+  // @@protoc_insertion_point(field_set:internal.DBAgentInfoRsp.handle_insert_count)
+}
+
+// required uint32 handle_update_count = 5;
+inline bool DBAgentInfoRsp::has_handle_update_count() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void DBAgentInfoRsp::set_has_handle_update_count() {
+  _has_bits_[0] |= 0x00000010u;
+}
+inline void DBAgentInfoRsp::clear_has_handle_update_count() {
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline void DBAgentInfoRsp::clear_handle_update_count() {
+  handle_update_count_ = 0u;
+  clear_has_handle_update_count();
+}
+inline ::google::protobuf::uint32 DBAgentInfoRsp::handle_update_count() const {
+  // @@protoc_insertion_point(field_get:internal.DBAgentInfoRsp.handle_update_count)
+  return handle_update_count_;
+}
+inline void DBAgentInfoRsp::set_handle_update_count(::google::protobuf::uint32 value) {
+  set_has_handle_update_count();
+  handle_update_count_ = value;
+  // @@protoc_insertion_point(field_set:internal.DBAgentInfoRsp.handle_update_count)
+}
+
+// required uint32 handle_delete_count = 6;
+inline bool DBAgentInfoRsp::has_handle_delete_count() const {
+  return (_has_bits_[0] & 0x00000020u) != 0;
+}
+inline void DBAgentInfoRsp::set_has_handle_delete_count() {
+  _has_bits_[0] |= 0x00000020u;
+}
+inline void DBAgentInfoRsp::clear_has_handle_delete_count() {
+  _has_bits_[0] &= ~0x00000020u;
+}
+inline void DBAgentInfoRsp::clear_handle_delete_count() {
+  handle_delete_count_ = 0u;
+  clear_has_handle_delete_count();
+}
+inline ::google::protobuf::uint32 DBAgentInfoRsp::handle_delete_count() const {
+  // @@protoc_insertion_point(field_get:internal.DBAgentInfoRsp.handle_delete_count)
+  return handle_delete_count_;
+}
+inline void DBAgentInfoRsp::set_handle_delete_count(::google::protobuf::uint32 value) {
+  set_has_handle_delete_count();
+  handle_delete_count_ = value;
+  // @@protoc_insertion_point(field_set:internal.DBAgentInfoRsp.handle_delete_count)
+}
+
+// required uint32 client_num = 7;
+inline bool DBAgentInfoRsp::has_client_num() const {
+  return (_has_bits_[0] & 0x00000040u) != 0;
+}
+inline void DBAgentInfoRsp::set_has_client_num() {
+  _has_bits_[0] |= 0x00000040u;
+}
+inline void DBAgentInfoRsp::clear_has_client_num() {
+  _has_bits_[0] &= ~0x00000040u;
+}
+inline void DBAgentInfoRsp::clear_client_num() {
+  client_num_ = 0u;
+  clear_has_client_num();
+}
+inline ::google::protobuf::uint32 DBAgentInfoRsp::client_num() const {
+  // @@protoc_insertion_point(field_get:internal.DBAgentInfoRsp.client_num)
+  return client_num_;
+}
+inline void DBAgentInfoRsp::set_client_num(::google::protobuf::uint32 value) {
+  set_has_client_num();
+  client_num_ = value;
+  // @@protoc_insertion_point(field_set:internal.DBAgentInfoRsp.client_num)
+}
+
+// required uint32 queue_num = 8;
+inline bool DBAgentInfoRsp::has_queue_num() const {
+  return (_has_bits_[0] & 0x00000080u) != 0;
+}
+inline void DBAgentInfoRsp::set_has_queue_num() {
+  _has_bits_[0] |= 0x00000080u;
+}
+inline void DBAgentInfoRsp::clear_has_queue_num() {
+  _has_bits_[0] &= ~0x00000080u;
+}
+inline void DBAgentInfoRsp::clear_queue_num() {
+  queue_num_ = 0u;
+  clear_has_queue_num();
+}
+inline ::google::protobuf::uint32 DBAgentInfoRsp::queue_num() const {
+  // @@protoc_insertion_point(field_get:internal.DBAgentInfoRsp.queue_num)
+  return queue_num_;
+}
+inline void DBAgentInfoRsp::set_queue_num(::google::protobuf::uint32 value) {
+  set_has_queue_num();
+  queue_num_ = value;
+  // @@protoc_insertion_point(field_set:internal.DBAgentInfoRsp.queue_num)
 }
 
 // -------------------------------------------------------------------

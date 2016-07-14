@@ -32,6 +32,12 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* LoginDBAgentRsp_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   LoginDBAgentRsp_reflection_ = NULL;
+const ::google::protobuf::Descriptor* DBAgentInfoReq_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  DBAgentInfoReq_reflection_ = NULL;
+const ::google::protobuf::Descriptor* DBAgentInfoRsp_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  DBAgentInfoRsp_reflection_ = NULL;
 const ::google::protobuf::Descriptor* QueryDBAgentReq_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   QueryDBAgentReq_reflection_ = NULL;
@@ -136,7 +142,43 @@ void protobuf_AssignDesc_proto_2finternal_2eprotocol_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(LoginDBAgentRsp));
-  QueryDBAgentReq_descriptor_ = file->message_type(4);
+  DBAgentInfoReq_descriptor_ = file->message_type(4);
+  static const int DBAgentInfoReq_offsets_[1] = {
+  };
+  DBAgentInfoReq_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      DBAgentInfoReq_descriptor_,
+      DBAgentInfoReq::default_instance_,
+      DBAgentInfoReq_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(DBAgentInfoReq, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(DBAgentInfoReq, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(DBAgentInfoReq));
+  DBAgentInfoRsp_descriptor_ = file->message_type(5);
+  static const int DBAgentInfoRsp_offsets_[8] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(DBAgentInfoRsp, up_volume_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(DBAgentInfoRsp, down_volume_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(DBAgentInfoRsp, handle_select_count_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(DBAgentInfoRsp, handle_insert_count_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(DBAgentInfoRsp, handle_update_count_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(DBAgentInfoRsp, handle_delete_count_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(DBAgentInfoRsp, client_num_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(DBAgentInfoRsp, queue_num_),
+  };
+  DBAgentInfoRsp_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      DBAgentInfoRsp_descriptor_,
+      DBAgentInfoRsp::default_instance_,
+      DBAgentInfoRsp_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(DBAgentInfoRsp, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(DBAgentInfoRsp, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(DBAgentInfoRsp));
+  QueryDBAgentReq_descriptor_ = file->message_type(6);
   static const int QueryDBAgentReq_offsets_[5] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QueryDBAgentReq, sequence_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QueryDBAgentReq, dbtype_),
@@ -157,7 +199,7 @@ void protobuf_AssignDesc_proto_2finternal_2eprotocol_2eproto() {
       sizeof(QueryDBAgentReq));
   QueryDBAgentReq_ActoinType_descriptor_ = QueryDBAgentReq_descriptor_->enum_type(0);
   QueryDBAgentReq_DatabaseType_descriptor_ = QueryDBAgentReq_descriptor_->enum_type(1);
-  QueryDBAgentRsp_descriptor_ = file->message_type(5);
+  QueryDBAgentRsp_descriptor_ = file->message_type(7);
   static const int QueryDBAgentRsp_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QueryDBAgentRsp, sequence_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QueryDBAgentRsp, result_),
@@ -173,7 +215,7 @@ void protobuf_AssignDesc_proto_2finternal_2eprotocol_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(QueryDBAgentRsp));
-  DBErrorRsp_descriptor_ = file->message_type(6);
+  DBErrorRsp_descriptor_ = file->message_type(8);
   static const int DBErrorRsp_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(DBErrorRsp, sequence_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(DBErrorRsp, error_code_),
@@ -190,7 +232,7 @@ void protobuf_AssignDesc_proto_2finternal_2eprotocol_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(DBErrorRsp));
-  DBAgentErrorRsp_descriptor_ = file->message_type(7);
+  DBAgentErrorRsp_descriptor_ = file->message_type(9);
   static const int DBAgentErrorRsp_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(DBAgentErrorRsp, error_code_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(DBAgentErrorRsp, sequence_),
@@ -206,7 +248,7 @@ void protobuf_AssignDesc_proto_2finternal_2eprotocol_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(DBAgentErrorRsp));
-  RouterErrorRsp_descriptor_ = file->message_type(8);
+  RouterErrorRsp_descriptor_ = file->message_type(10);
   static const int RouterErrorRsp_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RouterErrorRsp, error_code_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RouterErrorRsp, what_),
@@ -222,7 +264,7 @@ void protobuf_AssignDesc_proto_2finternal_2eprotocol_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(RouterErrorRsp));
-  LoginRouterReq_descriptor_ = file->message_type(9);
+  LoginRouterReq_descriptor_ = file->message_type(11);
   static const int LoginRouterReq_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LoginRouterReq, type_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LoginRouterReq, child_id_),
@@ -238,7 +280,7 @@ void protobuf_AssignDesc_proto_2finternal_2eprotocol_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(LoginRouterReq));
-  LoginRouterRsp_descriptor_ = file->message_type(10);
+  LoginRouterRsp_descriptor_ = file->message_type(12);
   static const int LoginRouterRsp_offsets_[1] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LoginRouterRsp, heartbeat_interval_),
   };
@@ -253,7 +295,7 @@ void protobuf_AssignDesc_proto_2finternal_2eprotocol_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(LoginRouterRsp));
-  ForwardMessageReq_descriptor_ = file->message_type(11);
+  ForwardMessageReq_descriptor_ = file->message_type(13);
   static const int ForwardMessageReq_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ForwardMessageReq, dst_type_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ForwardMessageReq, dst_child_id_),
@@ -270,7 +312,7 @@ void protobuf_AssignDesc_proto_2finternal_2eprotocol_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(ForwardMessageReq));
-  ForwardMessageRsp_descriptor_ = file->message_type(12);
+  ForwardMessageRsp_descriptor_ = file->message_type(14);
   static const int ForwardMessageRsp_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ForwardMessageRsp, src_type_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ForwardMessageRsp, src_child_id_),
@@ -287,7 +329,7 @@ void protobuf_AssignDesc_proto_2finternal_2eprotocol_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(ForwardMessageRsp));
-  BroadcastMessageReq_descriptor_ = file->message_type(13);
+  BroadcastMessageReq_descriptor_ = file->message_type(15);
   static const int BroadcastMessageReq_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BroadcastMessageReq, dst_lists_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BroadcastMessageReq, message_length_),
@@ -303,7 +345,7 @@ void protobuf_AssignDesc_proto_2finternal_2eprotocol_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(BroadcastMessageReq));
-  BroadcastMessageRsp_descriptor_ = file->message_type(14);
+  BroadcastMessageRsp_descriptor_ = file->message_type(16);
   static const int BroadcastMessageRsp_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BroadcastMessageRsp, src_type_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BroadcastMessageRsp, src_child_id_),
@@ -343,6 +385,10 @@ void protobuf_RegisterTypes(const ::std::string&) {
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     LoginDBAgentRsp_descriptor_, &LoginDBAgentRsp::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    DBAgentInfoReq_descriptor_, &DBAgentInfoReq::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    DBAgentInfoRsp_descriptor_, &DBAgentInfoRsp::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     QueryDBAgentReq_descriptor_, &QueryDBAgentReq::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     QueryDBAgentRsp_descriptor_, &QueryDBAgentRsp::default_instance());
@@ -377,6 +423,10 @@ void protobuf_ShutdownFile_proto_2finternal_2eprotocol_2eproto() {
   delete LoginDBAgentReq_reflection_;
   delete LoginDBAgentRsp::default_instance_;
   delete LoginDBAgentRsp_reflection_;
+  delete DBAgentInfoReq::default_instance_;
+  delete DBAgentInfoReq_reflection_;
+  delete DBAgentInfoRsp::default_instance_;
+  delete DBAgentInfoRsp_reflection_;
   delete QueryDBAgentReq::default_instance_;
   delete QueryDBAgentReq_reflection_;
   delete QueryDBAgentRsp::default_instance_;
@@ -411,48 +461,56 @@ void protobuf_AddDesc_proto_2finternal_2eprotocol_2eproto() {
     "\n\035proto/internal.protocol.proto\022\010interna"
     "l\"\t\n\007PingReq\"\t\n\007PongRsp\"\021\n\017LoginDBAgentR"
     "eq\"-\n\017LoginDBAgentRsp\022\032\n\022heartbeat_inter"
-    "val\030\001 \002(\r\"\236\002\n\017QueryDBAgentReq\022\020\n\010sequenc"
-    "e\030\001 \002(\r\0226\n\006dbtype\030\002 \002(\0162&.internal.Query"
-    "DBAgentReq.DatabaseType\0224\n\006action\030\003 \002(\0162"
-    "$.internal.QueryDBAgentReq.ActoinType\022\016\n"
-    "\006dbname\030\004 \002(\t\022\021\n\tstatement\030\005 \001(\t\"@\n\nActo"
-    "inType\022\013\n\007kSelect\020\001\022\013\n\007kInsert\020\002\022\013\n\007kUpd"
-    "ate\020\003\022\013\n\007kDelete\020\004\"&\n\014DatabaseType\022\n\n\006kR"
-    "edis\020\001\022\n\n\006kMySQL\020\002\"3\n\017QueryDBAgentRsp\022\020\n"
-    "\010sequence\030\001 \002(\r\022\016\n\006result\030\002 \001(\t\"@\n\nDBErr"
-    "orRsp\022\020\n\010sequence\030\001 \002(\r\022\022\n\nerror_code\030\002 "
-    "\002(\005\022\014\n\004what\030\003 \001(\t\"L\n\017DBAgentErrorRsp\022\'\n\n"
-    "error_code\030\001 \002(\0162\023.internal.ErrorCode\022\020\n"
-    "\010sequence\030\002 \001(\r\"G\n\016RouterErrorRsp\022\'\n\nerr"
-    "or_code\030\001 \002(\0162\023.internal.ErrorCode\022\014\n\004wh"
-    "at\030\002 \001(\t\"G\n\016LoginRouterReq\022 \n\004type\030\001 \002(\016"
-    "2\022.internal.NodeType\022\023\n\010child_id\030\002 \001(\r:\001"
-    "1\",\n\016LoginRouterRsp\022\032\n\022heartbeat_interva"
-    "l\030\001 \002(\r\"j\n\021ForwardMessageReq\022$\n\010dst_type"
-    "\030\001 \002(\0162\022.internal.NodeType\022\027\n\014dst_child_"
-    "id\030\002 \001(\r:\0011\022\026\n\016message_length\030\003 \002(\r\"j\n\021F"
-    "orwardMessageRsp\022$\n\010src_type\030\001 \002(\0162\022.int"
-    "ernal.NodeType\022\027\n\014src_child_id\030\002 \001(\r:\0011\022"
-    "\026\n\016message_length\030\003 \002(\r\"T\n\023BroadcastMess"
-    "ageReq\022%\n\tdst_lists\030\001 \003(\0162\022.internal.Nod"
-    "eType\022\026\n\016message_length\030\003 \002(\r\"l\n\023Broadca"
-    "stMessageRsp\022$\n\010src_type\030\001 \002(\0162\022.interna"
-    "l.NodeType\022\027\n\014src_child_id\030\002 \001(\r:\0011\022\026\n\016m"
-    "essage_length\030\003 \002(\r*\376\001\n\tErrorCode\022\020\n\014kNo"
-    "tLoggedIn\020\001\022\017\n\013kDisconnect\020\002\022\021\n\rkNotConn"
-    "ected\020\003\022\024\n\020kInvalidProtocol\020\004\022\025\n\021kInvali"
-    "dOperation\020\005\022\025\n\021kNotFoundDatabase\020\006\022\032\n\026k"
-    "ResourceInsufficiency\020\007\022\033\n\027kDestinationU"
-    "nreachable\020\010\022\024\n\020kInvalidNodeType\020\t\022\020\n\014kR"
-    "epeatLogin\020\n\022\026\n\022kInvalidDataPacket\020\013*F\n\010"
-    "NodeType\022\022\n\016kLicenceServer\020\001\022\021\n\rkLinkerS"
-    "erver\020\002\022\023\n\017kMainLogicSever\020\003", 1548);
+    "val\030\001 \002(\r\"\020\n\016DBAgentInfoReq\"\323\001\n\016DBAgentI"
+    "nfoRsp\022\021\n\tup_volume\030\001 \002(\r\022\023\n\013down_volume"
+    "\030\002 \002(\r\022\033\n\023handle_select_count\030\003 \002(\r\022\033\n\023h"
+    "andle_insert_count\030\004 \002(\r\022\033\n\023handle_updat"
+    "e_count\030\005 \002(\r\022\033\n\023handle_delete_count\030\006 \002"
+    "(\r\022\022\n\nclient_num\030\007 \002(\r\022\021\n\tqueue_num\030\010 \002("
+    "\r\"\236\002\n\017QueryDBAgentReq\022\020\n\010sequence\030\001 \002(\r\022"
+    "6\n\006dbtype\030\002 \002(\0162&.internal.QueryDBAgentR"
+    "eq.DatabaseType\0224\n\006action\030\003 \002(\0162$.intern"
+    "al.QueryDBAgentReq.ActoinType\022\016\n\006dbname\030"
+    "\004 \002(\t\022\021\n\tstatement\030\005 \001(\t\"@\n\nActoinType\022\013"
+    "\n\007kSelect\020\001\022\013\n\007kInsert\020\002\022\013\n\007kUpdate\020\003\022\013\n"
+    "\007kDelete\020\004\"&\n\014DatabaseType\022\n\n\006kRedis\020\001\022\n"
+    "\n\006kMySQL\020\002\"3\n\017QueryDBAgentRsp\022\020\n\010sequenc"
+    "e\030\001 \002(\r\022\016\n\006result\030\002 \001(\t\"@\n\nDBErrorRsp\022\020\n"
+    "\010sequence\030\001 \002(\r\022\022\n\nerror_code\030\002 \002(\005\022\014\n\004w"
+    "hat\030\003 \001(\t\"L\n\017DBAgentErrorRsp\022\'\n\nerror_co"
+    "de\030\001 \002(\0162\023.internal.ErrorCode\022\020\n\010sequenc"
+    "e\030\002 \001(\r\"G\n\016RouterErrorRsp\022\'\n\nerror_code\030"
+    "\001 \002(\0162\023.internal.ErrorCode\022\014\n\004what\030\002 \001(\t"
+    "\"G\n\016LoginRouterReq\022 \n\004type\030\001 \002(\0162\022.inter"
+    "nal.NodeType\022\023\n\010child_id\030\002 \001(\r:\0011\",\n\016Log"
+    "inRouterRsp\022\032\n\022heartbeat_interval\030\001 \002(\r\""
+    "j\n\021ForwardMessageReq\022$\n\010dst_type\030\001 \002(\0162\022"
+    ".internal.NodeType\022\027\n\014dst_child_id\030\002 \001(\r"
+    ":\0011\022\026\n\016message_length\030\003 \002(\r\"j\n\021ForwardMe"
+    "ssageRsp\022$\n\010src_type\030\001 \002(\0162\022.internal.No"
+    "deType\022\027\n\014src_child_id\030\002 \001(\r:\0011\022\026\n\016messa"
+    "ge_length\030\003 \002(\r\"T\n\023BroadcastMessageReq\022%"
+    "\n\tdst_lists\030\001 \003(\0162\022.internal.NodeType\022\026\n"
+    "\016message_length\030\003 \002(\r\"l\n\023BroadcastMessag"
+    "eRsp\022$\n\010src_type\030\001 \002(\0162\022.internal.NodeTy"
+    "pe\022\027\n\014src_child_id\030\002 \001(\r:\0011\022\026\n\016message_l"
+    "ength\030\003 \002(\r*\376\001\n\tErrorCode\022\020\n\014kNotLoggedI"
+    "n\020\001\022\017\n\013kDisconnect\020\002\022\021\n\rkNotConnected\020\003\022"
+    "\024\n\020kInvalidProtocol\020\004\022\025\n\021kInvalidOperati"
+    "on\020\005\022\025\n\021kNotFoundDatabase\020\006\022\032\n\026kResource"
+    "Insufficiency\020\007\022\033\n\027kDestinationUnreachab"
+    "le\020\010\022\024\n\020kInvalidNodeType\020\t\022\020\n\014kRepeatLog"
+    "in\020\n\022\026\n\022kInvalidDataPacket\020\013*C\n\010NodeType"
+    "\022\020\n\014kLoginServer\020\001\022\020\n\014kProxyServer\020\002\022\023\n\017"
+    "kMainLogicSever\020\003", 1777);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "proto/internal.protocol.proto", &protobuf_RegisterTypes);
   PingReq::default_instance_ = new PingReq();
   PongRsp::default_instance_ = new PongRsp();
   LoginDBAgentReq::default_instance_ = new LoginDBAgentReq();
   LoginDBAgentRsp::default_instance_ = new LoginDBAgentRsp();
+  DBAgentInfoReq::default_instance_ = new DBAgentInfoReq();
+  DBAgentInfoRsp::default_instance_ = new DBAgentInfoRsp();
   QueryDBAgentReq::default_instance_ = new QueryDBAgentReq();
   QueryDBAgentRsp::default_instance_ = new QueryDBAgentRsp();
   DBErrorRsp::default_instance_ = new DBErrorRsp();
@@ -468,6 +526,8 @@ void protobuf_AddDesc_proto_2finternal_2eprotocol_2eproto() {
   PongRsp::default_instance_->InitAsDefaultInstance();
   LoginDBAgentReq::default_instance_->InitAsDefaultInstance();
   LoginDBAgentRsp::default_instance_->InitAsDefaultInstance();
+  DBAgentInfoReq::default_instance_->InitAsDefaultInstance();
+  DBAgentInfoRsp::default_instance_->InitAsDefaultInstance();
   QueryDBAgentReq::default_instance_->InitAsDefaultInstance();
   QueryDBAgentRsp::default_instance_->InitAsDefaultInstance();
   DBErrorRsp::default_instance_->InitAsDefaultInstance();
@@ -1268,6 +1328,685 @@ void LoginDBAgentRsp::Swap(LoginDBAgentRsp* other) {
   ::google::protobuf::Metadata metadata;
   metadata.descriptor = LoginDBAgentRsp_descriptor_;
   metadata.reflection = LoginDBAgentRsp_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
+#endif  // !_MSC_VER
+
+DBAgentInfoReq::DBAgentInfoReq()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:internal.DBAgentInfoReq)
+}
+
+void DBAgentInfoReq::InitAsDefaultInstance() {
+}
+
+DBAgentInfoReq::DBAgentInfoReq(const DBAgentInfoReq& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:internal.DBAgentInfoReq)
+}
+
+void DBAgentInfoReq::SharedCtor() {
+  _cached_size_ = 0;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+DBAgentInfoReq::~DBAgentInfoReq() {
+  // @@protoc_insertion_point(destructor:internal.DBAgentInfoReq)
+  SharedDtor();
+}
+
+void DBAgentInfoReq::SharedDtor() {
+  if (this != default_instance_) {
+  }
+}
+
+void DBAgentInfoReq::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* DBAgentInfoReq::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return DBAgentInfoReq_descriptor_;
+}
+
+const DBAgentInfoReq& DBAgentInfoReq::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_proto_2finternal_2eprotocol_2eproto();
+  return *default_instance_;
+}
+
+DBAgentInfoReq* DBAgentInfoReq::default_instance_ = NULL;
+
+DBAgentInfoReq* DBAgentInfoReq::New() const {
+  return new DBAgentInfoReq;
+}
+
+void DBAgentInfoReq::Clear() {
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool DBAgentInfoReq::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:internal.DBAgentInfoReq)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+  handle_unusual:
+    if (tag == 0 ||
+        ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+        ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+      goto success;
+    }
+    DO_(::google::protobuf::internal::WireFormat::SkipField(
+          input, tag, mutable_unknown_fields()));
+  }
+success:
+  // @@protoc_insertion_point(parse_success:internal.DBAgentInfoReq)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:internal.DBAgentInfoReq)
+  return false;
+#undef DO_
+}
+
+void DBAgentInfoReq::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:internal.DBAgentInfoReq)
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:internal.DBAgentInfoReq)
+}
+
+::google::protobuf::uint8* DBAgentInfoReq::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:internal.DBAgentInfoReq)
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:internal.DBAgentInfoReq)
+  return target;
+}
+
+int DBAgentInfoReq::ByteSize() const {
+  int total_size = 0;
+
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void DBAgentInfoReq::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const DBAgentInfoReq* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const DBAgentInfoReq*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void DBAgentInfoReq::MergeFrom(const DBAgentInfoReq& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void DBAgentInfoReq::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void DBAgentInfoReq::CopyFrom(const DBAgentInfoReq& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool DBAgentInfoReq::IsInitialized() const {
+
+  return true;
+}
+
+void DBAgentInfoReq::Swap(DBAgentInfoReq* other) {
+  if (other != this) {
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata DBAgentInfoReq::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = DBAgentInfoReq_descriptor_;
+  metadata.reflection = DBAgentInfoReq_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
+const int DBAgentInfoRsp::kUpVolumeFieldNumber;
+const int DBAgentInfoRsp::kDownVolumeFieldNumber;
+const int DBAgentInfoRsp::kHandleSelectCountFieldNumber;
+const int DBAgentInfoRsp::kHandleInsertCountFieldNumber;
+const int DBAgentInfoRsp::kHandleUpdateCountFieldNumber;
+const int DBAgentInfoRsp::kHandleDeleteCountFieldNumber;
+const int DBAgentInfoRsp::kClientNumFieldNumber;
+const int DBAgentInfoRsp::kQueueNumFieldNumber;
+#endif  // !_MSC_VER
+
+DBAgentInfoRsp::DBAgentInfoRsp()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:internal.DBAgentInfoRsp)
+}
+
+void DBAgentInfoRsp::InitAsDefaultInstance() {
+}
+
+DBAgentInfoRsp::DBAgentInfoRsp(const DBAgentInfoRsp& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:internal.DBAgentInfoRsp)
+}
+
+void DBAgentInfoRsp::SharedCtor() {
+  _cached_size_ = 0;
+  up_volume_ = 0u;
+  down_volume_ = 0u;
+  handle_select_count_ = 0u;
+  handle_insert_count_ = 0u;
+  handle_update_count_ = 0u;
+  handle_delete_count_ = 0u;
+  client_num_ = 0u;
+  queue_num_ = 0u;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+DBAgentInfoRsp::~DBAgentInfoRsp() {
+  // @@protoc_insertion_point(destructor:internal.DBAgentInfoRsp)
+  SharedDtor();
+}
+
+void DBAgentInfoRsp::SharedDtor() {
+  if (this != default_instance_) {
+  }
+}
+
+void DBAgentInfoRsp::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* DBAgentInfoRsp::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return DBAgentInfoRsp_descriptor_;
+}
+
+const DBAgentInfoRsp& DBAgentInfoRsp::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_proto_2finternal_2eprotocol_2eproto();
+  return *default_instance_;
+}
+
+DBAgentInfoRsp* DBAgentInfoRsp::default_instance_ = NULL;
+
+DBAgentInfoRsp* DBAgentInfoRsp::New() const {
+  return new DBAgentInfoRsp;
+}
+
+void DBAgentInfoRsp::Clear() {
+#define OFFSET_OF_FIELD_(f) (reinterpret_cast<char*>(      \
+  &reinterpret_cast<DBAgentInfoRsp*>(16)->f) - \
+   reinterpret_cast<char*>(16))
+
+#define ZR_(first, last) do {                              \
+    size_t f = OFFSET_OF_FIELD_(first);                    \
+    size_t n = OFFSET_OF_FIELD_(last) - f + sizeof(last);  \
+    ::memset(&first, 0, n);                                \
+  } while (0)
+
+  if (_has_bits_[0 / 32] & 255) {
+    ZR_(up_volume_, queue_num_);
+  }
+
+#undef OFFSET_OF_FIELD_
+#undef ZR_
+
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool DBAgentInfoRsp::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:internal.DBAgentInfoRsp)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required uint32 up_volume = 1;
+      case 1: {
+        if (tag == 8) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &up_volume_)));
+          set_has_up_volume();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(16)) goto parse_down_volume;
+        break;
+      }
+
+      // required uint32 down_volume = 2;
+      case 2: {
+        if (tag == 16) {
+         parse_down_volume:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &down_volume_)));
+          set_has_down_volume();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(24)) goto parse_handle_select_count;
+        break;
+      }
+
+      // required uint32 handle_select_count = 3;
+      case 3: {
+        if (tag == 24) {
+         parse_handle_select_count:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &handle_select_count_)));
+          set_has_handle_select_count();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(32)) goto parse_handle_insert_count;
+        break;
+      }
+
+      // required uint32 handle_insert_count = 4;
+      case 4: {
+        if (tag == 32) {
+         parse_handle_insert_count:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &handle_insert_count_)));
+          set_has_handle_insert_count();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(40)) goto parse_handle_update_count;
+        break;
+      }
+
+      // required uint32 handle_update_count = 5;
+      case 5: {
+        if (tag == 40) {
+         parse_handle_update_count:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &handle_update_count_)));
+          set_has_handle_update_count();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(48)) goto parse_handle_delete_count;
+        break;
+      }
+
+      // required uint32 handle_delete_count = 6;
+      case 6: {
+        if (tag == 48) {
+         parse_handle_delete_count:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &handle_delete_count_)));
+          set_has_handle_delete_count();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(56)) goto parse_client_num;
+        break;
+      }
+
+      // required uint32 client_num = 7;
+      case 7: {
+        if (tag == 56) {
+         parse_client_num:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &client_num_)));
+          set_has_client_num();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(64)) goto parse_queue_num;
+        break;
+      }
+
+      // required uint32 queue_num = 8;
+      case 8: {
+        if (tag == 64) {
+         parse_queue_num:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &queue_num_)));
+          set_has_queue_num();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:internal.DBAgentInfoRsp)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:internal.DBAgentInfoRsp)
+  return false;
+#undef DO_
+}
+
+void DBAgentInfoRsp::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:internal.DBAgentInfoRsp)
+  // required uint32 up_volume = 1;
+  if (has_up_volume()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->up_volume(), output);
+  }
+
+  // required uint32 down_volume = 2;
+  if (has_down_volume()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->down_volume(), output);
+  }
+
+  // required uint32 handle_select_count = 3;
+  if (has_handle_select_count()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(3, this->handle_select_count(), output);
+  }
+
+  // required uint32 handle_insert_count = 4;
+  if (has_handle_insert_count()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(4, this->handle_insert_count(), output);
+  }
+
+  // required uint32 handle_update_count = 5;
+  if (has_handle_update_count()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(5, this->handle_update_count(), output);
+  }
+
+  // required uint32 handle_delete_count = 6;
+  if (has_handle_delete_count()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(6, this->handle_delete_count(), output);
+  }
+
+  // required uint32 client_num = 7;
+  if (has_client_num()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(7, this->client_num(), output);
+  }
+
+  // required uint32 queue_num = 8;
+  if (has_queue_num()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(8, this->queue_num(), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:internal.DBAgentInfoRsp)
+}
+
+::google::protobuf::uint8* DBAgentInfoRsp::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:internal.DBAgentInfoRsp)
+  // required uint32 up_volume = 1;
+  if (has_up_volume()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->up_volume(), target);
+  }
+
+  // required uint32 down_volume = 2;
+  if (has_down_volume()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(2, this->down_volume(), target);
+  }
+
+  // required uint32 handle_select_count = 3;
+  if (has_handle_select_count()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(3, this->handle_select_count(), target);
+  }
+
+  // required uint32 handle_insert_count = 4;
+  if (has_handle_insert_count()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(4, this->handle_insert_count(), target);
+  }
+
+  // required uint32 handle_update_count = 5;
+  if (has_handle_update_count()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(5, this->handle_update_count(), target);
+  }
+
+  // required uint32 handle_delete_count = 6;
+  if (has_handle_delete_count()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(6, this->handle_delete_count(), target);
+  }
+
+  // required uint32 client_num = 7;
+  if (has_client_num()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(7, this->client_num(), target);
+  }
+
+  // required uint32 queue_num = 8;
+  if (has_queue_num()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(8, this->queue_num(), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:internal.DBAgentInfoRsp)
+  return target;
+}
+
+int DBAgentInfoRsp::ByteSize() const {
+  int total_size = 0;
+
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required uint32 up_volume = 1;
+    if (has_up_volume()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->up_volume());
+    }
+
+    // required uint32 down_volume = 2;
+    if (has_down_volume()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->down_volume());
+    }
+
+    // required uint32 handle_select_count = 3;
+    if (has_handle_select_count()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->handle_select_count());
+    }
+
+    // required uint32 handle_insert_count = 4;
+    if (has_handle_insert_count()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->handle_insert_count());
+    }
+
+    // required uint32 handle_update_count = 5;
+    if (has_handle_update_count()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->handle_update_count());
+    }
+
+    // required uint32 handle_delete_count = 6;
+    if (has_handle_delete_count()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->handle_delete_count());
+    }
+
+    // required uint32 client_num = 7;
+    if (has_client_num()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->client_num());
+    }
+
+    // required uint32 queue_num = 8;
+    if (has_queue_num()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->queue_num());
+    }
+
+  }
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void DBAgentInfoRsp::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const DBAgentInfoRsp* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const DBAgentInfoRsp*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void DBAgentInfoRsp::MergeFrom(const DBAgentInfoRsp& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_up_volume()) {
+      set_up_volume(from.up_volume());
+    }
+    if (from.has_down_volume()) {
+      set_down_volume(from.down_volume());
+    }
+    if (from.has_handle_select_count()) {
+      set_handle_select_count(from.handle_select_count());
+    }
+    if (from.has_handle_insert_count()) {
+      set_handle_insert_count(from.handle_insert_count());
+    }
+    if (from.has_handle_update_count()) {
+      set_handle_update_count(from.handle_update_count());
+    }
+    if (from.has_handle_delete_count()) {
+      set_handle_delete_count(from.handle_delete_count());
+    }
+    if (from.has_client_num()) {
+      set_client_num(from.client_num());
+    }
+    if (from.has_queue_num()) {
+      set_queue_num(from.queue_num());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void DBAgentInfoRsp::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void DBAgentInfoRsp::CopyFrom(const DBAgentInfoRsp& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool DBAgentInfoRsp::IsInitialized() const {
+  if ((_has_bits_[0] & 0x000000ff) != 0x000000ff) return false;
+
+  return true;
+}
+
+void DBAgentInfoRsp::Swap(DBAgentInfoRsp* other) {
+  if (other != this) {
+    std::swap(up_volume_, other->up_volume_);
+    std::swap(down_volume_, other->down_volume_);
+    std::swap(handle_select_count_, other->handle_select_count_);
+    std::swap(handle_insert_count_, other->handle_insert_count_);
+    std::swap(handle_update_count_, other->handle_update_count_);
+    std::swap(handle_delete_count_, other->handle_delete_count_);
+    std::swap(client_num_, other->client_num_);
+    std::swap(queue_num_, other->queue_num_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata DBAgentInfoRsp::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = DBAgentInfoRsp_descriptor_;
+  metadata.reflection = DBAgentInfoRsp_reflection_;
   return metadata;
 }
 

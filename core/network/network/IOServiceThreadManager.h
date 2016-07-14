@@ -32,6 +32,8 @@ namespace network
 
 		void OnSessionClose(TCPSessionID id);
 
+		size_t SessionNumber() const;
+
 		SessionHandlePointer SessionHandler(TCPSessionID id) const;
 
 		void SetSessionTimeout(uint64_t timeout);

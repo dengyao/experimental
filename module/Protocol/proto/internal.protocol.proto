@@ -38,6 +38,22 @@ message LoginDBAgentRsp {
     required uint32 heartbeat_interval = 1; // 心跳包间隔
 }
 
+// 查询DBAgent信息请求
+message DBAgentInfoReq {
+}
+
+// 查询DBAgent信息返回
+message DBAgentInfoRsp {
+    required uint32 up_volume = 1; // 每秒上行流量
+    required uint32 down_volume = 2; // 每秒下行流量
+    required uint32 handle_select_count = 3; // 每秒处理查询数量
+    required uint32 handle_insert_count = 4; // 每秒处理插入数量
+    required uint32 handle_update_count = 5; // 每秒处理更新数量
+    required uint32 handle_delete_count = 6; // 每秒处理删除数量
+    required uint32 client_num = 7; // 客户端数量
+    required uint32 queue_num = 8; // 队列中的数量
+}
+
 // 查询DBAgent请求
 message QueryDBAgentReq {
     enum ActoinType { 
@@ -85,8 +101,8 @@ message DBAgentErrorRsp {
 
 // 服务器节点类型
 enum NodeType {
-    kLicenceServer = 1; // 验证服务器
-    kLinkerServer = 2; // 连接器服务器
+    kLoginServer = 1; // 登录服务器
+    kProxyServer = 2; // 代理器服务器
     kMainLogicSever = 3; // 主逻辑服务器
 }
 

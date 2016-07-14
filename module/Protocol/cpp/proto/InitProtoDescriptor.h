@@ -13,6 +13,8 @@ public:
         internal::PongRsp::descriptor();
         internal::LoginDBAgentReq::descriptor();
         internal::LoginDBAgentRsp::descriptor();
+        internal::DBAgentInfoReq::descriptor();
+        internal::DBAgentInfoRsp::descriptor();
         internal::QueryDBAgentReq::descriptor();
         internal::QueryDBAgentRsp::descriptor();
         internal::DBErrorRsp::descriptor();

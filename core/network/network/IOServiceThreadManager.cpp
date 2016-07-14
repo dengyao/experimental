@@ -164,6 +164,11 @@ namespace network
 		}
 	}
 
+	size_t IOServiceThreadManager::SessionNumber() const
+	{
+		return session_handler_map_.size();
+	}
+
 	SessionHandlePointer IOServiceThreadManager::SessionHandler(TCPSessionID id) const
 	{
 		SessionHandlerMap::const_iterator found = session_handler_map_.find(id);
