@@ -1,8 +1,6 @@
-// 服务器节点间的协议
-
 package internal;
 
-// 错误码
+// 服务器错误码
 enum ErrorCode {
     kNotLoggedIn = 1;            // 未登录
     kDisconnect = 2;             // 断开连接
@@ -44,14 +42,14 @@ message DBAgentInfoReq {
 
 // 查询DBAgent信息返回
 message DBAgentInfoRsp {
-    required uint32 up_volume = 1; // 每秒上行流量
-    required uint32 down_volume = 2; // 每秒下行流量
+    required uint32 up_volume = 1;           // 每秒上行流量
+    required uint32 down_volume = 2;         // 每秒下行流量
     required uint32 handle_select_count = 3; // 每秒处理查询数量
     required uint32 handle_insert_count = 4; // 每秒处理插入数量
     required uint32 handle_update_count = 5; // 每秒处理更新数量
     required uint32 handle_delete_count = 6; // 每秒处理删除数量
-    required uint32 client_num = 7; // 客户端数量
-    required uint32 queue_num = 8; // 队列中的数量
+    required uint32 client_num = 7;          // 客户端数量
+    required uint32 queue_num = 8;           // 队列中的数量
 }
 
 // 查询DBAgent请求
@@ -65,34 +63,34 @@ message QueryDBAgentReq {
     
     enum DatabaseType {
         kRedis = 1; // redis数据库
-        kMySQL = 2; // mysql数据库
+        kMySQL = 2; // MySQL数据库
     }
 
-    required uint32 sequence = 1; // 序列号
+    required uint32 sequence = 1;     // 序列号
     required DatabaseType dbtype = 2; // 数据库类型
-    required ActoinType action = 3; // 操作类型
-    required string dbname = 4; // 数据库名称
-    optional string statement = 5; // 操作语句
+    required ActoinType action = 3;   // 操作类型
+    required string dbname = 4;       // 数据库名称
+    optional string statement = 5;    // 操作语句
 }
 
 // 查询DBAgent返回
 message QueryDBAgentRsp {
     required uint32 sequence = 1; // 序列号
-    optional string result = 2; // 返回数据
+    optional string result = 2;   // 返回数据
 }
 
 // DB错误返回
 message DBErrorRsp
 {
-    required uint32 sequence = 1; // 序列号
+    required uint32 sequence = 1;  // 序列号
     required int32 error_code = 2; // 错误码
-    optional string what = 3; // 错误原因
+    optional string what = 3;      // 错误原因
 }
 
 // DBAgent错误返回
 message DBAgentErrorRsp {
     required ErrorCode error_code = 1; // 错误码
-    optional uint32 sequence = 2; // 序列号
+    optional uint32 sequence = 2;      // 序列号
 }
 
 /////////////////////////////////////////////////////
@@ -101,20 +99,20 @@ message DBAgentErrorRsp {
 
 // 服务器节点类型
 enum NodeType {
-    kLoginServer = 1; // 登录服务器
-    kProxyServer = 2; // 代理器服务器
+    kLoginServer = 1;    // 登录服务器
+    kProxyServer = 2;    // 代理器服务器
     kMainLogicSever = 3; // 主逻辑服务器
 }
 
 // Router错误返回
 message RouterErrorRsp {
     required ErrorCode error_code = 1; // 错误码
-    optional string what = 2; // 错误原因
+    optional string what = 2;          // 错误原因
 }
 
 // 登录Router请求
 message LoginRouterReq {
-    required NodeType type = 1; // 服务器节点类型
+    required NodeType type = 1;                 // 服务器节点类型
     optional uint32 child_id = 2 [default = 1]; // 服务器子节点id
 }
 
@@ -129,26 +127,26 @@ message RouterInfoReq {
 
 // 查询Router信息返回
 message RouterInfoRsp {
-    required uint32 up_volume = 1; // 每秒上行流量
+    required uint32 up_volume = 1;   // 每秒上行流量
     required uint32 down_volume = 2; // 每秒下行流量
 }
 
 // 转发消息请求
 message ForwardReq {
-    required NodeType dst_type = 1; // 目标服务器类型
+    required NodeType dst_type = 1;                 // 目标服务器类型
     optional uint32 dst_child_id = 2 [default = 1]; // 目标服务器子节点id
-    required uint32 message_length = 3; // 消息长度
+    required uint32 message_length = 3;             // 消息长度
 }
 
 // 广播消息请求
 message BroadcastReq {
-    repeated NodeType dst_lists = 1; // 目标服务器列表
+    repeated NodeType dst_lists = 1;    // 目标服务器列表
     required uint32 message_length = 2; // 消息长度
 }
 
 // 新消息通知
 message RouterNotify {
-    required NodeType src_type = 1; // 来源服务器类型
+    required NodeType src_type = 1;                 // 来源服务器类型
     optional uint32 src_child_id = 2 [default = 1]; // 来源服务器子节点id
-    required uint32 message_length = 3; // 消息长度
+    required uint32 message_length = 3;             // 消息长度
 }

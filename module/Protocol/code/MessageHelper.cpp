@@ -2,7 +2,7 @@
 #include <limits>
 #include <network/NetMessage.h>
 #include <google/protobuf/message.h>
-#include "InitProtoDescriptor.h"
+#include "InitDescriptor.h"
 
 void PackageMessage(google::protobuf::Message *in_message, network::NetMessage &out_message)
 {

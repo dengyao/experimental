@@ -1,13 +1,12 @@
-﻿#ifndef __INIT_PROTO_DESCRIPTOR_H__
-#define __INIT_PROTO_DESCRIPTOR_H__
+﻿#ifndef __INIT_DESCRIPTOR_H__
+#define __INIT_DESCRIPTOR_H__
 
-#include <proto/externall.protocol.pb.h>
-#include <proto/internal.protocol.pb.h>
+#include <proto/internal.pb.h>
 
-class InitProtoMessageDdasdas
+class InitDescriptor
 {
 public:
-    InitProtoMessageDdasdas()
+    InitDescriptor()
     {
         internal::PingReq::descriptor();
         internal::PongRsp::descriptor();
@@ -30,6 +29,6 @@ public:
     }
 };
 
-static InitProtoMessageDdasdas g_once_init;
+static InitDescriptor g_once_init;
 
 #endif

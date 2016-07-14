@@ -1,9 +1,8 @@
 set(CURRENT_PROJECT_NAME Protocol)
 
 set(CURRENT_PROJECT_SRC_LISTS 
-  cpp/proto/externall.protocol.pb.cc
-  cpp/proto/internal.protocol.pb.cc
-  cpp/proto/MessageHelper.cpp
+  code/MessageHelper.cpp
+  code/proto/internal.pb.cc
 )
 
 include_directories(

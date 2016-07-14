@@ -8,7 +8,7 @@ if __name__ == '__main__':
     """ 查找所有proto文件并生成c++源码 """
     head_files = []
     sep = os.path.sep
-    out_path = 'cpp'
+    out_path = 'code'
     proto_path = 'proto'
     for root, dirs, files in os.walk(''.join((os.curdir, os.path.sep, proto_path))):
         for filename in files:
@@ -22,8 +22,8 @@ if __name__ == '__main__':
 
     """ 生成proto消息自动初始化代码 """
     source_code = ''
-    source_code += '#ifndef __INIT_PROTO_DESCRIPTOR_H__\r\n'
-    source_code += '#define __INIT_PROTO_DESCRIPTOR_H__\r\n\r\n'
+    source_code += '#ifndef __INIT_DESCRIPTOR_H__\r\n'
+    source_code += '#define __INIT_DESCRIPTOR_H__\r\n\r\n'
     method_lists = []
     for filename in head_files:
         s = open(filename, 'r').read()
@@ -38,10 +38,10 @@ if __name__ == '__main__':
         source_code += ''.join(('#include <', head_file, '>\r\n'))
 
     source_code += '\r\n'
-    source_code += 'class InitProtoMessageDdasdas\r\n' \
+    source_code += 'class InitDescriptor\r\n' \
                    '{\r\n' \
                    'public:\r\n' \
-                   '    InitProtoMessageDdasdas()\r\n' \
+                   '    InitDescriptor()\r\n' \
                    '    {\r\n'
 
     for method in method_lists:
@@ -50,27 +50,26 @@ if __name__ == '__main__':
         source_code += '\r\n'
 
     source_code += '    }\r\n};\r\n\r\n'
-    source_code += 'static InitProtoMessageDdasdas g_once_init;\r\n\r\n'
+    source_code += 'static InitDescriptor g_once_init;\r\n\r\n'
     source_code += '#endif\r\n'
 
-    out_cpp_filename = ''.join((os.curdir, sep, out_path, sep, proto_path, sep, 'InitProtoDescriptor.h'))
+    out_cpp_filename = ''.join((os.curdir, sep, out_path, sep, 'InitDescriptor.h'))
     handle = codecs.open(out_cpp_filename, 'w', 'utf_8_sig')
     handle.write(source_code)
     handle.close()
 
     """ 包含头文件 """
-    helper_file = ''.join((os.curdir, sep, out_path, sep, proto_path, sep, 'MessageHelper.cpp'))
+    helper_file = ''.join((os.curdir, sep, out_path, sep, 'MessageHelper.cpp'))
     handle = codecs.open(helper_file, 'r+', 'utf_8_sig')
     helper_source = handle.read()
     handle.seek(0)
-    if helper_source.find('#include "InitProtoDescriptor.h"') < 0:
+    if helper_source.find('#include "InitDescriptor.h"') < 0:
         result = re.findall('#\s*include\s*["|<][^"|>]+["|>]', helper_source)
         if len(result) > 0:
             pos = helper_source.find(result[-1]) + len(result[-1])
-            helper_source = helper_source[:pos] + "\r\n#include \"InitProtoDescriptor.h\"" + helper_source[pos:]
-            print(helper_source)
+            helper_source = helper_source[:pos] + "\r\n#include \"InitDescriptor.h\"" + helper_source[pos:]
         else:
-            helper_source = "#include \"InitProtoDescriptor.h\"\r\n" + helper_source
+            helper_source = "#include \"InitDescriptor.h\"\r\n" + helper_source
 
         handle.write(helper_source)
     handle.close()
