@@ -1,7 +1,7 @@
 set(CURRENT_PROJECT_NAME Protocol)
 
 set(CURRENT_PROJECT_SRC_LISTS 
-  code/MessageHelper.cpp
+  code/ProtobufCodec.cpp
   code/proto/internal.pb.cc
 )
 

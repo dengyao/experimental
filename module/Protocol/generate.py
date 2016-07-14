@@ -59,7 +59,7 @@ if __name__ == '__main__':
     handle.close()
 
     """ 包含头文件 """
-    helper_file = ''.join((os.curdir, sep, out_path, sep, 'MessageHelper.cpp'))
+    helper_file = ''.join((os.curdir, sep, out_path, sep, 'ProtobufCodec.cpp'))
     handle = codecs.open(helper_file, 'r+', 'utf_8_sig')
     helper_source = handle.read()
     handle.seek(0)

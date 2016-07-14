@@ -1,10 +1,10 @@
-﻿#include "MessageHelper.h"
+﻿#include "ProtobufCodec.h"
 #include <limits>
 #include <network/NetMessage.h>
 #include <google/protobuf/message.h>
 #include "InitDescriptor.h"
 
-void PackageMessage(google::protobuf::Message *in_message, network::NetMessage &out_message)
+void ProtubufCodec::Encode(google::protobuf::Message *in_message, network::NetMessage &out_message)
 {
 	const std::string &full_name = in_message->GetDescriptor()->full_name();
 	const uint8_t name_size = static_cast<uint8_t>(full_name.size()) + 1;
@@ -22,7 +22,7 @@ void PackageMessage(google::protobuf::Message *in_message, network::NetMessage &
 	out_message.HasWritten(byte_size);
 }
 
-MessagePointer UnpackageMessage(network::NetMessage &in_message)
+MessagePointer ProtubufCodec::Decode(network::NetMessage &in_message)
 {
 	if (in_message.Readable() == 0)
 	{
