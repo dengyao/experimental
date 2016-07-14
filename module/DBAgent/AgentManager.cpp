@@ -34,7 +34,7 @@ AgentManager::AgentManager(network::IOServiceThreadManager &threads, AgentImpl<M
 	, mysql_agent_(mysql)
 	, generator_(backlog)
 	, timer_(threads.MainThread()->IOService())
-	, statisical_timer_(threads.MainThread()->IOService())
+	, statisical_timer_(threads.MainThread()->IOService(), std::chrono::seconds(1))
 	, wait_handler_(std::bind(&AgentManager::UpdateHandleResult, this, std::placeholders::_1))
 	, statisical_wait_handler_(std::bind(&AgentManager::UpdateStatisicalData, this, std::placeholders::_1))
 {
@@ -52,9 +52,11 @@ void AgentManager::UpdateHandleResult(asio::error_code error_code)
 	}
 
 	assert(completion_list_.empty());
+	network::NetMessage buffer;
 	mysql_agent_.GetCompletionQueue(completion_list_);
 	for (const auto &result : completion_list_)
 	{
+		buffer.Clear();
 		auto found = requests_.find(result.GetSequence());
 		assert(found != requests_.end());
 		if (found != requests_.end())
@@ -76,7 +78,7 @@ void AgentManager::UpdateHandleResult(asio::error_code error_code)
 			default:
 				break;
 			}
-			RespondHandleResult(found->second.session_id, found->second.sequence, result);
+			RespondHandleResult(found->second.session_id, found->second.sequence, result, buffer);
 		}
 		generator_.Put(result.GetSequence());
 		requests_.erase(found);
@@ -94,6 +96,7 @@ void AgentManager::UpdateStatisicalData(asio::error_code error_code)
 		return;
 	}
 	StatisticalTools::GetInstance()->Flush();
+	timer_.expires_from_now(std::chrono::seconds(1));
 	timer_.async_wait(statisical_wait_handler_);
 }
 
@@ -127,7 +130,8 @@ void AgentManager::OnQueryAgentInfo(SessionHandle &session, google::protobuf::Me
 	response.set_handle_insert_count(StatisticalTools::GetInstance()->HandleInsertCount());
 	response.set_handle_update_count(StatisticalTools::GetInstance()->HandleUpdateCount());
 	response.set_handle_delete_count(StatisticalTools::GetInstance()->HandleDeleteCount());
-	session.Respond(&response, buffer);
+	PackageMessage(&response, buffer);
+	session.Respond(buffer);
 }
 
 // 操作数据库
@@ -192,11 +196,12 @@ void AgentManager::RespondErrorCode(SessionHandle &session, uint32_t sequence, i
 	internal::DBAgentErrorRsp response;
 	response.set_sequence(sequence);
 	response.set_error_code(static_cast<internal::ErrorCode>(error_code));
-	session.Respond(&response, buffer);
+	PackageMessage(&response, buffer);
+	session.Respond(buffer);
 }
 
 // 回复处理结果
-void AgentManager::RespondHandleResult(network::TCPSessionID id, uint32_t sequence, const Result &result)
+void AgentManager::RespondHandleResult(network::TCPSessionID id, uint32_t sequence, const Result &result, network::NetMessage &buffer)
 {
 	network::SessionHandlePointer session = threads_.SessionHandler(id);
 	if (session != nullptr)
@@ -207,14 +212,15 @@ void AgentManager::RespondHandleResult(network::TCPSessionID id, uint32_t sequen
 			response.set_sequence(sequence);
 			response.set_error_code(result.GetErrorCode().Value());
 			response.set_what(result.GetErrorCode().Message());
-			static_cast<SessionHandle*>(session.get())->Respond(&response);
+			PackageMessage(&response, buffer);
 		}
 		else
 		{
 			internal::QueryDBAgentRsp response;
 			response.set_sequence(sequence);
 			response.set_result(result.GetResult().data(), result.GetResult().size());
-			static_cast<SessionHandle*>(session.get())->Respond(&response);
+			PackageMessage(&response, buffer);
 		}
+		static_cast<SessionHandle*>(session.get())->Respond(buffer);
 	}
 }

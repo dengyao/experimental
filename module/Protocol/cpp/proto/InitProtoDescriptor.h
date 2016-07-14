@@ -22,6 +22,8 @@ public:
         internal::RouterErrorRsp::descriptor();
         internal::LoginRouterReq::descriptor();
         internal::LoginRouterRsp::descriptor();
+        internal::RouterInfoReq::descriptor();
+        internal::RouterInfoRsp::descriptor();
         internal::ForwardMessageReq::descriptor();
         internal::ForwardMessageRsp::descriptor();
         internal::BroadcastMessageReq::descriptor();

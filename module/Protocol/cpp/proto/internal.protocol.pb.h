@@ -47,6 +47,8 @@ class DBAgentErrorRsp;
 class RouterErrorRsp;
 class LoginRouterReq;
 class LoginRouterRsp;
+class RouterInfoReq;
+class RouterInfoRsp;
 class ForwardMessageReq;
 class ForwardMessageRsp;
 class BroadcastMessageReq;
@@ -1371,6 +1373,164 @@ class LoginRouterRsp : public ::google::protobuf::Message {
 
   void InitAsDefaultInstance();
   static LoginRouterRsp* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class RouterInfoReq : public ::google::protobuf::Message {
+ public:
+  RouterInfoReq();
+  virtual ~RouterInfoReq();
+
+  RouterInfoReq(const RouterInfoReq& from);
+
+  inline RouterInfoReq& operator=(const RouterInfoReq& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const RouterInfoReq& default_instance();
+
+  void Swap(RouterInfoReq* other);
+
+  // implements Message ----------------------------------------------
+
+  RouterInfoReq* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const RouterInfoReq& from);
+  void MergeFrom(const RouterInfoReq& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:internal.RouterInfoReq)
+ private:
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  friend void  protobuf_AddDesc_proto_2finternal_2eprotocol_2eproto();
+  friend void protobuf_AssignDesc_proto_2finternal_2eprotocol_2eproto();
+  friend void protobuf_ShutdownFile_proto_2finternal_2eprotocol_2eproto();
+
+  void InitAsDefaultInstance();
+  static RouterInfoReq* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class RouterInfoRsp : public ::google::protobuf::Message {
+ public:
+  RouterInfoRsp();
+  virtual ~RouterInfoRsp();
+
+  RouterInfoRsp(const RouterInfoRsp& from);
+
+  inline RouterInfoRsp& operator=(const RouterInfoRsp& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const RouterInfoRsp& default_instance();
+
+  void Swap(RouterInfoRsp* other);
+
+  // implements Message ----------------------------------------------
+
+  RouterInfoRsp* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const RouterInfoRsp& from);
+  void MergeFrom(const RouterInfoRsp& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required uint32 up_volume = 1;
+  inline bool has_up_volume() const;
+  inline void clear_up_volume();
+  static const int kUpVolumeFieldNumber = 1;
+  inline ::google::protobuf::uint32 up_volume() const;
+  inline void set_up_volume(::google::protobuf::uint32 value);
+
+  // required uint32 down_volume = 2;
+  inline bool has_down_volume() const;
+  inline void clear_down_volume();
+  static const int kDownVolumeFieldNumber = 2;
+  inline ::google::protobuf::uint32 down_volume() const;
+  inline void set_down_volume(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:internal.RouterInfoRsp)
+ private:
+  inline void set_has_up_volume();
+  inline void clear_has_up_volume();
+  inline void set_has_down_volume();
+  inline void clear_has_down_volume();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 up_volume_;
+  ::google::protobuf::uint32 down_volume_;
+  friend void  protobuf_AddDesc_proto_2finternal_2eprotocol_2eproto();
+  friend void protobuf_AssignDesc_proto_2finternal_2eprotocol_2eproto();
+  friend void protobuf_ShutdownFile_proto_2finternal_2eprotocol_2eproto();
+
+  void InitAsDefaultInstance();
+  static RouterInfoRsp* default_instance_;
 };
 // -------------------------------------------------------------------
 
@@ -2701,6 +2861,62 @@ inline void LoginRouterRsp::set_heartbeat_interval(::google::protobuf::uint32 va
   set_has_heartbeat_interval();
   heartbeat_interval_ = value;
   // @@protoc_insertion_point(field_set:internal.LoginRouterRsp.heartbeat_interval)
+}
+
+// -------------------------------------------------------------------
+
+// RouterInfoReq
+
+// -------------------------------------------------------------------
+
+// RouterInfoRsp
+
+// required uint32 up_volume = 1;
+inline bool RouterInfoRsp::has_up_volume() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void RouterInfoRsp::set_has_up_volume() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void RouterInfoRsp::clear_has_up_volume() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void RouterInfoRsp::clear_up_volume() {
+  up_volume_ = 0u;
+  clear_has_up_volume();
+}
+inline ::google::protobuf::uint32 RouterInfoRsp::up_volume() const {
+  // @@protoc_insertion_point(field_get:internal.RouterInfoRsp.up_volume)
+  return up_volume_;
+}
+inline void RouterInfoRsp::set_up_volume(::google::protobuf::uint32 value) {
+  set_has_up_volume();
+  up_volume_ = value;
+  // @@protoc_insertion_point(field_set:internal.RouterInfoRsp.up_volume)
+}
+
+// required uint32 down_volume = 2;
+inline bool RouterInfoRsp::has_down_volume() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void RouterInfoRsp::set_has_down_volume() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void RouterInfoRsp::clear_has_down_volume() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void RouterInfoRsp::clear_down_volume() {
+  down_volume_ = 0u;
+  clear_has_down_volume();
+}
+inline ::google::protobuf::uint32 RouterInfoRsp::down_volume() const {
+  // @@protoc_insertion_point(field_get:internal.RouterInfoRsp.down_volume)
+  return down_volume_;
+}
+inline void RouterInfoRsp::set_down_volume(::google::protobuf::uint32 value) {
+  set_has_down_volume();
+  down_volume_ = value;
+  // @@protoc_insertion_point(field_set:internal.RouterInfoRsp.down_volume)
 }
 
 // -------------------------------------------------------------------

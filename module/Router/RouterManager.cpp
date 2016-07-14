@@ -1,15 +1,33 @@
 ﻿#include "RouterManager.h"
+#include <iostream>
 #include <proto/MessageHelper.h>
 #include <proto/internal.protocol.pb.h>
 #include "SessionHandle.h"
+#include "StatisticalTools.h"
 
 RouterManager::RouterManager(network::IOServiceThreadManager &threads)
 	: threads_(threads)
+	, timer_(threads.MainThread()->IOService(), std::chrono::seconds(1))
+	, wait_handler_(std::bind(&RouterManager::UpdateStatisicalData, this, std::placeholders::_1))
 {
+	timer_.async_wait(wait_handler_);
 }
 
 RouterManager::~RouterManager()
 {
+}
+
+// 更新统计数据
+void RouterManager::UpdateStatisicalData(asio::error_code error_code)
+{
+	if (error_code)
+	{
+		std::cerr << error_code.message() << std::endl;
+		return;
+	}
+	StatisticalTools::GetInstance()->Flush();
+	timer_.expires_from_now(std::chrono::seconds(1));
+	timer_.async_wait(wait_handler_);
 }
 
 // 查找服务器节点
@@ -102,6 +120,10 @@ void RouterManager::HandleMessage(SessionHandle &session, google::protobuf::Mess
 	else if (dynamic_cast<internal::BroadcastMessageReq*>(message) != nullptr)
 	{
 		OnBroadcastServerMessage(session, message, buffer);
+	}
+	else if (dynamic_cast<internal::RouterInfoReq*>(message) != nullptr)
+	{
+		OnQueryRouterInfo(session, message, buffer);
 	}
 	else
 	{
@@ -207,6 +229,17 @@ void RouterManager::OnServerLogin(SessionHandle &session, google::protobuf::Mess
 	buffer.Clear();
 	internal::LoginRouterRsp response;
 	response.set_heartbeat_interval(60);
+	PackageMessage(&response, buffer);
+	session.Respond(buffer);
+}
+
+// 查询路由信息
+void RouterManager::OnQueryRouterInfo(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
+{
+	buffer.Clear();
+	internal::RouterInfoRsp response;
+	response.set_up_volume(StatisticalTools::GetInstance()->UpVolume());
+	response.set_down_volume(StatisticalTools::GetInstance()->DownVolume());
 	PackageMessage(&response, buffer);
 	session.Respond(buffer);
 }

@@ -37,7 +37,7 @@ public:
 	void RespondErrorCode(SessionHandle &session, uint32_t sequence, int error_code, network::NetMessage &buffer);
 
 	// 回复处理结果
-	void RespondHandleResult(network::TCPSessionID id, uint32_t sequence, const Result &result);
+	void RespondHandleResult(network::TCPSessionID id, uint32_t sequence, const Result &result, network::NetMessage &buffer);
 
 	// 接受处理请求
 	void HandleMessage(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer);

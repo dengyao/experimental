@@ -20,7 +20,7 @@ public:
 
 public:
 	// 回复消息
-	void Respond(network::NetMessage &message);
+	void Respond(const network::NetMessage &message);
 
 private:
 	// 连接事件

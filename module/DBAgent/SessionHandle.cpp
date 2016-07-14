@@ -44,7 +44,8 @@ void SessionHandle::OnMessage(network::NetMessage &message)
 				is_logged_ = true;
 				internal::LoginDBAgentRsp response;
 				response.set_heartbeat_interval(60);
-				Respond(&response, message);
+				PackageMessage(&response, message);
+				Respond(message);
 			}
 		}
 	}
@@ -53,7 +54,8 @@ void SessionHandle::OnMessage(network::NetMessage &message)
 	{
 		message.Clear();
 		internal::PongRsp response;
-		Respond(&response, message);
+		PackageMessage(&response, message);
+		Respond(message);
 	}
 	else
 	{
@@ -67,17 +69,10 @@ void SessionHandle::OnClose()
 }
 
 // 回复消息
-void SessionHandle::Respond(google::protobuf::Message *message, network::NetMessage &buffer)
+void SessionHandle::Respond(const network::NetMessage &message)
 {
-	PackageMessage(message, buffer);
-	StatisticalTools::GetInstance()->AccumulateDownVolume(buffer.Readable() + sizeof(network::DefaultMessageFilter::MessageHeader));
-	Send(buffer);
-}
-
-void SessionHandle::Respond(google::protobuf::Message *message)
-{
-	network::NetMessage buffer;
-	Respond(message, buffer);
+	StatisticalTools::GetInstance()->AccumulateDownVolume(message.Readable() + sizeof(network::DefaultMessageFilter::MessageHeader));
+	Send(message);
 }
 
 /************************************************************************/

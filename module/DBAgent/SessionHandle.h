@@ -20,8 +20,7 @@ public:
 
 public:
 	// 回复消息
-	void Respond(google::protobuf::Message *message);
-	void Respond(google::protobuf::Message *message, network::NetMessage &buffer);
+	void Respond(const network::NetMessage &message);
 
 private:
 	// 连接事件

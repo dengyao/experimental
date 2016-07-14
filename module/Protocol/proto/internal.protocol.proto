@@ -118,9 +118,19 @@ message LoginRouterReq {
     optional uint32 child_id = 2 [default = 1]; // 服务器子节点id
 }
 
-// 登录网关返回
+// 登录Router返回
 message LoginRouterRsp {
     required uint32 heartbeat_interval = 1; // 心跳包间隔
+}
+
+// 查询Router信息请求
+message RouterInfoReq {
+}
+
+// 查询Router信息返回
+message RouterInfoRsp {
+    required uint32 up_volume = 1; // 每秒上行流量
+    required uint32 down_volume = 2; // 每秒下行流量
 }
 
 // 转发消息请求

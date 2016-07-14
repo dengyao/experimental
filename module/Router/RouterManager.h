@@ -67,6 +67,9 @@ private:
 	// 服务器登录
 	void OnServerLogin(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer);
 
+	// 查询路由信息
+	void OnQueryRouterInfo(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer);
+
 	// 转发服务器消息
 	void OnForwardServerMessage(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer);
 
@@ -78,6 +81,9 @@ public:
 	void RespondErrorCode(SessionHandle &session, network::NetMessage &buffer, int error_code, const char *what = nullptr);
 
 private:
+	// 更新统计数据
+	void UpdateStatisicalData(asio::error_code error_code);
+
 	// 查找服务器节点
 	bool FindServerNode(int node_type, int child_id, ChildNode *&out_child_node);
 	bool FindServerNodeBySessionID(network::TCPSessionID session_id, ChildNode *&out_child_node);
@@ -86,8 +92,10 @@ private:
 	bool FindServerNodeSession(int node_type, int child_id, network::SessionHandlePointer &out_session);
 
 private:
-	network::IOServiceThreadManager& threads_;
-	std::unordered_map<int, ServerNode> server_lists_;
+	network::IOServiceThreadManager&                     threads_;
+	asio::steady_timer                                   timer_;
+	const std::function<void(asio::error_code)>          wait_handler_;
+	std::unordered_map<int, ServerNode>                  server_lists_;
 	std::unordered_map<network::TCPSessionID, NodeIndex> node_index_;
 };
 

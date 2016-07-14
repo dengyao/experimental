@@ -70,7 +70,7 @@ void SessionHandle::OnClose()
 }
 
 // 回复消息
-void SessionHandle::Respond(network::NetMessage &message)
+void SessionHandle::Respond(const network::NetMessage &message)
 {
 	StatisticalTools::GetInstance()->AccumulateDownVolume(message.Readable() + sizeof(network::DefaultMessageFilter::MessageHeader));
 	Send(message);
