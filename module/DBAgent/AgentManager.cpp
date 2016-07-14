@@ -96,8 +96,8 @@ void AgentManager::UpdateStatisicalData(asio::error_code error_code)
 		return;
 	}
 	StatisticalTools::GetInstance()->Flush();
-	timer_.expires_from_now(std::chrono::seconds(1));
-	timer_.async_wait(statisical_wait_handler_);
+	statisical_timer_.expires_from_now(std::chrono::seconds(1));
+	statisical_timer_.async_wait(statisical_wait_handler_);
 }
 
 // 接受处理请求
