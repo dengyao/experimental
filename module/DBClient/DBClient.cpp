@@ -167,7 +167,7 @@ DBClient::DBClient(network::IOServiceThreadManager &threads, asio::ip::tcp::endp
 	, connection_num_(connection_num)
 	, generator_(std::numeric_limits<uint16_t>::max())
 	, timer_(threads.MainThread()->IOService(), std::chrono::seconds(1))
-	, wait_handler_(std::bind(&DBClient::UpdateTimer, this, std::placeholders::_1))
+	, wait_handler_(std::bind(&DBClient::OnUpdateTimer, this, std::placeholders::_1))
 	, session_handle_creator_(threads_, std::bind(&DBClient::CreateSessionHandle, this), std::bind(CreaterMessageFilter))
 {
 	assert(connection_num > 0);
@@ -178,14 +178,6 @@ DBClient::DBClient(network::IOServiceThreadManager &threads, asio::ip::tcp::endp
 DBClient::~DBClient()
 {
 	Clear();
-}
-
-// 创建会话处理器
-network::SessionHandlePointer DBClient::CreateSessionHandle()
-{
-	auto life = std::make_shared<bool>();
-	lifetimes_.insert(life);
-	return std::make_shared<DBSessionHandle>(this, life);
 }
 
 // 清理所有连接
@@ -202,6 +194,20 @@ void DBClient::Clear()
 	session_handle_lists_.clear();
 }
 
+// 获取有效连接数量
+size_t DBClient::GetKeepAliveConnectionNum() const
+{
+	return session_handle_lists_.size();
+}
+
+// 创建会话处理器
+network::SessionHandlePointer DBClient::CreateSessionHandle()
+{
+	auto life = std::make_shared<bool>();
+	lifetimes_.insert(life);
+	return std::make_shared<DBSessionHandle>(this, life);
+}
+
 // 初始化连接
 void DBClient::InitConnections()
 {
@@ -215,13 +221,13 @@ void DBClient::InitConnections()
 		catch (const std::exception&)
 		{
 			Clear();
-			throw ConnectDBSFailed(error_code.message().c_str());
+			throw ConnectDBAgentFailed(error_code.message().c_str());
 		}
 		
 		if (error_code)
 		{
 			Clear();
-			throw ConnectDBSFailed(error_code.message().c_str());
+			throw ConnectDBAgentFailed(error_code.message().c_str());
 		}
 	}
 }
@@ -269,7 +275,7 @@ void DBClient::AsyncReconnectResult(AsyncReconnectHandle &handler, asio::error_c
 }
 
 // 更新计时器
-void DBClient::UpdateTimer(asio::error_code error_code)
+void DBClient::OnUpdateTimer(asio::error_code error_code)
 {
 	if (error_code)
 	{
@@ -306,10 +312,10 @@ void DBClient::OnDisconnect(DBSessionHandle *session)
 {
 	lifetimes_.erase(session->GetShared());
 
-	auto client_iter = std::find(session_handle_lists_.begin(), session_handle_lists_.end(), session);
-	if (client_iter != session_handle_lists_.end())
+	auto session_iter = std::find(session_handle_lists_.begin(), session_handle_lists_.end(), session);
+	if (session_iter != session_handle_lists_.end())
 	{
-		session_handle_lists_.erase(client_iter);
+		session_handle_lists_.erase(session_iter);
 	}
 
 	std::set<uint32_t> lists;
@@ -347,15 +353,15 @@ void DBClient::OnMessage(DBSessionHandle *session, google::protobuf::Message *me
 	uint32_t sequence = 0;
 	if (dynamic_cast<internal::QueryDBAgentRsp*>(message) != nullptr)
 	{
-		sequence = dynamic_cast<internal::QueryDBAgentRsp*>(message)->sequence();
+		sequence = static_cast<internal::QueryDBAgentRsp*>(message)->sequence();
 	}
 	else if (dynamic_cast<internal::DBErrorRsp*>(message) != nullptr)
 	{
-		sequence = dynamic_cast<internal::DBErrorRsp*>(message)->sequence();
+		sequence = static_cast<internal::DBErrorRsp*>(message)->sequence();
 	}
 	else if (dynamic_cast<internal::DBAgentErrorRsp*>(message) != nullptr)
 	{
-		sequence = dynamic_cast<internal::DBAgentErrorRsp*>(message)->sequence();
+		sequence = static_cast<internal::DBAgentErrorRsp*>(message)->sequence();
 	}
 	else
 	{
@@ -386,12 +392,6 @@ void DBClient::OnMessage(DBSessionHandle *session, google::protobuf::Message *me
 	{
 		callback(message);
 	}
-}
-
-// 获取有效连接数量
-size_t DBClient::GetKeepAliveConnectionNum() const
-{
-	return session_handle_lists_.size();
 }
 
 // 异步操作

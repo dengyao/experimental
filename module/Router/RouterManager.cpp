@@ -26,6 +26,8 @@ void RouterManager::UpdateStatisicalData(asio::error_code error_code)
 		return;
 	}
 	StatisticalTools::GetInstance()->Flush();
+	std::cout << "每秒上行流量：" << StatisticalTools::GetInstance()->UpVolume() << "字节" << std::endl;
+	std::cout << "每秒下行流量：" << StatisticalTools::GetInstance()->UpVolume() << "字节" << std::endl;
 	timer_.expires_from_now(std::chrono::seconds(1));
 	timer_.async_wait(wait_handler_);
 }
@@ -113,11 +115,11 @@ void RouterManager::HandleMessage(SessionHandle &session, google::protobuf::Mess
 	{
 		OnServerLogin(session, message, buffer);
 	}
-	else if (dynamic_cast<internal::ForwardMessageReq*>(message) != nullptr)
+	else if (dynamic_cast<internal::ForwardReq*>(message) != nullptr)
 	{
 		OnForwardServerMessage(session, message, buffer);
 	}
-	else if (dynamic_cast<internal::BroadcastMessageReq*>(message) != nullptr)
+	else if (dynamic_cast<internal::BroadcastReq*>(message) != nullptr)
 	{
 		OnBroadcastServerMessage(session, message, buffer);
 	}
@@ -247,7 +249,7 @@ void RouterManager::OnQueryRouterInfo(SessionHandle &session, google::protobuf::
 // 转发服务器消息
 void RouterManager::OnForwardServerMessage(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
-	auto request = static_cast<internal::ForwardMessageReq*>(message);
+	auto request = static_cast<internal::ForwardReq*>(message);
 	if (request->message_length() != buffer.Readable())
 	{
 		RespondErrorCode(session, buffer, internal::kInvalidDataPacket);
@@ -269,7 +271,7 @@ void RouterManager::OnForwardServerMessage(SessionHandle &session, google::proto
 	}
 
 	network::NetMessage new_message;
-	internal::ForwardMessageRsp response;
+	internal::RouterNotify response;
 	response.set_src_type(static_cast<internal::NodeType>(child_node->node_type));
 	response.set_src_child_id(child_node->child_id);
 	response.set_message_length(buffer.Readable());
@@ -281,7 +283,7 @@ void RouterManager::OnForwardServerMessage(SessionHandle &session, google::proto
 // 广播服务器消息
 void RouterManager::OnBroadcastServerMessage(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
-	auto request = static_cast<internal::BroadcastMessageReq*>(message);
+	auto request = static_cast<internal::BroadcastReq*>(message);
 	if (request->message_length() != buffer.Readable())
 	{
 		RespondErrorCode(session, buffer, internal::kInvalidDataPacket);
@@ -295,7 +297,7 @@ void RouterManager::OnBroadcastServerMessage(SessionHandle &session, google::pro
 	}
 	
 	network::NetMessage new_message;
-	internal::BroadcastMessageRsp response;
+	internal::RouterNotify response;
 	response.set_src_type(static_cast<internal::NodeType>(child_node->node_type));
 	response.set_src_child_id(child_node->child_id);
 	response.set_message_length(buffer.Readable());

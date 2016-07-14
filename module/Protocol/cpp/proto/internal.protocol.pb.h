@@ -49,10 +49,9 @@ class LoginRouterReq;
 class LoginRouterRsp;
 class RouterInfoReq;
 class RouterInfoRsp;
-class ForwardMessageReq;
-class ForwardMessageRsp;
-class BroadcastMessageReq;
-class BroadcastMessageRsp;
+class ForwardReq;
+class BroadcastReq;
+class RouterNotify;
 
 enum QueryDBAgentReq_ActoinType {
   QueryDBAgentReq_ActoinType_kSelect = 1,
@@ -1534,14 +1533,14 @@ class RouterInfoRsp : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
-class ForwardMessageReq : public ::google::protobuf::Message {
+class ForwardReq : public ::google::protobuf::Message {
  public:
-  ForwardMessageReq();
-  virtual ~ForwardMessageReq();
+  ForwardReq();
+  virtual ~ForwardReq();
 
-  ForwardMessageReq(const ForwardMessageReq& from);
+  ForwardReq(const ForwardReq& from);
 
-  inline ForwardMessageReq& operator=(const ForwardMessageReq& from) {
+  inline ForwardReq& operator=(const ForwardReq& from) {
     CopyFrom(from);
     return *this;
   }
@@ -1555,17 +1554,17 @@ class ForwardMessageReq : public ::google::protobuf::Message {
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
-  static const ForwardMessageReq& default_instance();
+  static const ForwardReq& default_instance();
 
-  void Swap(ForwardMessageReq* other);
+  void Swap(ForwardReq* other);
 
   // implements Message ----------------------------------------------
 
-  ForwardMessageReq* New() const;
+  ForwardReq* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const ForwardMessageReq& from);
-  void MergeFrom(const ForwardMessageReq& from);
+  void CopyFrom(const ForwardReq& from);
+  void MergeFrom(const ForwardReq& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -1608,7 +1607,7 @@ class ForwardMessageReq : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 message_length() const;
   inline void set_message_length(::google::protobuf::uint32 value);
 
-  // @@protoc_insertion_point(class_scope:internal.ForwardMessageReq)
+  // @@protoc_insertion_point(class_scope:internal.ForwardReq)
  private:
   inline void set_has_dst_type();
   inline void clear_has_dst_type();
@@ -1629,18 +1628,18 @@ class ForwardMessageReq : public ::google::protobuf::Message {
   friend void protobuf_ShutdownFile_proto_2finternal_2eprotocol_2eproto();
 
   void InitAsDefaultInstance();
-  static ForwardMessageReq* default_instance_;
+  static ForwardReq* default_instance_;
 };
 // -------------------------------------------------------------------
 
-class ForwardMessageRsp : public ::google::protobuf::Message {
+class BroadcastReq : public ::google::protobuf::Message {
  public:
-  ForwardMessageRsp();
-  virtual ~ForwardMessageRsp();
+  BroadcastReq();
+  virtual ~BroadcastReq();
 
-  ForwardMessageRsp(const ForwardMessageRsp& from);
+  BroadcastReq(const BroadcastReq& from);
 
-  inline ForwardMessageRsp& operator=(const ForwardMessageRsp& from) {
+  inline BroadcastReq& operator=(const BroadcastReq& from) {
     CopyFrom(from);
     return *this;
   }
@@ -1654,116 +1653,17 @@ class ForwardMessageRsp : public ::google::protobuf::Message {
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
-  static const ForwardMessageRsp& default_instance();
+  static const BroadcastReq& default_instance();
 
-  void Swap(ForwardMessageRsp* other);
-
-  // implements Message ----------------------------------------------
-
-  ForwardMessageRsp* New() const;
-  void CopyFrom(const ::google::protobuf::Message& from);
-  void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const ForwardMessageRsp& from);
-  void MergeFrom(const ForwardMessageRsp& from);
-  void Clear();
-  bool IsInitialized() const;
-
-  int ByteSize() const;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input);
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const;
-  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
-  int GetCachedSize() const { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  public:
-  ::google::protobuf::Metadata GetMetadata() const;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // required .internal.NodeType src_type = 1;
-  inline bool has_src_type() const;
-  inline void clear_src_type();
-  static const int kSrcTypeFieldNumber = 1;
-  inline ::internal::NodeType src_type() const;
-  inline void set_src_type(::internal::NodeType value);
-
-  // optional uint32 src_child_id = 2 [default = 1];
-  inline bool has_src_child_id() const;
-  inline void clear_src_child_id();
-  static const int kSrcChildIdFieldNumber = 2;
-  inline ::google::protobuf::uint32 src_child_id() const;
-  inline void set_src_child_id(::google::protobuf::uint32 value);
-
-  // required uint32 message_length = 3;
-  inline bool has_message_length() const;
-  inline void clear_message_length();
-  static const int kMessageLengthFieldNumber = 3;
-  inline ::google::protobuf::uint32 message_length() const;
-  inline void set_message_length(::google::protobuf::uint32 value);
-
-  // @@protoc_insertion_point(class_scope:internal.ForwardMessageRsp)
- private:
-  inline void set_has_src_type();
-  inline void clear_has_src_type();
-  inline void set_has_src_child_id();
-  inline void clear_has_src_child_id();
-  inline void set_has_message_length();
-  inline void clear_has_message_length();
-
-  ::google::protobuf::UnknownFieldSet _unknown_fields_;
-
-  ::google::protobuf::uint32 _has_bits_[1];
-  mutable int _cached_size_;
-  int src_type_;
-  ::google::protobuf::uint32 src_child_id_;
-  ::google::protobuf::uint32 message_length_;
-  friend void  protobuf_AddDesc_proto_2finternal_2eprotocol_2eproto();
-  friend void protobuf_AssignDesc_proto_2finternal_2eprotocol_2eproto();
-  friend void protobuf_ShutdownFile_proto_2finternal_2eprotocol_2eproto();
-
-  void InitAsDefaultInstance();
-  static ForwardMessageRsp* default_instance_;
-};
-// -------------------------------------------------------------------
-
-class BroadcastMessageReq : public ::google::protobuf::Message {
- public:
-  BroadcastMessageReq();
-  virtual ~BroadcastMessageReq();
-
-  BroadcastMessageReq(const BroadcastMessageReq& from);
-
-  inline BroadcastMessageReq& operator=(const BroadcastMessageReq& from) {
-    CopyFrom(from);
-    return *this;
-  }
-
-  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
-    return _unknown_fields_;
-  }
-
-  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
-
-  static const ::google::protobuf::Descriptor* descriptor();
-  static const BroadcastMessageReq& default_instance();
-
-  void Swap(BroadcastMessageReq* other);
+  void Swap(BroadcastReq* other);
 
   // implements Message ----------------------------------------------
 
-  BroadcastMessageReq* New() const;
+  BroadcastReq* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const BroadcastMessageReq& from);
-  void MergeFrom(const BroadcastMessageReq& from);
+  void CopyFrom(const BroadcastReq& from);
+  void MergeFrom(const BroadcastReq& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -1795,14 +1695,14 @@ class BroadcastMessageReq : public ::google::protobuf::Message {
   inline const ::google::protobuf::RepeatedField<int>& dst_lists() const;
   inline ::google::protobuf::RepeatedField<int>* mutable_dst_lists();
 
-  // required uint32 message_length = 3;
+  // required uint32 message_length = 2;
   inline bool has_message_length() const;
   inline void clear_message_length();
-  static const int kMessageLengthFieldNumber = 3;
+  static const int kMessageLengthFieldNumber = 2;
   inline ::google::protobuf::uint32 message_length() const;
   inline void set_message_length(::google::protobuf::uint32 value);
 
-  // @@protoc_insertion_point(class_scope:internal.BroadcastMessageReq)
+  // @@protoc_insertion_point(class_scope:internal.BroadcastReq)
  private:
   inline void set_has_message_length();
   inline void clear_has_message_length();
@@ -1818,18 +1718,18 @@ class BroadcastMessageReq : public ::google::protobuf::Message {
   friend void protobuf_ShutdownFile_proto_2finternal_2eprotocol_2eproto();
 
   void InitAsDefaultInstance();
-  static BroadcastMessageReq* default_instance_;
+  static BroadcastReq* default_instance_;
 };
 // -------------------------------------------------------------------
 
-class BroadcastMessageRsp : public ::google::protobuf::Message {
+class RouterNotify : public ::google::protobuf::Message {
  public:
-  BroadcastMessageRsp();
-  virtual ~BroadcastMessageRsp();
+  RouterNotify();
+  virtual ~RouterNotify();
 
-  BroadcastMessageRsp(const BroadcastMessageRsp& from);
+  RouterNotify(const RouterNotify& from);
 
-  inline BroadcastMessageRsp& operator=(const BroadcastMessageRsp& from) {
+  inline RouterNotify& operator=(const RouterNotify& from) {
     CopyFrom(from);
     return *this;
   }
@@ -1843,17 +1743,17 @@ class BroadcastMessageRsp : public ::google::protobuf::Message {
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
-  static const BroadcastMessageRsp& default_instance();
+  static const RouterNotify& default_instance();
 
-  void Swap(BroadcastMessageRsp* other);
+  void Swap(RouterNotify* other);
 
   // implements Message ----------------------------------------------
 
-  BroadcastMessageRsp* New() const;
+  RouterNotify* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const BroadcastMessageRsp& from);
-  void MergeFrom(const BroadcastMessageRsp& from);
+  void CopyFrom(const RouterNotify& from);
+  void MergeFrom(const RouterNotify& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -1896,7 +1796,7 @@ class BroadcastMessageRsp : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 message_length() const;
   inline void set_message_length(::google::protobuf::uint32 value);
 
-  // @@protoc_insertion_point(class_scope:internal.BroadcastMessageRsp)
+  // @@protoc_insertion_point(class_scope:internal.RouterNotify)
  private:
   inline void set_has_src_type();
   inline void clear_has_src_type();
@@ -1917,7 +1817,7 @@ class BroadcastMessageRsp : public ::google::protobuf::Message {
   friend void protobuf_ShutdownFile_proto_2finternal_2eprotocol_2eproto();
 
   void InitAsDefaultInstance();
-  static BroadcastMessageRsp* default_instance_;
+  static RouterNotify* default_instance_;
 };
 // ===================================================================
 
@@ -2921,293 +2821,216 @@ inline void RouterInfoRsp::set_down_volume(::google::protobuf::uint32 value) {
 
 // -------------------------------------------------------------------
 
-// ForwardMessageReq
+// ForwardReq
 
 // required .internal.NodeType dst_type = 1;
-inline bool ForwardMessageReq::has_dst_type() const {
+inline bool ForwardReq::has_dst_type() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void ForwardMessageReq::set_has_dst_type() {
+inline void ForwardReq::set_has_dst_type() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void ForwardMessageReq::clear_has_dst_type() {
+inline void ForwardReq::clear_has_dst_type() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void ForwardMessageReq::clear_dst_type() {
+inline void ForwardReq::clear_dst_type() {
   dst_type_ = 1;
   clear_has_dst_type();
 }
-inline ::internal::NodeType ForwardMessageReq::dst_type() const {
-  // @@protoc_insertion_point(field_get:internal.ForwardMessageReq.dst_type)
+inline ::internal::NodeType ForwardReq::dst_type() const {
+  // @@protoc_insertion_point(field_get:internal.ForwardReq.dst_type)
   return static_cast< ::internal::NodeType >(dst_type_);
 }
-inline void ForwardMessageReq::set_dst_type(::internal::NodeType value) {
+inline void ForwardReq::set_dst_type(::internal::NodeType value) {
   assert(::internal::NodeType_IsValid(value));
   set_has_dst_type();
   dst_type_ = value;
-  // @@protoc_insertion_point(field_set:internal.ForwardMessageReq.dst_type)
+  // @@protoc_insertion_point(field_set:internal.ForwardReq.dst_type)
 }
 
 // optional uint32 dst_child_id = 2 [default = 1];
-inline bool ForwardMessageReq::has_dst_child_id() const {
+inline bool ForwardReq::has_dst_child_id() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void ForwardMessageReq::set_has_dst_child_id() {
+inline void ForwardReq::set_has_dst_child_id() {
   _has_bits_[0] |= 0x00000002u;
 }
-inline void ForwardMessageReq::clear_has_dst_child_id() {
+inline void ForwardReq::clear_has_dst_child_id() {
   _has_bits_[0] &= ~0x00000002u;
 }
-inline void ForwardMessageReq::clear_dst_child_id() {
+inline void ForwardReq::clear_dst_child_id() {
   dst_child_id_ = 1u;
   clear_has_dst_child_id();
 }
-inline ::google::protobuf::uint32 ForwardMessageReq::dst_child_id() const {
-  // @@protoc_insertion_point(field_get:internal.ForwardMessageReq.dst_child_id)
+inline ::google::protobuf::uint32 ForwardReq::dst_child_id() const {
+  // @@protoc_insertion_point(field_get:internal.ForwardReq.dst_child_id)
   return dst_child_id_;
 }
-inline void ForwardMessageReq::set_dst_child_id(::google::protobuf::uint32 value) {
+inline void ForwardReq::set_dst_child_id(::google::protobuf::uint32 value) {
   set_has_dst_child_id();
   dst_child_id_ = value;
-  // @@protoc_insertion_point(field_set:internal.ForwardMessageReq.dst_child_id)
+  // @@protoc_insertion_point(field_set:internal.ForwardReq.dst_child_id)
 }
 
 // required uint32 message_length = 3;
-inline bool ForwardMessageReq::has_message_length() const {
+inline bool ForwardReq::has_message_length() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
-inline void ForwardMessageReq::set_has_message_length() {
+inline void ForwardReq::set_has_message_length() {
   _has_bits_[0] |= 0x00000004u;
 }
-inline void ForwardMessageReq::clear_has_message_length() {
+inline void ForwardReq::clear_has_message_length() {
   _has_bits_[0] &= ~0x00000004u;
 }
-inline void ForwardMessageReq::clear_message_length() {
+inline void ForwardReq::clear_message_length() {
   message_length_ = 0u;
   clear_has_message_length();
 }
-inline ::google::protobuf::uint32 ForwardMessageReq::message_length() const {
-  // @@protoc_insertion_point(field_get:internal.ForwardMessageReq.message_length)
+inline ::google::protobuf::uint32 ForwardReq::message_length() const {
+  // @@protoc_insertion_point(field_get:internal.ForwardReq.message_length)
   return message_length_;
 }
-inline void ForwardMessageReq::set_message_length(::google::protobuf::uint32 value) {
+inline void ForwardReq::set_message_length(::google::protobuf::uint32 value) {
   set_has_message_length();
   message_length_ = value;
-  // @@protoc_insertion_point(field_set:internal.ForwardMessageReq.message_length)
+  // @@protoc_insertion_point(field_set:internal.ForwardReq.message_length)
 }
 
 // -------------------------------------------------------------------
 
-// ForwardMessageRsp
-
-// required .internal.NodeType src_type = 1;
-inline bool ForwardMessageRsp::has_src_type() const {
-  return (_has_bits_[0] & 0x00000001u) != 0;
-}
-inline void ForwardMessageRsp::set_has_src_type() {
-  _has_bits_[0] |= 0x00000001u;
-}
-inline void ForwardMessageRsp::clear_has_src_type() {
-  _has_bits_[0] &= ~0x00000001u;
-}
-inline void ForwardMessageRsp::clear_src_type() {
-  src_type_ = 1;
-  clear_has_src_type();
-}
-inline ::internal::NodeType ForwardMessageRsp::src_type() const {
-  // @@protoc_insertion_point(field_get:internal.ForwardMessageRsp.src_type)
-  return static_cast< ::internal::NodeType >(src_type_);
-}
-inline void ForwardMessageRsp::set_src_type(::internal::NodeType value) {
-  assert(::internal::NodeType_IsValid(value));
-  set_has_src_type();
-  src_type_ = value;
-  // @@protoc_insertion_point(field_set:internal.ForwardMessageRsp.src_type)
-}
-
-// optional uint32 src_child_id = 2 [default = 1];
-inline bool ForwardMessageRsp::has_src_child_id() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
-}
-inline void ForwardMessageRsp::set_has_src_child_id() {
-  _has_bits_[0] |= 0x00000002u;
-}
-inline void ForwardMessageRsp::clear_has_src_child_id() {
-  _has_bits_[0] &= ~0x00000002u;
-}
-inline void ForwardMessageRsp::clear_src_child_id() {
-  src_child_id_ = 1u;
-  clear_has_src_child_id();
-}
-inline ::google::protobuf::uint32 ForwardMessageRsp::src_child_id() const {
-  // @@protoc_insertion_point(field_get:internal.ForwardMessageRsp.src_child_id)
-  return src_child_id_;
-}
-inline void ForwardMessageRsp::set_src_child_id(::google::protobuf::uint32 value) {
-  set_has_src_child_id();
-  src_child_id_ = value;
-  // @@protoc_insertion_point(field_set:internal.ForwardMessageRsp.src_child_id)
-}
-
-// required uint32 message_length = 3;
-inline bool ForwardMessageRsp::has_message_length() const {
-  return (_has_bits_[0] & 0x00000004u) != 0;
-}
-inline void ForwardMessageRsp::set_has_message_length() {
-  _has_bits_[0] |= 0x00000004u;
-}
-inline void ForwardMessageRsp::clear_has_message_length() {
-  _has_bits_[0] &= ~0x00000004u;
-}
-inline void ForwardMessageRsp::clear_message_length() {
-  message_length_ = 0u;
-  clear_has_message_length();
-}
-inline ::google::protobuf::uint32 ForwardMessageRsp::message_length() const {
-  // @@protoc_insertion_point(field_get:internal.ForwardMessageRsp.message_length)
-  return message_length_;
-}
-inline void ForwardMessageRsp::set_message_length(::google::protobuf::uint32 value) {
-  set_has_message_length();
-  message_length_ = value;
-  // @@protoc_insertion_point(field_set:internal.ForwardMessageRsp.message_length)
-}
-
-// -------------------------------------------------------------------
-
-// BroadcastMessageReq
+// BroadcastReq
 
 // repeated .internal.NodeType dst_lists = 1;
-inline int BroadcastMessageReq::dst_lists_size() const {
+inline int BroadcastReq::dst_lists_size() const {
   return dst_lists_.size();
 }
-inline void BroadcastMessageReq::clear_dst_lists() {
+inline void BroadcastReq::clear_dst_lists() {
   dst_lists_.Clear();
 }
-inline ::internal::NodeType BroadcastMessageReq::dst_lists(int index) const {
-  // @@protoc_insertion_point(field_get:internal.BroadcastMessageReq.dst_lists)
+inline ::internal::NodeType BroadcastReq::dst_lists(int index) const {
+  // @@protoc_insertion_point(field_get:internal.BroadcastReq.dst_lists)
   return static_cast< ::internal::NodeType >(dst_lists_.Get(index));
 }
-inline void BroadcastMessageReq::set_dst_lists(int index, ::internal::NodeType value) {
+inline void BroadcastReq::set_dst_lists(int index, ::internal::NodeType value) {
   assert(::internal::NodeType_IsValid(value));
   dst_lists_.Set(index, value);
-  // @@protoc_insertion_point(field_set:internal.BroadcastMessageReq.dst_lists)
+  // @@protoc_insertion_point(field_set:internal.BroadcastReq.dst_lists)
 }
-inline void BroadcastMessageReq::add_dst_lists(::internal::NodeType value) {
+inline void BroadcastReq::add_dst_lists(::internal::NodeType value) {
   assert(::internal::NodeType_IsValid(value));
   dst_lists_.Add(value);
-  // @@protoc_insertion_point(field_add:internal.BroadcastMessageReq.dst_lists)
+  // @@protoc_insertion_point(field_add:internal.BroadcastReq.dst_lists)
 }
 inline const ::google::protobuf::RepeatedField<int>&
-BroadcastMessageReq::dst_lists() const {
-  // @@protoc_insertion_point(field_list:internal.BroadcastMessageReq.dst_lists)
+BroadcastReq::dst_lists() const {
+  // @@protoc_insertion_point(field_list:internal.BroadcastReq.dst_lists)
   return dst_lists_;
 }
 inline ::google::protobuf::RepeatedField<int>*
-BroadcastMessageReq::mutable_dst_lists() {
-  // @@protoc_insertion_point(field_mutable_list:internal.BroadcastMessageReq.dst_lists)
+BroadcastReq::mutable_dst_lists() {
+  // @@protoc_insertion_point(field_mutable_list:internal.BroadcastReq.dst_lists)
   return &dst_lists_;
 }
 
-// required uint32 message_length = 3;
-inline bool BroadcastMessageReq::has_message_length() const {
+// required uint32 message_length = 2;
+inline bool BroadcastReq::has_message_length() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void BroadcastMessageReq::set_has_message_length() {
+inline void BroadcastReq::set_has_message_length() {
   _has_bits_[0] |= 0x00000002u;
 }
-inline void BroadcastMessageReq::clear_has_message_length() {
+inline void BroadcastReq::clear_has_message_length() {
   _has_bits_[0] &= ~0x00000002u;
 }
-inline void BroadcastMessageReq::clear_message_length() {
+inline void BroadcastReq::clear_message_length() {
   message_length_ = 0u;
   clear_has_message_length();
 }
-inline ::google::protobuf::uint32 BroadcastMessageReq::message_length() const {
-  // @@protoc_insertion_point(field_get:internal.BroadcastMessageReq.message_length)
+inline ::google::protobuf::uint32 BroadcastReq::message_length() const {
+  // @@protoc_insertion_point(field_get:internal.BroadcastReq.message_length)
   return message_length_;
 }
-inline void BroadcastMessageReq::set_message_length(::google::protobuf::uint32 value) {
+inline void BroadcastReq::set_message_length(::google::protobuf::uint32 value) {
   set_has_message_length();
   message_length_ = value;
-  // @@protoc_insertion_point(field_set:internal.BroadcastMessageReq.message_length)
+  // @@protoc_insertion_point(field_set:internal.BroadcastReq.message_length)
 }
 
 // -------------------------------------------------------------------
 
-// BroadcastMessageRsp
+// RouterNotify
 
 // required .internal.NodeType src_type = 1;
-inline bool BroadcastMessageRsp::has_src_type() const {
+inline bool RouterNotify::has_src_type() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void BroadcastMessageRsp::set_has_src_type() {
+inline void RouterNotify::set_has_src_type() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void BroadcastMessageRsp::clear_has_src_type() {
+inline void RouterNotify::clear_has_src_type() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void BroadcastMessageRsp::clear_src_type() {
+inline void RouterNotify::clear_src_type() {
   src_type_ = 1;
   clear_has_src_type();
 }
-inline ::internal::NodeType BroadcastMessageRsp::src_type() const {
-  // @@protoc_insertion_point(field_get:internal.BroadcastMessageRsp.src_type)
+inline ::internal::NodeType RouterNotify::src_type() const {
+  // @@protoc_insertion_point(field_get:internal.RouterNotify.src_type)
   return static_cast< ::internal::NodeType >(src_type_);
 }
-inline void BroadcastMessageRsp::set_src_type(::internal::NodeType value) {
+inline void RouterNotify::set_src_type(::internal::NodeType value) {
   assert(::internal::NodeType_IsValid(value));
   set_has_src_type();
   src_type_ = value;
-  // @@protoc_insertion_point(field_set:internal.BroadcastMessageRsp.src_type)
+  // @@protoc_insertion_point(field_set:internal.RouterNotify.src_type)
 }
 
 // optional uint32 src_child_id = 2 [default = 1];
-inline bool BroadcastMessageRsp::has_src_child_id() const {
+inline bool RouterNotify::has_src_child_id() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void BroadcastMessageRsp::set_has_src_child_id() {
+inline void RouterNotify::set_has_src_child_id() {
   _has_bits_[0] |= 0x00000002u;
 }
-inline void BroadcastMessageRsp::clear_has_src_child_id() {
+inline void RouterNotify::clear_has_src_child_id() {
   _has_bits_[0] &= ~0x00000002u;
 }
-inline void BroadcastMessageRsp::clear_src_child_id() {
+inline void RouterNotify::clear_src_child_id() {
   src_child_id_ = 1u;
   clear_has_src_child_id();
 }
-inline ::google::protobuf::uint32 BroadcastMessageRsp::src_child_id() const {
-  // @@protoc_insertion_point(field_get:internal.BroadcastMessageRsp.src_child_id)
+inline ::google::protobuf::uint32 RouterNotify::src_child_id() const {
+  // @@protoc_insertion_point(field_get:internal.RouterNotify.src_child_id)
   return src_child_id_;
 }
-inline void BroadcastMessageRsp::set_src_child_id(::google::protobuf::uint32 value) {
+inline void RouterNotify::set_src_child_id(::google::protobuf::uint32 value) {
   set_has_src_child_id();
   src_child_id_ = value;
-  // @@protoc_insertion_point(field_set:internal.BroadcastMessageRsp.src_child_id)
+  // @@protoc_insertion_point(field_set:internal.RouterNotify.src_child_id)
 }
 
 // required uint32 message_length = 3;
-inline bool BroadcastMessageRsp::has_message_length() const {
+inline bool RouterNotify::has_message_length() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
-inline void BroadcastMessageRsp::set_has_message_length() {
+inline void RouterNotify::set_has_message_length() {
   _has_bits_[0] |= 0x00000004u;
 }
-inline void BroadcastMessageRsp::clear_has_message_length() {
+inline void RouterNotify::clear_has_message_length() {
   _has_bits_[0] &= ~0x00000004u;
 }
-inline void BroadcastMessageRsp::clear_message_length() {
+inline void RouterNotify::clear_message_length() {
   message_length_ = 0u;
   clear_has_message_length();
 }
-inline ::google::protobuf::uint32 BroadcastMessageRsp::message_length() const {
-  // @@protoc_insertion_point(field_get:internal.BroadcastMessageRsp.message_length)
+inline ::google::protobuf::uint32 RouterNotify::message_length() const {
+  // @@protoc_insertion_point(field_get:internal.RouterNotify.message_length)
   return message_length_;
 }
-inline void BroadcastMessageRsp::set_message_length(::google::protobuf::uint32 value) {
+inline void RouterNotify::set_message_length(::google::protobuf::uint32 value) {
   set_has_message_length();
   message_length_ = value;
-  // @@protoc_insertion_point(field_set:internal.BroadcastMessageRsp.message_length)
+  // @@protoc_insertion_point(field_set:internal.RouterNotify.message_length)
 }
 
 

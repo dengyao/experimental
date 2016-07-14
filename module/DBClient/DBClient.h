@@ -28,10 +28,10 @@ enum DatabaseActionType
 	kDelete = 4
 };
 
-class ConnectDBSFailed : public std::runtime_error
+class ConnectDBAgentFailed : public std::runtime_error
 {
 public:
-	ConnectDBSFailed(const char *message)
+	ConnectDBAgentFailed(const char *message)
 		: std::runtime_error(message)
 	{
 	}
@@ -92,7 +92,7 @@ private:
 	void AsyncReconnectResult(AsyncReconnectHandle &handler, asio::error_code error_code);
 
 	// 更新计时器
-	void UpdateTimer(asio::error_code error_code);
+	void OnUpdateTimer(asio::error_code error_code);
 
 	// 创建会话处理器
 	network::SessionHandlePointer CreateSessionHandle();

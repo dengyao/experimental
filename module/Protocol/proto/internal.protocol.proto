@@ -134,27 +134,20 @@ message RouterInfoRsp {
 }
 
 // 转发消息请求
-message ForwardMessageReq {
+message ForwardReq {
     required NodeType dst_type = 1; // 目标服务器类型
     optional uint32 dst_child_id = 2 [default = 1]; // 目标服务器子节点id
     required uint32 message_length = 3; // 消息长度
 }
 
-// 转发消息返回
-message ForwardMessageRsp {
-    required NodeType src_type = 1; // 来源服务器类型
-    optional uint32 src_child_id = 2 [default = 1]; // 来源服务器子节点id
-    required uint32 message_length = 3; // 消息长度
-}
-
 // 广播消息请求
-message BroadcastMessageReq {
+message BroadcastReq {
     repeated NodeType dst_lists = 1; // 目标服务器列表
-    required uint32 message_length = 3; // 消息长度
+    required uint32 message_length = 2; // 消息长度
 }
 
-// 广播消息返回
-message BroadcastMessageRsp {
+// 新消息通知
+message RouterNotify {
     required NodeType src_type = 1; // 来源服务器类型
     optional uint32 src_child_id = 2 [default = 1]; // 来源服务器子节点id
     required uint32 message_length = 3; // 消息长度

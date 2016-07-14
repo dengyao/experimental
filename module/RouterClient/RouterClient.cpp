@@ -1,15 +1,16 @@
 ﻿#include "RouterClient.h"
+#include <iostream>
 #include <proto/MessageHelper.h>
 #include <proto/internal.protocol.pb.h>
 
 /************************************************************************/
 
-class RouterClientHandle : public network::TCPSessionHandler
+class RouterSessionHandle : public network::TCPSessionHandler
 {
 	friend class RouterClient;
 
 public:
-	RouterClientHandle(RouterClient *client, std::shared_ptr<bool> &life)
+	RouterSessionHandle(RouterClient *client, std::shared_ptr<bool> &life)
 		: counter_(0)
 		, client_(client)
 		, is_logged_(false)
@@ -77,7 +78,7 @@ public:
 		}
 		else if (dynamic_cast<internal::PongRsp*>(response.get()) == nullptr)
 		{
-			client_->OnMessage(this, response.get());
+			client_->OnMessage(this, response.get(), message);
 		}
 		else
 		{
@@ -168,25 +169,18 @@ RouterClient::RouterClient(network::IOServiceThreadManager &threads, asio::ip::t
 	, next_client_index_(0)
 	, connection_num_(connection_num)
 	, timer_(threads.MainThread()->IOService(), std::chrono::seconds(1))
-	, wait_handler_(std::bind(&RouterClient::UpdateTimer, this, std::placeholders::_1))
-	, client_creator_(threads_, std::bind(&RouterClient::CreateSessionHandle, this), std::bind(CreaterMessageFilter))
+	, wait_handler_(std::bind(&RouterClient::OnUpdateTimer, this, std::placeholders::_1))
+	, session_handle_creator_(threads_, std::bind(&RouterClient::CreateSessionHandle, this), std::bind(CreaterMessageFilter))
 {
-	// 节点类型和子节点id检测
-
-	// 检测不成功直接让程序崩溃
+	assert(connection_num > 0);
+	assert(node_type_ >= internal::NodeType_MIN && node_type_ <= internal::NodeType_MAX);
+	InitConnections();
+	timer_.async_wait(wait_handler_);
 }
 
 RouterClient::~RouterClient()
 {
 	Clear();
-}
-
-// 创建会话处理器
-network::SessionHandlePointer RouterClient::CreateSessionHandle()
-{
-	auto life = std::make_shared<bool>();
-	lifetimes_.insert(life);
-	return std::make_shared<RouterClientHandle>(this, life);
 }
 
 // 服务器节点类型
@@ -207,14 +201,230 @@ void RouterClient::SetMessageCallback(const Callback &cb)
 	message_cb_ = cb;
 }
 
-// 响应消息
-void RouterClient::Respond(google::protobuf::Message *message)
+// 清理所有连接
+void RouterClient::Clear()
 {
+	lifetimes_.clear();
+	for (auto session : session_handle_lists_)
+	{
+		if (session != nullptr)
+		{
+			session->Close();
+		}
+	}
+	session_handle_lists_.clear();
+}
 
+// 创建会话处理器
+network::SessionHandlePointer RouterClient::CreateSessionHandle()
+{
+	auto life = std::make_shared<bool>();
+	lifetimes_.insert(life);
+	return std::make_shared<RouterSessionHandle>(this, life);
+}
+
+// 初始化连接
+void RouterClient::InitConnections()
+{
+	asio::error_code error_code;
+	for (size_t i = 0; i < connection_num_; ++i)
+	{
+		try
+		{
+			session_handle_creator_.Connect(endpoint_, error_code);
+		}
+		catch (const std::exception&)
+		{
+			Clear();
+			throw ConnectRouterFailed(error_code.message().c_str());
+		}
+
+		if (error_code)
+		{
+			Clear();
+			throw ConnectRouterFailed(error_code.message().c_str());
+		}
+	}
+}
+
+// 重新连接
+void RouterClient::AsyncReconnect()
+{
+	if (session_handle_lists_.size() < connection_num_)
+	{
+		const int diff = connection_num_ - session_handle_lists_.size();
+		assert(connecting_num_ <= diff);
+		if (connecting_num_ < diff)
+		{
+			const int lack = diff - connecting_num_;
+			for (int i = 0; i < lack; ++i)
+			{
+				++connecting_num_;
+
+				auto life = std::make_shared<bool>();
+				lifetimes_.insert(life);
+
+				auto handler = std::make_shared<AsyncReconnectHandle>(this, life);
+				session_handle_creator_.AsyncConnect(endpoint_, std::bind(&AsyncReconnectHandle::ConnectCallback, std::move(handler), std::placeholders::_1));
+			}
+		}
+	}
+}
+
+// 异步重连结果
+void RouterClient::AsyncReconnectResult(AsyncReconnectHandle &handler, asio::error_code error_code)
+{
+	if (error_code)
+	{
+		assert(connecting_num_ > 0);
+		if (connecting_num_ > 0)
+		{
+			--connecting_num_;
+		}
+	}
+	else
+	{
+		++connecting_num_;
+	}
+	lifetimes_.erase(handler.GetShared());
+}
+
+// 获取会话处理器
+RouterSessionHandle* RouterClient::GetRouterSessionHandle()
+{
+	if (session_handle_lists_.size() < connection_num_)
+	{
+		AsyncReconnect();
+		if (session_handle_lists_.empty())
+		{
+			std::cerr << "No more connections available!" << std::endl;
+			assert(false);
+			return nullptr;
+		}
+	}
+
+	if (next_client_index_ >= session_handle_lists_.size())
+	{
+		next_client_index_ = 0;
+	}
+	return session_handle_lists_[next_client_index_++];
+}
+
+// 更新计时器
+void RouterClient::OnUpdateTimer(asio::error_code error_code)
+{
+	if (error_code)
+	{
+		std::cerr << error_code.message() << std::endl;
+		return;
+	}
+
+	for (auto session : session_handle_lists_)
+	{
+		session->HeartbeatCountdown();
+	}
+	timer_.expires_from_now(std::chrono::seconds(1));
+	timer_.async_wait(wait_handler_);
+}
+
+// 连接事件
+void RouterClient::OnConnected(RouterSessionHandle *session)
+{
+	if (session_handle_lists_.size() >= connection_num_)
+	{
+		assert(false);
+		session->Close();
+		return;
+	}
+
+	if (std::find(session_handle_lists_.begin(), session_handle_lists_.end(), session) == session_handle_lists_.end())
+	{
+		session_handle_lists_.push_back(session);
+	}
+}
+
+// 断开连接事件
+void RouterClient::OnDisconnect(RouterSessionHandle *session)
+{
+	lifetimes_.erase(session->GetShared());
+	auto session_iter = std::find(session_handle_lists_.begin(), session_handle_lists_.end(), session);
+	if (session_iter != session_handle_lists_.end())
+	{
+		session_handle_lists_.erase(session_iter);
+	}
+}
+
+// 接受消息事件
+void RouterClient::OnMessage(RouterSessionHandle *session, google::protobuf::Message *message, network::NetMessage &buffer)
+{
+	if (dynamic_cast<internal::RouterNotify*>(message) != nullptr)
+	{
+		auto response = static_cast<internal::RouterNotify*>(message);
+		context_.node_type = response->src_type();
+		context_.child_id = response->src_child_id();
+		assert(response->message_length() == buffer.Readable());
+		if (response->message_length() == buffer.Readable())
+		{
+			auto forward_message = UnpackageMessage(buffer);
+			assert(forward_message != nullptr);
+			if (forward_message != nullptr && message_cb_ != nullptr)
+			{
+				message_cb_(this, forward_message.get(), buffer);
+			}
+		}
+	}
+	else if (dynamic_cast<internal::RouterErrorRsp*>(message) != nullptr)
+	{
+		auto response = static_cast<internal::RouterErrorRsp*>(message);
+		std::cerr << "Router error code: " << response->error_code() << ", message name: " << response->what() << std::endl;
+	}
+	else
+	{
+		assert(false);
+	}
+}
+
+// 回复消息
+void RouterClient::Reply(google::protobuf::Message *message)
+{
+	Send(context_.node_type, context_.child_id, message);
 }
 
 // 发送消息
-void RouterClient::Send(int node_type, int node_id, google::protobuf::Message *message)
+void RouterClient::Send(int dst_node_type, int dst_child_id, google::protobuf::Message *message)
 {
+	assert(dst_node_type >= internal::NodeType_MIN && dst_node_type <= internal::NodeType_MAX);
+	RouterSessionHandle *session = GetRouterSessionHandle();
+	if (session != nullptr)
+	{
+		network::NetMessage buffer;
+		internal::ForwardReq header;
+		header.set_dst_child_id(dst_child_id);
+		header.set_dst_type(static_cast<internal::NodeType>(dst_node_type));
+		header.set_message_length(message->ByteSize());
+		PackageMessage(&header, buffer);
+		PackageMessage(message, buffer);
+		session->Send(buffer);
+	}
+}
 
+// 广播消息
+void RouterClient::Broadcast(const std::vector<int> &dst_type_lists, google::protobuf::Message *message)
+{
+	RouterSessionHandle *session = GetRouterSessionHandle();
+	if (session != nullptr)
+	{
+		network::NetMessage buffer;
+		internal::BroadcastReq header;
+		for (size_t i = 0; i < dst_type_lists.size(); ++i)
+		{
+			int dst_node_type = dst_type_lists[i];
+			assert(dst_node_type >= internal::NodeType_MIN && dst_node_type <= internal::NodeType_MAX);
+			header.add_dst_lists(static_cast<internal::NodeType>(dst_node_type));
+		}
+		header.set_message_length(message->ByteSize());
+		PackageMessage(&header, buffer);
+		PackageMessage(message, buffer);
+		session->Send(buffer);
+	}
 }

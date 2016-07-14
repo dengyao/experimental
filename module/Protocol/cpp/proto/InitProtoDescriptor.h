@@ -24,10 +24,9 @@ public:
         internal::LoginRouterRsp::descriptor();
         internal::RouterInfoReq::descriptor();
         internal::RouterInfoRsp::descriptor();
-        internal::ForwardMessageReq::descriptor();
-        internal::ForwardMessageRsp::descriptor();
-        internal::BroadcastMessageReq::descriptor();
-        internal::BroadcastMessageRsp::descriptor();
+        internal::ForwardReq::descriptor();
+        internal::BroadcastReq::descriptor();
+        internal::RouterNotify::descriptor();
     }
 };
 
