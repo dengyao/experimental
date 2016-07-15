@@ -52,7 +52,7 @@ set(EASYLOGGINGPP_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/core/external/easylog
 set(COMMON_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/module/Common)
 set(PROTOCOL_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/module/Protocol/code)
 set(DBCLIENT_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/module/DBClient)
-set(ROUTERCLIENT_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/module/RouterClient)
+set(CONNECTOR_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/module/Connector)
 
 # 设置二进制输出目录
 set(BINARY_OUTPUT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/bin)
@@ -64,6 +64,6 @@ add_subdirectory(core/external/protobuf)
 add_subdirectory(module/Common)
 add_subdirectory(module/Protocol)
 add_subdirectory(module/Router)
-add_subdirectory(module/RouterClient)
+add_subdirectory(module/Connector)
 add_subdirectory(module/DBAgent)
 add_subdirectory(module/DBClient)

@@ -1,5 +1,5 @@
-﻿#ifndef __ROUTER_CLIENT_H__
-#define __ROUTER_CLIENT_H__
+﻿#ifndef __ROUTER_CONNECTOR_H__
+#define __ROUTER_CONNECTOR_H__
 
 #include <set>
 #include <network.h>
@@ -12,21 +12,21 @@ namespace google
 	}
 }
 
-class ConnectRouterFailed : public std::runtime_error
+class ConnectRouterFail : public std::runtime_error
 {
 public:
-	ConnectRouterFailed(const char *message)
+	ConnectRouterFail(const char *message)
 		: std::runtime_error(message)
 	{
 	}
 };
 
-class RouterSessionHandle;
+class SessionHandle;
 class AsyncReconnectHandle;
 
-class RouterClient
+class Connector
 {
-	friend class RouterSessionHandle;
+	friend class SessionHandle;
 	friend class AsyncReconnectHandle;
 
 public:
@@ -40,11 +40,11 @@ public:
 		}
 	};
 
-	typedef std::function<void(RouterClient *client, google::protobuf::Message*, network::NetMessage &buffer)> Callback;
+	typedef std::function<void(Connector *client, google::protobuf::Message*, network::NetMessage &buffer)> Callback;
 
 public:
-	RouterClient(network::IOServiceThreadManager &threads, asio::ip::tcp::endpoint &endpoint, size_t connection_num, int node_type, int child_id = 1);
-	~RouterClient();
+	Connector(network::IOServiceThreadManager &threads, asio::ip::tcp::endpoint &endpoint, size_t connection_num, int node_type, int child_id = 1);
+	~Connector();
 
 public:
 	// 服务器节点类型
@@ -67,13 +67,13 @@ public:
 
 private:
 	// 连接事件
-	void OnConnected(RouterSessionHandle *session);
+	void OnConnected(SessionHandle *session);
 
 	// 断开连接事件
-	void OnDisconnect(RouterSessionHandle *session);
+	void OnDisconnect(SessionHandle *session);
 
 	// 接受消息事件
-	void OnMessage(RouterSessionHandle *session, google::protobuf::Message *message, network::NetMessage &buffer);
+	void OnMessage(SessionHandle *session, google::protobuf::Message *message, network::NetMessage &buffer);
 
 private:
 	// 清理所有连接
@@ -92,7 +92,7 @@ private:
 	void OnUpdateTimer(asio::error_code error_code);
 
 	// 获取会话处理器
-	RouterSessionHandle* GetRouterSessionHandle();
+	SessionHandle* GetSessionHandle();
 
 	// 创建会话处理器
 	network::SessionHandlePointer CreateSessionHandle();
@@ -107,7 +107,7 @@ private:
 	network::IOServiceThreadManager&            threads_;
 	std::set<std::shared_ptr<bool> >            lifetimes_;
 	network::TCPClient					        session_handle_creator_;
-	std::vector<RouterSessionHandle*>           session_handle_lists_;
+	std::vector<SessionHandle*>                 session_handle_lists_;
 	asio::ip::tcp::endpoint                     endpoint_;
 	asio::steady_timer                          timer_;
 	const std::function<void(asio::error_code)> wait_handler_;

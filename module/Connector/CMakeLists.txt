@@ -1,7 +1,7 @@
-set(CURRENT_PROJECT_NAME RouterClient)
+set(CURRENT_PROJECT_NAME Connector)
 
 set(CURRENT_PROJECT_SRC_LISTS
-  RouterClient.cpp
+  Connector.cpp
 )
 
 include_directories(
