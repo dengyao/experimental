@@ -139,10 +139,7 @@ void ConfigManager::CheckUpdateConfigFiles()
 			{
 				if (config->instance->Load(config->filename))
 				{
-					if (GetConfigFileLastWriteTime(config->filename, last_write_time))
-					{
-						config->last_write_time = last_write_time;
-					}
+					config->last_write_time = last_write_time;
 				}
 				else
 				{
