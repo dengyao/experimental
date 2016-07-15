@@ -3,6 +3,8 @@
 #include <ProtobufCodec.h>
 #include <proto/internal.pb.h>
 
+static const size_t kExtrabufSize = 4096;
+
 /************************************************************************/
 
 class SessionHandle : public network::TCPSessionHandler
@@ -297,7 +299,6 @@ SessionHandle* Connector::GetSessionHandle()
 		AsyncReconnect();
 		if (session_handle_lists_.empty())
 		{
-			std::cerr << "No more connections available!" << std::endl;
 			assert(false);
 			return nullptr;
 		}
@@ -362,21 +363,20 @@ void Connector::OnMessage(SessionHandle *session, google::protobuf::Message *mes
 		auto response = static_cast<internal::RouterNotify*>(message);
 		context_.node_type = response->src_type();
 		context_.child_id = response->src_child_id();
-		assert(response->message_length() == buffer.Readable());
-		if (response->message_length() == buffer.Readable())
+
+		buffer.Clear();
+		buffer.Write(response->user_data().c_str(), response->user_data().size());
+		auto forward_message = ProtubufCodec::Decode(buffer);
+		assert(forward_message != nullptr);
+		if (forward_message != nullptr && message_cb_ != nullptr)
 		{
-			auto forward_message = ProtubufCodec::Decode(buffer);
-			assert(forward_message != nullptr);
-			if (forward_message != nullptr && message_cb_ != nullptr)
-			{
-				message_cb_(this, forward_message.get(), buffer);
-			}
+			message_cb_(this, forward_message.get(), buffer);
 		}
 	}
 	else if (dynamic_cast<internal::RouterErrorRsp*>(message) != nullptr)
 	{
 		auto response = static_cast<internal::RouterErrorRsp*>(message);
-		std::cerr << "Router error code: " << response->error_code() << ", message name: " << response->what() << std::endl;
+		std::cerr << "router error code: " << response->error_code() << std::endl;
 	}
 	else
 	{
@@ -390,20 +390,45 @@ void Connector::Reply(google::protobuf::Message *message)
 	Send(context_.node_type, context_.child_id, message);
 }
 
+void Connector::Reply(google::protobuf::Message *message, network::NetMessage &buffer)
+{
+	Send(context_.node_type, context_.child_id, message, buffer);
+}
+
 // 发送消息
 void Connector::Send(int dst_node_type, int dst_child_id, google::protobuf::Message *message)
+{
+	network::NetMessage buffer;
+	Send(dst_node_type, dst_child_id, message, buffer);
+}
+
+void Connector::Send(int dst_node_type, int dst_child_id, google::protobuf::Message *message, network::NetMessage &buffer)
 {
 	assert(dst_node_type >= internal::NodeType_MIN && dst_node_type <= internal::NodeType_MAX);
 	SessionHandle *session = GetSessionHandle();
 	if (session != nullptr)
 	{
-		network::NetMessage buffer;
-		internal::ForwardReq header;
-		header.set_dst_child_id(dst_child_id);
-		header.set_dst_type(static_cast<internal::NodeType>(dst_node_type));
-		header.set_message_length(message->ByteSize());
-		ProtubufCodec::Encode(&header, buffer);
+		buffer.Clear();
+		std::vector<char> byte_array;
+		std::array<char, kExtrabufSize> extrabuf;
 		ProtubufCodec::Encode(message, buffer);
+		const size_t byte_size = buffer.Readable();
+		if (byte_size <= extrabuf.size())
+		{
+			memcpy(extrabuf.data(), buffer.Data(), byte_size);
+		}
+		else
+		{
+			byte_array.resize(byte_size);
+			memcpy(byte_array.data(), buffer.Data(), byte_size);
+		}
+
+		buffer.Clear();
+		internal::ForwardReq request;
+		request.set_dst_child_id(dst_child_id);
+		request.set_dst_type(static_cast<internal::NodeType>(dst_node_type));
+		request.set_user_data(byte_array.empty() ? extrabuf.data() : byte_array.data(), byte_size);
+		ProtubufCodec::Encode(&request, buffer);
 		session->Send(buffer);
 	}
 }
@@ -411,20 +436,40 @@ void Connector::Send(int dst_node_type, int dst_child_id, google::protobuf::Mess
 // 广播消息
 void Connector::Broadcast(const std::vector<int> &dst_type_lists, google::protobuf::Message *message)
 {
+	network::NetMessage buffer;
+	Broadcast(dst_type_lists, message, buffer);
+}
+
+void Connector::Broadcast(const std::vector<int> &dst_type_lists, google::protobuf::Message *message, network::NetMessage &buffer)
+{
 	SessionHandle *session = GetSessionHandle();
 	if (session != nullptr)
 	{
-		network::NetMessage buffer;
-		internal::BroadcastReq header;
+		buffer.Clear();
+		std::vector<char> byte_array;
+		std::array<char, kExtrabufSize> extrabuf;
+		ProtubufCodec::Encode(message, buffer);
+		const size_t byte_size = buffer.Readable();
+		if (byte_size <= extrabuf.size())
+		{
+			memcpy(extrabuf.data(), buffer.Data(), byte_size);
+		}
+		else
+		{
+			byte_array.resize(byte_size);
+			memcpy(byte_array.data(), buffer.Data(), byte_size);
+		}
+
+		buffer.Clear();
+		internal::BroadcastReq request;
 		for (size_t i = 0; i < dst_type_lists.size(); ++i)
 		{
 			int dst_node_type = dst_type_lists[i];
 			assert(dst_node_type >= internal::NodeType_MIN && dst_node_type <= internal::NodeType_MAX);
-			header.add_dst_lists(static_cast<internal::NodeType>(dst_node_type));
+			request.add_dst_lists(static_cast<internal::NodeType>(dst_node_type));
 		}
-		header.set_message_length(message->ByteSize());
-		ProtubufCodec::Encode(&header, buffer);
-		ProtubufCodec::Encode(message, buffer);
+		request.set_user_data(byte_array.empty() ? extrabuf.data() : byte_array.data(), byte_size);
+		ProtubufCodec::Encode(&request, buffer);
 		session->Send(buffer);
 	}
 }

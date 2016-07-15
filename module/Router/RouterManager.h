@@ -58,23 +58,23 @@ public:
 
 public:
 	// 处理消息
-	void HandleMessage(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer);
+	bool HandleMessage(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer);
 
 	// 处理服务器下线
 	void HandleServerOffline(SessionHandle &session);
 
 private:
 	// 服务器登录
-	void OnServerLogin(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer);
+	bool OnServerLogin(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer);
 
 	// 查询路由信息
-	void OnQueryRouterInfo(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer);
+	bool OnQueryRouterInfo(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer);
 
 	// 转发服务器消息
-	void OnForwardServerMessage(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer);
+	bool OnForwardServerMessage(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer);
 
 	// 广播服务器消息
-	void OnBroadcastServerMessage(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer);
+	bool OnBroadcastServerMessage(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer);
 
 public:
 	// 回复错误码

@@ -37,20 +37,18 @@ void SessionHandle::OnMessage(network::NetMessage &message)
 			if (dynamic_cast<internal::LoginRouterReq*>(request.get()) == nullptr)
 			{
 				router_manager_.RespondErrorCode(*this, message, internal::kNotLoggedIn);
+				return;
 			}
 			else
 			{
-				message.Clear();
-				is_logged_ = true;
-				internal::LoginRouterRsp response;
-				response.set_heartbeat_interval(60);
-				ProtubufCodec::Encode(&response, message);
-				Respond(message);
+				is_logged_ = router_manager_.HandleMessage(*this, request.get(), message);
+				return;
 			}
 		}
 	}
+
 	// 处理心跳包
-	else if (dynamic_cast<internal::PingReq*>(request.get()) != nullptr)
+	if (dynamic_cast<internal::PingReq*>(request.get()) != nullptr)
 	{
 		message.Clear();
 		internal::PongRsp response;

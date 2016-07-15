@@ -40,7 +40,7 @@ public:
 		}
 	};
 
-	typedef std::function<void(Connector *client, google::protobuf::Message*, network::NetMessage &buffer)> Callback;
+	typedef std::function<void(Connector*, google::protobuf::Message*, network::NetMessage&)> Callback;
 
 public:
 	Connector(network::IOServiceThreadManager &threads, asio::ip::tcp::endpoint &endpoint, size_t connection_num, int node_type, int child_id = 1);
@@ -58,17 +58,20 @@ public:
 
 	// 回复消息
 	void Reply(google::protobuf::Message *message);
+	void Reply(google::protobuf::Message *message, network::NetMessage &buffer);
 
 	// 发送消息
 	void Send(int dst_node_type, int dst_child_id, google::protobuf::Message *message);
+	void Send(int dst_node_type, int dst_child_id, google::protobuf::Message *message, network::NetMessage &buffer);
 
 	// 广播消息
-	void Broadcast(const std::vector<int> &dst_type_lists,  google::protobuf::Message *message);
+	void Broadcast(const std::vector<int> &dst_type_lists, google::protobuf::Message *message);
+	void Broadcast(const std::vector<int> &dst_type_lists, google::protobuf::Message *message, network::NetMessage &buffer);
 
 private:
 	// 连接事件
 	void OnConnected(SessionHandle *session);
-
+	
 	// 断开连接事件
 	void OnDisconnect(SessionHandle *session);
 

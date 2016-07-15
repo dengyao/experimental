@@ -15,8 +15,13 @@ namespace google
 		class Message;
 	}
 }
-
 typedef std::unique_ptr<google::protobuf::Message> MessagePointer;
+
+/************************************************************************/
+/* nameLen: 1 bytes                                                     */
+/* message name: nameLen bytes, end with \0                             */
+/* protobuf data: (messageLen - 1 - nameLen) bytes                      */
+/************************************************************************/
 
 class ProtubufCodec
 {

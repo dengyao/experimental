@@ -1600,12 +1600,17 @@ class ForwardReq : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 dst_child_id() const;
   inline void set_dst_child_id(::google::protobuf::uint32 value);
 
-  // required uint32 message_length = 3;
-  inline bool has_message_length() const;
-  inline void clear_message_length();
-  static const int kMessageLengthFieldNumber = 3;
-  inline ::google::protobuf::uint32 message_length() const;
-  inline void set_message_length(::google::protobuf::uint32 value);
+  // required bytes user_data = 3;
+  inline bool has_user_data() const;
+  inline void clear_user_data();
+  static const int kUserDataFieldNumber = 3;
+  inline const ::std::string& user_data() const;
+  inline void set_user_data(const ::std::string& value);
+  inline void set_user_data(const char* value);
+  inline void set_user_data(const void* value, size_t size);
+  inline ::std::string* mutable_user_data();
+  inline ::std::string* release_user_data();
+  inline void set_allocated_user_data(::std::string* user_data);
 
   // @@protoc_insertion_point(class_scope:internal.ForwardReq)
  private:
@@ -1613,8 +1618,8 @@ class ForwardReq : public ::google::protobuf::Message {
   inline void clear_has_dst_type();
   inline void set_has_dst_child_id();
   inline void clear_has_dst_child_id();
-  inline void set_has_message_length();
-  inline void clear_has_message_length();
+  inline void set_has_user_data();
+  inline void clear_has_user_data();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -1622,7 +1627,7 @@ class ForwardReq : public ::google::protobuf::Message {
   mutable int _cached_size_;
   int dst_type_;
   ::google::protobuf::uint32 dst_child_id_;
-  ::google::protobuf::uint32 message_length_;
+  ::std::string* user_data_;
   friend void  protobuf_AddDesc_proto_2finternal_2eproto();
   friend void protobuf_AssignDesc_proto_2finternal_2eproto();
   friend void protobuf_ShutdownFile_proto_2finternal_2eproto();
@@ -1695,24 +1700,29 @@ class BroadcastReq : public ::google::protobuf::Message {
   inline const ::google::protobuf::RepeatedField<int>& dst_lists() const;
   inline ::google::protobuf::RepeatedField<int>* mutable_dst_lists();
 
-  // required uint32 message_length = 2;
-  inline bool has_message_length() const;
-  inline void clear_message_length();
-  static const int kMessageLengthFieldNumber = 2;
-  inline ::google::protobuf::uint32 message_length() const;
-  inline void set_message_length(::google::protobuf::uint32 value);
+  // required bytes user_data = 2;
+  inline bool has_user_data() const;
+  inline void clear_user_data();
+  static const int kUserDataFieldNumber = 2;
+  inline const ::std::string& user_data() const;
+  inline void set_user_data(const ::std::string& value);
+  inline void set_user_data(const char* value);
+  inline void set_user_data(const void* value, size_t size);
+  inline ::std::string* mutable_user_data();
+  inline ::std::string* release_user_data();
+  inline void set_allocated_user_data(::std::string* user_data);
 
   // @@protoc_insertion_point(class_scope:internal.BroadcastReq)
  private:
-  inline void set_has_message_length();
-  inline void clear_has_message_length();
+  inline void set_has_user_data();
+  inline void clear_has_user_data();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
   ::google::protobuf::RepeatedField<int> dst_lists_;
-  ::google::protobuf::uint32 message_length_;
+  ::std::string* user_data_;
   friend void  protobuf_AddDesc_proto_2finternal_2eproto();
   friend void protobuf_AssignDesc_proto_2finternal_2eproto();
   friend void protobuf_ShutdownFile_proto_2finternal_2eproto();
@@ -1789,12 +1799,17 @@ class RouterNotify : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 src_child_id() const;
   inline void set_src_child_id(::google::protobuf::uint32 value);
 
-  // required uint32 message_length = 3;
-  inline bool has_message_length() const;
-  inline void clear_message_length();
-  static const int kMessageLengthFieldNumber = 3;
-  inline ::google::protobuf::uint32 message_length() const;
-  inline void set_message_length(::google::protobuf::uint32 value);
+  // required bytes user_data = 3;
+  inline bool has_user_data() const;
+  inline void clear_user_data();
+  static const int kUserDataFieldNumber = 3;
+  inline const ::std::string& user_data() const;
+  inline void set_user_data(const ::std::string& value);
+  inline void set_user_data(const char* value);
+  inline void set_user_data(const void* value, size_t size);
+  inline ::std::string* mutable_user_data();
+  inline ::std::string* release_user_data();
+  inline void set_allocated_user_data(::std::string* user_data);
 
   // @@protoc_insertion_point(class_scope:internal.RouterNotify)
  private:
@@ -1802,8 +1817,8 @@ class RouterNotify : public ::google::protobuf::Message {
   inline void clear_has_src_type();
   inline void set_has_src_child_id();
   inline void clear_has_src_child_id();
-  inline void set_has_message_length();
-  inline void clear_has_message_length();
+  inline void set_has_user_data();
+  inline void clear_has_user_data();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -1811,7 +1826,7 @@ class RouterNotify : public ::google::protobuf::Message {
   mutable int _cached_size_;
   int src_type_;
   ::google::protobuf::uint32 src_child_id_;
-  ::google::protobuf::uint32 message_length_;
+  ::std::string* user_data_;
   friend void  protobuf_AddDesc_proto_2finternal_2eproto();
   friend void protobuf_AssignDesc_proto_2finternal_2eproto();
   friend void protobuf_ShutdownFile_proto_2finternal_2eproto();
@@ -2872,28 +2887,80 @@ inline void ForwardReq::set_dst_child_id(::google::protobuf::uint32 value) {
   // @@protoc_insertion_point(field_set:internal.ForwardReq.dst_child_id)
 }
 
-// required uint32 message_length = 3;
-inline bool ForwardReq::has_message_length() const {
+// required bytes user_data = 3;
+inline bool ForwardReq::has_user_data() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
-inline void ForwardReq::set_has_message_length() {
+inline void ForwardReq::set_has_user_data() {
   _has_bits_[0] |= 0x00000004u;
 }
-inline void ForwardReq::clear_has_message_length() {
+inline void ForwardReq::clear_has_user_data() {
   _has_bits_[0] &= ~0x00000004u;
 }
-inline void ForwardReq::clear_message_length() {
-  message_length_ = 0u;
-  clear_has_message_length();
+inline void ForwardReq::clear_user_data() {
+  if (user_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    user_data_->clear();
+  }
+  clear_has_user_data();
 }
-inline ::google::protobuf::uint32 ForwardReq::message_length() const {
-  // @@protoc_insertion_point(field_get:internal.ForwardReq.message_length)
-  return message_length_;
+inline const ::std::string& ForwardReq::user_data() const {
+  // @@protoc_insertion_point(field_get:internal.ForwardReq.user_data)
+  return *user_data_;
 }
-inline void ForwardReq::set_message_length(::google::protobuf::uint32 value) {
-  set_has_message_length();
-  message_length_ = value;
-  // @@protoc_insertion_point(field_set:internal.ForwardReq.message_length)
+inline void ForwardReq::set_user_data(const ::std::string& value) {
+  set_has_user_data();
+  if (user_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    user_data_ = new ::std::string;
+  }
+  user_data_->assign(value);
+  // @@protoc_insertion_point(field_set:internal.ForwardReq.user_data)
+}
+inline void ForwardReq::set_user_data(const char* value) {
+  set_has_user_data();
+  if (user_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    user_data_ = new ::std::string;
+  }
+  user_data_->assign(value);
+  // @@protoc_insertion_point(field_set_char:internal.ForwardReq.user_data)
+}
+inline void ForwardReq::set_user_data(const void* value, size_t size) {
+  set_has_user_data();
+  if (user_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    user_data_ = new ::std::string;
+  }
+  user_data_->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:internal.ForwardReq.user_data)
+}
+inline ::std::string* ForwardReq::mutable_user_data() {
+  set_has_user_data();
+  if (user_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    user_data_ = new ::std::string;
+  }
+  // @@protoc_insertion_point(field_mutable:internal.ForwardReq.user_data)
+  return user_data_;
+}
+inline ::std::string* ForwardReq::release_user_data() {
+  clear_has_user_data();
+  if (user_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    return NULL;
+  } else {
+    ::std::string* temp = user_data_;
+    user_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    return temp;
+  }
+}
+inline void ForwardReq::set_allocated_user_data(::std::string* user_data) {
+  if (user_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete user_data_;
+  }
+  if (user_data) {
+    set_has_user_data();
+    user_data_ = user_data;
+  } else {
+    clear_has_user_data();
+    user_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  }
+  // @@protoc_insertion_point(field_set_allocated:internal.ForwardReq.user_data)
 }
 
 // -------------------------------------------------------------------
@@ -2932,28 +2999,80 @@ BroadcastReq::mutable_dst_lists() {
   return &dst_lists_;
 }
 
-// required uint32 message_length = 2;
-inline bool BroadcastReq::has_message_length() const {
+// required bytes user_data = 2;
+inline bool BroadcastReq::has_user_data() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void BroadcastReq::set_has_message_length() {
+inline void BroadcastReq::set_has_user_data() {
   _has_bits_[0] |= 0x00000002u;
 }
-inline void BroadcastReq::clear_has_message_length() {
+inline void BroadcastReq::clear_has_user_data() {
   _has_bits_[0] &= ~0x00000002u;
 }
-inline void BroadcastReq::clear_message_length() {
-  message_length_ = 0u;
-  clear_has_message_length();
+inline void BroadcastReq::clear_user_data() {
+  if (user_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    user_data_->clear();
+  }
+  clear_has_user_data();
 }
-inline ::google::protobuf::uint32 BroadcastReq::message_length() const {
-  // @@protoc_insertion_point(field_get:internal.BroadcastReq.message_length)
-  return message_length_;
+inline const ::std::string& BroadcastReq::user_data() const {
+  // @@protoc_insertion_point(field_get:internal.BroadcastReq.user_data)
+  return *user_data_;
 }
-inline void BroadcastReq::set_message_length(::google::protobuf::uint32 value) {
-  set_has_message_length();
-  message_length_ = value;
-  // @@protoc_insertion_point(field_set:internal.BroadcastReq.message_length)
+inline void BroadcastReq::set_user_data(const ::std::string& value) {
+  set_has_user_data();
+  if (user_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    user_data_ = new ::std::string;
+  }
+  user_data_->assign(value);
+  // @@protoc_insertion_point(field_set:internal.BroadcastReq.user_data)
+}
+inline void BroadcastReq::set_user_data(const char* value) {
+  set_has_user_data();
+  if (user_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    user_data_ = new ::std::string;
+  }
+  user_data_->assign(value);
+  // @@protoc_insertion_point(field_set_char:internal.BroadcastReq.user_data)
+}
+inline void BroadcastReq::set_user_data(const void* value, size_t size) {
+  set_has_user_data();
+  if (user_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    user_data_ = new ::std::string;
+  }
+  user_data_->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:internal.BroadcastReq.user_data)
+}
+inline ::std::string* BroadcastReq::mutable_user_data() {
+  set_has_user_data();
+  if (user_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    user_data_ = new ::std::string;
+  }
+  // @@protoc_insertion_point(field_mutable:internal.BroadcastReq.user_data)
+  return user_data_;
+}
+inline ::std::string* BroadcastReq::release_user_data() {
+  clear_has_user_data();
+  if (user_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    return NULL;
+  } else {
+    ::std::string* temp = user_data_;
+    user_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    return temp;
+  }
+}
+inline void BroadcastReq::set_allocated_user_data(::std::string* user_data) {
+  if (user_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete user_data_;
+  }
+  if (user_data) {
+    set_has_user_data();
+    user_data_ = user_data;
+  } else {
+    clear_has_user_data();
+    user_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  }
+  // @@protoc_insertion_point(field_set_allocated:internal.BroadcastReq.user_data)
 }
 
 // -------------------------------------------------------------------
@@ -3009,28 +3128,80 @@ inline void RouterNotify::set_src_child_id(::google::protobuf::uint32 value) {
   // @@protoc_insertion_point(field_set:internal.RouterNotify.src_child_id)
 }
 
-// required uint32 message_length = 3;
-inline bool RouterNotify::has_message_length() const {
+// required bytes user_data = 3;
+inline bool RouterNotify::has_user_data() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
-inline void RouterNotify::set_has_message_length() {
+inline void RouterNotify::set_has_user_data() {
   _has_bits_[0] |= 0x00000004u;
 }
-inline void RouterNotify::clear_has_message_length() {
+inline void RouterNotify::clear_has_user_data() {
   _has_bits_[0] &= ~0x00000004u;
 }
-inline void RouterNotify::clear_message_length() {
-  message_length_ = 0u;
-  clear_has_message_length();
+inline void RouterNotify::clear_user_data() {
+  if (user_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    user_data_->clear();
+  }
+  clear_has_user_data();
 }
-inline ::google::protobuf::uint32 RouterNotify::message_length() const {
-  // @@protoc_insertion_point(field_get:internal.RouterNotify.message_length)
-  return message_length_;
+inline const ::std::string& RouterNotify::user_data() const {
+  // @@protoc_insertion_point(field_get:internal.RouterNotify.user_data)
+  return *user_data_;
 }
-inline void RouterNotify::set_message_length(::google::protobuf::uint32 value) {
-  set_has_message_length();
-  message_length_ = value;
-  // @@protoc_insertion_point(field_set:internal.RouterNotify.message_length)
+inline void RouterNotify::set_user_data(const ::std::string& value) {
+  set_has_user_data();
+  if (user_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    user_data_ = new ::std::string;
+  }
+  user_data_->assign(value);
+  // @@protoc_insertion_point(field_set:internal.RouterNotify.user_data)
+}
+inline void RouterNotify::set_user_data(const char* value) {
+  set_has_user_data();
+  if (user_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    user_data_ = new ::std::string;
+  }
+  user_data_->assign(value);
+  // @@protoc_insertion_point(field_set_char:internal.RouterNotify.user_data)
+}
+inline void RouterNotify::set_user_data(const void* value, size_t size) {
+  set_has_user_data();
+  if (user_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    user_data_ = new ::std::string;
+  }
+  user_data_->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:internal.RouterNotify.user_data)
+}
+inline ::std::string* RouterNotify::mutable_user_data() {
+  set_has_user_data();
+  if (user_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    user_data_ = new ::std::string;
+  }
+  // @@protoc_insertion_point(field_mutable:internal.RouterNotify.user_data)
+  return user_data_;
+}
+inline ::std::string* RouterNotify::release_user_data() {
+  clear_has_user_data();
+  if (user_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    return NULL;
+  } else {
+    ::std::string* temp = user_data_;
+    user_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    return temp;
+  }
+}
+inline void RouterNotify::set_allocated_user_data(::std::string* user_data) {
+  if (user_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete user_data_;
+  }
+  if (user_data) {
+    set_has_user_data();
+    user_data_ = user_data;
+  } else {
+    clear_has_user_data();
+    user_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  }
+  // @@protoc_insertion_point(field_set_allocated:internal.RouterNotify.user_data)
 }
 
 

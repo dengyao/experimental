@@ -332,7 +332,7 @@ void protobuf_AssignDesc_proto_2finternal_2eproto() {
   static const int ForwardReq_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ForwardReq, dst_type_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ForwardReq, dst_child_id_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ForwardReq, message_length_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ForwardReq, user_data_),
   };
   ForwardReq_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -348,7 +348,7 @@ void protobuf_AssignDesc_proto_2finternal_2eproto() {
   BroadcastReq_descriptor_ = file->message_type(16);
   static const int BroadcastReq_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BroadcastReq, dst_lists_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BroadcastReq, message_length_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(BroadcastReq, user_data_),
   };
   BroadcastReq_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -365,7 +365,7 @@ void protobuf_AssignDesc_proto_2finternal_2eproto() {
   static const int RouterNotify_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RouterNotify, src_type_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RouterNotify, src_child_id_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RouterNotify, message_length_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RouterNotify, user_data_),
   };
   RouterNotify_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -505,22 +505,22 @@ void protobuf_AddDesc_proto_2finternal_2eproto() {
     "ype\022\023\n\010child_id\030\002 \001(\r:\0011\",\n\016LoginRouterR"
     "sp\022\032\n\022heartbeat_interval\030\001 \002(\r\"\017\n\rRouter"
     "InfoReq\"7\n\rRouterInfoRsp\022\021\n\tup_volume\030\001 "
-    "\002(\r\022\023\n\013down_volume\030\002 \002(\r\"c\n\nForwardReq\022$"
+    "\002(\r\022\023\n\013down_volume\030\002 \002(\r\"^\n\nForwardReq\022$"
     "\n\010dst_type\030\001 \002(\0162\022.internal.NodeType\022\027\n\014"
-    "dst_child_id\030\002 \001(\r:\0011\022\026\n\016message_length\030"
-    "\003 \002(\r\"M\n\014BroadcastReq\022%\n\tdst_lists\030\001 \003(\016"
-    "2\022.internal.NodeType\022\026\n\016message_length\030\002"
-    " \002(\r\"e\n\014RouterNotify\022$\n\010src_type\030\001 \002(\0162\022"
-    ".internal.NodeType\022\027\n\014src_child_id\030\002 \001(\r"
-    ":\0011\022\026\n\016message_length\030\003 \002(\r*\376\001\n\tErrorCod"
-    "e\022\020\n\014kNotLoggedIn\020\001\022\017\n\013kDisconnect\020\002\022\021\n\r"
-    "kNotConnected\020\003\022\024\n\020kInvalidProtocol\020\004\022\025\n"
-    "\021kInvalidOperation\020\005\022\025\n\021kNotFoundDatabas"
-    "e\020\006\022\032\n\026kResourceInsufficiency\020\007\022\033\n\027kDest"
-    "inationUnreachable\020\010\022\024\n\020kInvalidNodeType"
-    "\020\t\022\020\n\014kRepeatLogin\020\n\022\026\n\022kInvalidDataPack"
-    "et\020\013*C\n\010NodeType\022\020\n\014kLoginServer\020\001\022\020\n\014kP"
-    "roxyServer\020\002\022\023\n\017kMainLogicSever\020\003", 1713);
+    "dst_child_id\030\002 \001(\r:\0011\022\021\n\tuser_data\030\003 \002(\014"
+    "\"H\n\014BroadcastReq\022%\n\tdst_lists\030\001 \003(\0162\022.in"
+    "ternal.NodeType\022\021\n\tuser_data\030\002 \002(\014\"`\n\014Ro"
+    "uterNotify\022$\n\010src_type\030\001 \002(\0162\022.internal."
+    "NodeType\022\027\n\014src_child_id\030\002 \001(\r:\0011\022\021\n\tuse"
+    "r_data\030\003 \002(\014*\376\001\n\tErrorCode\022\020\n\014kNotLogged"
+    "In\020\001\022\017\n\013kDisconnect\020\002\022\021\n\rkNotConnected\020\003"
+    "\022\024\n\020kInvalidProtocol\020\004\022\025\n\021kInvalidOperat"
+    "ion\020\005\022\025\n\021kNotFoundDatabase\020\006\022\032\n\026kResourc"
+    "eInsufficiency\020\007\022\033\n\027kDestinationUnreacha"
+    "ble\020\010\022\024\n\020kInvalidNodeType\020\t\022\020\n\014kRepeatLo"
+    "gin\020\n\022\026\n\022kInvalidDataPacket\020\013*C\n\010NodeTyp"
+    "e\022\020\n\014kLoginServer\020\001\022\020\n\014kProxyServer\020\002\022\023\n"
+    "\017kMainLogicSever\020\003", 1698);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "proto/internal.proto", &protobuf_RegisterTypes);
   PingReq::default_instance_ = new PingReq();
@@ -4641,7 +4641,7 @@ void RouterInfoRsp::Swap(RouterInfoRsp* other) {
 #ifndef _MSC_VER
 const int ForwardReq::kDstTypeFieldNumber;
 const int ForwardReq::kDstChildIdFieldNumber;
-const int ForwardReq::kMessageLengthFieldNumber;
+const int ForwardReq::kUserDataFieldNumber;
 #endif  // !_MSC_VER
 
 ForwardReq::ForwardReq()
@@ -4661,10 +4661,11 @@ ForwardReq::ForwardReq(const ForwardReq& from)
 }
 
 void ForwardReq::SharedCtor() {
+  ::google::protobuf::internal::GetEmptyString();
   _cached_size_ = 0;
   dst_type_ = 1;
   dst_child_id_ = 1u;
-  message_length_ = 0u;
+  user_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -4674,6 +4675,9 @@ ForwardReq::~ForwardReq() {
 }
 
 void ForwardReq::SharedDtor() {
+  if (user_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete user_data_;
+  }
   if (this != default_instance_) {
   }
 }
@@ -4703,7 +4707,11 @@ void ForwardReq::Clear() {
   if (_has_bits_[0 / 32] & 7) {
     dst_type_ = 1;
     dst_child_id_ = 1u;
-    message_length_ = 0u;
+    if (has_user_data()) {
+      if (user_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+        user_data_->clear();
+      }
+    }
   }
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
@@ -4749,18 +4757,16 @@ bool ForwardReq::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(24)) goto parse_message_length;
+        if (input->ExpectTag(26)) goto parse_user_data;
         break;
       }
 
-      // required uint32 message_length = 3;
+      // required bytes user_data = 3;
       case 3: {
-        if (tag == 24) {
-         parse_message_length:
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
-                 input, &message_length_)));
-          set_has_message_length();
+        if (tag == 26) {
+         parse_user_data:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_user_data()));
         } else {
           goto handle_unusual;
         }
@@ -4804,9 +4810,10 @@ void ForwardReq::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->dst_child_id(), output);
   }
 
-  // required uint32 message_length = 3;
-  if (has_message_length()) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(3, this->message_length(), output);
+  // required bytes user_data = 3;
+  if (has_user_data()) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      3, this->user_data(), output);
   }
 
   if (!unknown_fields().empty()) {
@@ -4830,9 +4837,11 @@ void ForwardReq::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(2, this->dst_child_id(), target);
   }
 
-  // required uint32 message_length = 3;
-  if (has_message_length()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(3, this->message_length(), target);
+  // required bytes user_data = 3;
+  if (has_user_data()) {
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+        3, this->user_data(), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -4860,11 +4869,11 @@ int ForwardReq::ByteSize() const {
           this->dst_child_id());
     }
 
-    // required uint32 message_length = 3;
-    if (has_message_length()) {
+    // required bytes user_data = 3;
+    if (has_user_data()) {
       total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::UInt32Size(
-          this->message_length());
+        ::google::protobuf::internal::WireFormatLite::BytesSize(
+          this->user_data());
     }
 
   }
@@ -4900,8 +4909,8 @@ void ForwardReq::MergeFrom(const ForwardReq& from) {
     if (from.has_dst_child_id()) {
       set_dst_child_id(from.dst_child_id());
     }
-    if (from.has_message_length()) {
-      set_message_length(from.message_length());
+    if (from.has_user_data()) {
+      set_user_data(from.user_data());
     }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
@@ -4929,7 +4938,7 @@ void ForwardReq::Swap(ForwardReq* other) {
   if (other != this) {
     std::swap(dst_type_, other->dst_type_);
     std::swap(dst_child_id_, other->dst_child_id_);
-    std::swap(message_length_, other->message_length_);
+    std::swap(user_data_, other->user_data_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
@@ -4949,7 +4958,7 @@ void ForwardReq::Swap(ForwardReq* other) {
 
 #ifndef _MSC_VER
 const int BroadcastReq::kDstListsFieldNumber;
-const int BroadcastReq::kMessageLengthFieldNumber;
+const int BroadcastReq::kUserDataFieldNumber;
 #endif  // !_MSC_VER
 
 BroadcastReq::BroadcastReq()
@@ -4969,8 +4978,9 @@ BroadcastReq::BroadcastReq(const BroadcastReq& from)
 }
 
 void BroadcastReq::SharedCtor() {
+  ::google::protobuf::internal::GetEmptyString();
   _cached_size_ = 0;
-  message_length_ = 0u;
+  user_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -4980,6 +4990,9 @@ BroadcastReq::~BroadcastReq() {
 }
 
 void BroadcastReq::SharedDtor() {
+  if (user_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete user_data_;
+  }
   if (this != default_instance_) {
   }
 }
@@ -5006,7 +5019,11 @@ BroadcastReq* BroadcastReq::New() const {
 }
 
 void BroadcastReq::Clear() {
-  message_length_ = 0u;
+  if (has_user_data()) {
+    if (user_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+      user_data_->clear();
+    }
+  }
   dst_lists_.Clear();
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
@@ -5044,18 +5061,16 @@ bool BroadcastReq::MergePartialFromCodedStream(
           goto handle_unusual;
         }
         if (input->ExpectTag(8)) goto parse_dst_lists;
-        if (input->ExpectTag(16)) goto parse_message_length;
+        if (input->ExpectTag(18)) goto parse_user_data;
         break;
       }
 
-      // required uint32 message_length = 2;
+      // required bytes user_data = 2;
       case 2: {
-        if (tag == 16) {
-         parse_message_length:
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
-                 input, &message_length_)));
-          set_has_message_length();
+        if (tag == 18) {
+         parse_user_data:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_user_data()));
         } else {
           goto handle_unusual;
         }
@@ -5094,9 +5109,10 @@ void BroadcastReq::SerializeWithCachedSizes(
       1, this->dst_lists(i), output);
   }
 
-  // required uint32 message_length = 2;
-  if (has_message_length()) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->message_length(), output);
+  // required bytes user_data = 2;
+  if (has_user_data()) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      2, this->user_data(), output);
   }
 
   if (!unknown_fields().empty()) {
@@ -5115,9 +5131,11 @@ void BroadcastReq::SerializeWithCachedSizes(
       1, this->dst_lists(i), target);
   }
 
-  // required uint32 message_length = 2;
-  if (has_message_length()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(2, this->message_length(), target);
+  // required bytes user_data = 2;
+  if (has_user_data()) {
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+        2, this->user_data(), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -5132,11 +5150,11 @@ int BroadcastReq::ByteSize() const {
   int total_size = 0;
 
   if (_has_bits_[1 / 32] & (0xffu << (1 % 32))) {
-    // required uint32 message_length = 2;
-    if (has_message_length()) {
+    // required bytes user_data = 2;
+    if (has_user_data()) {
       total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::UInt32Size(
-          this->message_length());
+        ::google::protobuf::internal::WireFormatLite::BytesSize(
+          this->user_data());
     }
 
   }
@@ -5177,8 +5195,8 @@ void BroadcastReq::MergeFrom(const BroadcastReq& from) {
   GOOGLE_CHECK_NE(&from, this);
   dst_lists_.MergeFrom(from.dst_lists_);
   if (from._has_bits_[1 / 32] & (0xffu << (1 % 32))) {
-    if (from.has_message_length()) {
-      set_message_length(from.message_length());
+    if (from.has_user_data()) {
+      set_user_data(from.user_data());
     }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
@@ -5205,7 +5223,7 @@ bool BroadcastReq::IsInitialized() const {
 void BroadcastReq::Swap(BroadcastReq* other) {
   if (other != this) {
     dst_lists_.Swap(&other->dst_lists_);
-    std::swap(message_length_, other->message_length_);
+    std::swap(user_data_, other->user_data_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
@@ -5226,7 +5244,7 @@ void BroadcastReq::Swap(BroadcastReq* other) {
 #ifndef _MSC_VER
 const int RouterNotify::kSrcTypeFieldNumber;
 const int RouterNotify::kSrcChildIdFieldNumber;
-const int RouterNotify::kMessageLengthFieldNumber;
+const int RouterNotify::kUserDataFieldNumber;
 #endif  // !_MSC_VER
 
 RouterNotify::RouterNotify()
@@ -5246,10 +5264,11 @@ RouterNotify::RouterNotify(const RouterNotify& from)
 }
 
 void RouterNotify::SharedCtor() {
+  ::google::protobuf::internal::GetEmptyString();
   _cached_size_ = 0;
   src_type_ = 1;
   src_child_id_ = 1u;
-  message_length_ = 0u;
+  user_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -5259,6 +5278,9 @@ RouterNotify::~RouterNotify() {
 }
 
 void RouterNotify::SharedDtor() {
+  if (user_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete user_data_;
+  }
   if (this != default_instance_) {
   }
 }
@@ -5288,7 +5310,11 @@ void RouterNotify::Clear() {
   if (_has_bits_[0 / 32] & 7) {
     src_type_ = 1;
     src_child_id_ = 1u;
-    message_length_ = 0u;
+    if (has_user_data()) {
+      if (user_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+        user_data_->clear();
+      }
+    }
   }
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
@@ -5334,18 +5360,16 @@ bool RouterNotify::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(24)) goto parse_message_length;
+        if (input->ExpectTag(26)) goto parse_user_data;
         break;
       }
 
-      // required uint32 message_length = 3;
+      // required bytes user_data = 3;
       case 3: {
-        if (tag == 24) {
-         parse_message_length:
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
-                 input, &message_length_)));
-          set_has_message_length();
+        if (tag == 26) {
+         parse_user_data:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadBytes(
+                input, this->mutable_user_data()));
         } else {
           goto handle_unusual;
         }
@@ -5389,9 +5413,10 @@ void RouterNotify::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->src_child_id(), output);
   }
 
-  // required uint32 message_length = 3;
-  if (has_message_length()) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(3, this->message_length(), output);
+  // required bytes user_data = 3;
+  if (has_user_data()) {
+    ::google::protobuf::internal::WireFormatLite::WriteBytesMaybeAliased(
+      3, this->user_data(), output);
   }
 
   if (!unknown_fields().empty()) {
@@ -5415,9 +5440,11 @@ void RouterNotify::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(2, this->src_child_id(), target);
   }
 
-  // required uint32 message_length = 3;
-  if (has_message_length()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(3, this->message_length(), target);
+  // required bytes user_data = 3;
+  if (has_user_data()) {
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteBytesToArray(
+        3, this->user_data(), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -5445,11 +5472,11 @@ int RouterNotify::ByteSize() const {
           this->src_child_id());
     }
 
-    // required uint32 message_length = 3;
-    if (has_message_length()) {
+    // required bytes user_data = 3;
+    if (has_user_data()) {
       total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::UInt32Size(
-          this->message_length());
+        ::google::protobuf::internal::WireFormatLite::BytesSize(
+          this->user_data());
     }
 
   }
@@ -5485,8 +5512,8 @@ void RouterNotify::MergeFrom(const RouterNotify& from) {
     if (from.has_src_child_id()) {
       set_src_child_id(from.src_child_id());
     }
-    if (from.has_message_length()) {
-      set_message_length(from.message_length());
+    if (from.has_user_data()) {
+      set_user_data(from.user_data());
     }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
@@ -5514,7 +5541,7 @@ void RouterNotify::Swap(RouterNotify* other) {
   if (other != this) {
     std::swap(src_type_, other->src_type_);
     std::swap(src_child_id_, other->src_child_id_);
-    std::swap(message_length_, other->message_length_);
+    std::swap(user_data_, other->user_data_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
