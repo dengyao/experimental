@@ -4,6 +4,7 @@
 #include <set>
 #include <vector>
 #include <cassert>
+#include <cstring>
 #include <common.h>
 #include "Connector.h"
 #include "ContainerSafe.h"
