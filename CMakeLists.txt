@@ -33,6 +33,7 @@ set(PROTOBUF_LIBRARY_NAME protobuf)
 set(COMMON_LIBRARY_NAME common)
 set(PROTOCOL_LIBRARY_NAME protocol)
 set(DBCLIENT_LIBRARY_NAME dbclient)
+set(CONNECTOR_LIBRARY_NAME connector)
 
 # 选择MySQL链接库
 if (WIN32)
