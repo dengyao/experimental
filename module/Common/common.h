@@ -2,6 +2,8 @@
 #define __COMMON_H__
 
 #include "common/Any.h"
+#include "common/MD5.h"
+#include "common/CRC32.h"
 #include "common/Singleton.h"
 #include "common/TaskPools.h"
 #include "common/TaskQueue.h"
