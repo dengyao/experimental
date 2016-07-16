@@ -28,18 +28,16 @@ std::vector<std::unique_ptr<ConnectorMySQL>> CreateMySQLConnector()
 					ServerConfig::GetInstance()->GetMySQLPassword(),
 					5);
 
-				connector->SelectDatabase("sgs", error_code);
+				connector->SelectDatabase(container[i].db_name.c_str(), error_code);
 				if (error_code)
 				{
-					connectors.clear();
 					std::cerr << error_code.Message() << std::endl;
 					exit(-1);
 				}
 
-				connector->SetCharacterSet("utf8", error_code);
+				connector->SetCharacterSet(ServerConfig::GetInstance()->GetMySQLCharset(), error_code);
 				if (error_code)
 				{
-					connectors.clear();
 					std::cerr << error_code.Message() << std::endl;
 					exit(-1);
 				}
@@ -47,7 +45,6 @@ std::vector<std::unique_ptr<ConnectorMySQL>> CreateMySQLConnector()
 			}
 			catch (const std::exception&)
 			{
-				connectors.clear();
 				std::cerr << "连接数据库失败!" << std::endl;
 				exit(-1);
 			}

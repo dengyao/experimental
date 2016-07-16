@@ -46,6 +46,9 @@ public:
 	// 获取MySQL密码
 	const char* GetMySQLPassword() const;
 
+	// 获取MySQL字符集
+	const char* GetMySQLCharset() const;
+
 	// 获取MySQL数据库连接信息
 	const std::vector<ConnectionMySQL>& GetMySQLConnectionInfo() const;
 
@@ -70,6 +73,7 @@ private:
 	unsigned short               mysql_port_;
 	std::string                  mysql_user_;
 	std::string                  mysql_passwd_;
+	std::string                  mysql_charset_;
 	std::vector<ConnectionMySQL> connections_;
 	std::string                  process_name_;
 };

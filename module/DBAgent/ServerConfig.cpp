@@ -78,6 +78,12 @@ const char* ServerConfig::GetMySQLPassword() const
 	return mysql_passwd_.c_str();
 }
 
+// 获取MySQL字符集
+const char* ServerConfig::GetMySQLCharset() const
+{
+	return mysql_charset_.c_str();
+}
+
 // 获取MySQL数据库连接信息
 const std::vector<ServerConfig::ConnectionMySQL>& ServerConfig::GetMySQLConnectionInfo() const
 {
@@ -166,6 +172,12 @@ bool ServerConfig::Load(const std::string &filename)
 		return false;
 	}
 	mysql_passwd_ = document["mysql_passwd"].GetString();
+
+	if (!document.HasMember("mysql_charset") || !document["mysql_charset"].IsString())
+	{
+		return false;
+	}
+	mysql_charset_ = document["mysql_charset"].GetString();
 
 	connections_.clear();
 	if (!document.HasMember("mysql_db_lists") || !document["mysql_db_lists"].IsArray())
