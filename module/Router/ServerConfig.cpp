@@ -75,3 +75,15 @@ bool ServerConfig::Load(const std::string &filename)
 
 	return true;
 }
+
+// 获取进程名
+const char* ServerConfig::ProcessName() const
+{
+	return process_name_.c_str();
+}
+
+// 设置进程名
+void ServerConfig::ProcessName(const std::string &name)
+{
+	process_name_ = name;
+}

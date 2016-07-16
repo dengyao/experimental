@@ -15,8 +15,9 @@ int main(int argc, char *argv[])
 		assert(false);
 		exit(-1);
 	}
+	ServerConfig::GetInstance()->ProcessName(path::basename(*argv));
 
-	// 启动路由器
+	// 启动路由服务器
 	unsigned short use_thread_num = ServerConfig::GetInstance()->GetUseThreadNum();
 	use_thread_num = use_thread_num == 0 ? std::thread::hardware_concurrency() : use_thread_num;
 	asio::ip::tcp::endpoint endpoint(asio::ip::address_v4(), ServerConfig::GetInstance()->GetPort());
@@ -25,7 +26,7 @@ int main(int argc, char *argv[])
 
 	RouterManager router(threads);
 	network::TCPServer server(endpoint, threads, std::bind(CreateSessionHandle, std::ref(router)), CreateMessageFilter);
-	std::cout << string_helper::format("路由器[ip:%s port:%u]启动成功!", server.LocalEndpoint().address().to_string().c_str(), server.LocalEndpoint().port()) << std::endl;
+	std::cout << string_helper::format("路由服务器[ip:%s port:%u]启动成功!", server.LocalEndpoint().address().to_string().c_str(), server.LocalEndpoint().port()) << std::endl;
 	threads.Run();
 
 	return 0;

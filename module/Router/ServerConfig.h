@@ -21,10 +21,17 @@ public:
 	// 加载服务器配置文件
 	bool Load(const std::string &filename);
 
+	// 获取进程名
+	const char* ProcessName() const;
+
+	// 设置进程名
+	void ProcessName(const std::string &name);
+
 private:
 	unsigned short port_;
 	unsigned short thread_num_;
 	unsigned int heartbeat_interval_;
+	std::string process_name_;
 };
 
 #endif

@@ -1,58 +1,83 @@
 ﻿#include <vector>
 #include <memory>
 #include <iostream>
-#include <common.h>
+#include <common/Path.h>
+#include <common/TaskPools.h>
+#include <common/StringHelper.h>
 #include "AgentImpl.h"
 #include "AgentManager.h"
+#include "ServerConfig.h"
 #include "SessionHandle.h"
 
-// 创建MySQL连接器
-std::vector<std::unique_ptr<ConnectorMySQL>> CreateConnectorMySQL(const size_t num)
+// 创建数据库连接
+std::vector<std::unique_ptr<ConnectorMySQL>> CreateMySQLConnector()
 {
-	assert(num > 0);
-	std::vector<std::unique_ptr<ConnectorMySQL>> connector_lists;
-	for (size_t i = 0; i < num; ++i)
+	std::vector<std::unique_ptr<ConnectorMySQL>> connectors;
+	auto container = ServerConfig::GetInstance()->GetMySQLConnectionInfo();
+	for (size_t i = 0; i < container.size(); ++i)
 	{
-		std::unique_ptr<ConnectorMySQL> connector;
-		try
+		for (size_t j = 0; j < container[i].connections; ++j)
 		{
-			ErrorCode error_code;
-			connector = std::make_unique<ConnectorMySQL>("192.168.1.201", 3306, "root", "123456", 5);
-
-			connector->SelectDatabase("sgs", error_code);
-			if (error_code)
+			std::unique_ptr<ConnectorMySQL> connector;
+			try
 			{
-				std::cerr << error_code.Message() << std::endl;
-			}
+				ErrorCode error_code;
+				connector = std::make_unique<ConnectorMySQL>(ServerConfig::GetInstance()->GetMySQLHost(),
+					ServerConfig::GetInstance()->GetMySQLPort(),
+					ServerConfig::GetInstance()->GetMySQLUser(),
+					ServerConfig::GetInstance()->GetMySQLPassword(),
+					5);
 
-			connector->SetCharacterSet("utf8", error_code);
-			if (error_code)
+				connector->SelectDatabase("sgs", error_code);
+				if (error_code)
+				{
+					connectors.clear();
+					std::cerr << error_code.Message() << std::endl;
+					exit(-1);
+				}
+
+				connector->SetCharacterSet("utf8", error_code);
+				if (error_code)
+				{
+					connectors.clear();
+					std::cerr << error_code.Message() << std::endl;
+					exit(-1);
+				}
+				connectors.push_back(std::move(connector));
+			}
+			catch (const std::exception&)
 			{
-				std::cerr << error_code.Message() << std::endl;
+				connectors.clear();
+				std::cerr << "连接数据库失败!" << std::endl;
+				exit(-1);
 			}
-
-			connector_lists.push_back(std::move(connector));
-		}
-		catch (const std::exception&)
-		{
-			std::cerr << "连接数据库失败!" << std::endl;
-			getchar();
-			exit(0);
 		}
 	}
-	return connector_lists;
+	return connectors;
 }
 
 int main(int argc, char *argv[])
 {
-	TaskPools pools(std::thread::hardware_concurrency() / 2);
-	network::IOServiceThreadManager threads(std::thread::hardware_concurrency() / 2);
+	// 加载服务器配置
+	std::string fullpath = path::curdir() + path::sep + "config.DBAgent.json";
+	if (!ServerConfig::GetInstance()->Load(fullpath))
+	{
+		std::cout << "加载服务器配置失败！" << std::endl;
+		assert(false);
+		exit(-1);
+	}
+	ServerConfig::GetInstance()->ProcessName(path::basename(*argv));
 
-	AgentImpl<MySQL> mysql_proxy(CreateConnectorMySQL(8), pools, 1000000);	// 最后个参数为单个连接最大积压数量
-	AgentManager manager(threads, mysql_proxy, 102400);    // 最后个参数为服务器最大积压数量
+	// 启动数据库代理
+	TaskPools pools(ServerConfig::GetInstance()->GetDBUseThreadNum());
+	network::IOServiceThreadManager threads(ServerConfig::GetInstance()->GetUseThreadNum());
 
-	asio::ip::tcp::endpoint endpoint(asio::ip::address_v4(), 4235);
+	AgentImpl<MySQL> mysql_agent(CreateMySQLConnector(), pools, ServerConfig::GetInstance()->GetMaxConnectionRequestBacklog());
+	AgentManager manager(threads, mysql_agent, ServerConfig::GetInstance()->GetMaxRequestBacklog());
+
+	asio::ip::tcp::endpoint endpoint(asio::ip::address_v4(), ServerConfig::GetInstance()->GetPort());
 	network::TCPServer server(endpoint, threads, std::bind(CreateSessionHandle, std::ref(manager)), CreateMessageFilter);
+	std::cout << string_helper::format("数据库代理[ip:%s port:%u]启动成功!", server.LocalEndpoint().address().to_string().c_str(), server.LocalEndpoint().port()) << std::endl;
 	threads.Run();
 	
 	return 0;

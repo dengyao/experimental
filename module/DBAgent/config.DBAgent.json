@@ -1,9 +1,12 @@
 {
     "port" : 10000,
+    "thread_num" : 4,
+    "db_thread_num" : 4,
     "heartbeat_interval" : 60,
     "backlog" : 10000,
-    "single_backlog" : 1000,
+    "connection_backlog" : 1000,
     "mysql_host" : "192.168.1.201",
+    "mysql_port" : 3306,
     "mysql_user" : "root",
     "mysql_passwd" : "123456",
     "mysql_db_lists" : [{
