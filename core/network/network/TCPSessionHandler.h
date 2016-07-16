@@ -53,16 +53,22 @@ namespace network
 			return messages_to_be_sent_;
 		}
 
+		const asio::ip::tcp::endpoint& RemoteEndpoint() const
+		{
+			return remote_endpoint_;
+		}
+
 	protected:
 		TCPSessionHandler(const TCPSessionHandler&) = delete;
 		TCPSessionHandler& operator= (const TCPSessionHandler&) = delete;
 
 	private:
-		void Init(TCPSessionID sid, IOThreadID tid, IOServiceThreadManager *manager);
+		void Init(TCPSessionID sid, IOThreadID tid, IOServiceThreadManager *manager, asio::ip::tcp::endpoint &remote_endpoint);
 
 	private:
 		TCPSessionID				session_id_;
 		IOThreadID					thread_id_;
+		asio::ip::tcp::endpoint		remote_endpoint_;
 		IOServiceThreadManager*		io_thread_manager_;
 		std::vector<NetMessage>		messages_to_be_sent_;
 	};

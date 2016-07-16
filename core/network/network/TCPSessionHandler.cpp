@@ -61,11 +61,12 @@ namespace network
 	{
 	}
 
-	void TCPSessionHandler::Init(TCPSessionID sid, IOThreadID tid, IOServiceThreadManager* manager)
+	void TCPSessionHandler::Init(TCPSessionID sid, IOThreadID tid, IOServiceThreadManager *manager, asio::ip::tcp::endpoint &remote_endpoint)
 	{
 		thread_id_ = tid;
 		session_id_ = sid;
 		io_thread_manager_ = manager;
+		remote_endpoint_ = remote_endpoint;
 	}
 
 	void TCPSessionHandler::Dispose()

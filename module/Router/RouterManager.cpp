@@ -26,8 +26,6 @@ void RouterManager::UpdateStatisicalData(asio::error_code error_code)
 		return;
 	}
 	StatisticalTools::GetInstance()->Flush();
-	std::cout << "每秒上行流量：" << StatisticalTools::GetInstance()->UpVolume() << "字节" << std::endl;
-	std::cout << "每秒下行流量：" << StatisticalTools::GetInstance()->UpVolume() << "字节" << std::endl;
 	timer_.expires_from_now(std::chrono::seconds(1));
 	timer_.async_wait(wait_handler_);
 }

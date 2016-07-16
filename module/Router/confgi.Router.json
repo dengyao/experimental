@@ -1,0 +1,5 @@
+{
+    "port" : 10010,
+    "thread_num" : 0,
+    "heartbeat_interval" : 60
+}

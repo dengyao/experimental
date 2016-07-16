@@ -79,8 +79,8 @@ protected:
 	}
 
 private:
-	Singleton(const Singleton &that) {}
-	Singleton& operator=(const Singleton &that) {}
+	Singleton(const Singleton &other) = delete;
+	Singleton& operator=(const Singleton &other) = delete;
 
 private:
 	static T* s_singleton_;
@@ -94,4 +94,9 @@ template<typename T> T* Singleton<T>::s_singleton_ = NULL;
 		~_class_name_();						\
 		friend class Singleton<_class_name_>
 
+#define SINGLETON_DEFAULT(_class_name_)			\
+	private:									\
+		_class_name_() = default;				\
+		~_class_name_() = default;				\
+		friend class Singleton<_class_name_>
 #endif

@@ -22,6 +22,8 @@ namespace network
 	public:
 		asio::io_service& IOService();
 
+		asio::ip::tcp::endpoint LocalEndpoint() const;
+
 	protected:
 		TCPServer(const TCPServer&) = delete;
 		TCPServer& operator= (const TCPServer&) = delete;
@@ -30,10 +32,10 @@ namespace network
 		void HandleAccept(SessionPointer session_ptr, asio::error_code error);
 
 	private:
-		asio::ip::tcp::acceptor			acceptor_;
-		IOServiceThreadManager&			io_thread_manager_;
-		SessionHandlerCreator			session_handler_creator_;
-		MessageFilterCreator			message_filter_creator_;
+		asio::ip::tcp::acceptor	acceptor_;
+		IOServiceThreadManager&	io_thread_manager_;
+		SessionHandlerCreator	session_handler_creator_;
+		MessageFilterCreator	message_filter_creator_;
 	};
 }
 

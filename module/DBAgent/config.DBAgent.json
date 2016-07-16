@@ -1,9 +1,8 @@
 {
-    "host" : "0.0.0.0",
-    "port" : 4235,
+    "port" : 10000,
     "heartbeat_interval" : 60,
     "backlog" : 10000,
-    "connection_backlog" : 1000,
+    "single_backlog" : 1000,
     "mysql_host" : "192.168.1.201",
     "mysql_user" : "root",
     "mysql_passwd" : "123456",

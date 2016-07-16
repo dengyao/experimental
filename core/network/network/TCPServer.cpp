@@ -29,6 +29,11 @@ namespace network
 		return io_thread_manager_.MainThread()->IOService();
 	}
 
+	asio::ip::tcp::endpoint TCPServer::LocalEndpoint() const
+	{
+		return acceptor_.local_endpoint();
+	}
+
 	void TCPServer::HandleAccept(SessionPointer session_ptr, asio::error_code error)
 	{
 		if (error)

@@ -2,6 +2,7 @@ set(CURRENT_PROJECT_NAME Router)
 
 set(CURRENT_PROJECT_SRC_LISTS
   Main.cpp
+  ServerConfig.cpp
   SessionHandle.cpp
   RouterManager.cpp
 )
@@ -12,6 +13,7 @@ include_directories(
   ${NETWORK_INCLUDE_DIRS}
   ${PROTOBUF_INCLUDE_DIRS}
   ${PROTOCOL_INCLUDE_DIRS}
+  ${RAPIDJSON_INCLUDE_DIRS}
 )
 
 link_directories(${BINARY_OUTPUT_DIR})

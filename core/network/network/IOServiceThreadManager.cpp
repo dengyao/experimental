@@ -114,7 +114,7 @@ namespace network
 		TCPSessionID id = IDGenerator::kInvalidID;
 		if (id_generator_.Get(id))
 		{
-			handler_ptr->Init(id, session_ptr->Thread()->ID(), this);
+			handler_ptr->Init(id, session_ptr->Thread()->ID(), this, session_ptr->Socket().remote_endpoint());
 			session_handler_map_.insert(std::make_pair(id, handler_ptr));
 			session_ptr->Thread()->Post(std::bind(&TCPSession::Init, session_ptr, id));
 			handler_ptr->OnConnect();
