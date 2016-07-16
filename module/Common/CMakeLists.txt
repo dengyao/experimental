@@ -2,6 +2,7 @@ set(CURRENT_PROJECT_NAME Common)
 
 set(CURRENT_PROJECT_SRC_LISTS
   common/MD5.cpp
+  common/Path.cpp
   common/CRC32.cpp
   common/TaskPools.cpp
   common/TaskQueue.cpp

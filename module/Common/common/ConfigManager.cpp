@@ -1,19 +1,12 @@
 ﻿#include "ConfigManager.h"
 #include <cassert>
 #include <cstring>
-
-#if defined(_WIN32)
-#include <windows.h>
-typedef FILETIME FileTimeType;
-#else
-#include <sys/stat.h>
-typedef time_t   FileTimeType;
-#endif
+#include "Path.h"
 
 struct ConfigInfo
 {
 	std::string filename;
-	FileTimeType last_write_time;
+	time_t last_write_time;
 	ConfigInterface* instance;
 
 	ConfigInfo(const std::string &file, ConfigInterface *object)
@@ -24,25 +17,13 @@ struct ConfigInfo
 	}
 };
 
-bool GetConfigFileLastWriteTime(const std::string &filename, FileTimeType &out_last_write_time)
+bool GetConfigFileLastWriteTime(const std::string &filename, time_t &out_last_write_time)
 {
-#if defined(_WIN32)
-	WIN32_FIND_DATAA find_file_data;
-	HANDLE handle = FindFirstFileA(filename.c_str(), &find_file_data);
-	if (handle == INVALID_HANDLE_VALUE)
+	out_last_write_time = path::getmtime(filename);
+	if (out_last_write_time == 0)
 	{
 		return false;
 	}
-	out_last_write_time = find_file_data.ftLastWriteTime;
-	FindClose(handle);
-#else
-	struct stat state;
-	if (stat(filename.c_str(), &state) != 0)
-	{
-		return false;
-	}
-	out_last_write_time = state.st_mtime;
-#endif
 	return true;
 }
 
@@ -82,8 +63,8 @@ void ConfigManager::RemoveAll()
 
 bool ConfigManager::LoadAllConfigFiles()
 {
+	time_t last_write_time;
 	load_error_files_.clear();
-	FileTimeType last_write_time;
 	for (auto &pair : config_files_)
 	{
 		if (!pair.second->instance->Load(pair.first))
@@ -128,14 +109,14 @@ std::vector<std::string> ConfigManager::GetConfigFiles() const
 
 void ConfigManager::CheckUpdateConfigFiles()
 {
+	time_t last_write_time;
 	load_error_files_.clear();
-	FileTimeType last_write_time;
 	for (auto &pair : config_files_)
 	{
 		ConfigInfoPointer &config = pair.second;
 		if (config->instance != nullptr && GetConfigFileLastWriteTime(config->filename, last_write_time))
 		{
-			if (memcmp(&last_write_time, &config->last_write_time, sizeof(FileTimeType)) != 0)
+			if (config->last_write_time == last_write_time)
 			{
 				if (config->instance->Load(config->filename))
 				{

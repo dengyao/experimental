@@ -5,7 +5,7 @@
 #include <string>
 #include <limits>
 
-namespace stringhlper
+namespace string_helper
 {
 	template <typename ...Args>
 	std::string format(const char *format, Args ...args)
@@ -15,6 +15,8 @@ namespace stringhlper
 		snprintf(const_cast<char *>(result.data()), result.size(), format, args ...);
 		return result;
 	}
+
+	std::string replace(const std::string &str, const char *old, const char *new_str);
 
 	std::vector<std::string> split(const std::string &str, const char *sep, size_t maxsplit = std::numeric_limits<size_t>::max());
 

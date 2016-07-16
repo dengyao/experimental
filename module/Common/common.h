@@ -3,6 +3,7 @@
 
 #include "common/Any.h"
 #include "common/MD5.h"
+#include "common/Path.h"
 #include "common/CRC32.h"
 #include "common/Singleton.h"
 #include "common/TaskPools.h"
