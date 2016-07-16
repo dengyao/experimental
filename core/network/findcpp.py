@@ -15,13 +15,13 @@ if __name__ == '__main__':
                 relative_path = relative_path.replace(os.path.sep, '/')
                 cppfiles.append(relative_path)
 
-    text = 'set(FILEPATH \n'
+    text = 'set(CURRENT_PROJECT_SRC_LISTS \n'
     for filename in cppfiles:
         text += '  '
         text += filename
         text += '\n'
     text += ')'
 
-    with open('cpplists.txt', 'w') as handle:
+    with open('lists.txt', 'w') as handle:
         handle.write(text)
         handle.close()

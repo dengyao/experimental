@@ -28,6 +28,7 @@ endif()
 
 # 设置类库名称
 set(NETWORK_LIBRARY_NAME network)
+set(LOG4CPP_LIBRARY_NAME log4cpp)
 set(PROTOBUF_LIBRARY_NAME protobuf)
 
 set(COMMON_LIBRARY_NAME common)
@@ -48,6 +49,7 @@ set(NETWORK_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/core/network)
 set(PROTOBUF_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/core/external/protobuf)
 set(RAPIDJSON_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/core/external/rapidjson)
 set(MYSQL_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/core/external/mysql/include)
+set(LOG4CPP_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/core/external/log4cpp/include)
 set(EASYLOGGINGPP_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/core/external/easyloggingpp)
 
 set(COMMON_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/module/Common)
@@ -60,6 +62,7 @@ set(BINARY_OUTPUT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
 # 添加编译项目
 add_subdirectory(core/network)
+add_subdirectory(core/external/log4cpp)
 add_subdirectory(core/external/protobuf)
 
 add_subdirectory(module/Common)
