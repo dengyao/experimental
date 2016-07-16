@@ -88,6 +88,16 @@ time_t path::getmtime(const std::string &s)
 	return 0;
 }
 
+bool path::mkdir(const std::string &s)
+{
+	return ::mkdir(s.c_str()) == 0;
+}
+
+bool path::rmdir(const std::string &s)
+{
+	return ::rmdir(s.c_str()) == 0;
+}
+
 std::array<std::string, 2> path::split(const std::string &s)
 {
 	struct stat state;

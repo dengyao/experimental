@@ -1,7 +1,7 @@
 ﻿#include "RouterManager.h"
-#include <iostream>
 #include <ProtobufCodec.h>
 #include <proto/internal.pb.h>
+#include "Logging.h"
 #include "SessionHandle.h"
 #include "StatisticalTools.h"
 
@@ -22,7 +22,7 @@ void RouterManager::UpdateStatisicalData(asio::error_code error_code)
 {
 	if (error_code)
 	{
-		std::cerr << error_code.message() << std::endl;
+		logger()->error(error_code.message());
 		return;
 	}
 	StatisticalTools::GetInstance()->Flush();

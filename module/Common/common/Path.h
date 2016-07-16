@@ -23,6 +23,10 @@ public:
 
 	static time_t getmtime(const std::string &s);
 
+	static bool mkdir(const std::string &s);
+
+	static bool rmdir(const std::string &s);
+
 	static std::array<std::string, 2> split(const std::string &s);
 
 	static std::array<std::string, 2> splitext(const std::string &s);

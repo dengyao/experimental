@@ -1,20 +1,31 @@
 ﻿#include <iostream>
 #include <common/Path.h>
 #include <common/StringHelper.h>
+#include "Logging.h"
 #include "ServerConfig.h"
 #include "SessionHandle.h"
 #include "RouterManager.h"
 
 int main(int argc, char *argv[])
 {
+	// 初始化日志设置
+	if (!OnceInitLogSettings("logs", path::split(*argv)[1]))
+	{
+		std::cerr << "初始化日志设置失败!" << std::endl;
+		assert(false);
+		exit(-1);
+	}
+	logger()->info("初始化日志设置成功!");
+
 	// 加载服务器配置
 	std::string fullpath = path::curdir() + path::sep + "confgi.Router.json";
 	if (!ServerConfig::GetInstance()->Load(fullpath))
 	{
-		std::cout << "加载服务器配置失败！" << std::endl;
+		logger()->critical("加载服务器配置失败！");
 		assert(false);
 		exit(-1);
 	}
+	logger()->info("加载服务器配置成功!");
 	ServerConfig::GetInstance()->ProcessName(path::basename(*argv));
 
 	// 启动路由服务器
@@ -26,7 +37,7 @@ int main(int argc, char *argv[])
 
 	RouterManager router(threads);
 	network::TCPServer server(endpoint, threads, std::bind(CreateSessionHandle, std::ref(router)), CreateMessageFilter);
-	std::cout << string_helper::format("路由服务器[ip:%s port:%u]启动成功!", server.LocalEndpoint().address().to_string().c_str(), server.LocalEndpoint().port()) << std::endl;
+	logger()->info("路由服务器[ip:{} port:{}]启动成功!", server.LocalEndpoint().address().to_string().c_str(), server.LocalEndpoint().port());
 	threads.Run();
 
 	return 0;

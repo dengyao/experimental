@@ -2,6 +2,7 @@ set(CURRENT_PROJECT_NAME DBAgent)
 
 set(CURRENT_PROJECT_SRC_LISTS 
   Main.cpp
+  Logging.cpp
   AgentManager.cpp
   ServerConfig.cpp
   SessionHandle.cpp
@@ -10,6 +11,7 @@ set(CURRENT_PROJECT_SRC_LISTS
 include_directories(
   ${ASIO_INCLUDE_DIRS}
   ${MYSQL_INCLUDE_DIRS}
+  ${SPDLOG_INCLUDE_DIRS}
   ${COMMON_INCLUDE_DIRS}
   ${NETWORK_INCLUDE_DIRS}
   ${PROTOBUF_INCLUDE_DIRS}
