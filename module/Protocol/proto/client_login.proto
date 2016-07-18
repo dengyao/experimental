@@ -1,0 +1,55 @@
+package login;
+
+// 注册账号请求
+message SignUpReq {
+    required string user = 1;     // 用户名
+    required string passwd = 2;   // 密码
+    optional string platform = 3; // 注册平台
+    optional string os = 4;       // 操作系统
+    optional string model = 5;    // 机型
+    optional string deviceid = 6; // 设备id
+}
+
+// 注册账号返回
+message SignUpRsp {
+    required uint32 id = 1; // 账号id
+}
+
+// 登录账号请求
+message SignInReq {
+    required string user = 1;   // 用户名
+    required string passwd = 2; // 密码
+}
+
+// 登录账号返回
+message SignInRsp {
+    required uint32 id = 1; // 账号id
+}
+
+// 查询分区列表请求
+message QueryPartitionReq {
+}
+
+// 查询分区列表返回
+message QueryPartitionRsp {
+    message Partition {
+        required uint32 id = 1;         // 分区id
+	    required string name = 2;       // 分区名称
+	    required uint32 status = 3;     // 分区状态
+	    required bool is_recommend = 4; // 是否是推荐分区
+    };
+
+    repeated Partition lists = 1; // 分区列表
+}
+
+// 进入分区请求
+message EntryPartitionReq {
+    required uint32 id = 1; // 账号id 
+}
+
+// 进入分区返回
+message EntryPartitionRsp {
+    required string ip = 1;    // 分区ip
+    required uint32 port = 2;  // 分区端口
+    required uint64 token = 3; // 令牌
+}

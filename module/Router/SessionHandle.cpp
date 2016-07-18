@@ -1,6 +1,7 @@
 ﻿#include "SessionHandle.h"
 #include <ProtobufCodec.h>
-#include <proto/internal.pb.h>
+#include <proto/public_struct.pb.h>
+#include <proto/server_internal.pb.h>
 #include "Logging.h"
 #include "RouterManager.h"
 #include "StatisticalTools.h"
@@ -26,18 +27,18 @@ void SessionHandle::OnMessage(network::NetMessage &message)
 	auto request = ProtubufCodec::Decode(message);
 	if (request == nullptr)
 	{
-		router_manager_.RespondErrorCode(*this, message, internal::kInvalidProtocol);
+		router_manager_.RespondErrorCode(*this, message, pub::kInvalidProtocol);
 		return;
 	}
 
 	// 连接后必须登录
 	if (!is_logged_)
 	{
-		if (dynamic_cast<internal::PingReq*>(request.get()) == nullptr)
+		if (dynamic_cast<pub::PingReq*>(request.get()) == nullptr)
 		{
-			if (dynamic_cast<internal::LoginRouterReq*>(request.get()) == nullptr)
+			if (dynamic_cast<svr::LoginRouterReq*>(request.get()) == nullptr)
 			{
-				router_manager_.RespondErrorCode(*this, message, internal::kNotLoggedIn);
+				router_manager_.RespondErrorCode(*this, message, pub::kNotLoggedIn);
 				logger()->warn("操作前未发起登录请求，来自{}:{}", RemoteEndpoint().address().to_string(), RemoteEndpoint().port());
 				return;
 			}
@@ -50,10 +51,10 @@ void SessionHandle::OnMessage(network::NetMessage &message)
 	}
 
 	// 处理心跳包
-	if (dynamic_cast<internal::PingReq*>(request.get()) != nullptr)
+	if (dynamic_cast<pub::PingReq*>(request.get()) != nullptr)
 	{
 		message.Clear();
-		internal::PongRsp response;
+		pub::PongRsp response;
 		ProtubufCodec::Encode(&response, message);
 		Respond(message);
 	}

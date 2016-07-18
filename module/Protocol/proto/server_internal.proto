@@ -1,27 +1,6 @@
-package internal;
+package svr;
 
-// 服务器错误码
-enum ErrorCode {
-    kNotLoggedIn = 1;            // 未登录
-    kDisconnect = 2;             // 断开连接
-    kNotConnected = 3;           // 未连接
-    kInvalidProtocol = 4;        // 无效协议
-    kInvalidOperation = 5;       // 无效操作
-    kNotFoundDatabase = 6;       // 不存在的数据库
-    kResourceInsufficiency = 7;  // 服务器资源不足
-    kDestinationUnreachable = 8; // 目的地不可到达
-    kInvalidNodeType = 9;        // 无效的节点类型
-    kRepeatLogin = 10;           // 重复登录
-    kInvalidDataPacket = 11;     // 无效数据包
-}
-
-// 心跳上行包
-message PingReq {
-}
-
-// 心跳上行包
-message PongRsp {
-}
+import "proto/public_enum.proto";
 
 /************************************************************************/
 /* 与DBAgent的协议                                                       */
@@ -89,8 +68,8 @@ message DBErrorRsp
 
 // DBAgent错误返回
 message DBAgentErrorRsp {
-    required ErrorCode error_code = 1; // 错误码
-    optional uint32 sequence = 2;      // 序列号
+    required pub.ErrorCode error_code = 1; // 错误码
+    optional uint32 sequence = 2;          // 序列号
 }
 
 /************************************************************************/
@@ -112,8 +91,8 @@ message ChildNode {
 
 // Router错误返回
 message RouterErrorRsp {
-    required ErrorCode error_code = 1; // 错误码
-    optional string what = 2;          // 错误原因
+    required pub.ErrorCode error_code = 1; // 错误码
+    optional string what = 2;              // 错误原因
 }
 
 // 登录Router请求

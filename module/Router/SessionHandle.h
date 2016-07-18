@@ -1,5 +1,5 @@
-﻿#ifndef __DBPROXY_SESSION_HANDLE_H__
-#define __DBPROXY_SESSION_HANDLE_H__
+﻿#ifndef __SESSION_HANDLE_H__
+#define __SESSION_HANDLE_H__
 
 #include <network.h>
 

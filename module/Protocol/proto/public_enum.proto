@@ -1,0 +1,16 @@
+package pub;
+
+// 错误代码
+enum ErrorCode {
+    kNotLoggedIn = 10001;            // 未登录
+    kDisconnect = 10002;             // 断开连接
+    kNotConnected = 10003;           // 未连接
+    kInvalidProtocol = 10004;        // 无效协议
+    kInvalidOperation = 10005;       // 无效操作
+    kNotFoundDatabase = 10006;       // 不存在的数据库
+    kResourceInsufficiency = 10007;  // 服务器资源不足
+    kDestinationUnreachable = 10008; // 目的地不可到达
+    kInvalidNodeType = 10009;        // 无效的节点类型
+    kRepeatLogin = 10010;            // 重复登录
+    kInvalidDataPacket = 10011;      // 无效数据包
+}

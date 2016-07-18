@@ -1,0 +1,16 @@
+package pub;
+
+import "proto/public_enum.proto";
+
+// 心跳上行包
+message PingReq {
+}
+
+// 心跳上行包
+message PongRsp {
+}
+
+// 错误响应
+message ErrorRsp {
+    required ErrorCode error_code = 1; // 错误码
+}

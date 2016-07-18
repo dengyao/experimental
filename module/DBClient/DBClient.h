@@ -28,10 +28,10 @@ enum DatabaseActionType
 	kDelete = 4
 };
 
-class ConnectDBAgentFailed : public std::runtime_error
+class ConnectDBAgentFail : public std::runtime_error
 {
 public:
-	ConnectDBAgentFailed(const char *message)
+	ConnectDBAgentFail(const char *message)
 		: std::runtime_error(message)
 	{
 	}
@@ -49,7 +49,7 @@ public:
 	typedef std::function<void(google::protobuf::Message*)> QueryCallBack;
 
 public:
-	DBClient(network::IOServiceThreadManager &threads, asio::ip::tcp::endpoint &endpoint, size_t connection_num);
+	DBClient(network::IOServiceThreadManager &threads, asio::ip::tcp::endpoint &endpoint, size_t connection_num = 1);
 	~DBClient();
 
 public:

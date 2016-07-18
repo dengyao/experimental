@@ -2,7 +2,8 @@
 #include <limits>
 #include <iostream>
 #include <ProtobufCodec.h>
-#include <proto/internal.pb.h>
+#include <proto/public_struct.pb.h>
+#include <proto/server_internal.pb.h>
 
 /************************************************************************/
 
@@ -36,7 +37,7 @@ public:
 		else
 		{
 			network::NetMessage message;
-			internal::LoginDBAgentReq request;
+			svr::LoginDBAgentReq request;
 			ProtubufCodec::Encode(&request, message);
 			Send(message);
 			client_->OnConnected(this);
@@ -61,12 +62,12 @@ public:
 
 		if (!is_logged_)
 		{
-			if (dynamic_cast<internal::PongRsp*>(response.get()) == nullptr)
+			if (dynamic_cast<pub::PongRsp*>(response.get()) == nullptr)
 			{
-				if (dynamic_cast<internal::LoginDBAgentRsp*>(response.get()) != nullptr)
+				if (dynamic_cast<svr::LoginDBAgentRsp*>(response.get()) != nullptr)
 				{
 					is_logged_ = true;
-					counter_ = heartbeat_interval_ = static_cast<internal::LoginDBAgentRsp*>(response.get())->heartbeat_interval();
+					counter_ = heartbeat_interval_ = static_cast<svr::LoginDBAgentRsp*>(response.get())->heartbeat_interval();
 				}
 				else
 				{
@@ -75,13 +76,13 @@ public:
 				}
 			}
 		}
-		else if (dynamic_cast<internal::PongRsp*>(response.get()) == nullptr)
+		else if (dynamic_cast<pub::PongRsp*>(response.get()) == nullptr)
 		{
 			client_->OnMessage(this, response.get());
 		}
 		else
 		{
-			assert(dynamic_cast<internal::PongRsp*>(response.get()) != nullptr);
+			assert(dynamic_cast<pub::PongRsp*>(response.get()) != nullptr);
 		}
 	}
 
@@ -102,7 +103,7 @@ public:
 		{
 			if (--counter_ == 0)
 			{
-				internal::PingReq request;
+				pub::PingReq request;
 				network::NetMessage message;
 				ProtubufCodec::Encode(&request, message);
 				Send(message);
@@ -221,13 +222,13 @@ void DBClient::InitConnections()
 		catch (const std::exception&)
 		{
 			Clear();
-			throw ConnectDBAgentFailed(error_code.message().c_str());
+			throw ConnectDBAgentFail(error_code.message().c_str());
 		}
 		
 		if (error_code)
 		{
 			Clear();
-			throw ConnectDBAgentFailed(error_code.message().c_str());
+			throw ConnectDBAgentFail(error_code.message().c_str());
 		}
 	}
 }
@@ -338,9 +339,9 @@ void DBClient::OnDisconnect(DBSessionHandle *session)
 
 			if (callback != nullptr)
 			{
-				internal::DBAgentErrorRsp response;
+				svr::DBAgentErrorRsp response;
 				response.set_sequence(0);
-				response.set_error_code(internal::kDisconnect);
+				response.set_error_code(pub::kDisconnect);
 				callback(&response);
 			}
 		}
@@ -351,17 +352,17 @@ void DBClient::OnDisconnect(DBSessionHandle *session)
 void DBClient::OnMessage(DBSessionHandle *session, google::protobuf::Message *message)
 {
 	uint32_t sequence = 0;
-	if (dynamic_cast<internal::QueryDBAgentRsp*>(message) != nullptr)
+	if (dynamic_cast<svr::QueryDBAgentRsp*>(message) != nullptr)
 	{
-		sequence = static_cast<internal::QueryDBAgentRsp*>(message)->sequence();
+		sequence = static_cast<svr::QueryDBAgentRsp*>(message)->sequence();
 	}
-	else if (dynamic_cast<internal::DBErrorRsp*>(message) != nullptr)
+	else if (dynamic_cast<svr::DBErrorRsp*>(message) != nullptr)
 	{
-		sequence = static_cast<internal::DBErrorRsp*>(message)->sequence();
+		sequence = static_cast<svr::DBErrorRsp*>(message)->sequence();
 	}
-	else if (dynamic_cast<internal::DBAgentErrorRsp*>(message) != nullptr)
+	else if (dynamic_cast<svr::DBAgentErrorRsp*>(message) != nullptr)
 	{
-		sequence = static_cast<internal::DBAgentErrorRsp*>(message)->sequence();
+		sequence = static_cast<svr::DBAgentErrorRsp*>(message)->sequence();
 	}
 	else
 	{
@@ -397,22 +398,22 @@ void DBClient::OnMessage(DBSessionHandle *session, google::protobuf::Message *me
 // 异步操作
 void DBClient::AsyncQuery(DatabaseType dbtype, const char *dbname, DatabaseActionType action, const char *statement, QueryCallBack &&callback)
 {
-	static_assert(DatabaseType::kRedis == internal::QueryDBAgentReq::kRedis &&
-		DatabaseType::kMySQL == internal::QueryDBAgentReq::kMySQL, "type mismatch");
+	static_assert(DatabaseType::kRedis == svr::QueryDBAgentReq::kRedis &&
+		DatabaseType::kMySQL == svr::QueryDBAgentReq::kMySQL, "type mismatch");
 
-	static_assert(DatabaseActionType::kSelect == internal::QueryDBAgentReq::kSelect &&
-		DatabaseActionType::kInsert == internal::QueryDBAgentReq::kInsert &&
-		DatabaseActionType::kUpdate == internal::QueryDBAgentReq::kUpdate &&
-		DatabaseActionType::kDelete == internal::QueryDBAgentReq::kDelete, "type mismatch");
+	static_assert(DatabaseActionType::kSelect == svr::QueryDBAgentReq::kSelect &&
+		DatabaseActionType::kInsert == svr::QueryDBAgentReq::kInsert &&
+		DatabaseActionType::kUpdate == svr::QueryDBAgentReq::kUpdate &&
+		DatabaseActionType::kDelete == svr::QueryDBAgentReq::kDelete, "type mismatch");
 
 	if (session_handle_lists_.size() < connection_num_)
 	{
 		AsyncReconnect();
 		if (session_handle_lists_.empty())
 		{
-			internal::DBAgentErrorRsp response;
+			svr::DBAgentErrorRsp response;
 			response.set_sequence(0);
-			response.set_error_code(internal::kNotConnected);
+			response.set_error_code(pub::kNotConnected);
 			callback(&response);
 			return;
 		}
@@ -426,12 +427,12 @@ void DBClient::AsyncQuery(DatabaseType dbtype, const char *dbname, DatabaseActio
 			next_client_index_ = 0;
 		}
 
-		internal::QueryDBAgentReq request;
+		svr::QueryDBAgentReq request;
 		request.set_dbname(dbname);
 		request.set_statement(statement);
 		request.set_sequence(sequence);
-		request.set_action(static_cast<internal::QueryDBAgentReq::ActoinType>(action));
-		request.set_dbtype(static_cast<internal::QueryDBAgentReq::DatabaseType>(dbtype));
+		request.set_action(static_cast<svr::QueryDBAgentReq::ActoinType>(action));
+		request.set_dbtype(static_cast<svr::QueryDBAgentReq::DatabaseType>(dbtype));
 
 		DBSessionHandle *session = session_handle_lists_[next_client_index_++];
 		assigned_lists_[session].insert(sequence);

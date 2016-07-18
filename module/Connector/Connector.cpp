@@ -1,7 +1,8 @@
 ﻿#include "Connector.h"
 #include <iostream>
 #include <ProtobufCodec.h>
-#include <proto/internal.pb.h>
+#include <proto/public_struct.pb.h>
+#include <proto/server_internal.pb.h>
 
 static const size_t kExtrabufSize = 4096;
 
@@ -37,9 +38,9 @@ public:
 		else
 		{
 			network::NetMessage message;
-			internal::LoginRouterReq request;
+			svr::LoginRouterReq request;
 			request.mutable_node()->set_child_id(client_->GetChildNodeID());
-			request.mutable_node()->set_type(static_cast<internal::NodeType>(client_->GetNodeType()));
+			request.mutable_node()->set_type(static_cast<svr::NodeType>(client_->GetNodeType()));
 			ProtubufCodec::Encode(&request, message);
 			Send(message);
 			client_->OnConnected(this);
@@ -64,12 +65,12 @@ public:
 
 		if (!is_logged_)
 		{
-			if (dynamic_cast<internal::PongRsp*>(response.get()) == nullptr)
+			if (dynamic_cast<pub::PongRsp*>(response.get()) == nullptr)
 			{
-				if (dynamic_cast<internal::LoginRouterRsp*>(response.get()) != nullptr)
+				if (dynamic_cast<svr::LoginRouterRsp*>(response.get()) != nullptr)
 				{
 					is_logged_ = true;
-					counter_ = heartbeat_interval_ = static_cast<internal::LoginRouterRsp*>(response.get())->heartbeat_interval();
+					counter_ = heartbeat_interval_ = static_cast<svr::LoginRouterRsp*>(response.get())->heartbeat_interval();
 				}
 				else
 				{
@@ -78,13 +79,13 @@ public:
 				}
 			}
 		}
-		else if (dynamic_cast<internal::PongRsp*>(response.get()) == nullptr)
+		else if (dynamic_cast<pub::PongRsp*>(response.get()) == nullptr)
 		{
 			client_->OnMessage(this, response.get(), message);
 		}
 		else
 		{
-			assert(dynamic_cast<internal::PongRsp*>(response.get()) != nullptr);
+			assert(dynamic_cast<pub::PongRsp*>(response.get()) != nullptr);
 		}
 	}
 
@@ -105,7 +106,7 @@ public:
 		{
 			if (--counter_ == 0)
 			{
-				internal::PingReq request;
+				pub::PingReq request;
 				network::NetMessage message;
 				ProtubufCodec::Encode(&request, message);
 				Send(message);
@@ -175,7 +176,7 @@ Connector::Connector(network::IOServiceThreadManager &threads, asio::ip::tcp::en
 	, session_handle_creator_(threads_, std::bind(&Connector::CreateSessionHandle, this), std::bind(CreaterMessageFilter))
 {
 	assert(connection_num > 0);
-	assert(node_type_ >= internal::NodeType_MIN && node_type_ <= internal::NodeType_MAX);
+	assert(node_type_ >= svr::NodeType_MIN && node_type_ <= svr::NodeType_MAX);
 	InitConnections();
 	timer_.async_wait(wait_handler_);
 }
@@ -358,9 +359,9 @@ void Connector::OnDisconnect(SessionHandle *session)
 // 接受消息事件
 void Connector::OnMessage(SessionHandle *session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
-	if (dynamic_cast<internal::RouterNotify*>(message) != nullptr)
+	if (dynamic_cast<svr::RouterNotify*>(message) != nullptr)
 	{
-		auto response = static_cast<internal::RouterNotify*>(message);
+		auto response = static_cast<svr::RouterNotify*>(message);
 		context_.node_type = response->src().type();
 		context_.child_id = response->src().child_id();
 
@@ -373,9 +374,9 @@ void Connector::OnMessage(SessionHandle *session, google::protobuf::Message *mes
 			message_cb_(this, forward_message.get(), buffer);
 		}
 	}
-	else if (dynamic_cast<internal::RouterErrorRsp*>(message) != nullptr)
+	else if (dynamic_cast<svr::RouterErrorRsp*>(message) != nullptr)
 	{
-		auto response = static_cast<internal::RouterErrorRsp*>(message);
+		auto response = static_cast<svr::RouterErrorRsp*>(message);
 		std::cerr << "router error code: " << response->error_code() << std::endl;
 	}
 	else
@@ -404,7 +405,7 @@ void Connector::Send(int dst_node_type, int dst_child_id, google::protobuf::Mess
 
 void Connector::Send(int dst_node_type, int dst_child_id, google::protobuf::Message *message, network::NetMessage &buffer)
 {
-	assert(dst_node_type >= internal::NodeType_MIN && dst_node_type <= internal::NodeType_MAX);
+	assert(dst_node_type >= svr::NodeType_MIN && dst_node_type <= svr::NodeType_MAX);
 	SessionHandle *session = GetSessionHandle();
 	if (session != nullptr)
 	{
@@ -424,8 +425,8 @@ void Connector::Send(int dst_node_type, int dst_child_id, google::protobuf::Mess
 		}
 
 		buffer.Clear();
-		internal::ForwardReq request;
-		request.mutable_dst()->set_type(static_cast<internal::NodeType>(dst_node_type));
+		svr::ForwardReq request;
+		request.mutable_dst()->set_type(static_cast<svr::NodeType>(dst_node_type));
 		request.mutable_dst()->set_child_id(dst_child_id);
 		request.set_user_data(byte_array.empty() ? extrabuf.data() : byte_array.data(), byte_size);
 		ProtubufCodec::Encode(&request, buffer);
@@ -461,12 +462,12 @@ void Connector::Broadcast(const std::vector<int> &dst_type_lists, google::protob
 		}
 
 		buffer.Clear();
-		internal::BroadcastReq request;
+		svr::BroadcastReq request;
 		for (size_t i = 0; i < dst_type_lists.size(); ++i)
 		{
 			int dst_node_type = dst_type_lists[i];
-			assert(dst_node_type >= internal::NodeType_MIN && dst_node_type <= internal::NodeType_MAX);
-			request.add_dst_lists(static_cast<internal::NodeType>(dst_node_type));
+			assert(dst_node_type >= svr::NodeType_MIN && dst_node_type <= svr::NodeType_MAX);
+			request.add_dst_lists(static_cast<svr::NodeType>(dst_node_type));
 		}
 		request.set_user_data(byte_array.empty() ? extrabuf.data() : byte_array.data(), byte_size);
 		ProtubufCodec::Encode(&request, buffer);

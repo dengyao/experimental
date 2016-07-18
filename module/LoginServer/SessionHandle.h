@@ -11,16 +11,18 @@ namespace google
 	}
 }
 
-class AgentManager;
+enum class RoleType
+{
+	kUser = 1,
+	kLinker = 2,
+};
+
+class LoginManager;
 
 class SessionHandle : public network::TCPSessionHandler
 {
 public:
-	SessionHandle(AgentManager &manager);
-
-public:
-	// 回复消息
-	void Respond(const network::NetMessage &message);
+	SessionHandle(LoginManager &login_manager);
 
 private:
 	// 连接事件
@@ -33,14 +35,14 @@ private:
 	virtual void OnClose() override;
 
 private:
-	bool is_logged_;
-	AgentManager& agent_manager_;
+	RoleType      type_;
+	LoginManager& login_manager_;
 };
 
 // 创建消息筛选器
 network::MessageFilterPointer CreateMessageFilter();
 
 // 创建Session处理器
-network::SessionHandlePointer CreateSessionHandle(AgentManager &agent_manager);
+network::SessionHandlePointer CreateSessionHandle(LoginManager &login_manager);
 
 #endif

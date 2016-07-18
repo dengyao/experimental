@@ -1,33 +1,45 @@
 ﻿#ifndef __INIT_DESCRIPTOR_H__
 #define __INIT_DESCRIPTOR_H__
 
-#include <proto/internal.pb.h>
-#include <proto/pub_login.pb.h>
+#include <proto/client_login.pb.h>
+#include <proto/public_enum.pb.h>
+#include <proto/public_struct.pb.h>
+#include <proto/server_internal.pb.h>
 
 class InitDescriptor
 {
 public:
     InitDescriptor()
     {
-        internal::PingReq::descriptor();
-        internal::PongRsp::descriptor();
-        internal::LoginDBAgentReq::descriptor();
-        internal::LoginDBAgentRsp::descriptor();
-        internal::DBAgentInfoReq::descriptor();
-        internal::DBAgentInfoRsp::descriptor();
-        internal::QueryDBAgentReq::descriptor();
-        internal::QueryDBAgentRsp::descriptor();
-        internal::DBErrorRsp::descriptor();
-        internal::DBAgentErrorRsp::descriptor();
-        internal::ChildNode::descriptor();
-        internal::RouterErrorRsp::descriptor();
-        internal::LoginRouterReq::descriptor();
-        internal::LoginRouterRsp::descriptor();
-        internal::RouterInfoReq::descriptor();
-        internal::RouterInfoRsp::descriptor();
-        internal::ForwardReq::descriptor();
-        internal::BroadcastReq::descriptor();
-        internal::RouterNotify::descriptor();
+        login::SignUpReq::descriptor();
+        login::SignUpRsp::descriptor();
+        login::SignInReq::descriptor();
+        login::SignInRsp::descriptor();
+        login::QueryPartitionReq::descriptor();
+        login::QueryPartitionRsp::descriptor();
+        login::QueryPartitionRsp_Partition::descriptor();
+        login::EntryPartitionReq::descriptor();
+        login::EntryPartitionRsp::descriptor();
+        pub::PingReq::descriptor();
+        pub::PongRsp::descriptor();
+        pub::ErrorRsp::descriptor();
+        svr::LoginDBAgentReq::descriptor();
+        svr::LoginDBAgentRsp::descriptor();
+        svr::DBAgentInfoReq::descriptor();
+        svr::DBAgentInfoRsp::descriptor();
+        svr::QueryDBAgentReq::descriptor();
+        svr::QueryDBAgentRsp::descriptor();
+        svr::DBErrorRsp::descriptor();
+        svr::DBAgentErrorRsp::descriptor();
+        svr::ChildNode::descriptor();
+        svr::RouterErrorRsp::descriptor();
+        svr::LoginRouterReq::descriptor();
+        svr::LoginRouterRsp::descriptor();
+        svr::RouterInfoReq::descriptor();
+        svr::RouterInfoRsp::descriptor();
+        svr::ForwardReq::descriptor();
+        svr::BroadcastReq::descriptor();
+        svr::RouterNotify::descriptor();
     }
 };
 
