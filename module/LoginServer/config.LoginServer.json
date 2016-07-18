@@ -1,0 +1,9 @@
+{
+  "port" : 10020,
+  "thread_num" : 2,
+  "heartbeat_interval": 60,
+  "max_user_online_time": 300,
+  "dba_ip" : "192.168.1.109",
+  "dba_port" : 10000,
+  "dba_connections" : 2
+}

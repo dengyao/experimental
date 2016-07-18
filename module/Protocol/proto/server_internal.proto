@@ -55,7 +55,7 @@ message QueryDBAgentReq {
 // 查询DBAgent返回
 message QueryDBAgentRsp {
     required uint32 sequence = 1; // 序列号
-    optional string result = 2;   // 返回数据
+    optional bytes result = 2;    // 返回数据
 }
 
 // DB错误返回
@@ -87,12 +87,6 @@ enum NodeType {
 message ChildNode {
     required NodeType type = 1;                 // 服务器节点类型
     optional uint32 child_id = 2 [default = 1]; // 服务器子节点id
-}
-
-// Router错误返回
-message RouterErrorRsp {
-    required pub.ErrorCode error_code = 1; // 错误码
-    optional string what = 2;              // 错误原因
 }
 
 // 登录Router请求
@@ -132,4 +126,24 @@ message BroadcastReq {
 message RouterNotify {
 	required ChildNode src = 1;   // 目标服务器节点
     required bytes user_data = 2; // 用户数据
+}
+
+/************************************************************************/
+/* 与LoginServer的协议                                                   */
+/************************************************************************/
+
+// 注册Linker请求
+message RegisterLinkerReq {
+    required uint32 partition_id = 1; // 分区id
+}
+
+// 注册Linker返回
+message RegisterLinkerRsp {
+    required uint32 heartbeat_interval = 1; // 心跳包间隔
+    required uint32 linker_id = 2; // LinkerServer id
+}
+
+// 上报Linker负载量
+message UpdateLinkerCapacityReq {
+    required uint32 load = 1; // 负载量
 }

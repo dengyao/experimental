@@ -1,5 +1,8 @@
 ﻿#include "SessionHandle.h"
-
+#include <ProtobufCodec.h>
+#include <proto/public_struct.pb.h>
+#include <proto/server_internal.pb.h>
+#include "LoginManager.h"
 
 SessionHandle::SessionHandle(LoginManager &login_manager)
 	: login_manager_(login_manager)
@@ -19,40 +22,42 @@ void SessionHandle::OnMessage(network::NetMessage &message)
 	auto request = ProtubufCodec::Decode(message);
 	if (request == nullptr)
 	{
-		router_manager_.RespondErrorCode(*this, message, internal::kInvalidProtocol);
+		message.Clear();
+		pub::ErrorRsp response;
+		response.set_error_code(pub::kInvalidProtocol);
+		ProtubufCodec::Encode(&response, message);
+		Send(message);
 		return;
 	}
 
-	// 连接后必须登录
-	if (!is_logged_)
+	// 注册LinkerServer
+	if (dynamic_cast<svr::RegisterLinkerReq*>(request.get()) != nullptr)
 	{
-		if (dynamic_cast<internal::PingReq*>(request.get()) == nullptr)
+		if (login_manager_.HandleLinkerMessage(*this, request.get(), message))
 		{
-			if (dynamic_cast<internal::LoginRouterReq*>(request.get()) == nullptr)
-			{
-				router_manager_.RespondErrorCode(*this, message, internal::kNotLoggedIn);
-				logger()->warn("操作前未发起登录请求，来自{}:{}", RemoteEndpoint().address().to_string(), RemoteEndpoint().port());
-				return;
-			}
-			else
-			{
-				is_logged_ = router_manager_.HandleMessage(*this, request.get(), message);
-				return;
-			}
+			type_ = RoleType::kLinker;
 		}
+		return;
 	}
 
-	// 处理心跳包
-	if (dynamic_cast<internal::PingReq*>(request.get()) != nullptr)
+	// 处理心跳
+	if (dynamic_cast<svr::RegisterLinkerReq*>(request.get()) != nullptr)
 	{
 		message.Clear();
-		internal::PongRsp response;
+		pub::PongRsp response;
 		ProtubufCodec::Encode(&response, message);
-		Respond(message);
+		Send(message);
+		return;
+	}
+
+	// 处理消息
+	if (type_ == RoleType::kUser)
+	{
+		login_manager_.HandleUserMessage(*this, request.get(), message);
 	}
 	else
 	{
-		router_manager_.HandleMessage(*this, request.get(), message);
+		login_manager_.HandleLinkerMessage(*this, request.get(), message);
 	}
 }
 

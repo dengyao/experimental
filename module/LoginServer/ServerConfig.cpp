@@ -6,7 +6,10 @@
 ServerConfig::ServerConfig()
 	: port_(0)
 	, thread_num_(0)
+	, dba_port_(0)
+	, dba_connections_(0)
 	, heartbeat_interval_(0)
+	, max_user_online_time_(0)
 {
 }
 
@@ -30,6 +33,30 @@ unsigned short ServerConfig::GetUseThreadNum() const
 unsigned int ServerConfig::GetHeartbeatInterval() const
 {
 	return heartbeat_interval_;
+}
+
+// 获取用户最大在线时长
+unsigned int ServerConfig::GetMaxUserOnlineTime() const
+{
+	return max_user_online_time_;
+}
+
+// 获取数据库代理服务器ip
+const char* ServerConfig::GetDBAgentIP() const
+{
+	return dba_ip_.c_str();
+}
+
+// 获取数据库代理服务器端口
+unsigned short ServerConfig::GetDBAgentPort() const
+{
+	return dba_port_;
+}
+
+// 获取与数据库代理服务器最大连接数
+unsigned short ServerConfig::GetDBAgentConnections() const
+{
+	return dba_connections_;
 }
 
 // 加载服务器配置文件
@@ -72,6 +99,30 @@ bool ServerConfig::Load(const std::string &filename)
 		return false;
 	}
 	heartbeat_interval_ = document["heartbeat_interval"].GetUint();
+
+	if (!document.HasMember("max_user_online_time") || !document["max_user_online_time"].IsUint())
+	{
+		return false;
+	}
+	max_user_online_time_ = document["max_user_online_time"].GetUint();
+
+	if (!document.HasMember("dba_ip") || !document["dba_ip"].IsString())
+	{
+		return false;
+	}
+	dba_ip_ = document["dba_ip"].GetString();
+
+	if (!document.HasMember("dba_port") || !document["dba_port"].IsUint())
+	{
+		return false;
+	}
+	dba_port_ = document["dba_port"].GetUint();
+
+	if (!document.HasMember("dba_connections") || !document["dba_connections"].IsUint())
+	{
+		return false;
+	}
+	dba_connections_ = document["dba_connections"].GetUint();
 
 	return true;
 }

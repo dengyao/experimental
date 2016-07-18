@@ -68,8 +68,9 @@ void protobuf_AssignDesc_proto_2fpublic_5fstruct_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(PongRsp));
   ErrorRsp_descriptor_ = file->message_type(2);
-  static const int ErrorRsp_offsets_[1] = {
+  static const int ErrorRsp_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ErrorRsp, error_code_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ErrorRsp, what_),
   };
   ErrorRsp_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -123,8 +124,8 @@ void protobuf_AddDesc_proto_2fpublic_5fstruct_2eproto() {
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\031proto/public_struct.proto\022\003pub\032\027proto/"
     "public_enum.proto\"\t\n\007PingReq\"\t\n\007PongRsp\""
-    ".\n\010ErrorRsp\022\"\n\nerror_code\030\001 \002(\0162\016.pub.Er"
-    "rorCode", 127);
+    "<\n\010ErrorRsp\022\"\n\nerror_code\030\001 \002(\0162\016.pub.Er"
+    "rorCode\022\014\n\004what\030\002 \001(\t", 141);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "proto/public_struct.proto", &protobuf_RegisterTypes);
   PingReq::default_instance_ = new PingReq();
@@ -495,6 +496,7 @@ void PongRsp::Swap(PongRsp* other) {
 
 #ifndef _MSC_VER
 const int ErrorRsp::kErrorCodeFieldNumber;
+const int ErrorRsp::kWhatFieldNumber;
 #endif  // !_MSC_VER
 
 ErrorRsp::ErrorRsp()
@@ -514,8 +516,10 @@ ErrorRsp::ErrorRsp(const ErrorRsp& from)
 }
 
 void ErrorRsp::SharedCtor() {
+  ::google::protobuf::internal::GetEmptyString();
   _cached_size_ = 0;
   error_code_ = 10001;
+  what_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -525,6 +529,9 @@ ErrorRsp::~ErrorRsp() {
 }
 
 void ErrorRsp::SharedDtor() {
+  if (what_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete what_;
+  }
   if (this != default_instance_) {
   }
 }
@@ -551,7 +558,14 @@ ErrorRsp* ErrorRsp::New() const {
 }
 
 void ErrorRsp::Clear() {
-  error_code_ = 10001;
+  if (_has_bits_[0 / 32] & 3) {
+    error_code_ = 10001;
+    if (has_what()) {
+      if (what_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+        what_->clear();
+      }
+    }
+  }
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
@@ -578,6 +592,23 @@ bool ErrorRsp::MergePartialFromCodedStream(
           } else {
             mutable_unknown_fields()->AddVarint(1, value);
           }
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(18)) goto parse_what;
+        break;
+      }
+
+      // optional string what = 2;
+      case 2: {
+        if (tag == 18) {
+         parse_what:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_what()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+            this->what().data(), this->what().length(),
+            ::google::protobuf::internal::WireFormat::PARSE,
+            "what");
         } else {
           goto handle_unusual;
         }
@@ -616,6 +647,16 @@ void ErrorRsp::SerializeWithCachedSizes(
       1, this->error_code(), output);
   }
 
+  // optional string what = 2;
+  if (has_what()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->what().data(), this->what().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "what");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      2, this->what(), output);
+  }
+
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -630,6 +671,17 @@ void ErrorRsp::SerializeWithCachedSizes(
   if (has_error_code()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       1, this->error_code(), target);
+  }
+
+  // optional string what = 2;
+  if (has_what()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->what().data(), this->what().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "what");
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        2, this->what(), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -648,6 +700,13 @@ int ErrorRsp::ByteSize() const {
     if (has_error_code()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->error_code());
+    }
+
+    // optional string what = 2;
+    if (has_what()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->what());
     }
 
   }
@@ -680,6 +739,9 @@ void ErrorRsp::MergeFrom(const ErrorRsp& from) {
     if (from.has_error_code()) {
       set_error_code(from.error_code());
     }
+    if (from.has_what()) {
+      set_what(from.what());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -705,6 +767,7 @@ bool ErrorRsp::IsInitialized() const {
 void ErrorRsp::Swap(ErrorRsp* other) {
   if (other != this) {
     std::swap(error_code_, other->error_code_);
+    std::swap(what_, other->what_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

@@ -238,15 +238,30 @@ class ErrorRsp : public ::google::protobuf::Message {
   inline ::pub::ErrorCode error_code() const;
   inline void set_error_code(::pub::ErrorCode value);
 
+  // optional string what = 2;
+  inline bool has_what() const;
+  inline void clear_what();
+  static const int kWhatFieldNumber = 2;
+  inline const ::std::string& what() const;
+  inline void set_what(const ::std::string& value);
+  inline void set_what(const char* value);
+  inline void set_what(const char* value, size_t size);
+  inline ::std::string* mutable_what();
+  inline ::std::string* release_what();
+  inline void set_allocated_what(::std::string* what);
+
   // @@protoc_insertion_point(class_scope:pub.ErrorRsp)
  private:
   inline void set_has_error_code();
   inline void clear_has_error_code();
+  inline void set_has_what();
+  inline void clear_has_what();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
+  ::std::string* what_;
   int error_code_;
   friend void  protobuf_AddDesc_proto_2fpublic_5fstruct_2eproto();
   friend void protobuf_AssignDesc_proto_2fpublic_5fstruct_2eproto();
@@ -293,6 +308,82 @@ inline void ErrorRsp::set_error_code(::pub::ErrorCode value) {
   set_has_error_code();
   error_code_ = value;
   // @@protoc_insertion_point(field_set:pub.ErrorRsp.error_code)
+}
+
+// optional string what = 2;
+inline bool ErrorRsp::has_what() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void ErrorRsp::set_has_what() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void ErrorRsp::clear_has_what() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void ErrorRsp::clear_what() {
+  if (what_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    what_->clear();
+  }
+  clear_has_what();
+}
+inline const ::std::string& ErrorRsp::what() const {
+  // @@protoc_insertion_point(field_get:pub.ErrorRsp.what)
+  return *what_;
+}
+inline void ErrorRsp::set_what(const ::std::string& value) {
+  set_has_what();
+  if (what_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    what_ = new ::std::string;
+  }
+  what_->assign(value);
+  // @@protoc_insertion_point(field_set:pub.ErrorRsp.what)
+}
+inline void ErrorRsp::set_what(const char* value) {
+  set_has_what();
+  if (what_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    what_ = new ::std::string;
+  }
+  what_->assign(value);
+  // @@protoc_insertion_point(field_set_char:pub.ErrorRsp.what)
+}
+inline void ErrorRsp::set_what(const char* value, size_t size) {
+  set_has_what();
+  if (what_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    what_ = new ::std::string;
+  }
+  what_->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:pub.ErrorRsp.what)
+}
+inline ::std::string* ErrorRsp::mutable_what() {
+  set_has_what();
+  if (what_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    what_ = new ::std::string;
+  }
+  // @@protoc_insertion_point(field_mutable:pub.ErrorRsp.what)
+  return what_;
+}
+inline ::std::string* ErrorRsp::release_what() {
+  clear_has_what();
+  if (what_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    return NULL;
+  } else {
+    ::std::string* temp = what_;
+    what_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    return temp;
+  }
+}
+inline void ErrorRsp::set_allocated_what(::std::string* what) {
+  if (what_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete what_;
+  }
+  if (what) {
+    set_has_what();
+    what_ = what;
+  } else {
+    clear_has_what();
+    what_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  }
+  // @@protoc_insertion_point(field_set_allocated:pub.ErrorRsp.what)
 }
 
 

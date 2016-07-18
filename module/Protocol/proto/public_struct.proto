@@ -13,4 +13,5 @@ message PongRsp {
 // 错误响应
 message ErrorRsp {
     required ErrorCode error_code = 1; // 错误码
+    optional string what = 2;          // 错误原因
 }

@@ -102,7 +102,7 @@ bool RouterManager::FindServerNodeSession(int node_type, int child_id, network::
 void RouterManager::RespondErrorCode(SessionHandle &session, network::NetMessage &buffer, int error_code, const char *what)
 {
 	buffer.Clear();
-	svr::RouterErrorRsp response;
+	pub::ErrorRsp response;
 	response.set_error_code(static_cast<pub::ErrorCode>(error_code));
 	if (what != nullptr)
 	{

@@ -374,9 +374,9 @@ void Connector::OnMessage(SessionHandle *session, google::protobuf::Message *mes
 			message_cb_(this, forward_message.get(), buffer);
 		}
 	}
-	else if (dynamic_cast<svr::RouterErrorRsp*>(message) != nullptr)
+	else if (dynamic_cast<pub::ErrorRsp*>(message) != nullptr)
 	{
-		auto response = static_cast<svr::RouterErrorRsp*>(message);
+		auto response = static_cast<pub::ErrorRsp*>(message);
 		std::cerr << "router error code: " << response->error_code() << std::endl;
 	}
 	else

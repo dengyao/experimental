@@ -32,7 +32,6 @@ public:
         svr::DBErrorRsp::descriptor();
         svr::DBAgentErrorRsp::descriptor();
         svr::ChildNode::descriptor();
-        svr::RouterErrorRsp::descriptor();
         svr::LoginRouterReq::descriptor();
         svr::LoginRouterRsp::descriptor();
         svr::RouterInfoReq::descriptor();
@@ -40,6 +39,9 @@ public:
         svr::ForwardReq::descriptor();
         svr::BroadcastReq::descriptor();
         svr::RouterNotify::descriptor();
+        svr::RegisterLinkerReq::descriptor();
+        svr::RegisterLinkerRsp::descriptor();
+        svr::UpdateLinkerCapacityReq::descriptor();
     }
 };
 

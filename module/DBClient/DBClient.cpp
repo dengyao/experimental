@@ -228,7 +228,7 @@ void DBClient::InitConnections()
 		if (error_code)
 		{
 			Clear();
-			throw ConnectDBAgentFail(error_code.message().c_str());
+ 			throw ConnectDBAgentFail(error_code.message().c_str());
 		}
 	}
 }

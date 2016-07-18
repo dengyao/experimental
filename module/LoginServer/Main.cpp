@@ -2,32 +2,44 @@
 #include <DBClient.h>
 #include <DBResult.h>
 #include <common/Path.h>
-#include <proto/internal.pb.h>
+#include <proto/server_internal.pb.h>
 #include "Logging.h"
+#include "ServerConfig.h"
+#include "LoginManager.h"
+#include "SessionHandle.h"
 
-struct SPartition
+std::unique_ptr<network::TCPServer> g_server;
+std::unique_ptr<LoginManager>       g_login_manager;
+network::IOServiceThreadManager*    g_thread_manager = nullptr;
+
+// 运行服务器
+void RunLoginServer(const std::vector<SPartition> &partition)
 {
-	int id;
-	std::string name;
-	int status;
-	bool is_recommend;
-	std::string createtime;
-
-	SPartition()
-		: id(0), status(0), is_recommend(false)
+	assert(g_thread_manager != nullptr);
+	if (g_thread_manager != nullptr)
 	{
+		asio::ip::tcp::endpoint endpoint(asio::ip::address_v4(), ServerConfig::GetInstance()->GetPort());
+		g_login_manager = std::make_unique<LoginManager>(*g_thread_manager, partition);
+		g_server = std::make_unique<network::TCPServer>(endpoint, *g_thread_manager, std::bind(CreateSessionHandle,
+			std::ref(*g_login_manager.get())), CreateMessageFilter);
+		logger()->info("登录服务器[ip:{} port:{}]启动成功!", g_server->LocalEndpoint().address().to_string().c_str(), g_server->LocalEndpoint().port());
 	}
-};
+	else
+	{
+		logger()->info("运行登录服务器失败!");
+		exit(-1);
+	}
+}
 
 // 查询分区信息
 void QueryPartitionInfo(DBClient *client)
 {
 	client->AsyncSelect(kMySQL, "db_verify", "SELECT * FROM `partition`;", [](google::protobuf::Message *message)
 	{
-		if (dynamic_cast<internal::QueryDBAgentRsp*>(message) != nullptr)
+		if (dynamic_cast<svr::QueryDBAgentRsp*>(message) != nullptr)
 		{
 			std::vector<SPartition> partition_lists;
-			auto rsp = static_cast<internal::QueryDBAgentRsp*>(message);
+			auto rsp = static_cast<svr::QueryDBAgentRsp*>(message);
 			DBResult result(rsp->result().data(), rsp->result().size());
 			for (unsigned int row = 0; row < result.NumRows(); ++row)
 			{
@@ -40,17 +52,18 @@ void QueryPartitionInfo(DBClient *client)
 				partition_lists.push_back(partition);
 			}
 			logger()->info("查询分区信息成功，共有{}个分区", partition_lists.size());
+			RunLoginServer(partition_lists);
 		}
 		else
 		{
-			if (dynamic_cast<internal::DBErrorRsp*>(message) != nullptr)
+			if (dynamic_cast<svr::DBErrorRsp*>(message) != nullptr)
 			{
-				auto error = static_cast<internal::DBErrorRsp*>(message);
+				auto error = static_cast<svr::DBErrorRsp*>(message);
 				logger()->critical("查询分区信息失败，error code: {} {}", error->error_code(), error->what());
 			}
-			else if(dynamic_cast<internal::DBAgentErrorRsp*>(message) != nullptr)
+			else if(dynamic_cast<svr::DBAgentErrorRsp*>(message) != nullptr)
 			{
-				auto error = static_cast<internal::DBAgentErrorRsp*>(message);
+				auto error = static_cast<svr::DBAgentErrorRsp*>(message);
 				logger()->critical("查询分区信息失败，error code: {}", error->error_code());
 			}
 			assert(false);
@@ -70,10 +83,23 @@ int main(int argc, char *argv[])
 	}
 	logger()->info("初始化日志设置成功!");
 
+	// 加载服务器配置
+	std::string fullpath = path::curdir() + path::sep + "config.LoginServer.json";
+	if (!ServerConfig::GetInstance()->Load(fullpath))
+	{
+		logger()->critical("加载服务器配置失败！");
+		assert(false);
+		exit(-1);
+	}
+	logger()->info("加载服务器配置成功!");
+	ServerConfig::GetInstance()->ProcessName(path::basename(*argv));
+
 	// 查询分区信息
-	network::IOServiceThreadManager threads(5);
-	asio::ip::tcp::endpoint endpoint(asio::ip::address_v4::from_string("192.168.1.109"), 10000);
-	DBClient db_client(threads, endpoint);
+	network::IOServiceThreadManager threads(ServerConfig::GetInstance()->GetUseThreadNum());
+	g_thread_manager = &threads;
+	asio::ip::tcp::endpoint endpoint(asio::ip::address_v4::from_string(ServerConfig::GetInstance()->GetDBAgentIP()),
+		ServerConfig::GetInstance()->GetDBAgentPort());
+	DBClient db_client(threads, endpoint, ServerConfig::GetInstance()->GetDBAgentConnections());
 	QueryPartitionInfo(&db_client);
 	threads.Run();
 

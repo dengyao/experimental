@@ -63,6 +63,9 @@ public:
 	// 处理服务器下线
 	void HandleServerOffline(SessionHandle &session);
 
+	// 回复错误码
+	void RespondErrorCode(SessionHandle &session, network::NetMessage &buffer, int error_code, const char *what = nullptr);
+
 private:
 	// 服务器登录
 	bool OnServerLogin(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer);
@@ -75,10 +78,6 @@ private:
 
 	// 广播服务器消息
 	bool OnBroadcastServerMessage(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer);
-
-public:
-	// 回复错误码
-	void RespondErrorCode(SessionHandle &session, network::NetMessage &buffer, int error_code, const char *what = nullptr);
 
 private:
 	// 更新统计数据

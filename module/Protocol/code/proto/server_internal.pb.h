@@ -44,7 +44,6 @@ class QueryDBAgentRsp;
 class DBErrorRsp;
 class DBAgentErrorRsp;
 class ChildNode;
-class RouterErrorRsp;
 class LoginRouterReq;
 class LoginRouterRsp;
 class RouterInfoReq;
@@ -52,6 +51,9 @@ class RouterInfoRsp;
 class ForwardReq;
 class BroadcastReq;
 class RouterNotify;
+class RegisterLinkerReq;
+class RegisterLinkerRsp;
+class UpdateLinkerCapacityReq;
 
 enum QueryDBAgentReq_ActoinType {
   QueryDBAgentReq_ActoinType_kSelect = 1,
@@ -720,14 +722,14 @@ class QueryDBAgentRsp : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 sequence() const;
   inline void set_sequence(::google::protobuf::uint32 value);
 
-  // optional string result = 2;
+  // optional bytes result = 2;
   inline bool has_result() const;
   inline void clear_result();
   static const int kResultFieldNumber = 2;
   inline const ::std::string& result() const;
   inline void set_result(const ::std::string& value);
   inline void set_result(const char* value);
-  inline void set_result(const char* value, size_t size);
+  inline void set_result(const void* value, size_t size);
   inline ::std::string* mutable_result();
   inline ::std::string* release_result();
   inline void set_allocated_result(::std::string* result);
@@ -1033,100 +1035,6 @@ class ChildNode : public ::google::protobuf::Message {
 
   void InitAsDefaultInstance();
   static ChildNode* default_instance_;
-};
-// -------------------------------------------------------------------
-
-class RouterErrorRsp : public ::google::protobuf::Message {
- public:
-  RouterErrorRsp();
-  virtual ~RouterErrorRsp();
-
-  RouterErrorRsp(const RouterErrorRsp& from);
-
-  inline RouterErrorRsp& operator=(const RouterErrorRsp& from) {
-    CopyFrom(from);
-    return *this;
-  }
-
-  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
-    return _unknown_fields_;
-  }
-
-  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
-    return &_unknown_fields_;
-  }
-
-  static const ::google::protobuf::Descriptor* descriptor();
-  static const RouterErrorRsp& default_instance();
-
-  void Swap(RouterErrorRsp* other);
-
-  // implements Message ----------------------------------------------
-
-  RouterErrorRsp* New() const;
-  void CopyFrom(const ::google::protobuf::Message& from);
-  void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const RouterErrorRsp& from);
-  void MergeFrom(const RouterErrorRsp& from);
-  void Clear();
-  bool IsInitialized() const;
-
-  int ByteSize() const;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input);
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const;
-  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
-  int GetCachedSize() const { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const;
-  public:
-  ::google::protobuf::Metadata GetMetadata() const;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // required .pub.ErrorCode error_code = 1;
-  inline bool has_error_code() const;
-  inline void clear_error_code();
-  static const int kErrorCodeFieldNumber = 1;
-  inline ::pub::ErrorCode error_code() const;
-  inline void set_error_code(::pub::ErrorCode value);
-
-  // optional string what = 2;
-  inline bool has_what() const;
-  inline void clear_what();
-  static const int kWhatFieldNumber = 2;
-  inline const ::std::string& what() const;
-  inline void set_what(const ::std::string& value);
-  inline void set_what(const char* value);
-  inline void set_what(const char* value, size_t size);
-  inline ::std::string* mutable_what();
-  inline ::std::string* release_what();
-  inline void set_allocated_what(::std::string* what);
-
-  // @@protoc_insertion_point(class_scope:svr.RouterErrorRsp)
- private:
-  inline void set_has_error_code();
-  inline void clear_has_error_code();
-  inline void set_has_what();
-  inline void clear_has_what();
-
-  ::google::protobuf::UnknownFieldSet _unknown_fields_;
-
-  ::google::protobuf::uint32 _has_bits_[1];
-  mutable int _cached_size_;
-  ::std::string* what_;
-  int error_code_;
-  friend void  protobuf_AddDesc_proto_2fserver_5finternal_2eproto();
-  friend void protobuf_AssignDesc_proto_2fserver_5finternal_2eproto();
-  friend void protobuf_ShutdownFile_proto_2fserver_5finternal_2eproto();
-
-  void InitAsDefaultInstance();
-  static RouterErrorRsp* default_instance_;
 };
 // -------------------------------------------------------------------
 
@@ -1746,6 +1654,253 @@ class RouterNotify : public ::google::protobuf::Message {
   void InitAsDefaultInstance();
   static RouterNotify* default_instance_;
 };
+// -------------------------------------------------------------------
+
+class RegisterLinkerReq : public ::google::protobuf::Message {
+ public:
+  RegisterLinkerReq();
+  virtual ~RegisterLinkerReq();
+
+  RegisterLinkerReq(const RegisterLinkerReq& from);
+
+  inline RegisterLinkerReq& operator=(const RegisterLinkerReq& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const RegisterLinkerReq& default_instance();
+
+  void Swap(RegisterLinkerReq* other);
+
+  // implements Message ----------------------------------------------
+
+  RegisterLinkerReq* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const RegisterLinkerReq& from);
+  void MergeFrom(const RegisterLinkerReq& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required uint32 partition_id = 1;
+  inline bool has_partition_id() const;
+  inline void clear_partition_id();
+  static const int kPartitionIdFieldNumber = 1;
+  inline ::google::protobuf::uint32 partition_id() const;
+  inline void set_partition_id(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:svr.RegisterLinkerReq)
+ private:
+  inline void set_has_partition_id();
+  inline void clear_has_partition_id();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 partition_id_;
+  friend void  protobuf_AddDesc_proto_2fserver_5finternal_2eproto();
+  friend void protobuf_AssignDesc_proto_2fserver_5finternal_2eproto();
+  friend void protobuf_ShutdownFile_proto_2fserver_5finternal_2eproto();
+
+  void InitAsDefaultInstance();
+  static RegisterLinkerReq* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class RegisterLinkerRsp : public ::google::protobuf::Message {
+ public:
+  RegisterLinkerRsp();
+  virtual ~RegisterLinkerRsp();
+
+  RegisterLinkerRsp(const RegisterLinkerRsp& from);
+
+  inline RegisterLinkerRsp& operator=(const RegisterLinkerRsp& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const RegisterLinkerRsp& default_instance();
+
+  void Swap(RegisterLinkerRsp* other);
+
+  // implements Message ----------------------------------------------
+
+  RegisterLinkerRsp* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const RegisterLinkerRsp& from);
+  void MergeFrom(const RegisterLinkerRsp& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required uint32 heartbeat_interval = 1;
+  inline bool has_heartbeat_interval() const;
+  inline void clear_heartbeat_interval();
+  static const int kHeartbeatIntervalFieldNumber = 1;
+  inline ::google::protobuf::uint32 heartbeat_interval() const;
+  inline void set_heartbeat_interval(::google::protobuf::uint32 value);
+
+  // required uint32 linker_id = 2;
+  inline bool has_linker_id() const;
+  inline void clear_linker_id();
+  static const int kLinkerIdFieldNumber = 2;
+  inline ::google::protobuf::uint32 linker_id() const;
+  inline void set_linker_id(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:svr.RegisterLinkerRsp)
+ private:
+  inline void set_has_heartbeat_interval();
+  inline void clear_has_heartbeat_interval();
+  inline void set_has_linker_id();
+  inline void clear_has_linker_id();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 heartbeat_interval_;
+  ::google::protobuf::uint32 linker_id_;
+  friend void  protobuf_AddDesc_proto_2fserver_5finternal_2eproto();
+  friend void protobuf_AssignDesc_proto_2fserver_5finternal_2eproto();
+  friend void protobuf_ShutdownFile_proto_2fserver_5finternal_2eproto();
+
+  void InitAsDefaultInstance();
+  static RegisterLinkerRsp* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class UpdateLinkerCapacityReq : public ::google::protobuf::Message {
+ public:
+  UpdateLinkerCapacityReq();
+  virtual ~UpdateLinkerCapacityReq();
+
+  UpdateLinkerCapacityReq(const UpdateLinkerCapacityReq& from);
+
+  inline UpdateLinkerCapacityReq& operator=(const UpdateLinkerCapacityReq& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const UpdateLinkerCapacityReq& default_instance();
+
+  void Swap(UpdateLinkerCapacityReq* other);
+
+  // implements Message ----------------------------------------------
+
+  UpdateLinkerCapacityReq* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const UpdateLinkerCapacityReq& from);
+  void MergeFrom(const UpdateLinkerCapacityReq& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required uint32 load = 1;
+  inline bool has_load() const;
+  inline void clear_load();
+  static const int kLoadFieldNumber = 1;
+  inline ::google::protobuf::uint32 load() const;
+  inline void set_load(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:svr.UpdateLinkerCapacityReq)
+ private:
+  inline void set_has_load();
+  inline void clear_has_load();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 load_;
+  friend void  protobuf_AddDesc_proto_2fserver_5finternal_2eproto();
+  friend void protobuf_AssignDesc_proto_2fserver_5finternal_2eproto();
+  friend void protobuf_ShutdownFile_proto_2fserver_5finternal_2eproto();
+
+  void InitAsDefaultInstance();
+  static UpdateLinkerCapacityReq* default_instance_;
+};
 // ===================================================================
 
 
@@ -2239,7 +2394,7 @@ inline void QueryDBAgentRsp::set_sequence(::google::protobuf::uint32 value) {
   // @@protoc_insertion_point(field_set:svr.QueryDBAgentRsp.sequence)
 }
 
-// optional string result = 2;
+// optional bytes result = 2;
 inline bool QueryDBAgentRsp::has_result() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
@@ -2275,7 +2430,7 @@ inline void QueryDBAgentRsp::set_result(const char* value) {
   result_->assign(value);
   // @@protoc_insertion_point(field_set_char:svr.QueryDBAgentRsp.result)
 }
-inline void QueryDBAgentRsp::set_result(const char* value, size_t size) {
+inline void QueryDBAgentRsp::set_result(const void* value, size_t size) {
   set_has_result();
   if (result_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     result_ = new ::std::string;
@@ -2547,111 +2702,6 @@ inline void ChildNode::set_child_id(::google::protobuf::uint32 value) {
   set_has_child_id();
   child_id_ = value;
   // @@protoc_insertion_point(field_set:svr.ChildNode.child_id)
-}
-
-// -------------------------------------------------------------------
-
-// RouterErrorRsp
-
-// required .pub.ErrorCode error_code = 1;
-inline bool RouterErrorRsp::has_error_code() const {
-  return (_has_bits_[0] & 0x00000001u) != 0;
-}
-inline void RouterErrorRsp::set_has_error_code() {
-  _has_bits_[0] |= 0x00000001u;
-}
-inline void RouterErrorRsp::clear_has_error_code() {
-  _has_bits_[0] &= ~0x00000001u;
-}
-inline void RouterErrorRsp::clear_error_code() {
-  error_code_ = 10001;
-  clear_has_error_code();
-}
-inline ::pub::ErrorCode RouterErrorRsp::error_code() const {
-  // @@protoc_insertion_point(field_get:svr.RouterErrorRsp.error_code)
-  return static_cast< ::pub::ErrorCode >(error_code_);
-}
-inline void RouterErrorRsp::set_error_code(::pub::ErrorCode value) {
-  assert(::pub::ErrorCode_IsValid(value));
-  set_has_error_code();
-  error_code_ = value;
-  // @@protoc_insertion_point(field_set:svr.RouterErrorRsp.error_code)
-}
-
-// optional string what = 2;
-inline bool RouterErrorRsp::has_what() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
-}
-inline void RouterErrorRsp::set_has_what() {
-  _has_bits_[0] |= 0x00000002u;
-}
-inline void RouterErrorRsp::clear_has_what() {
-  _has_bits_[0] &= ~0x00000002u;
-}
-inline void RouterErrorRsp::clear_what() {
-  if (what_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-    what_->clear();
-  }
-  clear_has_what();
-}
-inline const ::std::string& RouterErrorRsp::what() const {
-  // @@protoc_insertion_point(field_get:svr.RouterErrorRsp.what)
-  return *what_;
-}
-inline void RouterErrorRsp::set_what(const ::std::string& value) {
-  set_has_what();
-  if (what_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-    what_ = new ::std::string;
-  }
-  what_->assign(value);
-  // @@protoc_insertion_point(field_set:svr.RouterErrorRsp.what)
-}
-inline void RouterErrorRsp::set_what(const char* value) {
-  set_has_what();
-  if (what_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-    what_ = new ::std::string;
-  }
-  what_->assign(value);
-  // @@protoc_insertion_point(field_set_char:svr.RouterErrorRsp.what)
-}
-inline void RouterErrorRsp::set_what(const char* value, size_t size) {
-  set_has_what();
-  if (what_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-    what_ = new ::std::string;
-  }
-  what_->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:svr.RouterErrorRsp.what)
-}
-inline ::std::string* RouterErrorRsp::mutable_what() {
-  set_has_what();
-  if (what_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-    what_ = new ::std::string;
-  }
-  // @@protoc_insertion_point(field_mutable:svr.RouterErrorRsp.what)
-  return what_;
-}
-inline ::std::string* RouterErrorRsp::release_what() {
-  clear_has_what();
-  if (what_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-    return NULL;
-  } else {
-    ::std::string* temp = what_;
-    what_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-    return temp;
-  }
-}
-inline void RouterErrorRsp::set_allocated_what(::std::string* what) {
-  if (what_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-    delete what_;
-  }
-  if (what) {
-    set_has_what();
-    what_ = what;
-  } else {
-    clear_has_what();
-    what_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
-  }
-  // @@protoc_insertion_point(field_set_allocated:svr.RouterErrorRsp.what)
 }
 
 // -------------------------------------------------------------------
@@ -3165,6 +3215,114 @@ inline void RouterNotify::set_allocated_user_data(::std::string* user_data) {
     user_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:svr.RouterNotify.user_data)
+}
+
+// -------------------------------------------------------------------
+
+// RegisterLinkerReq
+
+// required uint32 partition_id = 1;
+inline bool RegisterLinkerReq::has_partition_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void RegisterLinkerReq::set_has_partition_id() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void RegisterLinkerReq::clear_has_partition_id() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void RegisterLinkerReq::clear_partition_id() {
+  partition_id_ = 0u;
+  clear_has_partition_id();
+}
+inline ::google::protobuf::uint32 RegisterLinkerReq::partition_id() const {
+  // @@protoc_insertion_point(field_get:svr.RegisterLinkerReq.partition_id)
+  return partition_id_;
+}
+inline void RegisterLinkerReq::set_partition_id(::google::protobuf::uint32 value) {
+  set_has_partition_id();
+  partition_id_ = value;
+  // @@protoc_insertion_point(field_set:svr.RegisterLinkerReq.partition_id)
+}
+
+// -------------------------------------------------------------------
+
+// RegisterLinkerRsp
+
+// required uint32 heartbeat_interval = 1;
+inline bool RegisterLinkerRsp::has_heartbeat_interval() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void RegisterLinkerRsp::set_has_heartbeat_interval() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void RegisterLinkerRsp::clear_has_heartbeat_interval() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void RegisterLinkerRsp::clear_heartbeat_interval() {
+  heartbeat_interval_ = 0u;
+  clear_has_heartbeat_interval();
+}
+inline ::google::protobuf::uint32 RegisterLinkerRsp::heartbeat_interval() const {
+  // @@protoc_insertion_point(field_get:svr.RegisterLinkerRsp.heartbeat_interval)
+  return heartbeat_interval_;
+}
+inline void RegisterLinkerRsp::set_heartbeat_interval(::google::protobuf::uint32 value) {
+  set_has_heartbeat_interval();
+  heartbeat_interval_ = value;
+  // @@protoc_insertion_point(field_set:svr.RegisterLinkerRsp.heartbeat_interval)
+}
+
+// required uint32 linker_id = 2;
+inline bool RegisterLinkerRsp::has_linker_id() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void RegisterLinkerRsp::set_has_linker_id() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void RegisterLinkerRsp::clear_has_linker_id() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void RegisterLinkerRsp::clear_linker_id() {
+  linker_id_ = 0u;
+  clear_has_linker_id();
+}
+inline ::google::protobuf::uint32 RegisterLinkerRsp::linker_id() const {
+  // @@protoc_insertion_point(field_get:svr.RegisterLinkerRsp.linker_id)
+  return linker_id_;
+}
+inline void RegisterLinkerRsp::set_linker_id(::google::protobuf::uint32 value) {
+  set_has_linker_id();
+  linker_id_ = value;
+  // @@protoc_insertion_point(field_set:svr.RegisterLinkerRsp.linker_id)
+}
+
+// -------------------------------------------------------------------
+
+// UpdateLinkerCapacityReq
+
+// required uint32 load = 1;
+inline bool UpdateLinkerCapacityReq::has_load() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void UpdateLinkerCapacityReq::set_has_load() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void UpdateLinkerCapacityReq::clear_has_load() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void UpdateLinkerCapacityReq::clear_load() {
+  load_ = 0u;
+  clear_has_load();
+}
+inline ::google::protobuf::uint32 UpdateLinkerCapacityReq::load() const {
+  // @@protoc_insertion_point(field_get:svr.UpdateLinkerCapacityReq.load)
+  return load_;
+}
+inline void UpdateLinkerCapacityReq::set_load(::google::protobuf::uint32 value) {
+  set_has_load();
+  load_ = value;
+  // @@protoc_insertion_point(field_set:svr.UpdateLinkerCapacityReq.load)
 }
 
 
