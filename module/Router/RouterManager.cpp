@@ -259,6 +259,15 @@ bool RouterManager::OnQueryRouterInfo(SessionHandle &session, google::protobuf::
 	internal::RouterInfoRsp response;
 	response.set_up_volume(StatisticalTools::GetInstance()->UpVolume());
 	response.set_down_volume(StatisticalTools::GetInstance()->DownVolume());
+	for (const auto &node : server_lists_)
+	{
+		for (const auto &child : node.second.child_lists)
+		{
+			auto node = response.add_node_lists();
+			node->set_type(static_cast<internal::NodeType>(child.second.node_type));
+			node->set_child_id(child.second.child_id);
+		}
+	}
 	ProtubufCodec::Encode(&response, buffer);
 	session.Respond(buffer);
 	return true;
