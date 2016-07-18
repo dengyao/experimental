@@ -3,6 +3,7 @@ set(CURRENT_PROJECT_NAME Protocol)
 set(CURRENT_PROJECT_SRC_LISTS 
   code/ProtobufCodec.cpp
   code/proto/internal.pb.cc
+  code/proto/pub_login.pb.cc
 )
 
 include_directories(

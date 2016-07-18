@@ -95,7 +95,18 @@ void AgentManager::UpdateStatisicalData(asio::error_code error_code)
 		logger()->error(error_code.message());
 		return;
 	}
+
 	StatisticalTools::GetInstance()->Flush();
+	logger()->info("服务器信息：连接数{}，队列数量{}，上行流量{}，下行流量{}，查询次数{}，插入次数{}，更新次数{}，删除次数{}",
+		threads_.SessionNumber(),
+		requests_.size(),
+		StatisticalTools::GetInstance()->UpVolume(),
+		StatisticalTools::GetInstance()->DownVolume(),
+		StatisticalTools::GetInstance()->HandleSelectCount(),
+		StatisticalTools::GetInstance()->HandleInsertCount(),
+		StatisticalTools::GetInstance()->HandleUpdateCount(),
+		StatisticalTools::GetInstance()->HandleDeleteCount());
+
 	statisical_timer_.expires_from_now(std::chrono::seconds(1));
 	statisical_timer_.async_wait(statisical_wait_handler_);
 }
@@ -114,6 +125,7 @@ void AgentManager::HandleMessage(SessionHandle &session, google::protobuf::Messa
 	else
 	{
 		RespondErrorCode(session, 0, internal::kInvalidProtocol, buffer);
+		logger()->warn("协议无效，来自{}:{}", session.RemoteEndpoint().address().to_string(), session.RemoteEndpoint().port());
 	}	
 }
 
@@ -166,6 +178,7 @@ void AgentManager::OnHandleDatabase(SessionHandle &session, google::protobuf::Me
 				requests_.erase(sequence_native);
 				generator_.Put(sequence_native);
 				RespondErrorCode(session, request->sequence(), internal::kNotFoundDatabase, buffer);
+				logger()->warn("协议无效，来自{}:{}", session.RemoteEndpoint().address().to_string(), session.RemoteEndpoint().port());
 			}
 			catch (ResourceInsufficiency &)
 			{
@@ -173,6 +186,7 @@ void AgentManager::OnHandleDatabase(SessionHandle &session, google::protobuf::Me
 				requests_.erase(sequence_native);
 				generator_.Put(sequence_native);
 				RespondErrorCode(session, request->sequence(), internal::kResourceInsufficiency, buffer);
+				logger()->warn("数据库任务队列已满!");
 			}
 		}
 		else
@@ -180,12 +194,14 @@ void AgentManager::OnHandleDatabase(SessionHandle &session, google::protobuf::Me
 			// 无效的操作类型
 			generator_.Put(sequence_native);
 			RespondErrorCode(session, request->sequence(), internal::kInvalidOperation, buffer);
+			logger()->warn("无效的数据库操作，类型{}，来自{}:{}", request->action(), session.RemoteEndpoint().address().to_string(), session.RemoteEndpoint().port());
 		}
 	}
 	else
 	{
 		// 生成序列号失败
 		RespondErrorCode(session, request->sequence(), internal::kResourceInsufficiency, buffer);
+		logger()->warn("数据库任务队列已满!");
 	}
 }
 

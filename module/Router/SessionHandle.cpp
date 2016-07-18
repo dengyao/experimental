@@ -1,6 +1,7 @@
 ﻿#include "SessionHandle.h"
 #include <ProtobufCodec.h>
 #include <proto/internal.pb.h>
+#include "Logging.h"
 #include "RouterManager.h"
 #include "StatisticalTools.h"
 
@@ -37,6 +38,7 @@ void SessionHandle::OnMessage(network::NetMessage &message)
 			if (dynamic_cast<internal::LoginRouterReq*>(request.get()) == nullptr)
 			{
 				router_manager_.RespondErrorCode(*this, message, internal::kNotLoggedIn);
+				logger()->warn("操作前未发起登录请求，来自{}:{}", RemoteEndpoint().address().to_string(), RemoteEndpoint().port());
 				return;
 			}
 			else

@@ -23,9 +23,9 @@ message PingReq {
 message PongRsp {
 }
 
-/////////////////////////////////////////////////////
-// 到DBAgent的协议
-/////////////////////////////////////////////////////
+/************************************************************************/
+/* 与DBAgent的协议                                                       */
+/************************************************************************/
 
 // 登录DBAgent请求
 message LoginDBAgentReq { 
@@ -93,15 +93,21 @@ message DBAgentErrorRsp {
     optional uint32 sequence = 2;      // 序列号
 }
 
-/////////////////////////////////////////////////////
-// 到Router的协议
-/////////////////////////////////////////////////////
+/************************************************************************/
+/* 与Router的协议                                                        */
+/************************************************************************/
 
-// 服务器节点类型
+// 节点类型
 enum NodeType {
     kLoginServer = 1;    // 登录服务器
-    kProxyServer = 2;    // 代理器服务器
+    kLinkerServer = 2;   // 连接器服务器
     kMainLogicSever = 3; // 主逻辑服务器
+}
+
+// 服务器节点
+message ChildNode {
+    required NodeType type = 1;                 // 服务器节点类型
+    optional uint32 child_id = 2 [default = 1]; // 服务器子节点id
 }
 
 // Router错误返回
@@ -112,8 +118,7 @@ message RouterErrorRsp {
 
 // 登录Router请求
 message LoginRouterReq {
-    required NodeType type = 1;                 // 服务器节点类型
-    optional uint32 child_id = 2 [default = 1]; // 服务器子节点id
+    required ChildNode node = 1; // 服务器节点
 }
 
 // 登录Router返回
@@ -127,26 +132,25 @@ message RouterInfoReq {
 
 // 查询Router信息返回
 message RouterInfoRsp {
-    required uint32 up_volume = 1;   // 每秒上行流量
-    required uint32 down_volume = 2; // 每秒下行流量
+    required uint32 up_volume = 1;     // 每秒上行流量
+    required uint32 down_volume = 2;   // 每秒下行流量
+    repeated ChildNode node_lists = 3; // 节点列表
 }
 
 // 转发消息请求
 message ForwardReq {
-    required NodeType dst_type = 1;                 // 目标服务器类型
-    optional uint32 dst_child_id = 2 [default = 1]; // 目标服务器子节点id
-    required bytes user_data = 3;                   // 用户数据
+    required ChildNode dst = 1;   // 目标服务器节点
+    required bytes user_data = 2; // 用户数据
 }
 
 // 广播消息请求
 message BroadcastReq {
-    repeated NodeType dst_lists = 1;    // 目标服务器列表
-    required bytes user_data = 2;       // 用户数据
+    repeated NodeType dst_lists = 1; // 目标服务器列表
+    required bytes user_data = 2;    // 用户数据
 }
 
 // 新消息通知
 message RouterNotify {
-    required NodeType src_type = 1;                 // 来源服务器类型
-    optional uint32 src_child_id = 2 [default = 1]; // 来源服务器子节点id
-    required bytes user_data = 3;                   // 用户数据
+	required ChildNode src = 1;   // 目标服务器节点
+    required bytes user_data = 2; // 用户数据
 }

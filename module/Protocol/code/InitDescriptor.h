@@ -2,6 +2,7 @@
 #define __INIT_DESCRIPTOR_H__
 
 #include <proto/internal.pb.h>
+#include <proto/pub_login.pb.h>
 
 class InitDescriptor
 {
@@ -18,6 +19,7 @@ public:
         internal::QueryDBAgentRsp::descriptor();
         internal::DBErrorRsp::descriptor();
         internal::DBAgentErrorRsp::descriptor();
+        internal::ChildNode::descriptor();
         internal::RouterErrorRsp::descriptor();
         internal::LoginRouterReq::descriptor();
         internal::LoginRouterRsp::descriptor();

@@ -1,6 +1,7 @@
 ﻿#include "SessionHandle.h"
 #include <ProtobufCodec.h>
 #include <proto/internal.pb.h>
+#include "Logging.h"
 #include "AgentManager.h"
 #include "StatisticalTools.h"
 
@@ -37,6 +38,7 @@ void SessionHandle::OnMessage(network::NetMessage &message)
 			if (dynamic_cast<internal::LoginDBAgentReq*>(request.get()) == nullptr)
 			{
 				agent_manager_.RespondErrorCode(*this, 0, internal::kNotLoggedIn, message);
+				logger()->warn("操作前未发起登录请求，来自{}:{}", RemoteEndpoint().address().to_string(), RemoteEndpoint().port());
 			}
 			else
 			{

@@ -38,8 +38,8 @@ public:
 		{
 			network::NetMessage message;
 			internal::LoginRouterReq request;
-			request.set_child_id(client_->GetChildNodeID());
-			request.set_type(static_cast<internal::NodeType>(client_->GetNodeType()));
+			request.mutable_node()->set_child_id(client_->GetChildNodeID());
+			request.mutable_node()->set_type(static_cast<internal::NodeType>(client_->GetNodeType()));
 			ProtubufCodec::Encode(&request, message);
 			Send(message);
 			client_->OnConnected(this);
@@ -115,7 +115,7 @@ public:
 	}
 
 private:
-	Connector*         client_;
+	Connector*            client_;
 	bool                  is_logged_;
 	std::shared_ptr<bool> client_life_;
 	uint32_t              counter_;
@@ -361,8 +361,8 @@ void Connector::OnMessage(SessionHandle *session, google::protobuf::Message *mes
 	if (dynamic_cast<internal::RouterNotify*>(message) != nullptr)
 	{
 		auto response = static_cast<internal::RouterNotify*>(message);
-		context_.node_type = response->src_type();
-		context_.child_id = response->src_child_id();
+		context_.node_type = response->src().type();
+		context_.child_id = response->src().child_id();
 
 		buffer.Clear();
 		buffer.Write(response->user_data().c_str(), response->user_data().size());
@@ -425,8 +425,8 @@ void Connector::Send(int dst_node_type, int dst_child_id, google::protobuf::Mess
 
 		buffer.Clear();
 		internal::ForwardReq request;
-		request.set_dst_child_id(dst_child_id);
-		request.set_dst_type(static_cast<internal::NodeType>(dst_node_type));
+		request.mutable_dst()->set_type(static_cast<internal::NodeType>(dst_node_type));
+		request.mutable_dst()->set_child_id(dst_child_id);
 		request.set_user_data(byte_array.empty() ? extrabuf.data() : byte_array.data(), byte_size);
 		ProtubufCodec::Encode(&request, buffer);
 		session->Send(buffer);

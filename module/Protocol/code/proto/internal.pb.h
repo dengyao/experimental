@@ -44,6 +44,7 @@ class QueryDBAgentReq;
 class QueryDBAgentRsp;
 class DBErrorRsp;
 class DBAgentErrorRsp;
+class ChildNode;
 class RouterErrorRsp;
 class LoginRouterReq;
 class LoginRouterRsp;
@@ -123,7 +124,7 @@ inline bool ErrorCode_Parse(
 }
 enum NodeType {
   kLoginServer = 1,
-  kProxyServer = 2,
+  kLinkerServer = 2,
   kMainLogicSever = 3
 };
 bool NodeType_IsValid(int value);
@@ -1113,6 +1114,95 @@ class DBAgentErrorRsp : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
+class ChildNode : public ::google::protobuf::Message {
+ public:
+  ChildNode();
+  virtual ~ChildNode();
+
+  ChildNode(const ChildNode& from);
+
+  inline ChildNode& operator=(const ChildNode& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const ChildNode& default_instance();
+
+  void Swap(ChildNode* other);
+
+  // implements Message ----------------------------------------------
+
+  ChildNode* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const ChildNode& from);
+  void MergeFrom(const ChildNode& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required .internal.NodeType type = 1;
+  inline bool has_type() const;
+  inline void clear_type();
+  static const int kTypeFieldNumber = 1;
+  inline ::internal::NodeType type() const;
+  inline void set_type(::internal::NodeType value);
+
+  // optional uint32 child_id = 2 [default = 1];
+  inline bool has_child_id() const;
+  inline void clear_child_id();
+  static const int kChildIdFieldNumber = 2;
+  inline ::google::protobuf::uint32 child_id() const;
+  inline void set_child_id(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:internal.ChildNode)
+ private:
+  inline void set_has_type();
+  inline void clear_has_type();
+  inline void set_has_child_id();
+  inline void clear_has_child_id();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  int type_;
+  ::google::protobuf::uint32 child_id_;
+  friend void  protobuf_AddDesc_proto_2finternal_2eproto();
+  friend void protobuf_AssignDesc_proto_2finternal_2eproto();
+  friend void protobuf_ShutdownFile_proto_2finternal_2eproto();
+
+  void InitAsDefaultInstance();
+  static ChildNode* default_instance_;
+};
+// -------------------------------------------------------------------
+
 class RouterErrorRsp : public ::google::protobuf::Message {
  public:
   RouterErrorRsp();
@@ -1260,33 +1350,25 @@ class LoginRouterReq : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // required .internal.NodeType type = 1;
-  inline bool has_type() const;
-  inline void clear_type();
-  static const int kTypeFieldNumber = 1;
-  inline ::internal::NodeType type() const;
-  inline void set_type(::internal::NodeType value);
-
-  // optional uint32 child_id = 2 [default = 1];
-  inline bool has_child_id() const;
-  inline void clear_child_id();
-  static const int kChildIdFieldNumber = 2;
-  inline ::google::protobuf::uint32 child_id() const;
-  inline void set_child_id(::google::protobuf::uint32 value);
+  // required .internal.ChildNode node = 1;
+  inline bool has_node() const;
+  inline void clear_node();
+  static const int kNodeFieldNumber = 1;
+  inline const ::internal::ChildNode& node() const;
+  inline ::internal::ChildNode* mutable_node();
+  inline ::internal::ChildNode* release_node();
+  inline void set_allocated_node(::internal::ChildNode* node);
 
   // @@protoc_insertion_point(class_scope:internal.LoginRouterReq)
  private:
-  inline void set_has_type();
-  inline void clear_has_type();
-  inline void set_has_child_id();
-  inline void clear_has_child_id();
+  inline void set_has_node();
+  inline void clear_has_node();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
-  int type_;
-  ::google::protobuf::uint32 child_id_;
+  ::internal::ChildNode* node_;
   friend void  protobuf_AddDesc_proto_2finternal_2eproto();
   friend void protobuf_AssignDesc_proto_2finternal_2eproto();
   friend void protobuf_ShutdownFile_proto_2finternal_2eproto();
@@ -1511,6 +1593,18 @@ class RouterInfoRsp : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 down_volume() const;
   inline void set_down_volume(::google::protobuf::uint32 value);
 
+  // repeated .internal.ChildNode node_lists = 3;
+  inline int node_lists_size() const;
+  inline void clear_node_lists();
+  static const int kNodeListsFieldNumber = 3;
+  inline const ::internal::ChildNode& node_lists(int index) const;
+  inline ::internal::ChildNode* mutable_node_lists(int index);
+  inline ::internal::ChildNode* add_node_lists();
+  inline const ::google::protobuf::RepeatedPtrField< ::internal::ChildNode >&
+      node_lists() const;
+  inline ::google::protobuf::RepeatedPtrField< ::internal::ChildNode >*
+      mutable_node_lists();
+
   // @@protoc_insertion_point(class_scope:internal.RouterInfoRsp)
  private:
   inline void set_has_up_volume();
@@ -1524,6 +1618,7 @@ class RouterInfoRsp : public ::google::protobuf::Message {
   mutable int _cached_size_;
   ::google::protobuf::uint32 up_volume_;
   ::google::protobuf::uint32 down_volume_;
+  ::google::protobuf::RepeatedPtrField< ::internal::ChildNode > node_lists_;
   friend void  protobuf_AddDesc_proto_2finternal_2eproto();
   friend void protobuf_AssignDesc_proto_2finternal_2eproto();
   friend void protobuf_ShutdownFile_proto_2finternal_2eproto();
@@ -1586,24 +1681,19 @@ class ForwardReq : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // required .internal.NodeType dst_type = 1;
-  inline bool has_dst_type() const;
-  inline void clear_dst_type();
-  static const int kDstTypeFieldNumber = 1;
-  inline ::internal::NodeType dst_type() const;
-  inline void set_dst_type(::internal::NodeType value);
+  // required .internal.ChildNode dst = 1;
+  inline bool has_dst() const;
+  inline void clear_dst();
+  static const int kDstFieldNumber = 1;
+  inline const ::internal::ChildNode& dst() const;
+  inline ::internal::ChildNode* mutable_dst();
+  inline ::internal::ChildNode* release_dst();
+  inline void set_allocated_dst(::internal::ChildNode* dst);
 
-  // optional uint32 dst_child_id = 2 [default = 1];
-  inline bool has_dst_child_id() const;
-  inline void clear_dst_child_id();
-  static const int kDstChildIdFieldNumber = 2;
-  inline ::google::protobuf::uint32 dst_child_id() const;
-  inline void set_dst_child_id(::google::protobuf::uint32 value);
-
-  // required bytes user_data = 3;
+  // required bytes user_data = 2;
   inline bool has_user_data() const;
   inline void clear_user_data();
-  static const int kUserDataFieldNumber = 3;
+  static const int kUserDataFieldNumber = 2;
   inline const ::std::string& user_data() const;
   inline void set_user_data(const ::std::string& value);
   inline void set_user_data(const char* value);
@@ -1614,10 +1704,8 @@ class ForwardReq : public ::google::protobuf::Message {
 
   // @@protoc_insertion_point(class_scope:internal.ForwardReq)
  private:
-  inline void set_has_dst_type();
-  inline void clear_has_dst_type();
-  inline void set_has_dst_child_id();
-  inline void clear_has_dst_child_id();
+  inline void set_has_dst();
+  inline void clear_has_dst();
   inline void set_has_user_data();
   inline void clear_has_user_data();
 
@@ -1625,8 +1713,7 @@ class ForwardReq : public ::google::protobuf::Message {
 
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
-  int dst_type_;
-  ::google::protobuf::uint32 dst_child_id_;
+  ::internal::ChildNode* dst_;
   ::std::string* user_data_;
   friend void  protobuf_AddDesc_proto_2finternal_2eproto();
   friend void protobuf_AssignDesc_proto_2finternal_2eproto();
@@ -1785,24 +1872,19 @@ class RouterNotify : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // required .internal.NodeType src_type = 1;
-  inline bool has_src_type() const;
-  inline void clear_src_type();
-  static const int kSrcTypeFieldNumber = 1;
-  inline ::internal::NodeType src_type() const;
-  inline void set_src_type(::internal::NodeType value);
+  // required .internal.ChildNode src = 1;
+  inline bool has_src() const;
+  inline void clear_src();
+  static const int kSrcFieldNumber = 1;
+  inline const ::internal::ChildNode& src() const;
+  inline ::internal::ChildNode* mutable_src();
+  inline ::internal::ChildNode* release_src();
+  inline void set_allocated_src(::internal::ChildNode* src);
 
-  // optional uint32 src_child_id = 2 [default = 1];
-  inline bool has_src_child_id() const;
-  inline void clear_src_child_id();
-  static const int kSrcChildIdFieldNumber = 2;
-  inline ::google::protobuf::uint32 src_child_id() const;
-  inline void set_src_child_id(::google::protobuf::uint32 value);
-
-  // required bytes user_data = 3;
+  // required bytes user_data = 2;
   inline bool has_user_data() const;
   inline void clear_user_data();
-  static const int kUserDataFieldNumber = 3;
+  static const int kUserDataFieldNumber = 2;
   inline const ::std::string& user_data() const;
   inline void set_user_data(const ::std::string& value);
   inline void set_user_data(const char* value);
@@ -1813,10 +1895,8 @@ class RouterNotify : public ::google::protobuf::Message {
 
   // @@protoc_insertion_point(class_scope:internal.RouterNotify)
  private:
-  inline void set_has_src_type();
-  inline void clear_has_src_type();
-  inline void set_has_src_child_id();
-  inline void clear_has_src_child_id();
+  inline void set_has_src();
+  inline void clear_has_src();
   inline void set_has_user_data();
   inline void clear_has_user_data();
 
@@ -1824,8 +1904,7 @@ class RouterNotify : public ::google::protobuf::Message {
 
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
-  int src_type_;
-  ::google::protobuf::uint32 src_child_id_;
+  ::internal::ChildNode* src_;
   ::std::string* user_data_;
   friend void  protobuf_AddDesc_proto_2finternal_2eproto();
   friend void protobuf_AssignDesc_proto_2finternal_2eproto();
@@ -2594,6 +2673,59 @@ inline void DBAgentErrorRsp::set_sequence(::google::protobuf::uint32 value) {
 
 // -------------------------------------------------------------------
 
+// ChildNode
+
+// required .internal.NodeType type = 1;
+inline bool ChildNode::has_type() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void ChildNode::set_has_type() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void ChildNode::clear_has_type() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void ChildNode::clear_type() {
+  type_ = 1;
+  clear_has_type();
+}
+inline ::internal::NodeType ChildNode::type() const {
+  // @@protoc_insertion_point(field_get:internal.ChildNode.type)
+  return static_cast< ::internal::NodeType >(type_);
+}
+inline void ChildNode::set_type(::internal::NodeType value) {
+  assert(::internal::NodeType_IsValid(value));
+  set_has_type();
+  type_ = value;
+  // @@protoc_insertion_point(field_set:internal.ChildNode.type)
+}
+
+// optional uint32 child_id = 2 [default = 1];
+inline bool ChildNode::has_child_id() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void ChildNode::set_has_child_id() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void ChildNode::clear_has_child_id() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void ChildNode::clear_child_id() {
+  child_id_ = 1u;
+  clear_has_child_id();
+}
+inline ::google::protobuf::uint32 ChildNode::child_id() const {
+  // @@protoc_insertion_point(field_get:internal.ChildNode.child_id)
+  return child_id_;
+}
+inline void ChildNode::set_child_id(::google::protobuf::uint32 value) {
+  set_has_child_id();
+  child_id_ = value;
+  // @@protoc_insertion_point(field_set:internal.ChildNode.child_id)
+}
+
+// -------------------------------------------------------------------
+
 // RouterErrorRsp
 
 // required .internal.ErrorCode error_code = 1;
@@ -2701,53 +2833,45 @@ inline void RouterErrorRsp::set_allocated_what(::std::string* what) {
 
 // LoginRouterReq
 
-// required .internal.NodeType type = 1;
-inline bool LoginRouterReq::has_type() const {
+// required .internal.ChildNode node = 1;
+inline bool LoginRouterReq::has_node() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void LoginRouterReq::set_has_type() {
+inline void LoginRouterReq::set_has_node() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void LoginRouterReq::clear_has_type() {
+inline void LoginRouterReq::clear_has_node() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void LoginRouterReq::clear_type() {
-  type_ = 1;
-  clear_has_type();
+inline void LoginRouterReq::clear_node() {
+  if (node_ != NULL) node_->::internal::ChildNode::Clear();
+  clear_has_node();
 }
-inline ::internal::NodeType LoginRouterReq::type() const {
-  // @@protoc_insertion_point(field_get:internal.LoginRouterReq.type)
-  return static_cast< ::internal::NodeType >(type_);
+inline const ::internal::ChildNode& LoginRouterReq::node() const {
+  // @@protoc_insertion_point(field_get:internal.LoginRouterReq.node)
+  return node_ != NULL ? *node_ : *default_instance_->node_;
 }
-inline void LoginRouterReq::set_type(::internal::NodeType value) {
-  assert(::internal::NodeType_IsValid(value));
-  set_has_type();
-  type_ = value;
-  // @@protoc_insertion_point(field_set:internal.LoginRouterReq.type)
+inline ::internal::ChildNode* LoginRouterReq::mutable_node() {
+  set_has_node();
+  if (node_ == NULL) node_ = new ::internal::ChildNode;
+  // @@protoc_insertion_point(field_mutable:internal.LoginRouterReq.node)
+  return node_;
 }
-
-// optional uint32 child_id = 2 [default = 1];
-inline bool LoginRouterReq::has_child_id() const {
-  return (_has_bits_[0] & 0x00000002u) != 0;
+inline ::internal::ChildNode* LoginRouterReq::release_node() {
+  clear_has_node();
+  ::internal::ChildNode* temp = node_;
+  node_ = NULL;
+  return temp;
 }
-inline void LoginRouterReq::set_has_child_id() {
-  _has_bits_[0] |= 0x00000002u;
-}
-inline void LoginRouterReq::clear_has_child_id() {
-  _has_bits_[0] &= ~0x00000002u;
-}
-inline void LoginRouterReq::clear_child_id() {
-  child_id_ = 1u;
-  clear_has_child_id();
-}
-inline ::google::protobuf::uint32 LoginRouterReq::child_id() const {
-  // @@protoc_insertion_point(field_get:internal.LoginRouterReq.child_id)
-  return child_id_;
-}
-inline void LoginRouterReq::set_child_id(::google::protobuf::uint32 value) {
-  set_has_child_id();
-  child_id_ = value;
-  // @@protoc_insertion_point(field_set:internal.LoginRouterReq.child_id)
+inline void LoginRouterReq::set_allocated_node(::internal::ChildNode* node) {
+  delete node_;
+  node_ = node;
+  if (node) {
+    set_has_node();
+  } else {
+    clear_has_node();
+  }
+  // @@protoc_insertion_point(field_set_allocated:internal.LoginRouterReq.node)
 }
 
 // -------------------------------------------------------------------
@@ -2834,68 +2958,90 @@ inline void RouterInfoRsp::set_down_volume(::google::protobuf::uint32 value) {
   // @@protoc_insertion_point(field_set:internal.RouterInfoRsp.down_volume)
 }
 
+// repeated .internal.ChildNode node_lists = 3;
+inline int RouterInfoRsp::node_lists_size() const {
+  return node_lists_.size();
+}
+inline void RouterInfoRsp::clear_node_lists() {
+  node_lists_.Clear();
+}
+inline const ::internal::ChildNode& RouterInfoRsp::node_lists(int index) const {
+  // @@protoc_insertion_point(field_get:internal.RouterInfoRsp.node_lists)
+  return node_lists_.Get(index);
+}
+inline ::internal::ChildNode* RouterInfoRsp::mutable_node_lists(int index) {
+  // @@protoc_insertion_point(field_mutable:internal.RouterInfoRsp.node_lists)
+  return node_lists_.Mutable(index);
+}
+inline ::internal::ChildNode* RouterInfoRsp::add_node_lists() {
+  // @@protoc_insertion_point(field_add:internal.RouterInfoRsp.node_lists)
+  return node_lists_.Add();
+}
+inline const ::google::protobuf::RepeatedPtrField< ::internal::ChildNode >&
+RouterInfoRsp::node_lists() const {
+  // @@protoc_insertion_point(field_list:internal.RouterInfoRsp.node_lists)
+  return node_lists_;
+}
+inline ::google::protobuf::RepeatedPtrField< ::internal::ChildNode >*
+RouterInfoRsp::mutable_node_lists() {
+  // @@protoc_insertion_point(field_mutable_list:internal.RouterInfoRsp.node_lists)
+  return &node_lists_;
+}
+
 // -------------------------------------------------------------------
 
 // ForwardReq
 
-// required .internal.NodeType dst_type = 1;
-inline bool ForwardReq::has_dst_type() const {
+// required .internal.ChildNode dst = 1;
+inline bool ForwardReq::has_dst() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void ForwardReq::set_has_dst_type() {
+inline void ForwardReq::set_has_dst() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void ForwardReq::clear_has_dst_type() {
+inline void ForwardReq::clear_has_dst() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void ForwardReq::clear_dst_type() {
-  dst_type_ = 1;
-  clear_has_dst_type();
+inline void ForwardReq::clear_dst() {
+  if (dst_ != NULL) dst_->::internal::ChildNode::Clear();
+  clear_has_dst();
 }
-inline ::internal::NodeType ForwardReq::dst_type() const {
-  // @@protoc_insertion_point(field_get:internal.ForwardReq.dst_type)
-  return static_cast< ::internal::NodeType >(dst_type_);
+inline const ::internal::ChildNode& ForwardReq::dst() const {
+  // @@protoc_insertion_point(field_get:internal.ForwardReq.dst)
+  return dst_ != NULL ? *dst_ : *default_instance_->dst_;
 }
-inline void ForwardReq::set_dst_type(::internal::NodeType value) {
-  assert(::internal::NodeType_IsValid(value));
-  set_has_dst_type();
-  dst_type_ = value;
-  // @@protoc_insertion_point(field_set:internal.ForwardReq.dst_type)
+inline ::internal::ChildNode* ForwardReq::mutable_dst() {
+  set_has_dst();
+  if (dst_ == NULL) dst_ = new ::internal::ChildNode;
+  // @@protoc_insertion_point(field_mutable:internal.ForwardReq.dst)
+  return dst_;
+}
+inline ::internal::ChildNode* ForwardReq::release_dst() {
+  clear_has_dst();
+  ::internal::ChildNode* temp = dst_;
+  dst_ = NULL;
+  return temp;
+}
+inline void ForwardReq::set_allocated_dst(::internal::ChildNode* dst) {
+  delete dst_;
+  dst_ = dst;
+  if (dst) {
+    set_has_dst();
+  } else {
+    clear_has_dst();
+  }
+  // @@protoc_insertion_point(field_set_allocated:internal.ForwardReq.dst)
 }
 
-// optional uint32 dst_child_id = 2 [default = 1];
-inline bool ForwardReq::has_dst_child_id() const {
+// required bytes user_data = 2;
+inline bool ForwardReq::has_user_data() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void ForwardReq::set_has_dst_child_id() {
+inline void ForwardReq::set_has_user_data() {
   _has_bits_[0] |= 0x00000002u;
 }
-inline void ForwardReq::clear_has_dst_child_id() {
-  _has_bits_[0] &= ~0x00000002u;
-}
-inline void ForwardReq::clear_dst_child_id() {
-  dst_child_id_ = 1u;
-  clear_has_dst_child_id();
-}
-inline ::google::protobuf::uint32 ForwardReq::dst_child_id() const {
-  // @@protoc_insertion_point(field_get:internal.ForwardReq.dst_child_id)
-  return dst_child_id_;
-}
-inline void ForwardReq::set_dst_child_id(::google::protobuf::uint32 value) {
-  set_has_dst_child_id();
-  dst_child_id_ = value;
-  // @@protoc_insertion_point(field_set:internal.ForwardReq.dst_child_id)
-}
-
-// required bytes user_data = 3;
-inline bool ForwardReq::has_user_data() const {
-  return (_has_bits_[0] & 0x00000004u) != 0;
-}
-inline void ForwardReq::set_has_user_data() {
-  _has_bits_[0] |= 0x00000004u;
-}
 inline void ForwardReq::clear_has_user_data() {
-  _has_bits_[0] &= ~0x00000004u;
+  _has_bits_[0] &= ~0x00000002u;
 }
 inline void ForwardReq::clear_user_data() {
   if (user_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
@@ -3079,64 +3225,56 @@ inline void BroadcastReq::set_allocated_user_data(::std::string* user_data) {
 
 // RouterNotify
 
-// required .internal.NodeType src_type = 1;
-inline bool RouterNotify::has_src_type() const {
+// required .internal.ChildNode src = 1;
+inline bool RouterNotify::has_src() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void RouterNotify::set_has_src_type() {
+inline void RouterNotify::set_has_src() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void RouterNotify::clear_has_src_type() {
+inline void RouterNotify::clear_has_src() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void RouterNotify::clear_src_type() {
-  src_type_ = 1;
-  clear_has_src_type();
+inline void RouterNotify::clear_src() {
+  if (src_ != NULL) src_->::internal::ChildNode::Clear();
+  clear_has_src();
 }
-inline ::internal::NodeType RouterNotify::src_type() const {
-  // @@protoc_insertion_point(field_get:internal.RouterNotify.src_type)
-  return static_cast< ::internal::NodeType >(src_type_);
+inline const ::internal::ChildNode& RouterNotify::src() const {
+  // @@protoc_insertion_point(field_get:internal.RouterNotify.src)
+  return src_ != NULL ? *src_ : *default_instance_->src_;
 }
-inline void RouterNotify::set_src_type(::internal::NodeType value) {
-  assert(::internal::NodeType_IsValid(value));
-  set_has_src_type();
-  src_type_ = value;
-  // @@protoc_insertion_point(field_set:internal.RouterNotify.src_type)
+inline ::internal::ChildNode* RouterNotify::mutable_src() {
+  set_has_src();
+  if (src_ == NULL) src_ = new ::internal::ChildNode;
+  // @@protoc_insertion_point(field_mutable:internal.RouterNotify.src)
+  return src_;
+}
+inline ::internal::ChildNode* RouterNotify::release_src() {
+  clear_has_src();
+  ::internal::ChildNode* temp = src_;
+  src_ = NULL;
+  return temp;
+}
+inline void RouterNotify::set_allocated_src(::internal::ChildNode* src) {
+  delete src_;
+  src_ = src;
+  if (src) {
+    set_has_src();
+  } else {
+    clear_has_src();
+  }
+  // @@protoc_insertion_point(field_set_allocated:internal.RouterNotify.src)
 }
 
-// optional uint32 src_child_id = 2 [default = 1];
-inline bool RouterNotify::has_src_child_id() const {
+// required bytes user_data = 2;
+inline bool RouterNotify::has_user_data() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void RouterNotify::set_has_src_child_id() {
+inline void RouterNotify::set_has_user_data() {
   _has_bits_[0] |= 0x00000002u;
 }
-inline void RouterNotify::clear_has_src_child_id() {
-  _has_bits_[0] &= ~0x00000002u;
-}
-inline void RouterNotify::clear_src_child_id() {
-  src_child_id_ = 1u;
-  clear_has_src_child_id();
-}
-inline ::google::protobuf::uint32 RouterNotify::src_child_id() const {
-  // @@protoc_insertion_point(field_get:internal.RouterNotify.src_child_id)
-  return src_child_id_;
-}
-inline void RouterNotify::set_src_child_id(::google::protobuf::uint32 value) {
-  set_has_src_child_id();
-  src_child_id_ = value;
-  // @@protoc_insertion_point(field_set:internal.RouterNotify.src_child_id)
-}
-
-// required bytes user_data = 3;
-inline bool RouterNotify::has_user_data() const {
-  return (_has_bits_[0] & 0x00000004u) != 0;
-}
-inline void RouterNotify::set_has_user_data() {
-  _has_bits_[0] |= 0x00000004u;
-}
 inline void RouterNotify::clear_has_user_data() {
-  _has_bits_[0] &= ~0x00000004u;
+  _has_bits_[0] &= ~0x00000002u;
 }
 inline void RouterNotify::clear_user_data() {
   if (user_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
