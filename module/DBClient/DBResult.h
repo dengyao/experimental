@@ -24,8 +24,8 @@ namespace db
 
 	private:
 		// 转换索引
-		size_t ToLocalIndex(size_t index) const;
-		size_t ToLocalIndex(const char *field) const;
+		size_t ToVecIndex(size_t index) const;
+		size_t ToFieldIndex(const char *field) const;
 
 	private:
 		const size_t         row_;

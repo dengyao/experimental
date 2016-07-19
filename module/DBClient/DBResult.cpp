@@ -18,12 +18,12 @@ namespace db
 	}
 
 	// 转换索引
-	inline size_t WrapResultItem::ToLocalIndex(size_t index) const
+	inline size_t WrapResultItem::ToVecIndex(size_t index) const
 	{
 		return 2 + (row_ + 1) * result_->NumField() + index;
 	}
 
-	inline size_t WrapResultItem::ToLocalIndex(const char *field) const
+	inline size_t WrapResultItem::ToFieldIndex(const char *field) const
 	{
 		for (size_t index = 0; index < result_->NumField(); ++index)
 		{
@@ -43,12 +43,18 @@ namespace db
 		{
 			return nullptr;
 		}
-		return strlen(result_->rows_[ToLocalIndex(index)]) == 0;
+		return strlen(result_->rows_[ToVecIndex(index)]) == 0;
 	}
 
 	bool WrapResultItem::IsNull(const std::string &field) const
 	{
-		return false;
+		size_t index = ToFieldIndex(field.c_str());
+		assert(index < result_->NumField());
+		if (index >= result_->NumField())
+		{
+			return true;
+		}
+		return IsNull(index);
 	}
 
 	// 获取字段数据
@@ -59,18 +65,18 @@ namespace db
 		{
 			return nullptr;
 		}
-		return result_->rows_[ToLocalIndex(index)];
+		return result_->rows_[ToVecIndex(index)];
 	}
 
 	const char* WrapResultItem::operator[] (const std::string &field) const
 	{
-		size_t index = ToLocalIndex(field.c_str());
+		size_t index = ToFieldIndex(field.c_str());
 		assert(index < result_->NumField());
 		if (index >= result_->NumField())
 		{
 			return nullptr;
 		}
-		return result_->rows_[ToLocalIndex(index)];
+		return result_->rows_[ToVecIndex(index)];
 	}
 
 	/************************************************************************/
