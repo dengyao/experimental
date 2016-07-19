@@ -50,16 +50,16 @@ private:
 
 private:
 	// 用户登录
-	bool OnUserSignIn(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer);
+	void OnUserSignIn(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer);
 
 	// 用户注册
-	bool OnUserSignUp(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer);
+	void OnUserSignUp(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer);
 
 	// 查询分区
-	bool OnUserQueryPartition(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer);
+	void OnUserQueryPartition(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer);
 
 	// 进入分区
-	bool OnUserEntryPartition(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer);
+	void OnUserEntryPartition(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer);
 
 private:
 	network::IOServiceThreadManager& threads_;

@@ -1,5 +1,7 @@
 ﻿#include "LoginManager.h"
+#include <DBClient.h>
 #include <ProtobufCodec.h>
+#include <proto/client_login.pb.h>
 #include <proto/public_struct.pb.h>
 #include <proto/server_internal.pb.h>
 #include "SessionHandle.h"
@@ -61,25 +63,27 @@ bool LoginManager::OnLinkerUpdateLoadCapacity(SessionHandle &session, google::pr
 }
 
 // 用户登录
-bool LoginManager::OnUserSignIn(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
+void OnUserSignInStep1(network::TCPSessionID id, std::shared_ptr<google::protobuf::Message> parameter, google::protobuf::Message *message)
 {
-	return true;
+
+}
+
+// 用户登录
+void LoginManager::OnUserSignIn(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
+{
 }
 
 // 用户注册
-bool LoginManager::OnUserSignUp(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
+void LoginManager::OnUserSignUp(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
-	return true;
 }
 
 // 查询分区
-bool LoginManager::OnUserQueryPartition(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
+void LoginManager::OnUserQueryPartition(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
-	return true;
 }
 
 // 进入分区
-bool LoginManager::OnUserEntryPartition(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
+void LoginManager::OnUserEntryPartition(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
-	return true;
 }

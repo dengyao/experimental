@@ -32,23 +32,24 @@ void RunLoginServer(const std::vector<SPartition> &partition)
 }
 
 // 查询分区信息
-void QueryPartitionInfo(DBClient *client)
+void QueryPartitionInfo(db::DBClient *db_client)
 {
-	client->AsyncSelect(kMySQL, "db_verify", "SELECT * FROM `partition`;", [](google::protobuf::Message *message)
+	db_client->AsyncSelect(db::kMySQL, "db_verify", "SELECT * FROM `partition`;", [](google::protobuf::Message *message)
 	{
 		if (dynamic_cast<svr::QueryDBAgentRsp*>(message) != nullptr)
 		{
 			std::vector<SPartition> partition_lists;
 			auto rsp = static_cast<svr::QueryDBAgentRsp*>(message);
-			DBResult result(rsp->result().data(), rsp->result().size());
-			for (unsigned int row = 0; row < result.NumRows(); ++row)
+			db::WrapResultSet result_set(rsp->result().data(), rsp->result().size());
+			for (unsigned int row = 0; row < result_set.NumRows(); ++row)
 			{
 				SPartition partition;
-				partition.id = atoi(result.Value(row, 0));
-				partition.name = result.Value(row, 1);
-				partition.status = atoi(result.Value(row, 2));
-				partition.is_recommend = atoi(result.Value(row, 3)) != 0;
-				partition.createtime = result.Value(row, 4);
+				db::WrapResultItem item = result_set.GetRow(row);
+				partition.id = atoi(item["id"]);
+				partition.name = item["name"];
+				partition.status = atoi(item["status"]);
+				partition.is_recommend = atoi(item["recommend"]) != 0;
+				partition.createtime = item["createtime"];
 				partition_lists.push_back(partition);
 			}
 			logger()->info("查询分区信息成功，共有{}个分区", partition_lists.size());
@@ -99,7 +100,7 @@ int main(int argc, char *argv[])
 	g_thread_manager = &threads;
 	asio::ip::tcp::endpoint endpoint(asio::ip::address_v4::from_string(ServerConfig::GetInstance()->GetDBAgentIP()),
 		ServerConfig::GetInstance()->GetDBAgentPort());
-	DBClient db_client(threads, endpoint, ServerConfig::GetInstance()->GetDBAgentConnections());
+	db::DBClient db_client(threads, endpoint, ServerConfig::GetInstance()->GetDBAgentConnections());
 	QueryPartitionInfo(&db_client);
 	threads.Run();
 

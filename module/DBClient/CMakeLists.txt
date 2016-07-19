@@ -2,6 +2,7 @@ set(CURRENT_PROJECT_NAME DBClient)
 
 set(CURRENT_PROJECT_SRC_LISTS
   DBClient.cpp
+  DBResult.cpp
 )
 
 include_directories(

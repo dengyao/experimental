@@ -1,6 +1,8 @@
 ﻿#ifndef __CONNECTOR_MYSQL_H__
 #define __CONNECTOR_MYSQL_H__
 
+#include <iostream>
+
 #include <array>
 #include <vector>
 #include <memory>
@@ -68,17 +70,52 @@ private:
 		{
 			size_t use_size = 0;
 			std::array<char, std::numeric_limits<uint16_t>::max()> extrabuf;
-			const my_ulonglong num_rows = mysql_num_rows(result);
+
+			MYSQL_FIELD *fields = mysql_fetch_fields(result);
+			const my_ulonglong num_rows = mysql_num_rows(result) + 1;
 			const my_ulonglong num_fields = mysql_num_fields(result);
 			use_size += snprintf(extrabuf.data(), extrabuf.size(), "%lld", num_rows) + 1;
 			use_size += snprintf(extrabuf.data() + use_size, extrabuf.size() - use_size, "%lld", num_fields) + 1;
-			for (unsigned int row = 0; row < num_rows; ++row)
+
+			// 首行存放字段名
+			for (size_t i = 0; i < num_fields; ++i)
+			{
+				size_t field_size = strlen(fields[i].name) + 1;
+				size_t new_use_size = use_size + field_size;
+				if (new_use_size > extrabuf.size())
+				{
+					if (data_.empty())
+					{
+						data_.reserve(i == num_fields - 1 ? new_use_size : new_use_size * 2);
+						data_.resize(use_size);
+						memcpy(data_.data(), extrabuf.data(), use_size);
+					}
+					else
+					{
+						while (new_use_size > data_.capacity())
+						{
+							data_.reserve(new_use_size * 2);
+						}
+					}
+					data_.resize(new_use_size);
+					memcpy(data_.data() + use_size, fields[i].name, field_size);
+				}
+				else
+				{
+					memcpy(extrabuf.data() + use_size, fields[i].name, field_size);
+				}
+				use_size = new_use_size;
+			}
+
+			// 数据从第二行开始存放
+			for (unsigned int row = 1; row < num_rows; ++row)
 			{
 				MYSQL_ROW row_data = mysql_fetch_row(result);
 				assert(row_data != nullptr);
 				for (unsigned int field = 0; field < num_fields; ++field)
 				{
-					size_t field_size = strlen(row_data[field]) + 1;
+					bool is_null = row_data[field] == nullptr;
+					size_t field_size = (is_null ? 0 : strlen(row_data[field])) + 1;
 					size_t new_use_size = use_size + field_size;
 					if (new_use_size > extrabuf.size())
 					{
@@ -96,11 +133,25 @@ private:
 							}
 						}
 						data_.resize(new_use_size);
-						memcpy(data_.data() + use_size, row_data[field], field_size);
+						if (is_null)
+						{
+							data_[use_size] = '\0';
+						}
+						else
+						{
+							memcpy(data_.data() + use_size, row_data[field], field_size);
+						}
 					}
 					else
 					{
-						memcpy(extrabuf.data() + use_size, row_data[field], field_size);
+						if (is_null)
+						{
+							extrabuf.data()[use_size] = '\0';
+						}
+						else
+						{
+							memcpy(extrabuf.data() + use_size, row_data[field], field_size);
+						}				
 					}
 					use_size = new_use_size;
 				}
