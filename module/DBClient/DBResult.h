@@ -47,7 +47,7 @@ namespace db
 		size_t NumField() const;
 
 		// 获取行数据
-		WrapResultItem GetRow(size_t row) const;
+		WrapResultItem GetRow(size_t row = 0) const;
 
 	private:
 		// 反序列化

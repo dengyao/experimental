@@ -44,11 +44,13 @@ enum ErrorCode {
   kDestinationUnreachable = 10008,
   kInvalidNodeType = 10009,
   kRepeatLogin = 10010,
-  kInvalidDataPacket = 10011
+  kInvalidDataPacket = 10011,
+  kDatabaseError = 10012,
+  kCreateAccountFailed = 10013
 };
 bool ErrorCode_IsValid(int value);
 const ErrorCode ErrorCode_MIN = kNotLoggedIn;
-const ErrorCode ErrorCode_MAX = kInvalidDataPacket;
+const ErrorCode ErrorCode_MAX = kCreateAccountFailed;
 const int ErrorCode_ARRAYSIZE = ErrorCode_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* ErrorCode_descriptor();

@@ -13,4 +13,6 @@ enum ErrorCode {
     kInvalidNodeType = 10009;        // 无效的节点类型
     kRepeatLogin = 10010;            // 重复登录
     kInvalidDataPacket = 10011;      // 无效数据包
+    kDatabaseError = 10012;          // 数据库错误
+    kCreateAccountFailed = 10013;    // 创建账号失败
 }

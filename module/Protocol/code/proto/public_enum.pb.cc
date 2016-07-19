@@ -58,14 +58,15 @@ void protobuf_AddDesc_proto_2fpublic_5fenum_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\027proto/public_enum.proto\022\003pub*\211\002\n\tError"
+    "\n\027proto/public_enum.proto\022\003pub*\271\002\n\tError"
     "Code\022\021\n\014kNotLoggedIn\020\221N\022\020\n\013kDisconnect\020\222"
     "N\022\022\n\rkNotConnected\020\223N\022\025\n\020kInvalidProtoco"
     "l\020\224N\022\026\n\021kInvalidOperation\020\225N\022\026\n\021kNotFoun"
     "dDatabase\020\226N\022\033\n\026kResourceInsufficiency\020\227"
     "N\022\034\n\027kDestinationUnreachable\020\230N\022\025\n\020kInva"
     "lidNodeType\020\231N\022\021\n\014kRepeatLogin\020\232N\022\027\n\022kIn"
-    "validDataPacket\020\233N", 298);
+    "validDataPacket\020\233N\022\023\n\016kDatabaseError\020\234N\022"
+    "\031\n\024kCreateAccountFailed\020\235N", 346);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "proto/public_enum.proto", &protobuf_RegisterTypes);
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_proto_2fpublic_5fenum_2eproto);
@@ -94,6 +95,8 @@ bool ErrorCode_IsValid(int value) {
     case 10009:
     case 10010:
     case 10011:
+    case 10012:
+    case 10013:
       return true;
     default:
       return false;

@@ -1,9 +1,11 @@
 ﻿#include "LoginManager.h"
 #include <DBClient.h>
+#include <DBResult.h>
 #include <ProtobufCodec.h>
 #include <proto/client_login.pb.h>
 #include <proto/public_struct.pb.h>
 #include <proto/server_internal.pb.h>
+#include <common/StringHelper.h>
 #include "SessionHandle.h"
 
 LoginManager::LoginManager(network::IOServiceThreadManager &threads, const std::vector<SPartition> &partition)
@@ -53,6 +55,13 @@ bool LoginManager::HandleLinkerMessage(SessionHandle &session, google::protobuf:
 // Linker注册
 bool LoginManager::OnLinkerRegister(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
+	// Linker是否已注册
+	auto request = static_cast<svr::RegisterLinkerReq*>(message);
+	if (linker_session_map_.find(request->partition_id()) != linker_session_map_.end())
+	{
+		return false;
+	}
+
 	return true;
 }
 
@@ -63,19 +72,66 @@ bool LoginManager::OnLinkerUpdateLoadCapacity(SessionHandle &session, google::pr
 }
 
 // 用户登录
-void OnUserSignInStep1(network::TCPSessionID id, std::shared_ptr<google::protobuf::Message> parameter, google::protobuf::Message *message)
-{
-
-}
-
-// 用户登录
 void LoginManager::OnUserSignIn(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
+	
 }
 
 // 用户注册
 void LoginManager::OnUserSignUp(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
+	auto request = static_cast<login::SignUpReq*>(message);
+
+	db::DBClient *db_client;
+	std::string msg_name = message->GetTypeName();
+	network::TCPSessionID session_id = session.SessionID();
+	std::string sql = string_helper::format("CALL sign_up('%s', '%s', '%s', '%s', '%s', '%s', '%s', @user_id); SELECT @user_id;",
+		request->user().c_str(),
+		request->passwd().c_str(),
+		session.RemoteEndpoint().address().to_string().c_str(),
+		request->has_platform() ? request->platform().c_str() : "",
+		request->has_os() ? request->os().c_str() : "",
+		request->has_model() ? request->model().c_str() : "",
+		request->has_deviceid() ? request->deviceid().c_str() : "");
+
+	db_client->AsyncSelect(db::kMySQL, "db_verify", sql.c_str(), [=](google::protobuf::Message *message)
+	{
+		network::SessionHandlePointer session_ptr = threads_.SessionHandler(session_id);
+		if (session_ptr != nullptr)
+		{
+			if (dynamic_cast<svr::QueryDBAgentRsp*>(message) != nullptr)
+			{
+				auto rsp = static_cast<svr::QueryDBAgentRsp*>(message);
+				db::WrapResultSet result_set(rsp->result().data(), rsp->result().size());
+				db::WrapResultItem item = result_set.GetRow();
+				uint32_t user_id = static_cast<uint32_t>(atoll(item[0]));
+				if (user_id > 0)
+				{
+
+				}
+				else
+				{
+					// 创建账号失败
+					pub::ErrorRsp response;
+					network::NetMessage message;
+					response.set_error_code(pub::kCreateAccountFailed);
+					response.set_what(msg_name.c_str());
+					ProtubufCodec::Encode(&response, message);
+					session_ptr->Send(message);
+				}
+			}
+			else
+			{
+				// 操作数据库错误
+				pub::ErrorRsp response;
+				network::NetMessage message;
+				response.set_error_code(pub::kDatabaseError);
+				response.set_what(msg_name.c_str());
+				ProtubufCodec::Encode(&response, message);
+				session_ptr->Send(message);
+			}
+		}	
+	});
 }
 
 // 查询分区

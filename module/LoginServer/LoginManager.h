@@ -62,8 +62,9 @@ private:
 	void OnUserEntryPartition(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer);
 
 private:
-	network::IOServiceThreadManager& threads_;
-	std::vector<SPartition>          partition_lists_;
+	network::IOServiceThreadManager&                    threads_;
+	std::vector<SPartition>                             partition_lists_;
+	std::unordered_map<uint16_t, network::TCPSessionID> linker_session_map_;
 };
 
 #endif
