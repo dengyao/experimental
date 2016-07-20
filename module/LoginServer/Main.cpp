@@ -4,6 +4,7 @@
 #include <common/Path.h>
 #include <proto/server_internal.pb.h>
 #include "Logging.h"
+#include "GlobalObject.h"
 #include "ServerConfig.h"
 #include "LoginManager.h"
 #include "SessionHandle.h"
@@ -32,9 +33,9 @@ void RunLoginServer(const std::vector<SPartition> &partition)
 }
 
 // 查询分区信息
-void QueryPartitionInfo(db::DBClient *db_client)
+void QueryPartitionInfo()
 {
-	db_client->AsyncSelect(db::kMySQL, "db_verify", "SELECT * FROM `partition`;", [](google::protobuf::Message *message)
+	GlobalDBClient()->AsyncSelect(db::kMySQL, "db_verify", "SELECT * FROM `partition`;", [](google::protobuf::Message *message)
 	{
 		if (dynamic_cast<svr::QueryDBAgentRsp*>(message) != nullptr)
 		{
@@ -97,13 +98,23 @@ int main(int argc, char *argv[])
 
 	// 查询分区信息
 	network::IOServiceThreadManager threads(ServerConfig::GetInstance()->GetUseThreadNum());
-	g_thread_manager = &threads;
 	threads.SetSessionTimeout(ServerConfig::GetInstance()->GetHeartbeatInterval());
-
-	asio::ip::tcp::endpoint endpoint(asio::ip::address_v4::from_string(ServerConfig::GetInstance()->GetDBAgentIP()),
-		ServerConfig::GetInstance()->GetDBAgentPort());
-	db::DBClient db_client(threads, endpoint, ServerConfig::GetInstance()->GetDBAgentConnections());
-	QueryPartitionInfo(&db_client);
+	g_thread_manager = &threads;
+	try
+	{
+		std::unique_ptr<db::DBClient> db_client;
+		asio::ip::tcp::endpoint endpoint(asio::ip::address_v4::from_string(ServerConfig::GetInstance()->GetDBAgentIP()),
+			ServerConfig::GetInstance()->GetDBAgentPort());
+		db_client = std::make_unique<db::DBClient>(threads, endpoint, ServerConfig::GetInstance()->GetDBAgentConnections());
+		OnceInitGlobalDBClient(std::move(db_client));
+	}
+	catch (...)
+	{
+		logger()->critical("连接数据库代理服务器失败！");
+		assert(false);
+		exit(-1);
+	}
+	QueryPartitionInfo();
 	threads.Run();
 
 	return 0;

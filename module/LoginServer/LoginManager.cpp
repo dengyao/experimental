@@ -310,7 +310,7 @@ void LoginManager::OnUserSignUp(SessionHandle &session, google::protobuf::Messag
 // 用户登录
 void LoginManager::OnUserSignIn(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
-
+	auto request = static_cast<login::SignInReq*>(message);
 }
 
 // 进入分区
