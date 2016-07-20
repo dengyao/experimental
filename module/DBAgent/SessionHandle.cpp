@@ -4,6 +4,7 @@
 #include <proto/server_internal.pb.h>
 #include "Logging.h"
 #include "AgentManager.h"
+#include "ServerConfig.h"
 #include "StatisticalTools.h"
 
 SessionHandle::SessionHandle(AgentManager &manager)
@@ -46,7 +47,7 @@ void SessionHandle::OnMessage(network::NetMessage &message)
 				message.Clear();
 				is_logged_ = true;
 				svr::LoginDBAgentRsp response;
-				response.set_heartbeat_interval(60);
+				response.set_heartbeat_interval(ServerConfig::GetInstance()->GetHeartbeatInterval());
 				ProtubufCodec::Encode(&response, message);
 				Respond(message);
 			}

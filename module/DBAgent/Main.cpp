@@ -90,6 +90,7 @@ int main(int argc, char *argv[])
 	// 启动数据库代理
 	TaskPools pools(ServerConfig::GetInstance()->GetDBUseThreadNum());
 	network::IOServiceThreadManager threads(ServerConfig::GetInstance()->GetUseThreadNum());
+	threads.SetSessionTimeout(ServerConfig::GetInstance()->GetHeartbeatInterval());
 
 	AgentImpl<MySQL> mysql_agent(CreateMySQLConnector(), pools, ServerConfig::GetInstance()->GetMaxConnectionRequestBacklog());
 	AgentManager manager(threads, mysql_agent, ServerConfig::GetInstance()->GetMaxRequestBacklog());

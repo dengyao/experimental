@@ -70,7 +70,7 @@ public:
 				if (dynamic_cast<svr::LoginRouterRsp*>(response.get()) != nullptr)
 				{
 					is_logged_ = true;
-					counter_ = heartbeat_interval_ = static_cast<svr::LoginRouterRsp*>(response.get())->heartbeat_interval();
+					counter_ = heartbeat_interval_ = static_cast<svr::LoginRouterRsp*>(response.get())->heartbeat_interval() / 2;
 				}
 				else
 				{

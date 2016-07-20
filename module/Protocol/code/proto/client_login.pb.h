@@ -616,6 +616,18 @@ class QueryPartitionRsp_Partition : public ::google::protobuf::Message {
   inline bool is_recommend() const;
   inline void set_is_recommend(bool value);
 
+  // repeated uint32 online_number = 5;
+  inline int online_number_size() const;
+  inline void clear_online_number();
+  static const int kOnlineNumberFieldNumber = 5;
+  inline ::google::protobuf::uint32 online_number(int index) const;
+  inline void set_online_number(int index, ::google::protobuf::uint32 value);
+  inline void add_online_number(::google::protobuf::uint32 value);
+  inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+      online_number() const;
+  inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+      mutable_online_number();
+
   // @@protoc_insertion_point(class_scope:login.QueryPartitionRsp.Partition)
  private:
   inline void set_has_id();
@@ -634,6 +646,7 @@ class QueryPartitionRsp_Partition : public ::google::protobuf::Message {
   ::std::string* name_;
   ::google::protobuf::uint32 id_;
   ::google::protobuf::uint32 status_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 > online_number_;
   bool is_recommend_;
   friend void  protobuf_AddDesc_proto_2fclient_5flogin_2eproto();
   friend void protobuf_AssignDesc_proto_2fclient_5flogin_2eproto();
@@ -1738,6 +1751,36 @@ inline void QueryPartitionRsp_Partition::set_is_recommend(bool value) {
   set_has_is_recommend();
   is_recommend_ = value;
   // @@protoc_insertion_point(field_set:login.QueryPartitionRsp.Partition.is_recommend)
+}
+
+// repeated uint32 online_number = 5;
+inline int QueryPartitionRsp_Partition::online_number_size() const {
+  return online_number_.size();
+}
+inline void QueryPartitionRsp_Partition::clear_online_number() {
+  online_number_.Clear();
+}
+inline ::google::protobuf::uint32 QueryPartitionRsp_Partition::online_number(int index) const {
+  // @@protoc_insertion_point(field_get:login.QueryPartitionRsp.Partition.online_number)
+  return online_number_.Get(index);
+}
+inline void QueryPartitionRsp_Partition::set_online_number(int index, ::google::protobuf::uint32 value) {
+  online_number_.Set(index, value);
+  // @@protoc_insertion_point(field_set:login.QueryPartitionRsp.Partition.online_number)
+}
+inline void QueryPartitionRsp_Partition::add_online_number(::google::protobuf::uint32 value) {
+  online_number_.Add(value);
+  // @@protoc_insertion_point(field_add:login.QueryPartitionRsp.Partition.online_number)
+}
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+QueryPartitionRsp_Partition::online_number() const {
+  // @@protoc_insertion_point(field_list:login.QueryPartitionRsp.Partition.online_number)
+  return online_number_;
+}
+inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+QueryPartitionRsp_Partition::mutable_online_number() {
+  // @@protoc_insertion_point(field_mutable_list:login.QueryPartitionRsp.Partition.online_number)
+  return &online_number_;
 }
 
 // -------------------------------------------------------------------

@@ -33,10 +33,11 @@ message QueryPartitionReq {
 // 查询分区列表返回
 message QueryPartitionRsp {
     message Partition {
-        required uint32 id = 1;         // 分区id
-	    required string name = 2;       // 分区名称
-	    required uint32 status = 3;     // 分区状态
-	    required bool is_recommend = 4; // 是否是推荐分区
+        required uint32 id = 1;            // 分区id
+	    required string name = 2;          // 分区名称
+	    required uint32 status = 3;        // 分区状态
+	    required bool is_recommend = 4;    // 是否是推荐分区
+        repeated uint32 online_number = 5; // 在线人数
     };
 
     repeated Partition lists = 1; // 分区列表

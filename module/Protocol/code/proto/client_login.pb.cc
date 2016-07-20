@@ -153,11 +153,12 @@ void protobuf_AssignDesc_proto_2fclient_5flogin_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(QueryPartitionRsp));
   QueryPartitionRsp_Partition_descriptor_ = QueryPartitionRsp_descriptor_->nested_type(0);
-  static const int QueryPartitionRsp_Partition_offsets_[4] = {
+  static const int QueryPartitionRsp_Partition_offsets_[5] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QueryPartitionRsp_Partition, id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QueryPartitionRsp_Partition, name_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QueryPartitionRsp_Partition, status_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QueryPartitionRsp_Partition, is_recommend_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QueryPartitionRsp_Partition, online_number_),
   };
   QueryPartitionRsp_Partition_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -270,13 +271,14 @@ void protobuf_AddDesc_proto_2fclient_5flogin_2eproto() {
     "\t\022\020\n\010deviceid\030\006 \001(\t\"\027\n\tSignUpRsp\022\n\n\002id\030\001"
     " \002(\r\")\n\tSignInReq\022\014\n\004user\030\001 \002(\t\022\016\n\006passw"
     "d\030\002 \002(\t\"\027\n\tSignInRsp\022\n\n\002id\030\001 \002(\r\"\023\n\021Quer"
-    "yPartitionReq\"\223\001\n\021QueryPartitionRsp\0221\n\005l"
+    "yPartitionReq\"\252\001\n\021QueryPartitionRsp\0221\n\005l"
     "ists\030\001 \003(\0132\".login.QueryPartitionRsp.Par"
-    "tition\032K\n\tPartition\022\n\n\002id\030\001 \002(\r\022\014\n\004name\030"
+    "tition\032b\n\tPartition\022\n\n\002id\030\001 \002(\r\022\014\n\004name\030"
     "\002 \002(\t\022\016\n\006status\030\003 \002(\r\022\024\n\014is_recommend\030\004 "
-    "\002(\010\"\037\n\021EntryPartitionReq\022\n\n\002id\030\001 \002(\r\"<\n\021"
-    "EntryPartitionRsp\022\n\n\002ip\030\001 \002(\t\022\014\n\004port\030\002 "
-    "\002(\r\022\r\n\005token\030\003 \002(\004", 498);
+    "\002(\010\022\025\n\ronline_number\030\005 \003(\r\"\037\n\021EntryParti"
+    "tionReq\022\n\n\002id\030\001 \002(\r\"<\n\021EntryPartitionRsp"
+    "\022\n\n\002ip\030\001 \002(\t\022\014\n\004port\030\002 \002(\r\022\r\n\005token\030\003 \002("
+    "\004", 521);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "proto/client_login.proto", &protobuf_RegisterTypes);
   SignUpReq::default_instance_ = new SignUpReq();
@@ -1780,6 +1782,7 @@ const int QueryPartitionRsp_Partition::kIdFieldNumber;
 const int QueryPartitionRsp_Partition::kNameFieldNumber;
 const int QueryPartitionRsp_Partition::kStatusFieldNumber;
 const int QueryPartitionRsp_Partition::kIsRecommendFieldNumber;
+const int QueryPartitionRsp_Partition::kOnlineNumberFieldNumber;
 #endif  // !_MSC_VER
 
 QueryPartitionRsp_Partition::QueryPartitionRsp_Partition()
@@ -1854,17 +1857,19 @@ void QueryPartitionRsp_Partition::Clear() {
   } while (0)
 
   if (_has_bits_[0 / 32] & 15) {
-    ZR_(id_, is_recommend_);
+    ZR_(id_, status_);
     if (has_name()) {
       if (name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
         name_->clear();
       }
     }
+    is_recommend_ = false;
   }
 
 #undef OFFSET_OF_FIELD_
 #undef ZR_
 
+  online_number_.Clear();
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
@@ -1936,6 +1941,25 @@ bool QueryPartitionRsp_Partition::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
+        if (input->ExpectTag(40)) goto parse_online_number;
+        break;
+      }
+
+      // repeated uint32 online_number = 5;
+      case 5: {
+        if (tag == 40) {
+         parse_online_number:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 1, 40, input, this->mutable_online_number())));
+        } else if (tag == 42) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitiveNoInline<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, this->mutable_online_number())));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(40)) goto parse_online_number;
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -1990,6 +2014,12 @@ void QueryPartitionRsp_Partition::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteBool(4, this->is_recommend(), output);
   }
 
+  // repeated uint32 online_number = 5;
+  for (int i = 0; i < this->online_number_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(
+      5, this->online_number(i), output);
+  }
+
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -2024,6 +2054,12 @@ void QueryPartitionRsp_Partition::SerializeWithCachedSizes(
   // required bool is_recommend = 4;
   if (has_is_recommend()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(4, this->is_recommend(), target);
+  }
+
+  // repeated uint32 online_number = 5;
+  for (int i = 0; i < this->online_number_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteUInt32ToArray(5, this->online_number(i), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -2065,6 +2101,16 @@ int QueryPartitionRsp_Partition::ByteSize() const {
     }
 
   }
+  // repeated uint32 online_number = 5;
+  {
+    int data_size = 0;
+    for (int i = 0; i < this->online_number_size(); i++) {
+      data_size += ::google::protobuf::internal::WireFormatLite::
+        UInt32Size(this->online_number(i));
+    }
+    total_size += 1 * this->online_number_size() + data_size;
+  }
+
   if (!unknown_fields().empty()) {
     total_size +=
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
@@ -2090,6 +2136,7 @@ void QueryPartitionRsp_Partition::MergeFrom(const ::google::protobuf::Message& f
 
 void QueryPartitionRsp_Partition::MergeFrom(const QueryPartitionRsp_Partition& from) {
   GOOGLE_CHECK_NE(&from, this);
+  online_number_.MergeFrom(from.online_number_);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (from.has_id()) {
       set_id(from.id());
@@ -2131,6 +2178,7 @@ void QueryPartitionRsp_Partition::Swap(QueryPartitionRsp_Partition* other) {
     std::swap(name_, other->name_);
     std::swap(status_, other->status_);
     std::swap(is_recommend_, other->is_recommend_);
+    online_number_.Swap(&other->online_number_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

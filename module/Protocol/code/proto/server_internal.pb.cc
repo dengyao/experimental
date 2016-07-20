@@ -70,12 +70,12 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* RouterNotify_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   RouterNotify_reflection_ = NULL;
-const ::google::protobuf::Descriptor* RegisterLinkerReq_descriptor_ = NULL;
+const ::google::protobuf::Descriptor* LinkerLoginReq_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
-  RegisterLinkerReq_reflection_ = NULL;
-const ::google::protobuf::Descriptor* RegisterLinkerRsp_descriptor_ = NULL;
+  LinkerLoginReq_reflection_ = NULL;
+const ::google::protobuf::Descriptor* LinkerLoginRsp_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
-  RegisterLinkerRsp_reflection_ = NULL;
+  LinkerLoginRsp_reflection_ = NULL;
 const ::google::protobuf::Descriptor* UpdateLinkerCapacityReq_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   UpdateLinkerCapacityReq_reflection_ = NULL;
@@ -350,37 +350,39 @@ void protobuf_AssignDesc_proto_2fserver_5finternal_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(RouterNotify));
-  RegisterLinkerReq_descriptor_ = file->message_type(16);
-  static const int RegisterLinkerReq_offsets_[1] = {
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RegisterLinkerReq, partition_id_),
+  LinkerLoginReq_descriptor_ = file->message_type(16);
+  static const int LinkerLoginReq_offsets_[3] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LinkerLoginReq, partition_id_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LinkerLoginReq, public_ip_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LinkerLoginReq, port_),
   };
-  RegisterLinkerReq_reflection_ =
+  LinkerLoginReq_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
-      RegisterLinkerReq_descriptor_,
-      RegisterLinkerReq::default_instance_,
-      RegisterLinkerReq_offsets_,
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RegisterLinkerReq, _has_bits_[0]),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RegisterLinkerReq, _unknown_fields_),
+      LinkerLoginReq_descriptor_,
+      LinkerLoginReq::default_instance_,
+      LinkerLoginReq_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LinkerLoginReq, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LinkerLoginReq, _unknown_fields_),
       -1,
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
-      sizeof(RegisterLinkerReq));
-  RegisterLinkerRsp_descriptor_ = file->message_type(17);
-  static const int RegisterLinkerRsp_offsets_[2] = {
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RegisterLinkerRsp, heartbeat_interval_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RegisterLinkerRsp, linker_id_),
+      sizeof(LinkerLoginReq));
+  LinkerLoginRsp_descriptor_ = file->message_type(17);
+  static const int LinkerLoginRsp_offsets_[2] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LinkerLoginRsp, heartbeat_interval_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LinkerLoginRsp, linker_id_),
   };
-  RegisterLinkerRsp_reflection_ =
+  LinkerLoginRsp_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
-      RegisterLinkerRsp_descriptor_,
-      RegisterLinkerRsp::default_instance_,
-      RegisterLinkerRsp_offsets_,
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RegisterLinkerRsp, _has_bits_[0]),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RegisterLinkerRsp, _unknown_fields_),
+      LinkerLoginRsp_descriptor_,
+      LinkerLoginRsp::default_instance_,
+      LinkerLoginRsp_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LinkerLoginRsp, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LinkerLoginRsp, _unknown_fields_),
       -1,
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
-      sizeof(RegisterLinkerRsp));
+      sizeof(LinkerLoginRsp));
   UpdateLinkerCapacityReq_descriptor_ = file->message_type(18);
   static const int UpdateLinkerCapacityReq_offsets_[1] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UpdateLinkerCapacityReq, load_),
@@ -442,9 +444,9 @@ void protobuf_RegisterTypes(const ::std::string&) {
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     RouterNotify_descriptor_, &RouterNotify::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-    RegisterLinkerReq_descriptor_, &RegisterLinkerReq::default_instance());
+    LinkerLoginReq_descriptor_, &LinkerLoginReq::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-    RegisterLinkerRsp_descriptor_, &RegisterLinkerRsp::default_instance());
+    LinkerLoginRsp_descriptor_, &LinkerLoginRsp::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     UpdateLinkerCapacityReq_descriptor_, &UpdateLinkerCapacityReq::default_instance());
 }
@@ -484,10 +486,10 @@ void protobuf_ShutdownFile_proto_2fserver_5finternal_2eproto() {
   delete BroadcastReq_reflection_;
   delete RouterNotify::default_instance_;
   delete RouterNotify_reflection_;
-  delete RegisterLinkerReq::default_instance_;
-  delete RegisterLinkerReq_reflection_;
-  delete RegisterLinkerRsp::default_instance_;
-  delete RegisterLinkerRsp_reflection_;
+  delete LinkerLoginReq::default_instance_;
+  delete LinkerLoginReq_reflection_;
+  delete LinkerLoginRsp::default_instance_;
+  delete LinkerLoginRsp_reflection_;
   delete UpdateLinkerCapacityReq::default_instance_;
   delete UpdateLinkerCapacityReq_reflection_;
 }
@@ -532,12 +534,13 @@ void protobuf_AddDesc_proto_2fserver_5finternal_2eproto() {
     "\014BroadcastReq\022 \n\tdst_lists\030\001 \003(\0162\r.svr.N"
     "odeType\022\021\n\tuser_data\030\002 \002(\014\">\n\014RouterNoti"
     "fy\022\033\n\003src\030\001 \002(\0132\016.svr.ChildNode\022\021\n\tuser_"
-    "data\030\002 \002(\014\")\n\021RegisterLinkerReq\022\024\n\014parti"
-    "tion_id\030\001 \002(\r\"B\n\021RegisterLinkerRsp\022\032\n\022he"
-    "artbeat_interval\030\001 \002(\r\022\021\n\tlinker_id\030\002 \002("
-    "\r\"\'\n\027UpdateLinkerCapacityReq\022\014\n\004load\030\001 \002"
-    "(\r*D\n\010NodeType\022\020\n\014kLoginServer\020\001\022\021\n\rkLin"
-    "kerServer\020\002\022\023\n\017kMainLogicSever\020\003", 1512);
+    "data\030\002 \002(\014\"G\n\016LinkerLoginReq\022\024\n\014partitio"
+    "n_id\030\001 \002(\r\022\021\n\tpublic_ip\030\002 \002(\t\022\014\n\004port\030\003 "
+    "\002(\r\"\?\n\016LinkerLoginRsp\022\032\n\022heartbeat_inter"
+    "val\030\001 \002(\r\022\021\n\tlinker_id\030\002 \002(\r\"\'\n\027UpdateLi"
+    "nkerCapacityReq\022\014\n\004load\030\001 \002(\r*D\n\010NodeTyp"
+    "e\022\020\n\014kLoginServer\020\001\022\021\n\rkLinkerServer\020\002\022\023"
+    "\n\017kMainLogicSever\020\003", 1539);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "proto/server_internal.proto", &protobuf_RegisterTypes);
   LoginDBAgentReq::default_instance_ = new LoginDBAgentReq();
@@ -556,8 +559,8 @@ void protobuf_AddDesc_proto_2fserver_5finternal_2eproto() {
   ForwardReq::default_instance_ = new ForwardReq();
   BroadcastReq::default_instance_ = new BroadcastReq();
   RouterNotify::default_instance_ = new RouterNotify();
-  RegisterLinkerReq::default_instance_ = new RegisterLinkerReq();
-  RegisterLinkerRsp::default_instance_ = new RegisterLinkerRsp();
+  LinkerLoginReq::default_instance_ = new LinkerLoginReq();
+  LinkerLoginRsp::default_instance_ = new LinkerLoginRsp();
   UpdateLinkerCapacityReq::default_instance_ = new UpdateLinkerCapacityReq();
   LoginDBAgentReq::default_instance_->InitAsDefaultInstance();
   LoginDBAgentRsp::default_instance_->InitAsDefaultInstance();
@@ -575,8 +578,8 @@ void protobuf_AddDesc_proto_2fserver_5finternal_2eproto() {
   ForwardReq::default_instance_->InitAsDefaultInstance();
   BroadcastReq::default_instance_->InitAsDefaultInstance();
   RouterNotify::default_instance_->InitAsDefaultInstance();
-  RegisterLinkerReq::default_instance_->InitAsDefaultInstance();
-  RegisterLinkerRsp::default_instance_->InitAsDefaultInstance();
+  LinkerLoginReq::default_instance_->InitAsDefaultInstance();
+  LinkerLoginRsp::default_instance_->InitAsDefaultInstance();
   UpdateLinkerCapacityReq::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_proto_2fserver_5finternal_2eproto);
 }
@@ -5102,73 +5105,102 @@ void RouterNotify::Swap(RouterNotify* other) {
 // ===================================================================
 
 #ifndef _MSC_VER
-const int RegisterLinkerReq::kPartitionIdFieldNumber;
+const int LinkerLoginReq::kPartitionIdFieldNumber;
+const int LinkerLoginReq::kPublicIpFieldNumber;
+const int LinkerLoginReq::kPortFieldNumber;
 #endif  // !_MSC_VER
 
-RegisterLinkerReq::RegisterLinkerReq()
+LinkerLoginReq::LinkerLoginReq()
   : ::google::protobuf::Message() {
   SharedCtor();
-  // @@protoc_insertion_point(constructor:svr.RegisterLinkerReq)
+  // @@protoc_insertion_point(constructor:svr.LinkerLoginReq)
 }
 
-void RegisterLinkerReq::InitAsDefaultInstance() {
+void LinkerLoginReq::InitAsDefaultInstance() {
 }
 
-RegisterLinkerReq::RegisterLinkerReq(const RegisterLinkerReq& from)
+LinkerLoginReq::LinkerLoginReq(const LinkerLoginReq& from)
   : ::google::protobuf::Message() {
   SharedCtor();
   MergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:svr.RegisterLinkerReq)
+  // @@protoc_insertion_point(copy_constructor:svr.LinkerLoginReq)
 }
 
-void RegisterLinkerReq::SharedCtor() {
+void LinkerLoginReq::SharedCtor() {
+  ::google::protobuf::internal::GetEmptyString();
   _cached_size_ = 0;
   partition_id_ = 0u;
+  public_ip_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  port_ = 0u;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
-RegisterLinkerReq::~RegisterLinkerReq() {
-  // @@protoc_insertion_point(destructor:svr.RegisterLinkerReq)
+LinkerLoginReq::~LinkerLoginReq() {
+  // @@protoc_insertion_point(destructor:svr.LinkerLoginReq)
   SharedDtor();
 }
 
-void RegisterLinkerReq::SharedDtor() {
+void LinkerLoginReq::SharedDtor() {
+  if (public_ip_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete public_ip_;
+  }
   if (this != default_instance_) {
   }
 }
 
-void RegisterLinkerReq::SetCachedSize(int size) const {
+void LinkerLoginReq::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const ::google::protobuf::Descriptor* RegisterLinkerReq::descriptor() {
+const ::google::protobuf::Descriptor* LinkerLoginReq::descriptor() {
   protobuf_AssignDescriptorsOnce();
-  return RegisterLinkerReq_descriptor_;
+  return LinkerLoginReq_descriptor_;
 }
 
-const RegisterLinkerReq& RegisterLinkerReq::default_instance() {
+const LinkerLoginReq& LinkerLoginReq::default_instance() {
   if (default_instance_ == NULL) protobuf_AddDesc_proto_2fserver_5finternal_2eproto();
   return *default_instance_;
 }
 
-RegisterLinkerReq* RegisterLinkerReq::default_instance_ = NULL;
+LinkerLoginReq* LinkerLoginReq::default_instance_ = NULL;
 
-RegisterLinkerReq* RegisterLinkerReq::New() const {
-  return new RegisterLinkerReq;
+LinkerLoginReq* LinkerLoginReq::New() const {
+  return new LinkerLoginReq;
 }
 
-void RegisterLinkerReq::Clear() {
-  partition_id_ = 0u;
+void LinkerLoginReq::Clear() {
+#define OFFSET_OF_FIELD_(f) (reinterpret_cast<char*>(      \
+  &reinterpret_cast<LinkerLoginReq*>(16)->f) - \
+   reinterpret_cast<char*>(16))
+
+#define ZR_(first, last) do {                              \
+    size_t f = OFFSET_OF_FIELD_(first);                    \
+    size_t n = OFFSET_OF_FIELD_(last) - f + sizeof(last);  \
+    ::memset(&first, 0, n);                                \
+  } while (0)
+
+  if (_has_bits_[0 / 32] & 7) {
+    ZR_(partition_id_, port_);
+    if (has_public_ip()) {
+      if (public_ip_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+        public_ip_->clear();
+      }
+    }
+  }
+
+#undef OFFSET_OF_FIELD_
+#undef ZR_
+
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
 
-bool RegisterLinkerReq::MergePartialFromCodedStream(
+bool LinkerLoginReq::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:svr.RegisterLinkerReq)
+  // @@protoc_insertion_point(parse_start:svr.LinkerLoginReq)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
     tag = p.first;
@@ -5181,6 +5213,38 @@ bool RegisterLinkerReq::MergePartialFromCodedStream(
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
                  input, &partition_id_)));
           set_has_partition_id();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(18)) goto parse_public_ip;
+        break;
+      }
+
+      // required string public_ip = 2;
+      case 2: {
+        if (tag == 18) {
+         parse_public_ip:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_public_ip()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+            this->public_ip().data(), this->public_ip().length(),
+            ::google::protobuf::internal::WireFormat::PARSE,
+            "public_ip");
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(24)) goto parse_port;
+        break;
+      }
+
+      // required uint32 port = 3;
+      case 3: {
+        if (tag == 24) {
+         parse_port:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &port_)));
+          set_has_port();
         } else {
           goto handle_unusual;
         }
@@ -5202,46 +5266,77 @@ bool RegisterLinkerReq::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:svr.RegisterLinkerReq)
+  // @@protoc_insertion_point(parse_success:svr.LinkerLoginReq)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:svr.RegisterLinkerReq)
+  // @@protoc_insertion_point(parse_failure:svr.LinkerLoginReq)
   return false;
 #undef DO_
 }
 
-void RegisterLinkerReq::SerializeWithCachedSizes(
+void LinkerLoginReq::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:svr.RegisterLinkerReq)
+  // @@protoc_insertion_point(serialize_start:svr.LinkerLoginReq)
   // required uint32 partition_id = 1;
   if (has_partition_id()) {
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->partition_id(), output);
+  }
+
+  // required string public_ip = 2;
+  if (has_public_ip()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->public_ip().data(), this->public_ip().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "public_ip");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      2, this->public_ip(), output);
+  }
+
+  // required uint32 port = 3;
+  if (has_port()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(3, this->port(), output);
   }
 
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
   }
-  // @@protoc_insertion_point(serialize_end:svr.RegisterLinkerReq)
+  // @@protoc_insertion_point(serialize_end:svr.LinkerLoginReq)
 }
 
-::google::protobuf::uint8* RegisterLinkerReq::SerializeWithCachedSizesToArray(
+::google::protobuf::uint8* LinkerLoginReq::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // @@protoc_insertion_point(serialize_to_array_start:svr.RegisterLinkerReq)
+  // @@protoc_insertion_point(serialize_to_array_start:svr.LinkerLoginReq)
   // required uint32 partition_id = 1;
   if (has_partition_id()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->partition_id(), target);
+  }
+
+  // required string public_ip = 2;
+  if (has_public_ip()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->public_ip().data(), this->public_ip().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "public_ip");
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        2, this->public_ip(), target);
+  }
+
+  // required uint32 port = 3;
+  if (has_port()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(3, this->port(), target);
   }
 
   if (!unknown_fields().empty()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:svr.RegisterLinkerReq)
+  // @@protoc_insertion_point(serialize_to_array_end:svr.LinkerLoginReq)
   return target;
 }
 
-int RegisterLinkerReq::ByteSize() const {
+int LinkerLoginReq::ByteSize() const {
   int total_size = 0;
 
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
@@ -5250,6 +5345,20 @@ int RegisterLinkerReq::ByteSize() const {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::UInt32Size(
           this->partition_id());
+    }
+
+    // required string public_ip = 2;
+    if (has_public_ip()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->public_ip());
+    }
+
+    // required uint32 port = 3;
+    if (has_port()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->port());
     }
 
   }
@@ -5264,10 +5373,10 @@ int RegisterLinkerReq::ByteSize() const {
   return total_size;
 }
 
-void RegisterLinkerReq::MergeFrom(const ::google::protobuf::Message& from) {
+void LinkerLoginReq::MergeFrom(const ::google::protobuf::Message& from) {
   GOOGLE_CHECK_NE(&from, this);
-  const RegisterLinkerReq* source =
-    ::google::protobuf::internal::dynamic_cast_if_available<const RegisterLinkerReq*>(
+  const LinkerLoginReq* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const LinkerLoginReq*>(
       &from);
   if (source == NULL) {
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
@@ -5276,48 +5385,56 @@ void RegisterLinkerReq::MergeFrom(const ::google::protobuf::Message& from) {
   }
 }
 
-void RegisterLinkerReq::MergeFrom(const RegisterLinkerReq& from) {
+void LinkerLoginReq::MergeFrom(const LinkerLoginReq& from) {
   GOOGLE_CHECK_NE(&from, this);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (from.has_partition_id()) {
       set_partition_id(from.partition_id());
     }
+    if (from.has_public_ip()) {
+      set_public_ip(from.public_ip());
+    }
+    if (from.has_port()) {
+      set_port(from.port());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
 
-void RegisterLinkerReq::CopyFrom(const ::google::protobuf::Message& from) {
+void LinkerLoginReq::CopyFrom(const ::google::protobuf::Message& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-void RegisterLinkerReq::CopyFrom(const RegisterLinkerReq& from) {
+void LinkerLoginReq::CopyFrom(const LinkerLoginReq& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool RegisterLinkerReq::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
+bool LinkerLoginReq::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000007) != 0x00000007) return false;
 
   return true;
 }
 
-void RegisterLinkerReq::Swap(RegisterLinkerReq* other) {
+void LinkerLoginReq::Swap(LinkerLoginReq* other) {
   if (other != this) {
     std::swap(partition_id_, other->partition_id_);
+    std::swap(public_ip_, other->public_ip_);
+    std::swap(port_, other->port_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
   }
 }
 
-::google::protobuf::Metadata RegisterLinkerReq::GetMetadata() const {
+::google::protobuf::Metadata LinkerLoginReq::GetMetadata() const {
   protobuf_AssignDescriptorsOnce();
   ::google::protobuf::Metadata metadata;
-  metadata.descriptor = RegisterLinkerReq_descriptor_;
-  metadata.reflection = RegisterLinkerReq_reflection_;
+  metadata.descriptor = LinkerLoginReq_descriptor_;
+  metadata.reflection = LinkerLoginReq_reflection_;
   return metadata;
 }
 
@@ -5325,67 +5442,67 @@ void RegisterLinkerReq::Swap(RegisterLinkerReq* other) {
 // ===================================================================
 
 #ifndef _MSC_VER
-const int RegisterLinkerRsp::kHeartbeatIntervalFieldNumber;
-const int RegisterLinkerRsp::kLinkerIdFieldNumber;
+const int LinkerLoginRsp::kHeartbeatIntervalFieldNumber;
+const int LinkerLoginRsp::kLinkerIdFieldNumber;
 #endif  // !_MSC_VER
 
-RegisterLinkerRsp::RegisterLinkerRsp()
+LinkerLoginRsp::LinkerLoginRsp()
   : ::google::protobuf::Message() {
   SharedCtor();
-  // @@protoc_insertion_point(constructor:svr.RegisterLinkerRsp)
+  // @@protoc_insertion_point(constructor:svr.LinkerLoginRsp)
 }
 
-void RegisterLinkerRsp::InitAsDefaultInstance() {
+void LinkerLoginRsp::InitAsDefaultInstance() {
 }
 
-RegisterLinkerRsp::RegisterLinkerRsp(const RegisterLinkerRsp& from)
+LinkerLoginRsp::LinkerLoginRsp(const LinkerLoginRsp& from)
   : ::google::protobuf::Message() {
   SharedCtor();
   MergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:svr.RegisterLinkerRsp)
+  // @@protoc_insertion_point(copy_constructor:svr.LinkerLoginRsp)
 }
 
-void RegisterLinkerRsp::SharedCtor() {
+void LinkerLoginRsp::SharedCtor() {
   _cached_size_ = 0;
   heartbeat_interval_ = 0u;
   linker_id_ = 0u;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
-RegisterLinkerRsp::~RegisterLinkerRsp() {
-  // @@protoc_insertion_point(destructor:svr.RegisterLinkerRsp)
+LinkerLoginRsp::~LinkerLoginRsp() {
+  // @@protoc_insertion_point(destructor:svr.LinkerLoginRsp)
   SharedDtor();
 }
 
-void RegisterLinkerRsp::SharedDtor() {
+void LinkerLoginRsp::SharedDtor() {
   if (this != default_instance_) {
   }
 }
 
-void RegisterLinkerRsp::SetCachedSize(int size) const {
+void LinkerLoginRsp::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const ::google::protobuf::Descriptor* RegisterLinkerRsp::descriptor() {
+const ::google::protobuf::Descriptor* LinkerLoginRsp::descriptor() {
   protobuf_AssignDescriptorsOnce();
-  return RegisterLinkerRsp_descriptor_;
+  return LinkerLoginRsp_descriptor_;
 }
 
-const RegisterLinkerRsp& RegisterLinkerRsp::default_instance() {
+const LinkerLoginRsp& LinkerLoginRsp::default_instance() {
   if (default_instance_ == NULL) protobuf_AddDesc_proto_2fserver_5finternal_2eproto();
   return *default_instance_;
 }
 
-RegisterLinkerRsp* RegisterLinkerRsp::default_instance_ = NULL;
+LinkerLoginRsp* LinkerLoginRsp::default_instance_ = NULL;
 
-RegisterLinkerRsp* RegisterLinkerRsp::New() const {
-  return new RegisterLinkerRsp;
+LinkerLoginRsp* LinkerLoginRsp::New() const {
+  return new LinkerLoginRsp;
 }
 
-void RegisterLinkerRsp::Clear() {
+void LinkerLoginRsp::Clear() {
 #define OFFSET_OF_FIELD_(f) (reinterpret_cast<char*>(      \
-  &reinterpret_cast<RegisterLinkerRsp*>(16)->f) - \
+  &reinterpret_cast<LinkerLoginRsp*>(16)->f) - \
    reinterpret_cast<char*>(16))
 
 #define ZR_(first, last) do {                              \
@@ -5403,11 +5520,11 @@ void RegisterLinkerRsp::Clear() {
   mutable_unknown_fields()->Clear();
 }
 
-bool RegisterLinkerRsp::MergePartialFromCodedStream(
+bool LinkerLoginRsp::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:svr.RegisterLinkerRsp)
+  // @@protoc_insertion_point(parse_start:svr.LinkerLoginRsp)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
     tag = p.first;
@@ -5456,17 +5573,17 @@ bool RegisterLinkerRsp::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:svr.RegisterLinkerRsp)
+  // @@protoc_insertion_point(parse_success:svr.LinkerLoginRsp)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:svr.RegisterLinkerRsp)
+  // @@protoc_insertion_point(parse_failure:svr.LinkerLoginRsp)
   return false;
 #undef DO_
 }
 
-void RegisterLinkerRsp::SerializeWithCachedSizes(
+void LinkerLoginRsp::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:svr.RegisterLinkerRsp)
+  // @@protoc_insertion_point(serialize_start:svr.LinkerLoginRsp)
   // required uint32 heartbeat_interval = 1;
   if (has_heartbeat_interval()) {
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->heartbeat_interval(), output);
@@ -5481,12 +5598,12 @@ void RegisterLinkerRsp::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
   }
-  // @@protoc_insertion_point(serialize_end:svr.RegisterLinkerRsp)
+  // @@protoc_insertion_point(serialize_end:svr.LinkerLoginRsp)
 }
 
-::google::protobuf::uint8* RegisterLinkerRsp::SerializeWithCachedSizesToArray(
+::google::protobuf::uint8* LinkerLoginRsp::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // @@protoc_insertion_point(serialize_to_array_start:svr.RegisterLinkerRsp)
+  // @@protoc_insertion_point(serialize_to_array_start:svr.LinkerLoginRsp)
   // required uint32 heartbeat_interval = 1;
   if (has_heartbeat_interval()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->heartbeat_interval(), target);
@@ -5501,11 +5618,11 @@ void RegisterLinkerRsp::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:svr.RegisterLinkerRsp)
+  // @@protoc_insertion_point(serialize_to_array_end:svr.LinkerLoginRsp)
   return target;
 }
 
-int RegisterLinkerRsp::ByteSize() const {
+int LinkerLoginRsp::ByteSize() const {
   int total_size = 0;
 
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
@@ -5535,10 +5652,10 @@ int RegisterLinkerRsp::ByteSize() const {
   return total_size;
 }
 
-void RegisterLinkerRsp::MergeFrom(const ::google::protobuf::Message& from) {
+void LinkerLoginRsp::MergeFrom(const ::google::protobuf::Message& from) {
   GOOGLE_CHECK_NE(&from, this);
-  const RegisterLinkerRsp* source =
-    ::google::protobuf::internal::dynamic_cast_if_available<const RegisterLinkerRsp*>(
+  const LinkerLoginRsp* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const LinkerLoginRsp*>(
       &from);
   if (source == NULL) {
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
@@ -5547,7 +5664,7 @@ void RegisterLinkerRsp::MergeFrom(const ::google::protobuf::Message& from) {
   }
 }
 
-void RegisterLinkerRsp::MergeFrom(const RegisterLinkerRsp& from) {
+void LinkerLoginRsp::MergeFrom(const LinkerLoginRsp& from) {
   GOOGLE_CHECK_NE(&from, this);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (from.has_heartbeat_interval()) {
@@ -5560,25 +5677,25 @@ void RegisterLinkerRsp::MergeFrom(const RegisterLinkerRsp& from) {
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
 
-void RegisterLinkerRsp::CopyFrom(const ::google::protobuf::Message& from) {
+void LinkerLoginRsp::CopyFrom(const ::google::protobuf::Message& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-void RegisterLinkerRsp::CopyFrom(const RegisterLinkerRsp& from) {
+void LinkerLoginRsp::CopyFrom(const LinkerLoginRsp& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool RegisterLinkerRsp::IsInitialized() const {
+bool LinkerLoginRsp::IsInitialized() const {
   if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
 
   return true;
 }
 
-void RegisterLinkerRsp::Swap(RegisterLinkerRsp* other) {
+void LinkerLoginRsp::Swap(LinkerLoginRsp* other) {
   if (other != this) {
     std::swap(heartbeat_interval_, other->heartbeat_interval_);
     std::swap(linker_id_, other->linker_id_);
@@ -5588,11 +5705,11 @@ void RegisterLinkerRsp::Swap(RegisterLinkerRsp* other) {
   }
 }
 
-::google::protobuf::Metadata RegisterLinkerRsp::GetMetadata() const {
+::google::protobuf::Metadata LinkerLoginRsp::GetMetadata() const {
   protobuf_AssignDescriptorsOnce();
   ::google::protobuf::Metadata metadata;
-  metadata.descriptor = RegisterLinkerRsp_descriptor_;
-  metadata.reflection = RegisterLinkerRsp_reflection_;
+  metadata.descriptor = LinkerLoginRsp_descriptor_;
+  metadata.reflection = LinkerLoginRsp_reflection_;
   return metadata;
 }
 

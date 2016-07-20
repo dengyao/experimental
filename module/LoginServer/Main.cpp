@@ -98,6 +98,8 @@ int main(int argc, char *argv[])
 	// 查询分区信息
 	network::IOServiceThreadManager threads(ServerConfig::GetInstance()->GetUseThreadNum());
 	g_thread_manager = &threads;
+	threads.SetSessionTimeout(ServerConfig::GetInstance()->GetHeartbeatInterval());
+
 	asio::ip::tcp::endpoint endpoint(asio::ip::address_v4::from_string(ServerConfig::GetInstance()->GetDBAgentIP()),
 		ServerConfig::GetInstance()->GetDBAgentPort());
 	db::DBClient db_client(threads, endpoint, ServerConfig::GetInstance()->GetDBAgentConnections());

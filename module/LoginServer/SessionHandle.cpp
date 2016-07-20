@@ -30,8 +30,8 @@ void SessionHandle::OnMessage(network::NetMessage &message)
 		return;
 	}
 
-	// 注册LinkerServer
-	if (dynamic_cast<svr::RegisterLinkerReq*>(request.get()) != nullptr)
+	// 注册Linker
+	if (dynamic_cast<svr::LinkerLoginReq*>(request.get()) != nullptr)
 	{
 		if (login_manager_.HandleLinkerMessage(*this, request.get(), message))
 		{
@@ -41,7 +41,7 @@ void SessionHandle::OnMessage(network::NetMessage &message)
 	}
 
 	// 处理心跳
-	if (dynamic_cast<svr::RegisterLinkerReq*>(request.get()) != nullptr)
+	if (dynamic_cast<pub::PingReq*>(request.get()) != nullptr)
 	{
 		message.Clear();
 		pub::PongRsp response;
@@ -64,6 +64,14 @@ void SessionHandle::OnMessage(network::NetMessage &message)
 // 关闭事件
 void SessionHandle::OnClose()
 {
+	if (type_ == RoleType::kUser)
+	{
+		login_manager_.HandleUserOffline(*this);
+	}
+	else
+	{
+		login_manager_.HandleLinkerOffline(*this);
+	}
 }
 
 /************************************************************************/

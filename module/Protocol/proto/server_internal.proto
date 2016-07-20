@@ -132,15 +132,17 @@ message RouterNotify {
 /* 与LoginServer的协议                                                   */
 /************************************************************************/
 
-// 注册Linker请求
-message RegisterLinkerReq {
+// Linker登录请求
+message LinkerLoginReq {
     required uint32 partition_id = 1; // 分区id
+    required string public_ip = 2;    // 公网ip
+    required uint32 port = 3;         // 端口号
 }
 
-// 注册Linker返回
-message RegisterLinkerRsp {
+// Linker登录返回
+message LinkerLoginRsp {
     required uint32 heartbeat_interval = 1; // 心跳包间隔
-    required uint32 linker_id = 2; // LinkerServer id
+    required uint32 linker_id = 2;          // Linker ID
 }
 
 // 上报Linker负载量

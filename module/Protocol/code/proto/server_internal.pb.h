@@ -51,8 +51,8 @@ class RouterInfoRsp;
 class ForwardReq;
 class BroadcastReq;
 class RouterNotify;
-class RegisterLinkerReq;
-class RegisterLinkerRsp;
+class LinkerLoginReq;
+class LinkerLoginRsp;
 class UpdateLinkerCapacityReq;
 
 enum QueryDBAgentReq_ActoinType {
@@ -1656,14 +1656,14 @@ class RouterNotify : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
-class RegisterLinkerReq : public ::google::protobuf::Message {
+class LinkerLoginReq : public ::google::protobuf::Message {
  public:
-  RegisterLinkerReq();
-  virtual ~RegisterLinkerReq();
+  LinkerLoginReq();
+  virtual ~LinkerLoginReq();
 
-  RegisterLinkerReq(const RegisterLinkerReq& from);
+  LinkerLoginReq(const LinkerLoginReq& from);
 
-  inline RegisterLinkerReq& operator=(const RegisterLinkerReq& from) {
+  inline LinkerLoginReq& operator=(const LinkerLoginReq& from) {
     CopyFrom(from);
     return *this;
   }
@@ -1677,17 +1677,17 @@ class RegisterLinkerReq : public ::google::protobuf::Message {
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
-  static const RegisterLinkerReq& default_instance();
+  static const LinkerLoginReq& default_instance();
 
-  void Swap(RegisterLinkerReq* other);
+  void Swap(LinkerLoginReq* other);
 
   // implements Message ----------------------------------------------
 
-  RegisterLinkerReq* New() const;
+  LinkerLoginReq* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const RegisterLinkerReq& from);
-  void MergeFrom(const RegisterLinkerReq& from);
+  void CopyFrom(const LinkerLoginReq& from);
+  void MergeFrom(const LinkerLoginReq& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -1716,33 +1716,58 @@ class RegisterLinkerReq : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 partition_id() const;
   inline void set_partition_id(::google::protobuf::uint32 value);
 
-  // @@protoc_insertion_point(class_scope:svr.RegisterLinkerReq)
+  // required string public_ip = 2;
+  inline bool has_public_ip() const;
+  inline void clear_public_ip();
+  static const int kPublicIpFieldNumber = 2;
+  inline const ::std::string& public_ip() const;
+  inline void set_public_ip(const ::std::string& value);
+  inline void set_public_ip(const char* value);
+  inline void set_public_ip(const char* value, size_t size);
+  inline ::std::string* mutable_public_ip();
+  inline ::std::string* release_public_ip();
+  inline void set_allocated_public_ip(::std::string* public_ip);
+
+  // required uint32 port = 3;
+  inline bool has_port() const;
+  inline void clear_port();
+  static const int kPortFieldNumber = 3;
+  inline ::google::protobuf::uint32 port() const;
+  inline void set_port(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:svr.LinkerLoginReq)
  private:
   inline void set_has_partition_id();
   inline void clear_has_partition_id();
+  inline void set_has_public_ip();
+  inline void clear_has_public_ip();
+  inline void set_has_port();
+  inline void clear_has_port();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
+  ::std::string* public_ip_;
   ::google::protobuf::uint32 partition_id_;
+  ::google::protobuf::uint32 port_;
   friend void  protobuf_AddDesc_proto_2fserver_5finternal_2eproto();
   friend void protobuf_AssignDesc_proto_2fserver_5finternal_2eproto();
   friend void protobuf_ShutdownFile_proto_2fserver_5finternal_2eproto();
 
   void InitAsDefaultInstance();
-  static RegisterLinkerReq* default_instance_;
+  static LinkerLoginReq* default_instance_;
 };
 // -------------------------------------------------------------------
 
-class RegisterLinkerRsp : public ::google::protobuf::Message {
+class LinkerLoginRsp : public ::google::protobuf::Message {
  public:
-  RegisterLinkerRsp();
-  virtual ~RegisterLinkerRsp();
+  LinkerLoginRsp();
+  virtual ~LinkerLoginRsp();
 
-  RegisterLinkerRsp(const RegisterLinkerRsp& from);
+  LinkerLoginRsp(const LinkerLoginRsp& from);
 
-  inline RegisterLinkerRsp& operator=(const RegisterLinkerRsp& from) {
+  inline LinkerLoginRsp& operator=(const LinkerLoginRsp& from) {
     CopyFrom(from);
     return *this;
   }
@@ -1756,17 +1781,17 @@ class RegisterLinkerRsp : public ::google::protobuf::Message {
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
-  static const RegisterLinkerRsp& default_instance();
+  static const LinkerLoginRsp& default_instance();
 
-  void Swap(RegisterLinkerRsp* other);
+  void Swap(LinkerLoginRsp* other);
 
   // implements Message ----------------------------------------------
 
-  RegisterLinkerRsp* New() const;
+  LinkerLoginRsp* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const RegisterLinkerRsp& from);
-  void MergeFrom(const RegisterLinkerRsp& from);
+  void CopyFrom(const LinkerLoginRsp& from);
+  void MergeFrom(const LinkerLoginRsp& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -1802,7 +1827,7 @@ class RegisterLinkerRsp : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 linker_id() const;
   inline void set_linker_id(::google::protobuf::uint32 value);
 
-  // @@protoc_insertion_point(class_scope:svr.RegisterLinkerRsp)
+  // @@protoc_insertion_point(class_scope:svr.LinkerLoginRsp)
  private:
   inline void set_has_heartbeat_interval();
   inline void clear_has_heartbeat_interval();
@@ -1820,7 +1845,7 @@ class RegisterLinkerRsp : public ::google::protobuf::Message {
   friend void protobuf_ShutdownFile_proto_2fserver_5finternal_2eproto();
 
   void InitAsDefaultInstance();
-  static RegisterLinkerRsp* default_instance_;
+  static LinkerLoginRsp* default_instance_;
 };
 // -------------------------------------------------------------------
 
@@ -3219,82 +3244,182 @@ inline void RouterNotify::set_allocated_user_data(::std::string* user_data) {
 
 // -------------------------------------------------------------------
 
-// RegisterLinkerReq
+// LinkerLoginReq
 
 // required uint32 partition_id = 1;
-inline bool RegisterLinkerReq::has_partition_id() const {
+inline bool LinkerLoginReq::has_partition_id() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void RegisterLinkerReq::set_has_partition_id() {
+inline void LinkerLoginReq::set_has_partition_id() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void RegisterLinkerReq::clear_has_partition_id() {
+inline void LinkerLoginReq::clear_has_partition_id() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void RegisterLinkerReq::clear_partition_id() {
+inline void LinkerLoginReq::clear_partition_id() {
   partition_id_ = 0u;
   clear_has_partition_id();
 }
-inline ::google::protobuf::uint32 RegisterLinkerReq::partition_id() const {
-  // @@protoc_insertion_point(field_get:svr.RegisterLinkerReq.partition_id)
+inline ::google::protobuf::uint32 LinkerLoginReq::partition_id() const {
+  // @@protoc_insertion_point(field_get:svr.LinkerLoginReq.partition_id)
   return partition_id_;
 }
-inline void RegisterLinkerReq::set_partition_id(::google::protobuf::uint32 value) {
+inline void LinkerLoginReq::set_partition_id(::google::protobuf::uint32 value) {
   set_has_partition_id();
   partition_id_ = value;
-  // @@protoc_insertion_point(field_set:svr.RegisterLinkerReq.partition_id)
+  // @@protoc_insertion_point(field_set:svr.LinkerLoginReq.partition_id)
+}
+
+// required string public_ip = 2;
+inline bool LinkerLoginReq::has_public_ip() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void LinkerLoginReq::set_has_public_ip() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void LinkerLoginReq::clear_has_public_ip() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void LinkerLoginReq::clear_public_ip() {
+  if (public_ip_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    public_ip_->clear();
+  }
+  clear_has_public_ip();
+}
+inline const ::std::string& LinkerLoginReq::public_ip() const {
+  // @@protoc_insertion_point(field_get:svr.LinkerLoginReq.public_ip)
+  return *public_ip_;
+}
+inline void LinkerLoginReq::set_public_ip(const ::std::string& value) {
+  set_has_public_ip();
+  if (public_ip_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    public_ip_ = new ::std::string;
+  }
+  public_ip_->assign(value);
+  // @@protoc_insertion_point(field_set:svr.LinkerLoginReq.public_ip)
+}
+inline void LinkerLoginReq::set_public_ip(const char* value) {
+  set_has_public_ip();
+  if (public_ip_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    public_ip_ = new ::std::string;
+  }
+  public_ip_->assign(value);
+  // @@protoc_insertion_point(field_set_char:svr.LinkerLoginReq.public_ip)
+}
+inline void LinkerLoginReq::set_public_ip(const char* value, size_t size) {
+  set_has_public_ip();
+  if (public_ip_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    public_ip_ = new ::std::string;
+  }
+  public_ip_->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:svr.LinkerLoginReq.public_ip)
+}
+inline ::std::string* LinkerLoginReq::mutable_public_ip() {
+  set_has_public_ip();
+  if (public_ip_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    public_ip_ = new ::std::string;
+  }
+  // @@protoc_insertion_point(field_mutable:svr.LinkerLoginReq.public_ip)
+  return public_ip_;
+}
+inline ::std::string* LinkerLoginReq::release_public_ip() {
+  clear_has_public_ip();
+  if (public_ip_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    return NULL;
+  } else {
+    ::std::string* temp = public_ip_;
+    public_ip_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    return temp;
+  }
+}
+inline void LinkerLoginReq::set_allocated_public_ip(::std::string* public_ip) {
+  if (public_ip_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete public_ip_;
+  }
+  if (public_ip) {
+    set_has_public_ip();
+    public_ip_ = public_ip;
+  } else {
+    clear_has_public_ip();
+    public_ip_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  }
+  // @@protoc_insertion_point(field_set_allocated:svr.LinkerLoginReq.public_ip)
+}
+
+// required uint32 port = 3;
+inline bool LinkerLoginReq::has_port() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void LinkerLoginReq::set_has_port() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void LinkerLoginReq::clear_has_port() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void LinkerLoginReq::clear_port() {
+  port_ = 0u;
+  clear_has_port();
+}
+inline ::google::protobuf::uint32 LinkerLoginReq::port() const {
+  // @@protoc_insertion_point(field_get:svr.LinkerLoginReq.port)
+  return port_;
+}
+inline void LinkerLoginReq::set_port(::google::protobuf::uint32 value) {
+  set_has_port();
+  port_ = value;
+  // @@protoc_insertion_point(field_set:svr.LinkerLoginReq.port)
 }
 
 // -------------------------------------------------------------------
 
-// RegisterLinkerRsp
+// LinkerLoginRsp
 
 // required uint32 heartbeat_interval = 1;
-inline bool RegisterLinkerRsp::has_heartbeat_interval() const {
+inline bool LinkerLoginRsp::has_heartbeat_interval() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void RegisterLinkerRsp::set_has_heartbeat_interval() {
+inline void LinkerLoginRsp::set_has_heartbeat_interval() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void RegisterLinkerRsp::clear_has_heartbeat_interval() {
+inline void LinkerLoginRsp::clear_has_heartbeat_interval() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void RegisterLinkerRsp::clear_heartbeat_interval() {
+inline void LinkerLoginRsp::clear_heartbeat_interval() {
   heartbeat_interval_ = 0u;
   clear_has_heartbeat_interval();
 }
-inline ::google::protobuf::uint32 RegisterLinkerRsp::heartbeat_interval() const {
-  // @@protoc_insertion_point(field_get:svr.RegisterLinkerRsp.heartbeat_interval)
+inline ::google::protobuf::uint32 LinkerLoginRsp::heartbeat_interval() const {
+  // @@protoc_insertion_point(field_get:svr.LinkerLoginRsp.heartbeat_interval)
   return heartbeat_interval_;
 }
-inline void RegisterLinkerRsp::set_heartbeat_interval(::google::protobuf::uint32 value) {
+inline void LinkerLoginRsp::set_heartbeat_interval(::google::protobuf::uint32 value) {
   set_has_heartbeat_interval();
   heartbeat_interval_ = value;
-  // @@protoc_insertion_point(field_set:svr.RegisterLinkerRsp.heartbeat_interval)
+  // @@protoc_insertion_point(field_set:svr.LinkerLoginRsp.heartbeat_interval)
 }
 
 // required uint32 linker_id = 2;
-inline bool RegisterLinkerRsp::has_linker_id() const {
+inline bool LinkerLoginRsp::has_linker_id() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void RegisterLinkerRsp::set_has_linker_id() {
+inline void LinkerLoginRsp::set_has_linker_id() {
   _has_bits_[0] |= 0x00000002u;
 }
-inline void RegisterLinkerRsp::clear_has_linker_id() {
+inline void LinkerLoginRsp::clear_has_linker_id() {
   _has_bits_[0] &= ~0x00000002u;
 }
-inline void RegisterLinkerRsp::clear_linker_id() {
+inline void LinkerLoginRsp::clear_linker_id() {
   linker_id_ = 0u;
   clear_has_linker_id();
 }
-inline ::google::protobuf::uint32 RegisterLinkerRsp::linker_id() const {
-  // @@protoc_insertion_point(field_get:svr.RegisterLinkerRsp.linker_id)
+inline ::google::protobuf::uint32 LinkerLoginRsp::linker_id() const {
+  // @@protoc_insertion_point(field_get:svr.LinkerLoginRsp.linker_id)
   return linker_id_;
 }
-inline void RegisterLinkerRsp::set_linker_id(::google::protobuf::uint32 value) {
+inline void LinkerLoginRsp::set_linker_id(::google::protobuf::uint32 value) {
   set_has_linker_id();
   linker_id_ = value;
-  // @@protoc_insertion_point(field_set:svr.RegisterLinkerRsp.linker_id)
+  // @@protoc_insertion_point(field_set:svr.LinkerLoginRsp.linker_id)
 }
 
 // -------------------------------------------------------------------

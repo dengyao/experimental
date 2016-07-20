@@ -39,8 +39,8 @@ public:
         svr::ForwardReq::descriptor();
         svr::BroadcastReq::descriptor();
         svr::RouterNotify::descriptor();
-        svr::RegisterLinkerReq::descriptor();
-        svr::RegisterLinkerRsp::descriptor();
+        svr::LinkerLoginReq::descriptor();
+        svr::LinkerLoginRsp::descriptor();
         svr::UpdateLinkerCapacityReq::descriptor();
     }
 };
