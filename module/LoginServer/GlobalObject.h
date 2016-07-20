@@ -8,7 +8,7 @@ namespace db
 	class DBClient;
 }
 
-std::unique_ptr<db::DBClient>& GlobalDBClient();
+const std::unique_ptr<db::DBClient>& GlobalDBClient();
 
 void OnceInitGlobalDBClient(std::unique_ptr<db::DBClient> &&db_client);
 

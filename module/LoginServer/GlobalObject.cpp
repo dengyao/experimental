@@ -7,7 +7,7 @@ namespace global_stuff
 	std::unique_ptr<db::DBClient> g_db_client;
 }
 
-std::unique_ptr<db::DBClient>& GlobalDBClient()
+const std::unique_ptr<db::DBClient>& GlobalDBClient()
 {
 	return global_stuff::g_db_client;
 }
