@@ -380,8 +380,7 @@ void LoginManager::OnUserEntryPartition(SessionHandle &session, google::protobuf
 	}
 
 	// 更新Linker验证信息
-	uint64_t token = 0;
-	uint32_t user_id = found->second.user_id;
+	uint64_t token = generator_(found->second.user_id);
 	auto linker_session = threads_.SessionHandler(min_element->session_id);
 	if (linker_session == nullptr)
 	{
@@ -391,7 +390,7 @@ void LoginManager::OnUserEntryPartition(SessionHandle &session, google::protobuf
 	}
 	buffer.Clear();
 	svr::UpdateUserTokenReq update_token;
-	update_token.set_user_id(user_id);
+	update_token.set_user_id(found->second.user_id);
 	update_token.set_token(token);
 	ProtubufCodec::Encode(&update_token, buffer);
 	linker_session->Send(buffer);

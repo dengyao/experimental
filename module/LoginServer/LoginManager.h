@@ -2,6 +2,7 @@
 #define __LOGIN_MANAGER_H__
 
 #include <network.h>
+#include "TokenGenerator.h"
 
 namespace google
 {
@@ -104,6 +105,7 @@ private:
 
 private:
 	network::IOServiceThreadManager&                       threads_;
+	TokenGenerator                                         generator_;
 	std::vector<SPartition>                                partition_lists_;
 	std::unordered_map<uint16_t, SLinkerGroup>             partition_map_;
 	std::unordered_map<network::TCPSessionID, SConnection> connection_map_;
