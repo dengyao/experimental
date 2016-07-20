@@ -14,6 +14,17 @@ LoginManager::LoginManager(network::IOServiceThreadManager &threads, const std::
 	: threads_(threads)
 	, partition_lists_(partition)
 {
+	for (const auto &partition : partition_lists_)
+	{
+		assert(partition.status >= login::QueryPartitionRsp::StateType_MIN &&
+			partition.status <= login::QueryPartitionRsp::StateType_MAX);
+		if (partition.status < login::QueryPartitionRsp::StateType_MIN ||
+			partition.status > login::QueryPartitionRsp::StateType_MAX)
+		{
+			logger()->critical("非法的分区状态码!");
+			exit(-1);
+		}
+	}
 }
 
 // 回复错误码
@@ -30,16 +41,43 @@ void LoginManager::RespondErrorCode(SessionHandle &session, network::NetMessage 
 	session.Send(buffer);
 }
 
+// 处理接受新连接
+void LoginManager::HandleAcceptConnection(SessionHandle &session)
+{
+	connection_map_.insert(std::make_pair(session.SessionID(), SConnection()));
+}
+
 // 处理用户消息
 bool LoginManager::HandleUserMessage(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
+	if (dynamic_cast<login::QueryPartitionReq*>(message) != nullptr)
+	{
+		OnUserQueryPartition(session, message, buffer);
+	}
+	else if (dynamic_cast<login::SignInReq*>(message) != nullptr)
+	{
+		OnUserSignIn(session, message, buffer);
+	}
+	else if (dynamic_cast<login::EntryPartitionReq*>(message) != nullptr)
+	{
+		OnUserEntryPartition(session, message, buffer);
+	}
+	else if (dynamic_cast<login::SignUpReq*>(message) != nullptr)
+	{
+		OnUserSignUp(session, message, buffer);
+	}
+	else
+	{
+		RespondErrorCode(session, buffer, pub::kInvalidProtocol, message->GetTypeName().c_str());
+		logger()->warn("协议无效，来自{}:{}", session.RemoteEndpoint().address().to_string(), session.RemoteEndpoint().port());
+	}
 	return true;
 }
 
 // 处理用户离线
 void LoginManager::HandleUserOffline(SessionHandle &session)
 {
-	
+	connection_map_.erase(session.SessionID());
 }
 
 // 处理Linker消息
@@ -66,14 +104,14 @@ void LoginManager::HandleLinkerOffline(SessionHandle &session)
 {
 	for (auto &partition : partition_map_)
 	{
-		for (auto &item : partition.second.session_map)
+		for (auto &item : partition.second.linker_map)
 		{
 			if (item.second.session_id == session.SessionID())
 			{
 				const uint16_t linker_id = item.first;
 				const uint16_t partition_id = partition.first;
-				partition.second.session_map.erase(linker_id);
-				if (partition.second.session_map.empty())
+				partition.second.linker_map.erase(linker_id);
+				if (partition.second.linker_map.empty())
 				{
 					partition_map_.erase(partition_id);
 				}
@@ -91,6 +129,27 @@ bool LoginManager::OnLinkerLogin(SessionHandle &session, google::protobuf::Messa
 {
 	auto request = static_cast<svr::LinkerLoginReq*>(message);
 
+	// 分区是否存在
+	auto found = std::find_if(partition_lists_.begin(), partition_lists_.end(), [=](const SPartition &partition)
+	{
+		return partition.id == request->partition_id();
+	});
+
+	if (found == partition_lists_.end())
+	{
+		RespondErrorCode(session, buffer, pub::kRepeatLogin, message->GetTypeName().c_str());
+		logger()->warn("分区不存在，Linker登录失败，来自{}:{}", session.RemoteEndpoint().address().to_string(), session.RemoteEndpoint().port());
+		return false;
+	}
+
+	// 分区是否停机维护
+	if (found->status != login::QueryPartitionRsp::kNormal)
+	{
+		RespondErrorCode(session, buffer, pub::kRepeatLogin, message->GetTypeName().c_str());
+		logger()->warn("分区停机维护中，Linker登录失败，来自{}:{}", session.RemoteEndpoint().address().to_string(), session.RemoteEndpoint().port());
+		return false;
+	}
+
 	auto partition_iter = partition_map_.find(request->partition_id());
 	if (partition_iter != partition_map_.end())
 	{
@@ -100,14 +159,14 @@ bool LoginManager::OnLinkerLogin(SessionHandle &session, google::protobuf::Messa
 		partition_iter = partition_map_.find(request->partition_id());
 	}
 
-	// 是否重复注册
-	auto &session_map = partition_iter->second.session_map;
-	for (const auto &item : session_map)
+	// 是否重复登录
+	auto &linker_map = partition_iter->second.linker_map;
+	for (const auto &item : linker_map)
 	{
 		if (item.second.session_id == session.SessionID())
 		{
 			RespondErrorCode(session, buffer, pub::kRepeatLogin, message->GetTypeName().c_str());
-			logger()->warn("Linker重复注册，来自{}:{}", session.RemoteEndpoint().address().to_string(), session.RemoteEndpoint().port());
+			logger()->warn("Linker重复登录，来自{}:{}", session.RemoteEndpoint().address().to_string(), session.RemoteEndpoint().port());
 			return false;
 		}
 	}
@@ -117,16 +176,20 @@ bool LoginManager::OnLinkerLogin(SessionHandle &session, google::protobuf::Messa
 	linker_item.port = request->port();
 	linker_item.public_ip = request->public_ip();
 	linker_item.session_id = session.SessionID();
-	linker_item.linker_id = session_map.empty() ? 1 : session_map.rbegin()->first + 1;
-	session_map.insert(std::make_pair(linker_item.linker_id, linker_item));
+	linker_item.linker_id = linker_map.empty() ? 1 : linker_map.rbegin()->first + 1;
+	linker_map.insert(std::make_pair(linker_item.linker_id, linker_item));
 
 	// 返回结果
 	buffer.Clear();
 	svr::LinkerLoginRsp response;
 	response.set_linker_id(linker_item.linker_id);
 	response.set_heartbeat_interval(ServerConfig::GetInstance()->GetHeartbeatInterval());
-	logger()->info("Partition[{}] Linker[{}]注册成功，来自{}:{}", request->partition_id(), linker_item.linker_id,
+	ProtubufCodec::Encode(&response, buffer);
+	session.Send(buffer);
+
+	logger()->info("Partition[{}] Linker[{}]登录成功，来自{}:{}", request->partition_id(), linker_item.linker_id,
 		session.RemoteEndpoint().address().to_string(), session.RemoteEndpoint().port());
+
 	return true;
 }
 
@@ -139,7 +202,7 @@ bool LoginManager::OnLinkerUpdateLoadCapacity(SessionHandle &session, google::pr
 	uint16_t partition_id = 0;
 	for (auto &partition : partition_map_)
 	{
-		for (auto &item : partition.second.session_map)
+		for (auto &item : partition.second.linker_map)
 		{
 			if (item.second.session_id == session.SessionID())
 			{
@@ -160,10 +223,31 @@ bool LoginManager::OnLinkerUpdateLoadCapacity(SessionHandle &session, google::pr
 	return true;
 }
 
-// 用户登录
-void LoginManager::OnUserSignIn(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
+// 查询分区
+void LoginManager::OnUserQueryPartition(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
+	buffer.Clear();
+	login::QueryPartitionRsp response;
+	for (const auto &partition : partition_lists_)
+	{
+		// 计算分区Linker数量
+		uint32_t linker_sum = 0;
+		auto found = partition_map_.find(partition.id);
+		if (found != partition_map_.end())
+		{
+			linker_sum = found->second.linker_map.size();
+		}
 
+		// 添加分区信息
+		auto status = static_cast<login::QueryPartitionRsp::StateType>(partition.status);
+		login::QueryPartitionRsp::Partition *data = response.add_lists();
+		data->set_id(partition.id);
+		data->set_name(partition.name);
+		data->set_status(linker_sum > 0 ? status : login::QueryPartitionRsp::kShutdown);
+		data->set_is_recommend(partition.is_recommend);
+	}
+	ProtubufCodec::Encode(&response, buffer);
+	session.Send(buffer);
 }
 
 // 用户注册
@@ -223,9 +307,10 @@ void LoginManager::OnUserSignUp(SessionHandle &session, google::protobuf::Messag
 	});
 }
 
-// 查询分区
-void LoginManager::OnUserQueryPartition(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
+// 用户登录
+void LoginManager::OnUserSignIn(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
+
 }
 
 // 进入分区

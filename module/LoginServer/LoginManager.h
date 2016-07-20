@@ -15,11 +15,11 @@ class SessionHandle;
 
 struct SPartition
 {
-	int id;											// 分区id
-	std::string name;								// 分区名称
-	int status;										// 分区状态
-	bool is_recommend;								// 推荐分区
-	std::string createtime;							// 创建时间
+	int id;										// 分区id
+	std::string name;							// 分区名称
+	int status;									// 分区状态
+	bool is_recommend;							// 推荐分区
+	std::string createtime;						// 创建时间
 	SPartition()
 		: id(0), status(0), is_recommend(false)
 	{
@@ -28,11 +28,11 @@ struct SPartition
 
 struct SLinkerItem
 {
-	uint16_t linker_id;								// id
-	std::string public_ip;							// 公网地址
-	unsigned short port;							// 端口
-	network::TCPSessionID session_id;				// 会话
-	uint32_t online_number;							// 在线人数
+	uint16_t linker_id;							// id
+	std::string public_ip;						// 公网地址
+	unsigned short port;						// 端口
+	network::TCPSessionID session_id;			// 会话
+	uint32_t online_number;						// 在线人数
 	SLinkerItem()
 		: linker_id(0), session_id(0), online_number(0)
 	{
@@ -41,17 +41,21 @@ struct SLinkerItem
 
 struct SLinkerGroup
 {
-	uint16_t partition_id;							// 分区id
-	std::map<uint16_t, SLinkerItem> session_map;	// 会话集合
+	uint16_t partition_id;						// 分区id
+	std::map<uint16_t, SLinkerItem> linker_map;	// linker集合
 	SLinkerGroup() : partition_id(0)
 	{
 	}
 };
 
-struct SUserInfo
+struct SConnection
 {
-	uint32_t user_id;
-	std::chrono::sadsa Connection time;
+	uint32_t user_id;							// 用户id
+	std::chrono::steady_clock::time_point time;	// 连接时间
+	SConnection()
+		: user_id(0), time(std::chrono::steady_clock::now())
+	{
+	}
 };
 
 class LoginManager
@@ -60,6 +64,9 @@ public:
 	LoginManager(network::IOServiceThreadManager &threads, const std::vector<SPartition> &partition);
 
 public:
+	// 处理接受新连接
+	void HandleAcceptConnection(SessionHandle &session);
+
 	// 处理用户消息
 	bool HandleUserMessage(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer);
 
@@ -83,22 +90,23 @@ private:
 	bool OnLinkerUpdateLoadCapacity(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer);
 
 private:
-	// 用户登录
-	void OnUserSignIn(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer);
+	// 查询分区
+	void OnUserQueryPartition(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer);
 
 	// 用户注册
 	void OnUserSignUp(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer);
 
-	// 查询分区
-	void OnUserQueryPartition(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer);
+	// 用户登录
+	void OnUserSignIn(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer);
 
 	// 进入分区
 	void OnUserEntryPartition(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer);
 
 private:
-	network::IOServiceThreadManager&           threads_;
-	std::vector<SPartition>                    partition_lists_;
-	std::unordered_map<uint16_t, SLinkerGroup> partition_map_;
+	network::IOServiceThreadManager&                       threads_;
+	std::vector<SPartition>                                partition_lists_;
+	std::unordered_map<uint16_t, SLinkerGroup>             partition_map_;
+	std::unordered_map<network::TCPSessionID, SConnection> connection_map_;
 };
 
 #endif

@@ -23,6 +23,7 @@
 #include <google/protobuf/message.h>
 #include <google/protobuf/repeated_field.h>
 #include <google/protobuf/extension_set.h>
+#include <google/protobuf/generated_enum_reflection.h>
 #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
 
@@ -43,6 +44,25 @@ class QueryPartitionRsp_Partition;
 class EntryPartitionReq;
 class EntryPartitionRsp;
 
+enum QueryPartitionRsp_StateType {
+  QueryPartitionRsp_StateType_kNormal = 0,
+  QueryPartitionRsp_StateType_kShutdown = 1
+};
+bool QueryPartitionRsp_StateType_IsValid(int value);
+const QueryPartitionRsp_StateType QueryPartitionRsp_StateType_StateType_MIN = QueryPartitionRsp_StateType_kNormal;
+const QueryPartitionRsp_StateType QueryPartitionRsp_StateType_StateType_MAX = QueryPartitionRsp_StateType_kShutdown;
+const int QueryPartitionRsp_StateType_StateType_ARRAYSIZE = QueryPartitionRsp_StateType_StateType_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* QueryPartitionRsp_StateType_descriptor();
+inline const ::std::string& QueryPartitionRsp_StateType_Name(QueryPartitionRsp_StateType value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    QueryPartitionRsp_StateType_descriptor(), value);
+}
+inline bool QueryPartitionRsp_StateType_Parse(
+    const ::std::string& name, QueryPartitionRsp_StateType* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<QueryPartitionRsp_StateType>(
+    QueryPartitionRsp_StateType_descriptor(), name, value);
+}
 // ===================================================================
 
 class SignUpReq : public ::google::protobuf::Message {
@@ -602,12 +622,12 @@ class QueryPartitionRsp_Partition : public ::google::protobuf::Message {
   inline ::std::string* release_name();
   inline void set_allocated_name(::std::string* name);
 
-  // required uint32 status = 3;
+  // required .login.QueryPartitionRsp.StateType status = 3;
   inline bool has_status() const;
   inline void clear_status();
   static const int kStatusFieldNumber = 3;
-  inline ::google::protobuf::uint32 status() const;
-  inline void set_status(::google::protobuf::uint32 value);
+  inline ::login::QueryPartitionRsp_StateType status() const;
+  inline void set_status(::login::QueryPartitionRsp_StateType value);
 
   // required bool is_recommend = 4;
   inline bool has_is_recommend() const;
@@ -615,18 +635,6 @@ class QueryPartitionRsp_Partition : public ::google::protobuf::Message {
   static const int kIsRecommendFieldNumber = 4;
   inline bool is_recommend() const;
   inline void set_is_recommend(bool value);
-
-  // repeated uint32 online_number = 5;
-  inline int online_number_size() const;
-  inline void clear_online_number();
-  static const int kOnlineNumberFieldNumber = 5;
-  inline ::google::protobuf::uint32 online_number(int index) const;
-  inline void set_online_number(int index, ::google::protobuf::uint32 value);
-  inline void add_online_number(::google::protobuf::uint32 value);
-  inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
-      online_number() const;
-  inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
-      mutable_online_number();
 
   // @@protoc_insertion_point(class_scope:login.QueryPartitionRsp.Partition)
  private:
@@ -645,8 +653,7 @@ class QueryPartitionRsp_Partition : public ::google::protobuf::Message {
   mutable int _cached_size_;
   ::std::string* name_;
   ::google::protobuf::uint32 id_;
-  ::google::protobuf::uint32 status_;
-  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 > online_number_;
+  int status_;
   bool is_recommend_;
   friend void  protobuf_AddDesc_proto_2fclient_5flogin_2eproto();
   friend void protobuf_AssignDesc_proto_2fclient_5flogin_2eproto();
@@ -709,6 +716,30 @@ class QueryPartitionRsp : public ::google::protobuf::Message {
   // nested types ----------------------------------------------------
 
   typedef QueryPartitionRsp_Partition Partition;
+
+  typedef QueryPartitionRsp_StateType StateType;
+  static const StateType kNormal = QueryPartitionRsp_StateType_kNormal;
+  static const StateType kShutdown = QueryPartitionRsp_StateType_kShutdown;
+  static inline bool StateType_IsValid(int value) {
+    return QueryPartitionRsp_StateType_IsValid(value);
+  }
+  static const StateType StateType_MIN =
+    QueryPartitionRsp_StateType_StateType_MIN;
+  static const StateType StateType_MAX =
+    QueryPartitionRsp_StateType_StateType_MAX;
+  static const int StateType_ARRAYSIZE =
+    QueryPartitionRsp_StateType_StateType_ARRAYSIZE;
+  static inline const ::google::protobuf::EnumDescriptor*
+  StateType_descriptor() {
+    return QueryPartitionRsp_StateType_descriptor();
+  }
+  static inline const ::std::string& StateType_Name(StateType value) {
+    return QueryPartitionRsp_StateType_Name(value);
+  }
+  static inline bool StateType_Parse(const ::std::string& name,
+      StateType* value) {
+    return QueryPartitionRsp_StateType_Parse(name, value);
+  }
 
   // accessors -------------------------------------------------------
 
@@ -1705,7 +1736,7 @@ inline void QueryPartitionRsp_Partition::set_allocated_name(::std::string* name)
   // @@protoc_insertion_point(field_set_allocated:login.QueryPartitionRsp.Partition.name)
 }
 
-// required uint32 status = 3;
+// required .login.QueryPartitionRsp.StateType status = 3;
 inline bool QueryPartitionRsp_Partition::has_status() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
@@ -1716,14 +1747,15 @@ inline void QueryPartitionRsp_Partition::clear_has_status() {
   _has_bits_[0] &= ~0x00000004u;
 }
 inline void QueryPartitionRsp_Partition::clear_status() {
-  status_ = 0u;
+  status_ = 0;
   clear_has_status();
 }
-inline ::google::protobuf::uint32 QueryPartitionRsp_Partition::status() const {
+inline ::login::QueryPartitionRsp_StateType QueryPartitionRsp_Partition::status() const {
   // @@protoc_insertion_point(field_get:login.QueryPartitionRsp.Partition.status)
-  return status_;
+  return static_cast< ::login::QueryPartitionRsp_StateType >(status_);
 }
-inline void QueryPartitionRsp_Partition::set_status(::google::protobuf::uint32 value) {
+inline void QueryPartitionRsp_Partition::set_status(::login::QueryPartitionRsp_StateType value) {
+  assert(::login::QueryPartitionRsp_StateType_IsValid(value));
   set_has_status();
   status_ = value;
   // @@protoc_insertion_point(field_set:login.QueryPartitionRsp.Partition.status)
@@ -1751,36 +1783,6 @@ inline void QueryPartitionRsp_Partition::set_is_recommend(bool value) {
   set_has_is_recommend();
   is_recommend_ = value;
   // @@protoc_insertion_point(field_set:login.QueryPartitionRsp.Partition.is_recommend)
-}
-
-// repeated uint32 online_number = 5;
-inline int QueryPartitionRsp_Partition::online_number_size() const {
-  return online_number_.size();
-}
-inline void QueryPartitionRsp_Partition::clear_online_number() {
-  online_number_.Clear();
-}
-inline ::google::protobuf::uint32 QueryPartitionRsp_Partition::online_number(int index) const {
-  // @@protoc_insertion_point(field_get:login.QueryPartitionRsp.Partition.online_number)
-  return online_number_.Get(index);
-}
-inline void QueryPartitionRsp_Partition::set_online_number(int index, ::google::protobuf::uint32 value) {
-  online_number_.Set(index, value);
-  // @@protoc_insertion_point(field_set:login.QueryPartitionRsp.Partition.online_number)
-}
-inline void QueryPartitionRsp_Partition::add_online_number(::google::protobuf::uint32 value) {
-  online_number_.Add(value);
-  // @@protoc_insertion_point(field_add:login.QueryPartitionRsp.Partition.online_number)
-}
-inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
-QueryPartitionRsp_Partition::online_number() const {
-  // @@protoc_insertion_point(field_list:login.QueryPartitionRsp.Partition.online_number)
-  return online_number_;
-}
-inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
-QueryPartitionRsp_Partition::mutable_online_number() {
-  // @@protoc_insertion_point(field_mutable_list:login.QueryPartitionRsp.Partition.online_number)
-  return &online_number_;
 }
 
 // -------------------------------------------------------------------
@@ -1982,6 +1984,11 @@ inline void EntryPartitionRsp::set_token(::google::protobuf::uint64 value) {
 namespace google {
 namespace protobuf {
 
+template <> struct is_proto_enum< ::login::QueryPartitionRsp_StateType> : ::google::protobuf::internal::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::login::QueryPartitionRsp_StateType>() {
+  return ::login::QueryPartitionRsp_StateType_descriptor();
+}
 
 }  // namespace google
 }  // namespace protobuf

@@ -13,6 +13,7 @@ SessionHandle::SessionHandle(LoginManager &login_manager)
 // 连接事件
 void SessionHandle::OnConnect()
 {
+	login_manager_.HandleAcceptConnection(*this);
 }
 
 // 接收消息事件
