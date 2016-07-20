@@ -39,8 +39,8 @@ void QueryPartitionInfo(db::DBClient *db_client)
 		if (dynamic_cast<svr::QueryDBAgentRsp*>(message) != nullptr)
 		{
 			std::vector<SPartition> partition_lists;
-			auto rsp = static_cast<svr::QueryDBAgentRsp*>(message);
-			db::WrapResultSet result_set(rsp->result().data(), rsp->result().size());
+			auto response = static_cast<svr::QueryDBAgentRsp*>(message);
+			db::WrapResultSet result_set(response->result().data(), response->result().size());
 			for (unsigned int row = 0; row < result_set.NumRows(); ++row)
 			{
 				SPartition partition;

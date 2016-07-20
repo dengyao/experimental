@@ -80,16 +80,16 @@ namespace network
 			return threads_[kMainThreadIndex];
 		}
 
-		size_t min_element_index = kMainThreadIndex;
-		size_t min_element_value = thread_load_[kMainThreadIndex];
+		size_t min_load_index = kMainThreadIndex;
+		size_t min_load_value = std::numeric_limits<size_t>::max();
 		for (size_t i = 0; i < thread_load_.size(); ++i)
 		{
-			if (kMainThreadIndex != i && thread_load_[i] < min_element_value)
+			if (i != kMainThreadIndex && thread_load_[i] < min_load_value)
 			{
-				min_element_index = i;
+				min_load_index = i;
 			}
 		}
-		return threads_[min_element_index];
+		return threads_[min_load_index];
 	}
 
 	ThreadPointer IOServiceThreadManager::Thread(IOThreadID id)
