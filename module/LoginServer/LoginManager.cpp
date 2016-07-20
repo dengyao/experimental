@@ -14,6 +14,8 @@
 LoginManager::LoginManager(network::IOServiceThreadManager &threads, const std::vector<SPartition> &partition)
 	: threads_(threads)
 	, partition_lists_(partition)
+	, timer_(threads.MainThread()->IOService(), std::chrono::seconds(1))
+	, wait_handler_(std::bind(&LoginManager::UpdateTimer, this, std::placeholders::_1))
 {
 	for (const auto &partition : partition_lists_)
 	{
@@ -26,6 +28,43 @@ LoginManager::LoginManager(network::IOServiceThreadManager &threads, const std::
 			exit(-1);
 		}
 	}
+	timer_.async_wait(wait_handler_);
+}
+
+// 更新定时器
+void LoginManager::UpdateTimer(asio::error_code error_code)
+{
+	if (error_code)
+	{
+		logger()->error(error_code.message());
+		return;
+	}
+
+	// 关闭超时用户连接
+	for (auto iter = connection_map_.begin(); iter != connection_map_.end();)
+	{
+		auto duration = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - iter->second.time).count();
+		if (duration >= ServerConfig::GetInstance()->GetMaxUserOnlineTime())
+		{
+			auto session_ptr = threads_.SessionHandler(iter->first);
+			if (session_ptr != nullptr)
+			{
+				auto session = static_cast<SessionHandle*>(session_ptr.get());
+				if (session->GetRoleType() == RoleType::kUser)
+				{
+					session->Close();
+				}
+			}
+			iter = connection_map_.erase(iter);
+		}
+		else
+		{
+			++iter;
+		}
+	}
+
+	timer_.expires_from_now(std::chrono::seconds(1));
+	timer_.async_wait(wait_handler_);
 }
 
 // 回复错误码

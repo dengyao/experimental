@@ -10,6 +10,12 @@ SessionHandle::SessionHandle(LoginManager &login_manager)
 {
 }
 
+// 获取角色类型
+RoleType SessionHandle::GetRoleType() const
+{
+	return type_;
+}
+
 // 连接事件
 void SessionHandle::OnConnect()
 {

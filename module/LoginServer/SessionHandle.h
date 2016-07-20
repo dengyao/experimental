@@ -24,6 +24,10 @@ class SessionHandle : public network::TCPSessionHandler
 public:
 	SessionHandle(LoginManager &login_manager);
 
+public:
+	// 获取角色类型
+	RoleType GetRoleType() const;
+
 private:
 	// 连接事件
 	virtual void OnConnect() override;

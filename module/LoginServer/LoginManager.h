@@ -84,6 +84,10 @@ public:
 	void RespondErrorCode(SessionHandle &session, network::NetMessage &buffer, int error_code, const char *what = nullptr);
 
 private:
+	// 更新定时器
+	void UpdateTimer(asio::error_code error_code);
+
+private:
 	// Linker登录
 	bool OnLinkerLogin(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer);
 
@@ -104,6 +108,8 @@ private:
 	void OnUserEntryPartition(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer);
 
 private:
+	asio::steady_timer                                     timer_;
+	const std::function<void(asio::error_code)>            wait_handler_;
 	network::IOServiceThreadManager&                       threads_;
 	TokenGenerator                                         generator_;
 	std::vector<SPartition>                                partition_lists_;
