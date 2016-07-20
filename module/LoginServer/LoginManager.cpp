@@ -15,7 +15,7 @@ LoginManager::LoginManager(network::IOServiceThreadManager &threads, const std::
 	: threads_(threads)
 	, partition_lists_(partition)
 	, timer_(threads.MainThread()->IOService(), std::chrono::seconds(1))
-	, wait_handler_(std::bind(&LoginManager::UpdateTimer, this, std::placeholders::_1))
+	, wait_handler_(std::bind(&LoginManager::OnUpdateTimer, this, std::placeholders::_1))
 {
 	for (const auto &partition : partition_lists_)
 	{
@@ -32,7 +32,7 @@ LoginManager::LoginManager(network::IOServiceThreadManager &threads, const std::
 }
 
 // 更新定时器
-void LoginManager::UpdateTimer(asio::error_code error_code)
+void LoginManager::OnUpdateTimer(asio::error_code error_code)
 {
 	if (error_code)
 	{

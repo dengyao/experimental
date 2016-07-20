@@ -85,7 +85,7 @@ public:
 
 private:
 	// 更新定时器
-	void UpdateTimer(asio::error_code error_code);
+	void OnUpdateTimer(asio::error_code error_code);
 
 private:
 	// Linker登录
