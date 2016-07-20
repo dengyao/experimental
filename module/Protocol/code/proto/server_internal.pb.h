@@ -54,6 +54,7 @@ class RouterNotify;
 class LinkerLoginReq;
 class LinkerLoginRsp;
 class UpdateLinkerCapacityReq;
+class UpdateUserTokenReq;
 
 enum QueryDBAgentReq_ActoinType {
   QueryDBAgentReq_ActoinType_kSelect = 1,
@@ -1926,6 +1927,95 @@ class UpdateLinkerCapacityReq : public ::google::protobuf::Message {
   void InitAsDefaultInstance();
   static UpdateLinkerCapacityReq* default_instance_;
 };
+// -------------------------------------------------------------------
+
+class UpdateUserTokenReq : public ::google::protobuf::Message {
+ public:
+  UpdateUserTokenReq();
+  virtual ~UpdateUserTokenReq();
+
+  UpdateUserTokenReq(const UpdateUserTokenReq& from);
+
+  inline UpdateUserTokenReq& operator=(const UpdateUserTokenReq& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const UpdateUserTokenReq& default_instance();
+
+  void Swap(UpdateUserTokenReq* other);
+
+  // implements Message ----------------------------------------------
+
+  UpdateUserTokenReq* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const UpdateUserTokenReq& from);
+  void MergeFrom(const UpdateUserTokenReq& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required uint32 user_id = 1;
+  inline bool has_user_id() const;
+  inline void clear_user_id();
+  static const int kUserIdFieldNumber = 1;
+  inline ::google::protobuf::uint32 user_id() const;
+  inline void set_user_id(::google::protobuf::uint32 value);
+
+  // required uint64 token = 2;
+  inline bool has_token() const;
+  inline void clear_token();
+  static const int kTokenFieldNumber = 2;
+  inline ::google::protobuf::uint64 token() const;
+  inline void set_token(::google::protobuf::uint64 value);
+
+  // @@protoc_insertion_point(class_scope:svr.UpdateUserTokenReq)
+ private:
+  inline void set_has_user_id();
+  inline void clear_has_user_id();
+  inline void set_has_token();
+  inline void clear_has_token();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::uint64 token_;
+  ::google::protobuf::uint32 user_id_;
+  friend void  protobuf_AddDesc_proto_2fserver_5finternal_2eproto();
+  friend void protobuf_AssignDesc_proto_2fserver_5finternal_2eproto();
+  friend void protobuf_ShutdownFile_proto_2fserver_5finternal_2eproto();
+
+  void InitAsDefaultInstance();
+  static UpdateUserTokenReq* default_instance_;
+};
 // ===================================================================
 
 
@@ -3448,6 +3538,58 @@ inline void UpdateLinkerCapacityReq::set_load(::google::protobuf::uint32 value) 
   set_has_load();
   load_ = value;
   // @@protoc_insertion_point(field_set:svr.UpdateLinkerCapacityReq.load)
+}
+
+// -------------------------------------------------------------------
+
+// UpdateUserTokenReq
+
+// required uint32 user_id = 1;
+inline bool UpdateUserTokenReq::has_user_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void UpdateUserTokenReq::set_has_user_id() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void UpdateUserTokenReq::clear_has_user_id() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void UpdateUserTokenReq::clear_user_id() {
+  user_id_ = 0u;
+  clear_has_user_id();
+}
+inline ::google::protobuf::uint32 UpdateUserTokenReq::user_id() const {
+  // @@protoc_insertion_point(field_get:svr.UpdateUserTokenReq.user_id)
+  return user_id_;
+}
+inline void UpdateUserTokenReq::set_user_id(::google::protobuf::uint32 value) {
+  set_has_user_id();
+  user_id_ = value;
+  // @@protoc_insertion_point(field_set:svr.UpdateUserTokenReq.user_id)
+}
+
+// required uint64 token = 2;
+inline bool UpdateUserTokenReq::has_token() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void UpdateUserTokenReq::set_has_token() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void UpdateUserTokenReq::clear_has_token() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void UpdateUserTokenReq::clear_token() {
+  token_ = GOOGLE_ULONGLONG(0);
+  clear_has_token();
+}
+inline ::google::protobuf::uint64 UpdateUserTokenReq::token() const {
+  // @@protoc_insertion_point(field_get:svr.UpdateUserTokenReq.token)
+  return token_;
+}
+inline void UpdateUserTokenReq::set_token(::google::protobuf::uint64 value) {
+  set_has_token();
+  token_ = value;
+  // @@protoc_insertion_point(field_set:svr.UpdateUserTokenReq.token)
 }
 
 

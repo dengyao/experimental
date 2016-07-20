@@ -42,7 +42,7 @@ struct SLinkerItem
 struct SLinkerGroup
 {
 	uint16_t partition_id;						// 分区id
-	std::map<uint16_t, SLinkerItem> linker_map;	// linker集合
+	std::vector<SLinkerItem> linker_lists;		// linker列表
 	SLinkerGroup() : partition_id(0)
 	{
 	}

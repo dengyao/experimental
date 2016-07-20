@@ -42,6 +42,7 @@ public:
         svr::LinkerLoginReq::descriptor();
         svr::LinkerLoginRsp::descriptor();
         svr::UpdateLinkerCapacityReq::descriptor();
+        svr::UpdateUserTokenReq::descriptor();
     }
 };
 

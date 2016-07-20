@@ -3,6 +3,7 @@ set(CURRENT_PROJECT_NAME LoginServer)
 set(CURRENT_PROJECT_SRC_LISTS 
   Main.cpp
   Logging.cpp
+  GlobalObject.cpp
   ServerConfig.cpp
   LoginManager.cpp
   SessionHandle.cpp

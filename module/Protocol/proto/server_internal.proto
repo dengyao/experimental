@@ -149,3 +149,13 @@ message LinkerLoginRsp {
 message UpdateLinkerCapacityReq {
     required uint32 load = 1; // 负载量
 }
+
+/************************************************************************/
+/* 与LinkerServer的协议                                                  */
+/************************************************************************/
+
+// 更新用户Token请求
+message UpdateUserTokenReq {
+    required uint32 user_id = 1; // 用户id
+    required uint64 token = 2;   // Token
+}
