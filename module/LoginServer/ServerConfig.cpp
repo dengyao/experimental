@@ -53,6 +53,12 @@ unsigned short ServerConfig::GetDBAgentPort() const
 	return dba_port_;
 }
 
+// 获取验证数据库名称
+const char* ServerConfig::GetVerifyDBName() const
+{
+	return verify_db_name_.c_str();
+}
+
 // 获取与数据库代理服务器最大连接数
 unsigned short ServerConfig::GetDBAgentConnections() const
 {
@@ -117,6 +123,12 @@ bool ServerConfig::Load(const std::string &filename)
 		return false;
 	}
 	dba_port_ = document["dba_port"].GetUint();
+
+	if (!document.HasMember("db_name") || !document["db_name"].IsString())
+	{
+		return false;
+	}
+	verify_db_name_ = document["db_name"].GetString();
 
 	if (!document.HasMember("dba_connections") || !document["dba_connections"].IsUint())
 	{

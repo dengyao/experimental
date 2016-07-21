@@ -27,6 +27,9 @@ public:
 	// 获取数据库代理服务器端口
 	unsigned short GetDBAgentPort() const;
 
+	// 获取验证数据库名称
+	const char* GetVerifyDBName() const;
+
 	// 获取与数据库代理服务器最大连接数
 	unsigned short GetDBAgentConnections() const;
 
@@ -47,6 +50,7 @@ private:
 	unsigned int            max_user_online_time_;
 	std::string             dba_ip_;
 	unsigned short          dba_port_;
+	std::string             verify_db_name_;
 	unsigned short          dba_connections_;
 	std::string             process_name_;
 };

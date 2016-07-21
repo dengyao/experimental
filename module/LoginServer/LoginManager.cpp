@@ -322,14 +322,14 @@ void LoginManager::OnUserSignUp(SessionHandle &session, google::protobuf::Messag
 		request->has_deviceid() ? request->deviceid().c_str() : "");
 
 	// 执行异步查询
-	GlobalDBClient()->AsyncSelect(db::kMySQL, "db_verify", sql.c_str(), [this, msg_name, session_id](google::protobuf::Message *db_message)
+	auto callback = [this, msg_name, session_id](google::protobuf::Message *db_message)
 	{
 		network::SessionHandlePointer session_ptr = threads_.SessionHandler(session_id);
 		if (session_ptr != nullptr)
 		{
 			network::NetMessage new_buffer;
 			if (dynamic_cast<svr::QueryDBAgentRsp*>(db_message) != nullptr)
-			{			
+			{
 				auto result = static_cast<svr::QueryDBAgentRsp*>(db_message);
 				db::WrapResultSet result_set(result->result().data(), result->result().size());
 				db::WrapResultItem item = result_set.GetRow();
@@ -357,7 +357,8 @@ void LoginManager::OnUserSignUp(SessionHandle &session, google::protobuf::Messag
 				logger()->info("数据库错误，创建账号失败，来自{}:{}", session_ptr->RemoteEndpoint().address().to_string(), session_ptr->RemoteEndpoint().port());
 			}
 		}
-	});
+	};
+	GlobalDBClient()->AsyncSelect(db::kMySQL, ServerConfig::GetInstance()->GetVerifyDBName(), sql.c_str(), callback);
 }
 
 // 用户登录
@@ -377,7 +378,7 @@ void LoginManager::OnUserSignIn(SessionHandle &session, google::protobuf::Messag
 		request->has_deviceid() ? request->deviceid().c_str() : "");
 
 	// 执行异步查询
-	GlobalDBClient()->AsyncSelect(db::kMySQL, "db_verify", sql.c_str(), [this, msg_name, session_id](google::protobuf::Message *db_message)
+	auto callback = [this, msg_name, session_id](google::protobuf::Message *db_message)
 	{
 		network::SessionHandlePointer session_ptr = threads_.SessionHandler(session_id);
 		if (session_ptr != nullptr)
@@ -392,7 +393,7 @@ void LoginManager::OnUserSignIn(SessionHandle &session, google::protobuf::Messag
 				if (user_id > 0)
 				{
 					// 更新连接
-					auto found =  connection_map_.find(session_id);
+					auto found = connection_map_.find(session_id);
 					if (found != connection_map_.end())
 					{
 						found->second.user_id = user_id;
@@ -419,7 +420,8 @@ void LoginManager::OnUserSignIn(SessionHandle &session, google::protobuf::Messag
 				logger()->info("数据库错误，用户登录失败，来自{}:{}", session_ptr->RemoteEndpoint().address().to_string(), session_ptr->RemoteEndpoint().port());
 			}
 		}
-	});
+	};
+	GlobalDBClient()->AsyncSelect(db::kMySQL, ServerConfig::GetInstance()->GetVerifyDBName(), sql.c_str(), callback);
 }
 
 // 进入分区

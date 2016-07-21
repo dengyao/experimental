@@ -35,7 +35,7 @@ void RunLoginServer(const std::vector<SPartition> &partition)
 // 查询分区信息
 void QueryPartitionInfo()
 {
-	GlobalDBClient()->AsyncSelect(db::kMySQL, "db_verify", "SELECT * FROM `partition`;", [](google::protobuf::Message *message)
+	auto callback = [](google::protobuf::Message *message)
 	{
 		if (dynamic_cast<svr::QueryDBAgentRsp*>(message) != nullptr)
 		{
@@ -63,7 +63,7 @@ void QueryPartitionInfo()
 				auto error = static_cast<svr::DBErrorRsp*>(message);
 				logger()->critical("查询分区信息失败，error code: {} {}", error->error_code(), error->what());
 			}
-			else if(dynamic_cast<svr::DBAgentErrorRsp*>(message) != nullptr)
+			else if (dynamic_cast<svr::DBAgentErrorRsp*>(message) != nullptr)
 			{
 				auto error = static_cast<svr::DBAgentErrorRsp*>(message);
 				logger()->critical("查询分区信息失败，error code: {}", error->error_code());
@@ -71,7 +71,8 @@ void QueryPartitionInfo()
 			assert(false);
 			exit(-1);
 		}
-	});
+	};
+	GlobalDBClient()->AsyncSelect(db::kMySQL, ServerConfig::GetInstance()->GetVerifyDBName(), "SELECT * FROM `partition`;", callback);
 }
 
 int main(int argc, char *argv[])
