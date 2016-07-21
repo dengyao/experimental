@@ -1,0 +1,14 @@
+{
+  "public_ip": "192.168.1.109",
+  "port": 10030,
+  "thread_num": 2,
+  "heartbeat_interval": 60,
+  "max_user_verify_time": 300,
+  "router_ip": "192.168.1.109",
+  "router_port": 10010,
+  "router_connections": 1,
+  "ls_ip": "192.168.1.109",
+  "ls_port": 10020,
+  "patition_id": 1,
+  "report_interval": 5
+}
