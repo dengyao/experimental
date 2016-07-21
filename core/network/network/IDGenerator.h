@@ -22,13 +22,13 @@ namespace network
 
 		bool Get(uint32_t &id)
 		{
-			if (pools_.size() > threshold_)
+			if (pools_.size() >= threshold_)
 			{
 				id = pools_.back();
 				pools_.pop_back();
 				return true;
 			}
-			else if (next_ <= threshold_)
+			else if (next_ < threshold_)
 			{
 				id = ++next_;
 				return true;
@@ -45,6 +45,18 @@ namespace network
 			}
 #endif // _DEBUG
 			pools_.push_back(id);
+		}
+
+		void erase(uint32_t id)
+		{
+			for (auto iter = pools_.begin(); iter != pools_.end(); ++iter)
+			{
+				if (*iter == id)
+				{
+					pools_.erase(iter);
+					break;
+				}				
+			}		
 		}
 
 	private:

@@ -21,6 +21,7 @@ struct SPartition
 	int status;									// 分区状态
 	bool is_recommend;							// 推荐分区
 	std::string createtime;						// 创建时间
+
 	SPartition()
 		: id(0), status(0), is_recommend(false)
 	{
@@ -34,6 +35,7 @@ struct SLinkerItem
 	unsigned short port;						// 端口
 	network::TCPSessionID session_id;			// 会话
 	uint32_t online_number;						// 在线人数
+
 	SLinkerItem()
 		: linker_id(0), session_id(0), online_number(0)
 	{
@@ -44,7 +46,11 @@ struct SLinkerGroup
 {
 	uint16_t partition_id;						// 分区id
 	std::vector<SLinkerItem> linker_lists;		// linker列表
-	SLinkerGroup() : partition_id(0)
+	network::IDGenerator generator;             // id生成器
+
+	SLinkerGroup()
+		: partition_id(0)
+		, generator(std::numeric_limits<uint16_t>::max())
 	{
 	}
 };

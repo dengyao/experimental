@@ -151,7 +151,9 @@ void LoginManager::HandleLinkerOffline(SessionHandle &session)
 			{
 				const uint16_t linker_id = iter->session_id;
 				const uint16_t partition_id = partition.first;
+
 				linker_lists.erase(iter);
+				partition.second.generator.Put(linker_id);	
 				if (linker_lists.empty())
 				{
 					partition_map_.erase(partition_id);
@@ -204,7 +206,7 @@ bool LoginManager::OnLinkerLogin(SessionHandle &session, google::protobuf::Messa
 	auto &linker_lists = partition_iter->second.linker_lists;
 	for (const auto &item : linker_lists)
 	{
-		if (item.session_id == session.SessionID())
+		if (item.session_id == session.SessionID() || (request->has_linker_id() && request->linker_id() == item.linker_id))
 		{
 			RespondErrorCode(session, buffer, pub::kRepeatLogin, message->GetTypeName().c_str());
 			logger()->warn("Linker重复登录，来自{}:{}", session.RemoteEndpoint().address().to_string(), session.RemoteEndpoint().port());
@@ -217,17 +219,23 @@ bool LoginManager::OnLinkerLogin(SessionHandle &session, google::protobuf::Messa
 	linker_item.port = request->port();
 	linker_item.public_ip = request->public_ip();
 	linker_item.session_id = session.SessionID();
-	if (linker_lists.empty())
+	if (request->has_linker_id())
 	{
-		linker_item.linker_id = 1;
+		linker_item.linker_id = request->linker_id();
+		partition_iter->second.generator.erase(linker_item.linker_id);
 	}
 	else
 	{
-		auto max_element = std::max_element(linker_lists.begin(), linker_lists.end(), [](const SLinkerItem &a, const SLinkerItem &b)
+		uint32_t linker_id = 0;
+		if (partition_iter->second.generator.Get(linker_id))
 		{
-			return a.linker_id > b.linker_id;
-		});
-		linker_item.linker_id = max_element->linker_id + 1;
+			linker_item.linker_id = linker_id;
+		}
+		else
+		{
+			logger()->warn("生成LinkerID失败!，来自{}:{}", session.RemoteEndpoint().address().to_string(), session.RemoteEndpoint().port());
+			return false;
+		}
 	}
 	linker_lists.push_back(linker_item);
 

@@ -1736,6 +1736,13 @@ class LinkerLoginReq : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 port() const;
   inline void set_port(::google::protobuf::uint32 value);
 
+  // optional uint32 linker_id = 4;
+  inline bool has_linker_id() const;
+  inline void clear_linker_id();
+  static const int kLinkerIdFieldNumber = 4;
+  inline ::google::protobuf::uint32 linker_id() const;
+  inline void set_linker_id(::google::protobuf::uint32 value);
+
   // @@protoc_insertion_point(class_scope:svr.LinkerLoginReq)
  private:
   inline void set_has_partition_id();
@@ -1744,6 +1751,8 @@ class LinkerLoginReq : public ::google::protobuf::Message {
   inline void clear_has_public_ip();
   inline void set_has_port();
   inline void clear_has_port();
+  inline void set_has_linker_id();
+  inline void clear_has_linker_id();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -1752,6 +1761,7 @@ class LinkerLoginReq : public ::google::protobuf::Message {
   ::std::string* public_ip_;
   ::google::protobuf::uint32 partition_id_;
   ::google::protobuf::uint32 port_;
+  ::google::protobuf::uint32 linker_id_;
   friend void  protobuf_AddDesc_proto_2fserver_5finternal_2eproto();
   friend void protobuf_AssignDesc_proto_2fserver_5finternal_2eproto();
   friend void protobuf_ShutdownFile_proto_2fserver_5finternal_2eproto();
@@ -3458,6 +3468,30 @@ inline void LinkerLoginReq::set_port(::google::protobuf::uint32 value) {
   set_has_port();
   port_ = value;
   // @@protoc_insertion_point(field_set:svr.LinkerLoginReq.port)
+}
+
+// optional uint32 linker_id = 4;
+inline bool LinkerLoginReq::has_linker_id() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void LinkerLoginReq::set_has_linker_id() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void LinkerLoginReq::clear_has_linker_id() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void LinkerLoginReq::clear_linker_id() {
+  linker_id_ = 0u;
+  clear_has_linker_id();
+}
+inline ::google::protobuf::uint32 LinkerLoginReq::linker_id() const {
+  // @@protoc_insertion_point(field_get:svr.LinkerLoginReq.linker_id)
+  return linker_id_;
+}
+inline void LinkerLoginReq::set_linker_id(::google::protobuf::uint32 value) {
+  set_has_linker_id();
+  linker_id_ = value;
+  // @@protoc_insertion_point(field_set:svr.LinkerLoginReq.linker_id)
 }
 
 // -------------------------------------------------------------------

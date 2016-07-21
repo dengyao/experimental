@@ -354,10 +354,11 @@ void protobuf_AssignDesc_proto_2fserver_5finternal_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(RouterNotify));
   LinkerLoginReq_descriptor_ = file->message_type(16);
-  static const int LinkerLoginReq_offsets_[3] = {
+  static const int LinkerLoginReq_offsets_[4] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LinkerLoginReq, partition_id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LinkerLoginReq, public_ip_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LinkerLoginReq, port_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LinkerLoginReq, linker_id_),
   };
   LinkerLoginReq_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -557,14 +558,15 @@ void protobuf_AddDesc_proto_2fserver_5finternal_2eproto() {
     "\014BroadcastReq\022 \n\tdst_lists\030\001 \003(\0162\r.svr.N"
     "odeType\022\021\n\tuser_data\030\002 \002(\014\">\n\014RouterNoti"
     "fy\022\033\n\003src\030\001 \002(\0132\016.svr.ChildNode\022\021\n\tuser_"
-    "data\030\002 \002(\014\"G\n\016LinkerLoginReq\022\024\n\014partitio"
+    "data\030\002 \002(\014\"Z\n\016LinkerLoginReq\022\024\n\014partitio"
     "n_id\030\001 \002(\r\022\021\n\tpublic_ip\030\002 \002(\t\022\014\n\004port\030\003 "
-    "\002(\r\"\?\n\016LinkerLoginRsp\022\032\n\022heartbeat_inter"
-    "val\030\001 \002(\r\022\021\n\tlinker_id\030\002 \002(\r\"\'\n\027UpdateLi"
-    "nkerCapacityReq\022\014\n\004load\030\001 \002(\r\"4\n\022UpdateU"
-    "serTokenReq\022\017\n\007user_id\030\001 \002(\r\022\r\n\005token\030\002 "
-    "\002(\004*D\n\010NodeType\022\020\n\014kLoginServer\020\001\022\021\n\rkLi"
-    "nkerServer\020\002\022\023\n\017kMainLogicSever\020\003", 1593);
+    "\002(\r\022\021\n\tlinker_id\030\004 \001(\r\"\?\n\016LinkerLoginRsp"
+    "\022\032\n\022heartbeat_interval\030\001 \002(\r\022\021\n\tlinker_i"
+    "d\030\002 \002(\r\"\'\n\027UpdateLinkerCapacityReq\022\014\n\004lo"
+    "ad\030\001 \002(\r\"4\n\022UpdateUserTokenReq\022\017\n\007user_i"
+    "d\030\001 \002(\r\022\r\n\005token\030\002 \002(\004*D\n\010NodeType\022\020\n\014kL"
+    "oginServer\020\001\022\021\n\rkLinkerServer\020\002\022\023\n\017kMain"
+    "LogicSever\020\003", 1612);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "proto/server_internal.proto", &protobuf_RegisterTypes);
   LoginDBAgentReq::default_instance_ = new LoginDBAgentReq();
@@ -5134,6 +5136,7 @@ void RouterNotify::Swap(RouterNotify* other) {
 const int LinkerLoginReq::kPartitionIdFieldNumber;
 const int LinkerLoginReq::kPublicIpFieldNumber;
 const int LinkerLoginReq::kPortFieldNumber;
+const int LinkerLoginReq::kLinkerIdFieldNumber;
 #endif  // !_MSC_VER
 
 LinkerLoginReq::LinkerLoginReq()
@@ -5158,6 +5161,7 @@ void LinkerLoginReq::SharedCtor() {
   partition_id_ = 0u;
   public_ip_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   port_ = 0u;
+  linker_id_ = 0u;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -5206,8 +5210,8 @@ void LinkerLoginReq::Clear() {
     ::memset(&first, 0, n);                                \
   } while (0)
 
-  if (_has_bits_[0 / 32] & 7) {
-    ZR_(partition_id_, port_);
+  if (_has_bits_[0 / 32] & 15) {
+    ZR_(partition_id_, linker_id_);
     if (has_public_ip()) {
       if (public_ip_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
         public_ip_->clear();
@@ -5274,6 +5278,21 @@ bool LinkerLoginReq::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
+        if (input->ExpectTag(32)) goto parse_linker_id;
+        break;
+      }
+
+      // optional uint32 linker_id = 4;
+      case 4: {
+        if (tag == 32) {
+         parse_linker_id:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &linker_id_)));
+          set_has_linker_id();
+        } else {
+          goto handle_unusual;
+        }
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -5323,6 +5342,11 @@ void LinkerLoginReq::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(3, this->port(), output);
   }
 
+  // optional uint32 linker_id = 4;
+  if (has_linker_id()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(4, this->linker_id(), output);
+  }
+
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -5352,6 +5376,11 @@ void LinkerLoginReq::SerializeWithCachedSizes(
   // required uint32 port = 3;
   if (has_port()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(3, this->port(), target);
+  }
+
+  // optional uint32 linker_id = 4;
+  if (has_linker_id()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(4, this->linker_id(), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -5385,6 +5414,13 @@ int LinkerLoginReq::ByteSize() const {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::UInt32Size(
           this->port());
+    }
+
+    // optional uint32 linker_id = 4;
+    if (has_linker_id()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->linker_id());
     }
 
   }
@@ -5423,6 +5459,9 @@ void LinkerLoginReq::MergeFrom(const LinkerLoginReq& from) {
     if (from.has_port()) {
       set_port(from.port());
     }
+    if (from.has_linker_id()) {
+      set_linker_id(from.linker_id());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -5450,6 +5489,7 @@ void LinkerLoginReq::Swap(LinkerLoginReq* other) {
     std::swap(partition_id_, other->partition_id_);
     std::swap(public_ip_, other->public_ip_);
     std::swap(port_, other->port_);
+    std::swap(linker_id_, other->linker_id_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
