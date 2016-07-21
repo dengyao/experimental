@@ -1,7 +1,18 @@
 ﻿#include <iostream>
+#include <network.h>
 #include <common/Path.h>
 #include "Logging.h"
 #include "ServerConfig.h"
+
+network::MessageFilterPointer CreateMessageFilter()
+{
+	return std::make_shared<network::DefaultMessageFilter>();
+}
+
+network::SessionHandlePointer CreateSessionHandle()
+{
+	return std::make_shared<network::TCPSessionHandler>();
+}
 
 int main(int argc, char *argv[])
 {
