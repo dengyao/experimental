@@ -194,7 +194,7 @@ bool LoginManager::OnLinkerLogin(SessionHandle &session, google::protobuf::Messa
 	}
 
 	auto partition_iter = partition_map_.find(request->partition_id());
-	if (partition_iter != partition_map_.end())
+	if (partition_iter == partition_map_.end())
 	{
 		SLinkerGroup group;
 		group.partition_id = request->partition_id();

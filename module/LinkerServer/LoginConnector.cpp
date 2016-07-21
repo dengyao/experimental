@@ -1,7 +1,9 @@
 ﻿#include "LoginConnector.h"
 #include <ProtobufCodec.h>
 #include <proto/public_struct.pb.h>
+#include <proto/server_internal.pb.h>
 #include "Logging.h"
+#include "ServerConfig.h"
 
 /************************************************************************/
 
@@ -112,12 +114,11 @@ network::MessageFilterPointer CreaterConnectorMessageFilter()
 	return std::make_shared<network::DefaultMessageFilter>();
 }
 
-LoginConnector::LoginConnector(network::IOServiceThreadManager &threads, asio::ip::tcp::endpoint &endpoint,
-	unsigned short patition_id, std::function<void> &callback)
-	: threads_(threads)
-	, is_logged_(false)
+LoginConnector::LoginConnector(network::IOServiceThreadManager &threads, asio::ip::tcp::endpoint &endpoint, std::function<void(uint16_t)> &callback)
+	: linker_id_(0)
+	, threads_(threads)
+	, endpoint_(endpoint)
 	, session_handle_(nullptr)
-	, patition_id_(patition_id)
 	, login_callback_(callback)
 	, timer_(threads.MainThread()->IOService())
 	, wait_handler_(std::bind(&LoginConnector::OnUpdateTimer, this, std::placeholders::_1))
@@ -200,7 +201,7 @@ void LoginConnector::OnUpdateTimer(asio::error_code error_code)
 // 发送消息
 bool LoginConnector::Send(google::protobuf::Message *message)
 {
-	if (!is_logged_ || session_handle_ == nullptr)
+	if (linker_id_ == 0 || session_handle_ == nullptr)
 	{
 		return false;
 	}
@@ -214,17 +215,26 @@ bool LoginConnector::Send(google::protobuf::Message *message)
 // 连接事件
 void LoginConnector::OnConnected(LoginSessionHandle *session)
 {
-	assert(!is_logged_ && session_handle_ == nullptr);
-	if (!is_logged_ && session_handle_ == nullptr)
+	assert(session_handle_ == nullptr);
+	if (session_handle_ == nullptr)
 	{
-
+		svr::LinkerLoginReq request;
+		request.set_port(ServerConfig::GetInstance()->GetPort());
+		request.set_public_ip(ServerConfig::GetInstance()->GetPublicIP());
+		request.set_partition_id(ServerConfig::GetInstance()->GetPatitionID());
+		if (linker_id_ != 0)
+		{
+			request.set_linker_id(linker_id_);
+		}
+		network::NetMessage message;
+		ProtubufCodec::Encode(&request, message);
+		session->Send(message);
 	}
 }
 
 // 接收消息事件
 void LoginConnector::OnMessage(LoginSessionHandle *session, network::NetMessage &buffer)
 {
-
 }
 
 // 断开连接事件

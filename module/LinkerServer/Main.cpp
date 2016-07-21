@@ -3,15 +3,14 @@
 #include <common/Path.h>
 #include "Logging.h"
 #include "ServerConfig.h"
+#include "LoginConnector.h"
+
+std::unique_ptr<network::TCPServer> g_server;
+network::IOServiceThreadManager*    g_thread_manager = nullptr;
 
 network::MessageFilterPointer CreateMessageFilter()
 {
 	return std::make_shared<network::DefaultMessageFilter>();
-}
-
-network::SessionHandlePointer CreateSessionHandle()
-{
-	return std::make_shared<network::TCPSessionHandler>();
 }
 
 int main(int argc, char *argv[])
@@ -37,6 +36,21 @@ int main(int argc, char *argv[])
 	ServerConfig::GetInstance()->ProcessName(path::basename(*argv));
 
 	// 连接登录服务器
+	network::IOServiceThreadManager threads(ServerConfig::GetInstance()->GetUseThreadNum());
+	threads.SetSessionTimeout(ServerConfig::GetInstance()->GetHeartbeatInterval());
+	g_thread_manager = &threads;
+
+	std::unique_ptr<LoginConnector> db_client;
+	asio::ip::tcp::endpoint endpoint(asio::ip::address_v4::from_string(ServerConfig::GetInstance()->GetLoginSeverIP()),
+		ServerConfig::GetInstance()->GetLoginServerPort());
+
+	std::function<void(uint16_t)> callback = [](uint16_t)
+	{
+
+	};
+	db_client = std::make_unique<LoginConnector>(threads, endpoint, callback);
+
+	threads.Run();
 
 	// 连接路由服务器
 

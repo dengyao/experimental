@@ -54,8 +54,7 @@ class LoginConnector
 	friend class AsyncReconnectHandle;
 
 public:
-	LoginConnector(network::IOServiceThreadManager &threads, asio::ip::tcp::endpoint &endpoint,
-		unsigned short patition_id, std::function<void(uint16_t)> &callback);
+	LoginConnector(network::IOServiceThreadManager &threads, asio::ip::tcp::endpoint &endpoint, std::function<void(uint16_t)> &callback);
 	~LoginConnector();
 
 public:
@@ -92,9 +91,8 @@ private:
 	void OnUpdateTimer(asio::error_code error_code);
 
 private:
-	bool                                        is_logged_;
+	uint16_t                                    linker_id_;
 	network::IOServiceThreadManager&            threads_;
-	const unsigned short                        patition_id_;
 	std::function<void(uint16_t)>               login_callback_;
 	network::TCPClient					        session_handle_creator_;
 	std::set<std::shared_ptr<bool> >            lifetimes_;
