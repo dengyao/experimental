@@ -307,7 +307,7 @@ void LoginManager::OnUserSignUp(SessionHandle &session, google::protobuf::Messag
 {
 	auto request = static_cast<login::SignUpReq*>(message);
 
-	// 拷贝数据
+	// 拷贝回调数据
 	std::string msg_name = message->GetTypeName();
 	network::TCPSessionID session_id = session.SessionID();
 
@@ -322,7 +322,7 @@ void LoginManager::OnUserSignUp(SessionHandle &session, google::protobuf::Messag
 		request->has_deviceid() ? request->deviceid().c_str() : "");
 
 	// 执行异步查询
-	GlobalDBClient()->AsyncSelect(db::kMySQL, "db_verify", sql.c_str(), [=](google::protobuf::Message *db_message)
+	GlobalDBClient()->AsyncSelect(db::kMySQL, "db_verify", sql.c_str(), [this, msg_name, session_id](google::protobuf::Message *db_message)
 	{
 		network::SessionHandlePointer session_ptr = threads_.SessionHandler(session_id);
 		if (session_ptr != nullptr)
@@ -340,7 +340,7 @@ void LoginManager::OnUserSignUp(SessionHandle &session, google::protobuf::Messag
 					login::SignUpRsp response;
 					response.set_id(user_id);
 					ProtubufCodec::Encode(&response, new_buffer);
-					session_ptr->Send(buffer);
+					session_ptr->Send(new_buffer);
 					logger()->info("创建账号成功，来自{}:{}", session_ptr->RemoteEndpoint().address().to_string(), session_ptr->RemoteEndpoint().port());
 				}
 				else
@@ -354,7 +354,7 @@ void LoginManager::OnUserSignUp(SessionHandle &session, google::protobuf::Messag
 			{
 				// 操作数据库错误
 				RespondErrorCode(*static_cast<SessionHandle*>(session_ptr.get()), new_buffer, pub::kDatabaseError, msg_name.c_str());
-				logger()->info("创建账号失败，来自{}:{}", session_ptr->RemoteEndpoint().address().to_string(), session_ptr->RemoteEndpoint().port());
+				logger()->info("数据库错误，创建账号失败，来自{}:{}", session_ptr->RemoteEndpoint().address().to_string(), session_ptr->RemoteEndpoint().port());
 			}
 		}
 	});
@@ -365,7 +365,61 @@ void LoginManager::OnUserSignIn(SessionHandle &session, google::protobuf::Messag
 {
 	auto request = static_cast<login::SignInReq*>(message);
 
+	// 拷贝回调数据
+	std::string msg_name = message->GetTypeName();
+	network::TCPSessionID session_id = session.SessionID();
 
+	// 构造sql语句
+	std::string sql = string_helper::format("CALL sign_in('%s','%s','%s','%s',@userid); SELECT @userid;",
+		request->user().c_str(),
+		request->passwd().c_str(),
+		session.RemoteEndpoint().address().to_string().c_str(),
+		request->has_deviceid() ? request->deviceid().c_str() : "");
+
+	// 执行异步查询
+	GlobalDBClient()->AsyncSelect(db::kMySQL, "db_verify", sql.c_str(), [this, msg_name, session_id](google::protobuf::Message *db_message)
+	{
+		network::SessionHandlePointer session_ptr = threads_.SessionHandler(session_id);
+		if (session_ptr != nullptr)
+		{
+			network::NetMessage new_buffer;
+			if (dynamic_cast<svr::QueryDBAgentRsp*>(db_message) != nullptr)
+			{
+				auto result = static_cast<svr::QueryDBAgentRsp*>(db_message);
+				db::WrapResultSet result_set(result->result().data(), result->result().size());
+				db::WrapResultItem item = result_set.GetRow();
+				uint32_t user_id = static_cast<uint32_t>(atoll(item[0]));
+				if (user_id > 0)
+				{
+					// 更新连接
+					auto found =  connection_map_.find(session_id);
+					if (found != connection_map_.end())
+					{
+						found->second.user_id = user_id;
+					}
+
+					// 登录成功
+					login::SignInRsp response;
+					response.set_id(user_id);
+					ProtubufCodec::Encode(&response, new_buffer);
+					session_ptr->Send(new_buffer);
+					logger()->info("用户登录成功，来自{}:{}", session_ptr->RemoteEndpoint().address().to_string(), session_ptr->RemoteEndpoint().port());
+				}
+				else
+				{
+					// 登录失败			
+					RespondErrorCode(*static_cast<SessionHandle*>(session_ptr.get()), new_buffer, pub::kUsernameOrPasswordError, msg_name.c_str());
+					logger()->info("用户登录失败，来自{}:{}", session_ptr->RemoteEndpoint().address().to_string(), session_ptr->RemoteEndpoint().port());
+				}
+			}
+			else
+			{
+				// 操作数据库错误
+				RespondErrorCode(*static_cast<SessionHandle*>(session_ptr.get()), new_buffer, pub::kDatabaseError, msg_name.c_str());
+				logger()->info("数据库错误，用户登录失败，来自{}:{}", session_ptr->RemoteEndpoint().address().to_string(), session_ptr->RemoteEndpoint().port());
+			}
+		}
+	});
 }
 
 // 进入分区

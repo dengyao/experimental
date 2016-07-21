@@ -94,9 +94,10 @@ void protobuf_AssignDesc_proto_2fclient_5flogin_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(SignUpRsp));
   SignInReq_descriptor_ = file->message_type(2);
-  static const int SignInReq_offsets_[2] = {
+  static const int SignInReq_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SignInReq, user_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SignInReq, passwd_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(SignInReq, deviceid_),
   };
   SignInReq_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -270,17 +271,17 @@ void protobuf_AddDesc_proto_2fclient_5flogin_2eproto() {
     "nUpReq\022\014\n\004user\030\001 \002(\t\022\016\n\006passwd\030\002 \002(\t\022\020\n\010"
     "platform\030\003 \001(\t\022\n\n\002os\030\004 \001(\t\022\r\n\005model\030\005 \001("
     "\t\022\020\n\010deviceid\030\006 \001(\t\"\027\n\tSignUpRsp\022\n\n\002id\030\001"
-    " \002(\r\")\n\tSignInReq\022\014\n\004user\030\001 \002(\t\022\016\n\006passw"
-    "d\030\002 \002(\t\"\027\n\tSignInRsp\022\n\n\002id\030\001 \002(\r\"\023\n\021Quer"
-    "yPartitionReq\"\340\001\n\021QueryPartitionRsp\0221\n\005l"
-    "ists\030\001 \003(\0132\".login.QueryPartitionRsp.Par"
-    "tition\032o\n\tPartition\022\n\n\002id\030\001 \002(\r\022\014\n\004name\030"
-    "\002 \002(\t\0222\n\006status\030\003 \002(\0162\".login.QueryParti"
-    "tionRsp.StateType\022\024\n\014is_recommend\030\004 \002(\010\""
-    "\'\n\tStateType\022\013\n\007kNormal\020\000\022\r\n\tkShutdown\020\001"
-    "\"\037\n\021EntryPartitionReq\022\n\n\002id\030\001 \002(\r\"<\n\021Ent"
-    "ryPartitionRsp\022\n\n\002ip\030\001 \002(\t\022\014\n\004port\030\002 \002(\r"
-    "\022\r\n\005token\030\003 \002(\004", 575);
+    " \002(\r\";\n\tSignInReq\022\014\n\004user\030\001 \002(\t\022\016\n\006passw"
+    "d\030\002 \002(\t\022\020\n\010deviceid\030\003 \001(\t\"\027\n\tSignInRsp\022\n"
+    "\n\002id\030\001 \002(\r\"\023\n\021QueryPartitionReq\"\340\001\n\021Quer"
+    "yPartitionRsp\0221\n\005lists\030\001 \003(\0132\".login.Que"
+    "ryPartitionRsp.Partition\032o\n\tPartition\022\n\n"
+    "\002id\030\001 \002(\r\022\014\n\004name\030\002 \002(\t\0222\n\006status\030\003 \002(\0162"
+    "\".login.QueryPartitionRsp.StateType\022\024\n\014i"
+    "s_recommend\030\004 \002(\010\"\'\n\tStateType\022\013\n\007kNorma"
+    "l\020\000\022\r\n\tkShutdown\020\001\"\037\n\021EntryPartitionReq\022"
+    "\n\n\002id\030\001 \002(\r\"<\n\021EntryPartitionRsp\022\n\n\002ip\030\001"
+    " \002(\t\022\014\n\004port\030\002 \002(\r\022\r\n\005token\030\003 \002(\004", 593);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "proto/client_login.proto", &protobuf_RegisterTypes);
   SignUpReq::default_instance_ = new SignUpReq();
@@ -1080,6 +1081,7 @@ void SignUpRsp::Swap(SignUpRsp* other) {
 #ifndef _MSC_VER
 const int SignInReq::kUserFieldNumber;
 const int SignInReq::kPasswdFieldNumber;
+const int SignInReq::kDeviceidFieldNumber;
 #endif  // !_MSC_VER
 
 SignInReq::SignInReq()
@@ -1103,6 +1105,7 @@ void SignInReq::SharedCtor() {
   _cached_size_ = 0;
   user_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   passwd_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  deviceid_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -1117,6 +1120,9 @@ void SignInReq::SharedDtor() {
   }
   if (passwd_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete passwd_;
+  }
+  if (deviceid_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete deviceid_;
   }
   if (this != default_instance_) {
   }
@@ -1144,7 +1150,7 @@ SignInReq* SignInReq::New() const {
 }
 
 void SignInReq::Clear() {
-  if (_has_bits_[0 / 32] & 3) {
+  if (_has_bits_[0 / 32] & 7) {
     if (has_user()) {
       if (user_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
         user_->clear();
@@ -1153,6 +1159,11 @@ void SignInReq::Clear() {
     if (has_passwd()) {
       if (passwd_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
         passwd_->clear();
+      }
+    }
+    if (has_deviceid()) {
+      if (deviceid_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+        deviceid_->clear();
       }
     }
   }
@@ -1196,6 +1207,23 @@ bool SignInReq::MergePartialFromCodedStream(
             this->passwd().data(), this->passwd().length(),
             ::google::protobuf::internal::WireFormat::PARSE,
             "passwd");
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(26)) goto parse_deviceid;
+        break;
+      }
+
+      // optional string deviceid = 3;
+      case 3: {
+        if (tag == 26) {
+         parse_deviceid:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_deviceid()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+            this->deviceid().data(), this->deviceid().length(),
+            ::google::protobuf::internal::WireFormat::PARSE,
+            "deviceid");
         } else {
           goto handle_unusual;
         }
@@ -1248,6 +1276,16 @@ void SignInReq::SerializeWithCachedSizes(
       2, this->passwd(), output);
   }
 
+  // optional string deviceid = 3;
+  if (has_deviceid()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->deviceid().data(), this->deviceid().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "deviceid");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      3, this->deviceid(), output);
+  }
+
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -1280,6 +1318,17 @@ void SignInReq::SerializeWithCachedSizes(
         2, this->passwd(), target);
   }
 
+  // optional string deviceid = 3;
+  if (has_deviceid()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->deviceid().data(), this->deviceid().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "deviceid");
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        3, this->deviceid(), target);
+  }
+
   if (!unknown_fields().empty()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
@@ -1304,6 +1353,13 @@ int SignInReq::ByteSize() const {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::StringSize(
           this->passwd());
+    }
+
+    // optional string deviceid = 3;
+    if (has_deviceid()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->deviceid());
     }
 
   }
@@ -1339,6 +1395,9 @@ void SignInReq::MergeFrom(const SignInReq& from) {
     if (from.has_passwd()) {
       set_passwd(from.passwd());
     }
+    if (from.has_deviceid()) {
+      set_deviceid(from.deviceid());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -1365,6 +1424,7 @@ void SignInReq::Swap(SignInReq* other) {
   if (other != this) {
     std::swap(user_, other->user_);
     std::swap(passwd_, other->passwd_);
+    std::swap(deviceid_, other->deviceid_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);

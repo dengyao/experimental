@@ -17,8 +17,9 @@ message SignUpRsp {
 
 // 登录账号请求
 message SignInReq {
-    required string user = 1;   // 用户名
-    required string passwd = 2; // 密码
+    required string user = 1;     // 用户名
+    required string passwd = 2;   // 密码
+    optional string deviceid = 3; // 设备id
 }
 
 // 登录账号返回

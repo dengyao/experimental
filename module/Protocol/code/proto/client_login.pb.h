@@ -380,12 +380,26 @@ class SignInReq : public ::google::protobuf::Message {
   inline ::std::string* release_passwd();
   inline void set_allocated_passwd(::std::string* passwd);
 
+  // optional string deviceid = 3;
+  inline bool has_deviceid() const;
+  inline void clear_deviceid();
+  static const int kDeviceidFieldNumber = 3;
+  inline const ::std::string& deviceid() const;
+  inline void set_deviceid(const ::std::string& value);
+  inline void set_deviceid(const char* value);
+  inline void set_deviceid(const char* value, size_t size);
+  inline ::std::string* mutable_deviceid();
+  inline ::std::string* release_deviceid();
+  inline void set_allocated_deviceid(::std::string* deviceid);
+
   // @@protoc_insertion_point(class_scope:login.SignInReq)
  private:
   inline void set_has_user();
   inline void clear_has_user();
   inline void set_has_passwd();
   inline void clear_has_passwd();
+  inline void set_has_deviceid();
+  inline void clear_has_deviceid();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
@@ -393,6 +407,7 @@ class SignInReq : public ::google::protobuf::Message {
   mutable int _cached_size_;
   ::std::string* user_;
   ::std::string* passwd_;
+  ::std::string* deviceid_;
   friend void  protobuf_AddDesc_proto_2fclient_5flogin_2eproto();
   friend void protobuf_AssignDesc_proto_2fclient_5flogin_2eproto();
   friend void protobuf_ShutdownFile_proto_2fclient_5flogin_2eproto();
@@ -1598,6 +1613,82 @@ inline void SignInReq::set_allocated_passwd(::std::string* passwd) {
     passwd_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
   // @@protoc_insertion_point(field_set_allocated:login.SignInReq.passwd)
+}
+
+// optional string deviceid = 3;
+inline bool SignInReq::has_deviceid() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void SignInReq::set_has_deviceid() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void SignInReq::clear_has_deviceid() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void SignInReq::clear_deviceid() {
+  if (deviceid_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    deviceid_->clear();
+  }
+  clear_has_deviceid();
+}
+inline const ::std::string& SignInReq::deviceid() const {
+  // @@protoc_insertion_point(field_get:login.SignInReq.deviceid)
+  return *deviceid_;
+}
+inline void SignInReq::set_deviceid(const ::std::string& value) {
+  set_has_deviceid();
+  if (deviceid_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    deviceid_ = new ::std::string;
+  }
+  deviceid_->assign(value);
+  // @@protoc_insertion_point(field_set:login.SignInReq.deviceid)
+}
+inline void SignInReq::set_deviceid(const char* value) {
+  set_has_deviceid();
+  if (deviceid_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    deviceid_ = new ::std::string;
+  }
+  deviceid_->assign(value);
+  // @@protoc_insertion_point(field_set_char:login.SignInReq.deviceid)
+}
+inline void SignInReq::set_deviceid(const char* value, size_t size) {
+  set_has_deviceid();
+  if (deviceid_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    deviceid_ = new ::std::string;
+  }
+  deviceid_->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:login.SignInReq.deviceid)
+}
+inline ::std::string* SignInReq::mutable_deviceid() {
+  set_has_deviceid();
+  if (deviceid_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    deviceid_ = new ::std::string;
+  }
+  // @@protoc_insertion_point(field_mutable:login.SignInReq.deviceid)
+  return deviceid_;
+}
+inline ::std::string* SignInReq::release_deviceid() {
+  clear_has_deviceid();
+  if (deviceid_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    return NULL;
+  } else {
+    ::std::string* temp = deviceid_;
+    deviceid_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    return temp;
+  }
+}
+inline void SignInReq::set_allocated_deviceid(::std::string* deviceid) {
+  if (deviceid_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete deviceid_;
+  }
+  if (deviceid) {
+    set_has_deviceid();
+    deviceid_ = deviceid;
+  } else {
+    clear_has_deviceid();
+    deviceid_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  }
+  // @@protoc_insertion_point(field_set_allocated:login.SignInReq.deviceid)
 }
 
 // -------------------------------------------------------------------

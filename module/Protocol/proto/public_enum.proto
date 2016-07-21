@@ -2,20 +2,20 @@ package pub;
 
 // 错误代码
 enum ErrorCode {
-    kNotLoggedIn = 10001;            // 未登录
-    kDisconnect = 10002;             // 断开连接
-    kNotConnected = 10003;           // 未连接
-    kInvalidProtocol = 10004;        // 无效协议
-    kInvalidOperation = 10005;       // 无效操作
-    kNotFoundDatabase = 10006;       // 没有找到数据库
-    kResourceInsufficiency = 10007;  // 服务器资源不足
-    kDestinationUnreachable = 10008; // 目的地不可到达
-    kInvalidNodeType = 10009;        // 无效的节点类型
-    kRepeatLogin = 10010;            // 重复登录
-    kInvalidDataPacket = 10011;      // 无效数据包
-    kDatabaseError = 10012;          // 数据库错误
-    
-    kCreateAccountFailed = 10013;    // 创建账号失败
-    kPartitionNotExist = 10014;      // 分区不存在
-    kLinkerNotExist = 10015;         // Linker不存在
+    kNotLoggedIn = 10001;             // 未登录
+    kDisconnect = 10002;              // 断开连接
+    kNotConnected = 10003;            // 未连接
+    kInvalidProtocol = 10004;         // 无效协议
+    kInvalidOperation = 10005;        // 无效操作
+    kNotFoundDatabase = 10006;        // 没有找到数据库
+    kResourceInsufficiency = 10007;   // 服务器资源不足
+    kDestinationUnreachable = 10008;  // 目的地不可到达
+    kInvalidNodeType = 10009;         // 无效的节点类型
+    kRepeatLogin = 10010;             // 重复登录
+    kInvalidDataPacket = 10011;       // 无效数据包
+    kDatabaseError = 10012;           // 数据库错误
+    kCreateAccountFailed = 10013;     // 创建账号失败
+    kPartitionNotExist = 10014;       // 分区不存在
+    kLinkerNotExist = 10015;          // Linker不存在
+    kUsernameOrPasswordError = 10016; // 用户名或密码错误
 }
