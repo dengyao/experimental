@@ -36,7 +36,7 @@ void LoginManager::OnUpdateTimer(asio::error_code error_code)
 {
 	if (error_code)
 	{
-		logger()->error("%s:%d %s", __FUNCTION__, __LINE__, error_code.message());
+		logger()->error("{}:{} {}", __FUNCTION__, __LINE__, error_code.message());
 		return;
 	}
 

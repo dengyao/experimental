@@ -9,6 +9,12 @@ LinkerManager::LinkerManager(network::IOServiceThreadManager &threads)
 
 }
 
+// 处理来自用户的消息
+void LinkerManager::HandleMessageFromUser()
+{
+
+}
+
 // 处理来自网关的消息
 void LinkerManager::HandleMessageFromRouter()
 {
@@ -26,11 +32,21 @@ void LinkerManager::OnUpdateTimer(asio::error_code error_code)
 {
 	if (error_code)
 	{
-		logger()->error("%s:%d %s", __FUNCTION__, __LINE__, error_code.message());
+		logger()->error("{}:{} {}", __FUNCTION__, __LINE__, error_code.message());
 		return;
 	}
 
 	// 删除超时未验证的用户
+	for (auto iter = user_auth_.begin(); iter != user_auth_.end();)
+	{
+		if (std::chrono::steady_clock::now() - iter->second.time >= std::chrono::seconds(60))
+		{
+			iter = user_auth_.erase(iter);
+		}
+		{
+			++iter;
+		}
+	}
 
 	timer_.expires_from_now(std::chrono::seconds(1));
 	timer_.async_wait(wait_handler_);
