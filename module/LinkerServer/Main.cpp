@@ -23,13 +23,13 @@ void ConnectRouter(uint16_t linker_id)
 {
 	if (linker_id == 0)
 	{
-		logger()->critical("连接登录服务器失败!");
+		logger()->critical("与登录服务器验证失败!");
 		assert(false);
 		exit(-1);
 	}
 	else
 	{
-		logger()->info("连接登录服务器成功!");
+		logger()->info("与登录服务器验证成功!");
 
 		std::unique_ptr<router::Connector> connector;
 		try
