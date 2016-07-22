@@ -116,19 +116,22 @@ namespace network
 		{
 			return;
 		}
-
-		thread_->ThreadManager().MainThread()->Post(
-			std::bind(&IOServiceThreadManager::OnSessionClose, &thread_->ThreadManager(), ID()));
-
-		asio::error_code error_code;
-		socket_.shutdown(asio::ip::tcp::socket::shutdown_both, error_code);
-		if (error_code && error_code != asio::error::not_connected)
+		
+		if (thread_->SessionQueue().Get(ID()) != nullptr)
 		{
-			std::cerr << error_code.message() << std::endl;
-		}
+			thread_->ThreadManager().MainThread()->Post(
+				std::bind(&IOServiceThreadManager::OnSessionClose, &thread_->ThreadManager(), ID()));
 
-		socket_.close();
-		thread_->SessionQueue().Remove(ID());
+			asio::error_code error_code;
+			socket_.shutdown(asio::ip::tcp::socket::shutdown_both, error_code);
+			if (error_code && error_code != asio::error::not_connected)
+			{
+				std::cerr << error_code.message() << std::endl;
+			}
+
+			socket_.close();
+			thread_->SessionQueue().Remove(ID());
+		}	
 	}
 
 	void TCPSession::PostMessageList(const std::vector<NetMessage> &messages)
