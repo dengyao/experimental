@@ -8,8 +8,11 @@ namespace network
 {
 	class IOServiceThreadManager;
 
-	class TCPClient final
+	class TCPClient
 	{
+		TCPClient(const TCPClient&) = delete;
+		TCPClient& operator= (const TCPClient&) = delete;
+
 	public:
 		TCPClient(IOServiceThreadManager &io_thread_manager,
 			const SessionHandlerCreator &handler_creator,
@@ -23,10 +26,6 @@ namespace network
 		void Connect(asio::ip::tcp::endpoint &endpoint, asio::error_code &error_code);
 
 		void AsyncConnect(asio::ip::tcp::endpoint &endpoint, const std::function<void(asio::error_code)> &connect_handler);
-
-	protected:
-		TCPClient(const TCPClient&) = delete;
-		TCPClient& operator= (const TCPClient&) = delete;
 
 	private:
 		void HandleConnect(SessionPointer session_ptr, asio::error_code error_code);

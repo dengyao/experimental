@@ -149,7 +149,7 @@ void LoginManager::HandleLinkerOffline(SessionHandle &session)
 		{	
 			if (iter->session_id == session.SessionID())
 			{
-				const uint16_t linker_id = iter->session_id;
+				const uint16_t linker_id = iter->linker_id;
 				const uint16_t partition_id = partition.first;
 
 				linker_lists.erase(iter);
@@ -159,9 +159,9 @@ void LoginManager::HandleLinkerOffline(SessionHandle &session)
 					partition_map_.erase(partition_id);
 				}
 
-				logger()->info("Partition[{}] Linker[{}]下线，来自{}:{}", partition_id, linker_id,
+				logger()->info("partition[{}] linker[{}]下线，来自{}:{}", partition_id, linker_id,
 					session.RemoteEndpoint().address().to_string(), session.RemoteEndpoint().port());
-				break;
+				return;
 			}
 		}
 	}
@@ -247,7 +247,7 @@ bool LoginManager::OnLinkerLogin(SessionHandle &session, google::protobuf::Messa
 	ProtubufCodec::Encode(&response, buffer);
 	session.Send(buffer);
 
-	logger()->info("Partition[{}] Linker[{}]登录成功，来自{}:{}", request->partition_id(), linker_item.linker_id,
+	logger()->info("partition[{}] linker[{}]登录成功，来自{}:{}", request->partition_id(), linker_item.linker_id,
 		session.RemoteEndpoint().address().to_string(), session.RemoteEndpoint().port());
 
 	return true;
@@ -276,7 +276,7 @@ bool LoginManager::OnLinkerUpdateLoadCapacity(SessionHandle &session, google::pr
 
 	if (linker_id != 0 && partition_id != 0)
 	{
-		logger()->info("Partition[{}] Linker[{}]上报在线人数{}，来自{}:{}", partition_id, linker_id, request->load(),
+		logger()->info("partition[{}] linker[{}]上报在线人数{}，来自{}:{}", partition_id, linker_id, request->load(),
 			session.RemoteEndpoint().address().to_string(), session.RemoteEndpoint().port());
 	}
 

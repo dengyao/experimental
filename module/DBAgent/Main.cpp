@@ -90,13 +90,13 @@ int main(int argc, char *argv[])
 	// 启动数据库代理
 	TaskPools pools(ServerConfig::GetInstance()->GetDBUseThreadNum());
 	network::IOServiceThreadManager threads(ServerConfig::GetInstance()->GetUseThreadNum());
-	threads.SetSessionTimeout(ServerConfig::GetInstance()->GetHeartbeatInterval());
 
 	AgentImpl<MySQL> mysql_agent(CreateMySQLConnector(), pools, ServerConfig::GetInstance()->GetMaxConnectionRequestBacklog());
 	AgentManager manager(threads, mysql_agent, ServerConfig::GetInstance()->GetMaxRequestBacklog());
 
 	asio::ip::tcp::endpoint endpoint(asio::ip::address_v4(), ServerConfig::GetInstance()->GetPort());
-	network::TCPServer server(endpoint, threads, std::bind(CreateSessionHandle, std::ref(manager)), CreateMessageFilter);
+	network::TCPServer server(endpoint, threads, std::bind(CreateSessionHandle, std::ref(manager)),
+		CreateMessageFilter, ServerConfig::GetInstance()->GetHeartbeatInterval());
 	logger()->info("数据库代理[ip:{} port:{}]启动成功!", server.LocalEndpoint().address().to_string().c_str(), server.LocalEndpoint().port());
 	threads.Run();
 	

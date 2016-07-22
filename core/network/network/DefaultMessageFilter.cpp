@@ -10,6 +10,11 @@ namespace network
 	{
 	}
 
+	bool DefaultMessageFilter::CompletedRead()
+	{
+		return !header_read_;
+	}
+
 	size_t DefaultMessageFilter::BytesWannaRead()
 	{
 		return header_read_ ? header_ : s_header_size_;

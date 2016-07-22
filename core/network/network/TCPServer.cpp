@@ -12,15 +12,15 @@ namespace network
 		IOServiceThreadManager &io_thread_manager,
 		const SessionHandlerCreator &handler_creator,
 		const MessageFilterCreator &filter_creator,
-		uint64_t timeout)
-		: io_thread_manager_(io_thread_manager)
+		uint32_t keep_alive)
+		: keep_alive_(keep_alive)
+		, io_thread_manager_(io_thread_manager)
 		, session_handler_creator_(handler_creator)
 		, message_filter_creator_(filter_creator)
 		, acceptor_(io_thread_manager.MainThread()->IOService(), endpoint)
 	{
-		io_thread_manager.SetSessionTimeout(timeout);
 		MessageFilterPointer filter_ptr = message_filter_creator_();
-		SessionPointer session_ptr = std::make_shared<TCPSession>(io_thread_manager_.Thread(), filter_ptr);
+		SessionPointer session_ptr = std::make_shared<TCPSession>(io_thread_manager_.Thread(), filter_ptr, keep_alive_);
 		acceptor_.async_accept(session_ptr->Socket(), std::bind(&TCPServer::HandleAccept, this, session_ptr, std::placeholders::_1));
 	}
 
@@ -47,7 +47,7 @@ namespace network
 		io_thread_manager_.OnSessionConnect(session_ptr, handle_ptr);
 
 		MessageFilterPointer filter_ptr = message_filter_creator_();
-		SessionPointer new_session_ptr = std::make_shared<TCPSession>(io_thread_manager_.Thread(), filter_ptr);
+		SessionPointer new_session_ptr = std::make_shared<TCPSession>(io_thread_manager_.Thread(), filter_ptr, keep_alive_);
 		acceptor_.async_accept(new_session_ptr->Socket(), std::bind(&TCPServer::HandleAccept, this, new_session_ptr, std::placeholders::_1));
 	}
 }

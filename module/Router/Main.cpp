@@ -33,10 +33,10 @@ int main(int argc, char *argv[])
 	use_thread_num = use_thread_num == 0 ? std::thread::hardware_concurrency() : use_thread_num;
 	asio::ip::tcp::endpoint endpoint(asio::ip::address_v4(), ServerConfig::GetInstance()->GetPort());
 	network::IOServiceThreadManager threads(use_thread_num);
-	threads.SetSessionTimeout(ServerConfig::GetInstance()->GetHeartbeatInterval());
 
 	RouterManager router(threads);
-	network::TCPServer server(endpoint, threads, std::bind(CreateSessionHandle, std::ref(router)), CreateMessageFilter);
+	network::TCPServer server(endpoint, threads, std::bind(CreateSessionHandle, std::ref(router)),
+		CreateMessageFilter, ServerConfig::GetInstance()->GetHeartbeatInterval());
 	logger()->info("路由服务器[ip:{} port:{}]启动成功!", server.LocalEndpoint().address().to_string().c_str(), server.LocalEndpoint().port());
 	threads.Run();
 

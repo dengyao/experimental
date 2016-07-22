@@ -6,8 +6,11 @@
 
 namespace network
 {
-	class TCPSessionQueue final
+	class TCPSessionQueue
 	{
+		TCPSessionQueue(const TCPSessionQueue&) = delete;
+		TCPSessionQueue& operator= (const TCPSessionQueue&) = delete;
+
 	public:
 		TCPSessionQueue();
 		~TCPSessionQueue();
@@ -24,10 +27,6 @@ namespace network
 		void Clear();
 
 		void Foreach(const std::function<void(const SessionPointer &session)> &func);
-
-	private:
-		TCPSessionQueue(const TCPSessionQueue&) = delete;
-		TCPSessionQueue& operator= (const TCPSessionQueue&) = delete;
 
 	private:
 		std::unordered_map<TCPSessionID, SessionPointer> session_queue_;

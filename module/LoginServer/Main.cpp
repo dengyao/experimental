@@ -22,7 +22,7 @@ void RunLoginServer(const std::vector<SPartition> &partition)
 		asio::ip::tcp::endpoint endpoint(asio::ip::address_v4(), ServerConfig::GetInstance()->GetPort());
 		g_login_manager = std::make_unique<LoginManager>(*g_thread_manager, partition);
 		g_server = std::make_unique<network::TCPServer>(endpoint, *g_thread_manager, std::bind(CreateSessionHandle,
-			std::ref(*g_login_manager.get())), CreateMessageFilter);
+			std::ref(*g_login_manager.get())), CreateMessageFilter, ServerConfig::GetInstance()->GetHeartbeatInterval());
 		logger()->info("登录服务器[ip:{} port:{}]启动成功!", g_server->LocalEndpoint().address().to_string().c_str(), g_server->LocalEndpoint().port());
 	}
 	else
@@ -99,7 +99,6 @@ int main(int argc, char *argv[])
 
 	// 查询分区信息
 	network::IOServiceThreadManager threads(ServerConfig::GetInstance()->GetUseThreadNum());
-	threads.SetSessionTimeout(ServerConfig::GetInstance()->GetHeartbeatInterval());
 	g_thread_manager = &threads;
 	try
 	{

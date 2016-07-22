@@ -10,9 +10,11 @@ namespace network
 {
 	class IOServiceThreadManager;
 
-	class IOServiceThread final : public std::enable_shared_from_this < IOServiceThread >
+	class IOServiceThread : public std::enable_shared_from_this < IOServiceThread >
 	{
 		friend class IOServiceThreadManager;
+		IOServiceThread(const IOServiceThread&) = delete;
+		IOServiceThread& operator=(const IOServiceThread&) = delete;
 
 	public:
 		IOServiceThread(IOThreadID id, IOServiceThreadManager &manager);
@@ -24,13 +26,6 @@ namespace network
 		void Join();
 
 		void Stop();
-
-		void SetSessionTimeout(uint64_t timeout);
-
-		uint64_t GetSessionTimeout() const
-		{
-			return timeout_.count();
-		}
 
 		template <typename CompletionHandler>
 		void Post(ASIO_MOVE_ARG(CompletionHandler) handler)
@@ -62,18 +57,13 @@ namespace network
 	private:
 		void Run();
 
-		void CheckTimeOut(asio::error_code error);
-
-	private:
-		IOServiceThread(const IOServiceThread&) = delete;
-		IOServiceThread& operator=(const IOServiceThread&) = delete;
+		void CheckSessionKeepAliveTime(asio::error_code error);
 
 	private:
 		IOThreadID								thread_id_;
 		IOServiceThreadManager&					manager_;
 		asio::io_service						io_service_;
 		asio::steady_timer						timer_;
-		std::chrono::seconds					timeout_;
 		std::unique_ptr<std::thread>			thread_;
 		std::unique_ptr<asio::io_service::work>	work_;
 		TCPSessionQueue							session_queue_;

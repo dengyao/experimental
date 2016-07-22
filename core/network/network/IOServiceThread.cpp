@@ -5,8 +5,7 @@
 namespace network
 {
 	IOServiceThread::IOServiceThread(IOThreadID id, IOServiceThreadManager &manager)
-		: timeout_(0)
-		, thread_id_(id)
+		: thread_id_(id)
 		, manager_(manager)
 		, timer_(io_service_)
 	{
@@ -20,7 +19,7 @@ namespace network
 		}
 
 		timer_.expires_from_now(std::chrono::seconds(1));
-		timer_.async_wait(std::bind(&IOServiceThread::CheckTimeOut, shared_from_this(), std::placeholders::_1));
+		timer_.async_wait(std::bind(&IOServiceThread::CheckSessionKeepAliveTime, shared_from_this(), std::placeholders::_1));
 
 		asio::error_code error;
 		io_service_.run(error);
@@ -55,30 +54,19 @@ namespace network
 		}
 	}
 
-	void IOServiceThread::SetSessionTimeout(uint64_t seconds)
-	{
-		timeout_ = std::chrono::seconds(seconds);
-	}
-
-	void IOServiceThread::CheckTimeOut(asio::error_code error)
+	void IOServiceThread::CheckSessionKeepAliveTime(asio::error_code error)
 	{
 		if (!error)
 		{
-			if (timeout_ > std::chrono::seconds(0))
+			session_queue_.Foreach([&](const SessionPointer &session)->void
 			{
-				auto now_time = std::chrono::steady_clock::now();
-				session_queue_.Foreach([&](const SessionPointer &session)->void
+				if (!session->CheckKeepAliveTime())
 				{
-					auto interval = now_time - session->LastActivity();
-					if (interval >= timeout_)
-					{
-						session->Close();
-					}		
-				});
-			}
-
+					IOService().post(std::bind(&TCPSession::Close, session));
+				}
+			});
 			timer_.expires_from_now(std::chrono::seconds(1));
-			timer_.async_wait(std::bind(&IOServiceThread::CheckTimeOut, shared_from_this(), std::placeholders::_1));
+			timer_.async_wait(std::bind(&IOServiceThread::CheckSessionKeepAliveTime, shared_from_this(), std::placeholders::_1));
 		}
 		else
 		{

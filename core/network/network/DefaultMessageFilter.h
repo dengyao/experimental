@@ -5,8 +5,11 @@
 
 namespace network
 {
-	class DefaultMessageFilter final : public MessageFilterInterface
+	class DefaultMessageFilter : public MessageFilterInterface
 	{
+		DefaultMessageFilter(const DefaultMessageFilter&) = delete;
+		DefaultMessageFilter& operator= (const DefaultMessageFilter&) = delete;
+
 	public:
 		typedef uint16_t MessageHeader;
 
@@ -14,6 +17,8 @@ namespace network
 		DefaultMessageFilter();
 
 	public:
+		bool CompletedRead() override;
+
 		size_t BytesWannaRead() override;
 
 		size_t BytesWannaWrite(const std::vector<NetMessage> &messages_to_be_sent) override;

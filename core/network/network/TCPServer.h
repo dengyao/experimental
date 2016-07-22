@@ -8,14 +8,17 @@ namespace network
 {
 	class IOServiceThreadManager;
 
-	class TCPServer final
+	class TCPServer
 	{
+		TCPServer(const TCPServer&) = delete;
+		TCPServer& operator= (const TCPServer&) = delete;
+
 	public:
 		TCPServer(asio::ip::tcp::endpoint &endpoint,
 			IOServiceThreadManager &io_thread_manager,
 			const SessionHandlerCreator &handler_creator,
 			const MessageFilterCreator &filter_creator,
-			uint64_t timeout = 0);
+			uint32_t keep_alive = 0);
 
 		~TCPServer() = default;
 
@@ -24,14 +27,11 @@ namespace network
 
 		asio::ip::tcp::endpoint LocalEndpoint() const;
 
-	protected:
-		TCPServer(const TCPServer&) = delete;
-		TCPServer& operator= (const TCPServer&) = delete;
-
 	private:
 		void HandleAccept(SessionPointer session_ptr, asio::error_code error);
 
 	private:
+		const uint32_t			keep_alive_;
 		asio::ip::tcp::acceptor	acceptor_;
 		IOServiceThreadManager&	io_thread_manager_;
 		SessionHandlerCreator	session_handler_creator_;

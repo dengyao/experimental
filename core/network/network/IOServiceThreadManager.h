@@ -9,9 +9,11 @@
 
 namespace network
 {
-	class IOServiceThreadManager final
+	class IOServiceThreadManager
 	{
 		typedef std::unordered_map<TCPSessionID, SessionHandlePointer > SessionHandlerMap;
+		IOServiceThreadManager(const IOServiceThreadManager&) = delete;
+		IOServiceThreadManager& operator=(const IOServiceThreadManager&) = delete;
 
 	public:
 		explicit IOServiceThreadManager(size_t thread_num = 1);
@@ -35,12 +37,6 @@ namespace network
 		size_t SessionNumber() const;
 
 		SessionHandlePointer SessionHandler(TCPSessionID id) const;
-
-		void SetSessionTimeout(uint64_t timeout);
-
-	protected:
-		IOServiceThreadManager(const IOServiceThreadManager&) = delete;
-		IOServiceThreadManager& operator=(const IOServiceThreadManager&) = delete;
 
 	private:
 		std::vector<ThreadPointer>	threads_;

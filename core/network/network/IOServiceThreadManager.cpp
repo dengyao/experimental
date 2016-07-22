@@ -178,12 +178,4 @@ namespace network
 		}
 		return SessionHandlePointer();
 	}
-
-	void IOServiceThreadManager::SetSessionTimeout(uint64_t seconds)
-	{
-		for (const auto &td : threads_)
-		{
-			td->Post(std::bind(&IOServiceThread::SetSessionTimeout, td, seconds));
-		}
-	}
 }

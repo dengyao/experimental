@@ -37,7 +37,6 @@ int main(int argc, char *argv[])
 
 	// 连接登录服务器
 	network::IOServiceThreadManager threads(ServerConfig::GetInstance()->GetUseThreadNum());
-	threads.SetSessionTimeout(ServerConfig::GetInstance()->GetHeartbeatInterval());
 	g_thread_manager = &threads;
 
 	std::unique_ptr<LoginConnector> db_client;

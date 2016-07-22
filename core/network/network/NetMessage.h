@@ -9,7 +9,7 @@
 
 namespace network
 {
-	class NetMessage final
+	class NetMessage
 	{
 	public:
 		typedef uint8_t					ValueType;

@@ -56,19 +56,16 @@ namespace network
 		}
 	}
 
-	TCPSession::TCPSession(ThreadPointer &thread_ptr, MessageFilterPointer &filter)
+	TCPSession::TCPSession(ThreadPointer &thread_ptr, MessageFilterPointer &filter, uint32_t keep_alive)
 		: closed_(false)
 		, filter_(filter)
-		, num_handlers_(0)
 		, thread_(thread_ptr)
+		, num_read_handlers_(0)
+		, num_write_handlers_(0)
+		, keep_alive_(keep_alive)
 		, socket_(thread_ptr->IOService())
 		, session_id_(IDGenerator::kInvalidID)
 	{
-	}
-
-	inline void TCPSession::UpdateLastActivity()
-	{
-		last_activity_ = std::chrono::steady_clock::now();
 	}
 
 	void TCPSession::Init(TCPSessionID id)
@@ -76,8 +73,8 @@ namespace network
 		assert(IDGenerator::kInvalidID != id);
 
 		SetSessionID(id);
-		UpdateLastActivity();
 		thread_->SessionQueue().Add(shared_from_this());
+		last_activity_time_ = std::chrono::steady_clock::now();
 
 		asio::ip::tcp::no_delay option(true);
 		socket_.set_option(option);
@@ -88,7 +85,7 @@ namespace network
 			return;
 		}
 
-		++num_handlers_;
+		++num_read_handlers_;
 		if (bytes_wanna_read == MessageFilterInterface::kAnyBytes)
 		{
 			buffer_receiving_.resize(NetMessage::kDynamicThreshold);
@@ -115,7 +112,7 @@ namespace network
 
 	void TCPSession::HanldeClose()
 	{
-		if (num_handlers_ > 0)
+		if (!filter_->CompletedRead() || num_write_handlers_ > 0)
 		{
 			return;
 		}
@@ -154,7 +151,7 @@ namespace network
 
 		if (buffer_sending_.empty())
 		{
-			++num_handlers_;
+			++num_write_handlers_;
 			buffer_sending_.swap(buffer_to_be_sent_);
 			asio::async_write(socket_, asio::buffer(buffer_sending_.data(), bytes_wanna_write),
 				std::bind(&TCPSession::HanldeWrite, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
@@ -163,8 +160,8 @@ namespace network
 
 	void TCPSession::HandleRead(asio::error_code error_code, size_t bytes_transferred)
 	{
-		--num_handlers_;
-		assert(num_handlers_ >= 0);
+		--num_read_handlers_;
+		assert(num_read_handlers_ >= 0);
 
 		if (error_code || closed_)
 		{
@@ -193,7 +190,7 @@ namespace network
 			{
 				thread_->Post(std::bind(PackMessageList, shared_from_this()));
 			}
-			UpdateLastActivity();
+			last_activity_time_ = std::chrono::steady_clock::now();
 		}
 
 		size_t bytes_wanna_read = filter_->BytesWannaRead();
@@ -202,7 +199,7 @@ namespace network
 			return;
 		}
 
-		++num_handlers_;
+		++num_read_handlers_;
 		if (bytes_wanna_read == MessageFilterInterface::kAnyBytes)
 		{
 			buffer_receiving_.resize(NetMessage::kDynamicThreshold);
@@ -219,8 +216,8 @@ namespace network
 
 	void TCPSession::HanldeWrite(asio::error_code error_code, size_t bytes_transferred)
 	{
-		--num_handlers_;
-		assert(num_handlers_ >= 0);
+		--num_write_handlers_;
+		assert(num_write_handlers_ >= 0);
 
 		if (error_code || closed_)
 		{
@@ -236,9 +233,18 @@ namespace network
 			return;
 		}
 
-		++num_handlers_;
+		++num_write_handlers_;
 		buffer_sending_.swap(buffer_to_be_sent_);
 		asio::async_write(socket_, asio::buffer(buffer_sending_.data(), buffer_sending_.size()),
 			std::bind(&TCPSession::HanldeWrite, shared_from_this(), std::placeholders::_1, std::placeholders::_2));
+	}
+
+	bool TCPSession::CheckKeepAliveTime()
+	{
+		if (keep_alive_ == std::chrono::seconds())
+		{
+			return true;
+		}
+		return std::chrono::steady_clock::now() - last_activity_time_ < keep_alive_;
 	}
 }
