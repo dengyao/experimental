@@ -6,9 +6,11 @@
 #include "Logging.h"
 #include "ServerConfig.h"
 #include "GlobalObject.h"
+#include "LinkerManager.h"
 #include "LoginConnector.h"
 
 std::unique_ptr<network::TCPServer> g_server;
+std::unique_ptr<LinkerManager>      g_linker_manager;
 network::IOServiceThreadManager*    g_thread_manager = nullptr;
 
 
