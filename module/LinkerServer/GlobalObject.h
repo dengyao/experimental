@@ -8,8 +8,12 @@ namespace router
 	class Connector;
 }
 
-const std::unique_ptr<router::Connector>& GlobalConnector();
+class LoginConnector;
 
+const std::unique_ptr<LoginConnector> &GlobalLoginConnector();
+void OnceInitGlobalLoginConnector(std::unique_ptr<LoginConnector> &&connector);
+
+const std::unique_ptr<router::Connector>& GlobalConnector();
 void OnceInitGlobalConnector(std::unique_ptr<router::Connector> &&connector);
 
 

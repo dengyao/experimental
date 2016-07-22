@@ -4,78 +4,7 @@
 #include <proto/server_internal.pb.h>
 #include "Logging.h"
 #include "ServerConfig.h"
-
-/************************************************************************/
-
-LoginSessionHandle::LoginSessionHandle(LoginConnector *connector, std::shared_ptr<bool> &life)
-	: counter_(0)
-	, is_logged_(false)
-	, connector_life_(life)
-	, connector_(connector)
-	, heartbeat_interval_(0)
-{
-}
-
-// 获取计数器
-std::shared_ptr<bool>& LoginSessionHandle::GetShared()
-{
-	return connector_life_;
-}
-
-// 连接成功
-void LoginSessionHandle::OnConnect()
-{
-	if (connector_life_.unique())
-	{
-		Close();
-	}
-	else
-	{
-		connector_->OnConnected(this);
-	}
-}
-
-// 接收消息
-void LoginSessionHandle::OnMessage(network::NetMessage &message)
-{
-	if (connector_life_.unique())
-	{
-		Close();
-	}
-	else
-	{
-		connector_->OnMessage(this, message);
-	}
-}
-
-// 连接关闭
-void LoginSessionHandle::LoginSessionHandle::OnClose()
-{
-	is_logged_ = false;
-	if (!connector_life_.unique())
-	{
-		connector_->OnDisconnect(this);
-	}
-}
-
-// 发送心跳倒计时
-void LoginSessionHandle::HeartbeatCountdown()
-{
-	if (is_logged_ && heartbeat_interval_ > 0)
-	{
-		if (--counter_ == 0)
-		{
-			pub::PingReq request;
-			network::NetMessage message;
-			ProtubufCodec::Encode(&request, message);
-			Send(message);
-			counter_ = heartbeat_interval_;
-		}
-	}
-}
-
-/************************************************************************/
-/************************************************************************/
+#include "LoginSessionHandle.h"
 
 class AsyncReconnectHandle : public std::enable_shared_from_this< AsyncReconnectHandle >
 {
@@ -114,10 +43,11 @@ network::MessageFilterPointer CreaterConnectorMessageFilter()
 	return std::make_shared<network::DefaultMessageFilter>();
 }
 
-LoginConnector::LoginConnector(network::IOServiceThreadManager &threads, asio::ip::tcp::endpoint &endpoint, std::function<void(uint16_t)> &callback)
+LoginConnector::LoginConnector(network::IOServiceThreadManager &threads, asio::ip::tcp::endpoint &endpoint, const std::function<void(uint16_t)> &callback)
 	: linker_id_(0)
 	, threads_(threads)
 	, endpoint_(endpoint)
+	, reconnecting_(false)
 	, session_handle_(nullptr)
 	, login_callback_(callback)
 	, timer_(threads.MainThread()->IOService())
@@ -133,11 +63,14 @@ LoginConnector::~LoginConnector()
 	Clear();
 }
 
-
 // 清理连接
 void LoginConnector::Clear()
 {
-
+	lifetimes_.clear();
+	if (session_handle_ != nullptr)
+	{
+		session_handle_->Close();
+	}
 }
 
 // 创建会话处理器
@@ -172,13 +105,25 @@ void LoginConnector::InitConnections()
 // 异步重连
 void LoginConnector::AsyncReconnect()
 {
-
+	if (!reconnecting_)
+	{
+		reconnecting_ = true;
+		auto life = std::make_shared<bool>();
+		lifetimes_.insert(life);
+		auto handler = std::make_shared<AsyncReconnectHandle>(this, life);
+		session_handle_creator_.AsyncConnect(endpoint_, std::bind(&AsyncReconnectHandle::ConnectCallback, std::move(handler), std::placeholders::_1));
+	}
 }
 
 // 异步重连结果
 void LoginConnector::AsyncReconnectResult(AsyncReconnectHandle &handler, asio::error_code error_code)
 {
-
+	if (error_code)
+	{
+		reconnecting_ = false;
+		logger()->error("重连登录服务器失败，{}", error_code.message());
+	}
+	lifetimes_.erase(handler.GetShared());
 }
 
 // 更新计时器
@@ -198,17 +143,31 @@ void LoginConnector::OnUpdateTimer(asio::error_code error_code)
 	timer_.async_wait(wait_handler_);
 }
 
+// 设置消息回调
+void LoginConnector::SetMessageCallback(const Callback &cb)
+{
+	message_cb_ = cb;
+}
+
 // 发送消息
 bool LoginConnector::Send(google::protobuf::Message *message)
 {
-	if (linker_id_ == 0 || session_handle_ == nullptr)
+	if (linker_id_ == 0)
 	{
 		return false;
 	}
 
-	network::NetMessage buffer;
-	ProtubufCodec::Encode(message, buffer);
-	session_handle_->Send(buffer);
+	if (session_handle_ == nullptr)
+	{
+		AsyncReconnect();
+		return false;
+	}
+	else
+	{
+		network::NetMessage buffer;
+		ProtubufCodec::Encode(message, buffer);
+		session_handle_->Send(buffer);
+	}
 	return true;
 }
 
@@ -235,10 +194,68 @@ void LoginConnector::OnConnected(LoginSessionHandle *session)
 // 接收消息事件
 void LoginConnector::OnMessage(LoginSessionHandle *session, network::NetMessage &buffer)
 {
+	auto request = ProtubufCodec::Decode(buffer);
+	if (dynamic_cast<svr::LinkerLoginRsp*>(request.get()) != nullptr)
+	{
+		// 处理登录结果
+		assert(session_handle_ == nullptr);
+		if (session_handle_ == nullptr)
+		{
+			svr::LinkerLoginRsp *message = static_cast<svr::LinkerLoginRsp*>(request.get());
+			reconnecting_ = false;
+			session_handle_ = session;
+			linker_id_ = message->linker_id();
+			session_handle_->SetHeartbeatInterval(message->heartbeat_interval() / 2);
+
+			// 登录通知只回调一次
+			if (login_callback_ != nullptr)
+			{
+				login_callback_(linker_id_);
+				login_callback_ = nullptr;
+			}
+			else
+			{
+				logger()->info("重连登录服务器成功!");
+			}
+		}	
+	}
+	else if (dynamic_cast<pub::PongRsp*>(request.get()) == nullptr) 
+	{
+		if (dynamic_cast<pub::ErrorRsp*>(request.get()) != nullptr)
+		{
+			// 处理错误响应
+			pub::ErrorRsp *error = static_cast<pub::ErrorRsp*>(request.get());
+			if (error->what() == svr::LinkerLoginReq::default_instance().GetTypeName())
+			{
+				if (login_callback_ != nullptr)
+				{
+					login_callback_(0);
+					login_callback_ = nullptr;
+				}
+				else
+				{
+					logger()->error("重连登录服务器失败，{}", static_cast<int>(error->error_code()));
+				}
+				return;
+			}
+		}
+
+		if (session_handle_ == nullptr && message_cb_ != nullptr)
+		{
+			message_cb_(this, request.get(), buffer);
+		}
+	}
 }
 
 // 断开连接事件
 void LoginConnector::OnDisconnect(LoginSessionHandle *session)
 {
-
+	if (session_handle_ != nullptr)
+	{
+		assert(session == session_handle_);
+		session_handle_ = nullptr;
+	}
+	reconnecting_ = false;
+	lifetimes_.erase(session->GetShared());
+	logger()->error("与登录服务器断开连接!");
 }

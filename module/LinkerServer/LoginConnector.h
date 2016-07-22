@@ -23,41 +23,22 @@ public:
 	}
 };
 
-class LoginSessionHandle : public network::TCPSessionHandler
-{
-public:
-	LoginSessionHandle(LoginConnector *connector, std::shared_ptr<bool> &life);
-
-public:
-	virtual void OnConnect();
-
-	virtual void OnMessage(network::NetMessage &message);
-
-	virtual void OnClose();
-
-public:
-	void HeartbeatCountdown();
-
-	std::shared_ptr<bool>& GetShared();
-
-private:
-	LoginConnector*       connector_;
-	bool                  is_logged_;
-	std::shared_ptr<bool> connector_life_;
-	uint32_t              counter_;
-	uint32_t              heartbeat_interval_;
-};
-
 class LoginConnector
 {
 	friend class LoginSessionHandle;
 	friend class AsyncReconnectHandle;
 
 public:
-	LoginConnector(network::IOServiceThreadManager &threads, asio::ip::tcp::endpoint &endpoint, std::function<void(uint16_t)> &callback);
+	typedef std::function<void(LoginConnector*, google::protobuf::Message*, network::NetMessage&)> Callback;
+
+public:
+	LoginConnector(network::IOServiceThreadManager &threads, asio::ip::tcp::endpoint &endpoint, const std::function<void(uint16_t)> &callback);
 	~LoginConnector();
 
 public:
+	// 设置消息回调
+	void SetMessageCallback(const Callback &cb);
+
 	// 发送消息
 	bool Send(google::protobuf::Message *message);
 	
@@ -91,15 +72,17 @@ private:
 	void OnUpdateTimer(asio::error_code error_code);
 
 private:
-	uint16_t                                    linker_id_;
-	network::IOServiceThreadManager&            threads_;
-	std::function<void(uint16_t)>               login_callback_;
-	network::TCPClient					        session_handle_creator_;
-	std::set<std::shared_ptr<bool> >            lifetimes_;
+	bool										reconnecting_;
+	uint16_t									linker_id_;
+	network::IOServiceThreadManager&			threads_;
+	Callback									message_cb_;
+	std::function<void(uint16_t)>				login_callback_;
+	network::TCPClient							session_handle_creator_;
+	std::set<std::shared_ptr<bool> >			lifetimes_;
 	asio::ip::tcp::endpoint                     endpoint_;
-	asio::steady_timer                          timer_;
-	const std::function<void(asio::error_code)> wait_handler_;
-	LoginSessionHandle*                         session_handle_;
+	asio::steady_timer							timer_;
+	const std::function<void(asio::error_code)>	wait_handler_;
+	LoginSessionHandle*							session_handle_;
 };
 
 #endif

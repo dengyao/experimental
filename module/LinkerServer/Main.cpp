@@ -1,16 +1,53 @@
 ﻿#include <iostream>
 #include <network.h>
+#include <Connector.h>
 #include <common/Path.h>
+#include <proto/server_internal.pb.h>
 #include "Logging.h"
 #include "ServerConfig.h"
+#include "GlobalObject.h"
 #include "LoginConnector.h"
 
 std::unique_ptr<network::TCPServer> g_server;
 network::IOServiceThreadManager*    g_thread_manager = nullptr;
 
-network::MessageFilterPointer CreateMessageFilter()
+
+// 运行服务器
+void RunLoginServer()
 {
-	return std::make_shared<network::DefaultMessageFilter>();
+	
+}
+
+// 连接路由服务器
+void ConnectRouter(uint16_t linker_id)
+{
+	if (linker_id == 0)
+	{
+		logger()->critical("连接登录服务器失败!");
+		assert(false);
+		exit(-1);
+	}
+	else
+	{
+		logger()->info("连接登录服务器成功!");
+
+		std::unique_ptr<router::Connector> connector;
+		try
+		{
+			asio::ip::tcp::endpoint endpoint(asio::ip::address_v4::from_string(ServerConfig::GetInstance()->GetRouterIP()),
+				ServerConfig::GetInstance()->GetRouterPort());
+			connector = std::make_unique<router::Connector>(*g_thread_manager, endpoint, ServerConfig::GetInstance()->GetRouterConnections(), svr::kLinkerServer, linker_id);
+			logger()->info("连接路由服务器成功!");
+		}
+		catch (...)
+		{
+			logger()->critical("连接路由服务器失败!");
+			assert(false);
+			exit(-1);
+		}
+		OnceInitGlobalConnector(std::move(connector));
+		RunLoginServer();
+	}
 }
 
 int main(int argc, char *argv[])
@@ -28,7 +65,7 @@ int main(int argc, char *argv[])
 	std::string fullpath = path::curdir() + path::sep + "config.LinkerServer.json";
 	if (!ServerConfig::GetInstance()->Load(fullpath))
 	{
-		logger()->critical("加载服务器配置失败！");
+		logger()->critical("加载服务器配置失败!");
 		assert(false);
 		exit(-1);
 	}
@@ -39,22 +76,21 @@ int main(int argc, char *argv[])
 	network::IOServiceThreadManager threads(ServerConfig::GetInstance()->GetUseThreadNum());
 	g_thread_manager = &threads;
 
-	std::unique_ptr<LoginConnector> db_client;
+	std::unique_ptr<LoginConnector> login_connector;
 	asio::ip::tcp::endpoint endpoint(asio::ip::address_v4::from_string(ServerConfig::GetInstance()->GetLoginSeverIP()),
 		ServerConfig::GetInstance()->GetLoginServerPort());
-
-	std::function<void(uint16_t)> callback = [](uint16_t)
+	try
 	{
-
-	};
-	db_client = std::make_unique<LoginConnector>(threads, endpoint, callback);
-
+		login_connector = std::make_unique<LoginConnector>(threads, endpoint, ConnectRouter);
+		OnceInitGlobalLoginConnector(std::move(login_connector));
+	}
+	catch (...)
+	{
+		logger()->critical("连接登录服务器失败!");
+		assert(false);
+		exit(-1);
+	}
 	threads.Run();
 
-	// 连接路由服务器
-
-	// 启动Linker服务器
-
-	system("pause");
 	return 0;
 }

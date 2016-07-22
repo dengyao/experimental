@@ -8,6 +8,7 @@ set(CURRENT_PROJECT_SRC_LISTS
   LinkerManager.cpp
   SessionHandle.cpp
   LoginConnector.cpp
+  LoginSessionHandle.cpp
 )
 
 include_directories(
