@@ -73,6 +73,7 @@ private:
 	void OnUpdateTimer(asio::error_code error_code);
 
 private:
+	uint32_t											counter_;
 	asio::steady_timer									timer_;
 	const std::function<void(asio::error_code)>			wait_handler_;
 	network::IOServiceThreadManager&					threads_;

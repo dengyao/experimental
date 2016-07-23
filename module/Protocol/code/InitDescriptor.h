@@ -44,7 +44,7 @@ public:
         svr::RouterNotify::descriptor();
         svr::LinkerLoginReq::descriptor();
         svr::LinkerLoginRsp::descriptor();
-        svr::UpdateLinkerCapacityReq::descriptor();
+        svr::ReportLinkerReq::descriptor();
         svr::UpdateTokenReq::descriptor();
     }
 };

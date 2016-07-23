@@ -27,8 +27,7 @@ void SessionHandle::OnMessage(network::NetMessage &message)
 	auto request = ProtubufCodec::Decode(message);
 	if (request == nullptr)
 	{
-		router_manager_.RespondErrorCode(*this, message, pub::kInvalidProtocol);
-		return;
+		return router_manager_.RespondErrorCode(*this, message, pub::kInvalidProtocol);
 	}
 
 	// 连接后必须登录

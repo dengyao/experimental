@@ -76,9 +76,9 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* LinkerLoginRsp_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   LinkerLoginRsp_reflection_ = NULL;
-const ::google::protobuf::Descriptor* UpdateLinkerCapacityReq_descriptor_ = NULL;
+const ::google::protobuf::Descriptor* ReportLinkerReq_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
-  UpdateLinkerCapacityReq_reflection_ = NULL;
+  ReportLinkerReq_reflection_ = NULL;
 const ::google::protobuf::Descriptor* UpdateTokenReq_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   UpdateTokenReq_reflection_ = NULL;
@@ -387,21 +387,21 @@ void protobuf_AssignDesc_proto_2fserver_5finternal_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(LinkerLoginRsp));
-  UpdateLinkerCapacityReq_descriptor_ = file->message_type(18);
-  static const int UpdateLinkerCapacityReq_offsets_[1] = {
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UpdateLinkerCapacityReq, load_),
+  ReportLinkerReq_descriptor_ = file->message_type(18);
+  static const int ReportLinkerReq_offsets_[1] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ReportLinkerReq, load_),
   };
-  UpdateLinkerCapacityReq_reflection_ =
+  ReportLinkerReq_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
-      UpdateLinkerCapacityReq_descriptor_,
-      UpdateLinkerCapacityReq::default_instance_,
-      UpdateLinkerCapacityReq_offsets_,
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UpdateLinkerCapacityReq, _has_bits_[0]),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UpdateLinkerCapacityReq, _unknown_fields_),
+      ReportLinkerReq_descriptor_,
+      ReportLinkerReq::default_instance_,
+      ReportLinkerReq_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ReportLinkerReq, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ReportLinkerReq, _unknown_fields_),
       -1,
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
-      sizeof(UpdateLinkerCapacityReq));
+      sizeof(ReportLinkerReq));
   UpdateTokenReq_descriptor_ = file->message_type(19);
   static const int UpdateTokenReq_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UpdateTokenReq, user_id_),
@@ -468,7 +468,7 @@ void protobuf_RegisterTypes(const ::std::string&) {
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     LinkerLoginRsp_descriptor_, &LinkerLoginRsp::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-    UpdateLinkerCapacityReq_descriptor_, &UpdateLinkerCapacityReq::default_instance());
+    ReportLinkerReq_descriptor_, &ReportLinkerReq::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     UpdateTokenReq_descriptor_, &UpdateTokenReq::default_instance());
 }
@@ -512,8 +512,8 @@ void protobuf_ShutdownFile_proto_2fserver_5finternal_2eproto() {
   delete LinkerLoginReq_reflection_;
   delete LinkerLoginRsp::default_instance_;
   delete LinkerLoginRsp_reflection_;
-  delete UpdateLinkerCapacityReq::default_instance_;
-  delete UpdateLinkerCapacityReq_reflection_;
+  delete ReportLinkerReq::default_instance_;
+  delete ReportLinkerReq_reflection_;
   delete UpdateTokenReq::default_instance_;
   delete UpdateTokenReq_reflection_;
 }
@@ -562,11 +562,10 @@ void protobuf_AddDesc_proto_2fserver_5finternal_2eproto() {
     "n_id\030\001 \002(\r\022\021\n\tpublic_ip\030\002 \002(\t\022\014\n\004port\030\003 "
     "\002(\r\022\021\n\tlinker_id\030\004 \001(\r\"\?\n\016LinkerLoginRsp"
     "\022\032\n\022heartbeat_interval\030\001 \002(\r\022\021\n\tlinker_i"
-    "d\030\002 \002(\r\"\'\n\027UpdateLinkerCapacityReq\022\014\n\004lo"
-    "ad\030\001 \002(\r\"0\n\016UpdateTokenReq\022\017\n\007user_id\030\001 "
-    "\002(\r\022\r\n\005token\030\002 \002(\004*D\n\010NodeType\022\020\n\014kLogin"
-    "Server\020\001\022\021\n\rkLinkerServer\020\002\022\023\n\017kMainLogi"
-    "cSever\020\003", 1608);
+    "d\030\002 \002(\r\"\037\n\017ReportLinkerReq\022\014\n\004load\030\001 \002(\r"
+    "\"0\n\016UpdateTokenReq\022\017\n\007user_id\030\001 \002(\r\022\r\n\005t"
+    "oken\030\002 \002(\004*D\n\010NodeType\022\020\n\014kLoginServer\020\001"
+    "\022\021\n\rkLinkerServer\020\002\022\023\n\017kMainLogicSever\020\003", 1600);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "proto/server_internal.proto", &protobuf_RegisterTypes);
   LoginDBAgentReq::default_instance_ = new LoginDBAgentReq();
@@ -587,7 +586,7 @@ void protobuf_AddDesc_proto_2fserver_5finternal_2eproto() {
   RouterNotify::default_instance_ = new RouterNotify();
   LinkerLoginReq::default_instance_ = new LinkerLoginReq();
   LinkerLoginRsp::default_instance_ = new LinkerLoginRsp();
-  UpdateLinkerCapacityReq::default_instance_ = new UpdateLinkerCapacityReq();
+  ReportLinkerReq::default_instance_ = new ReportLinkerReq();
   UpdateTokenReq::default_instance_ = new UpdateTokenReq();
   LoginDBAgentReq::default_instance_->InitAsDefaultInstance();
   LoginDBAgentRsp::default_instance_->InitAsDefaultInstance();
@@ -607,7 +606,7 @@ void protobuf_AddDesc_proto_2fserver_5finternal_2eproto() {
   RouterNotify::default_instance_->InitAsDefaultInstance();
   LinkerLoginReq::default_instance_->InitAsDefaultInstance();
   LinkerLoginRsp::default_instance_->InitAsDefaultInstance();
-  UpdateLinkerCapacityReq::default_instance_->InitAsDefaultInstance();
+  ReportLinkerReq::default_instance_->InitAsDefaultInstance();
   UpdateTokenReq::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_proto_2fserver_5finternal_2eproto);
 }
@@ -5783,73 +5782,73 @@ void LinkerLoginRsp::Swap(LinkerLoginRsp* other) {
 // ===================================================================
 
 #ifndef _MSC_VER
-const int UpdateLinkerCapacityReq::kLoadFieldNumber;
+const int ReportLinkerReq::kLoadFieldNumber;
 #endif  // !_MSC_VER
 
-UpdateLinkerCapacityReq::UpdateLinkerCapacityReq()
+ReportLinkerReq::ReportLinkerReq()
   : ::google::protobuf::Message() {
   SharedCtor();
-  // @@protoc_insertion_point(constructor:svr.UpdateLinkerCapacityReq)
+  // @@protoc_insertion_point(constructor:svr.ReportLinkerReq)
 }
 
-void UpdateLinkerCapacityReq::InitAsDefaultInstance() {
+void ReportLinkerReq::InitAsDefaultInstance() {
 }
 
-UpdateLinkerCapacityReq::UpdateLinkerCapacityReq(const UpdateLinkerCapacityReq& from)
+ReportLinkerReq::ReportLinkerReq(const ReportLinkerReq& from)
   : ::google::protobuf::Message() {
   SharedCtor();
   MergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:svr.UpdateLinkerCapacityReq)
+  // @@protoc_insertion_point(copy_constructor:svr.ReportLinkerReq)
 }
 
-void UpdateLinkerCapacityReq::SharedCtor() {
+void ReportLinkerReq::SharedCtor() {
   _cached_size_ = 0;
   load_ = 0u;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
-UpdateLinkerCapacityReq::~UpdateLinkerCapacityReq() {
-  // @@protoc_insertion_point(destructor:svr.UpdateLinkerCapacityReq)
+ReportLinkerReq::~ReportLinkerReq() {
+  // @@protoc_insertion_point(destructor:svr.ReportLinkerReq)
   SharedDtor();
 }
 
-void UpdateLinkerCapacityReq::SharedDtor() {
+void ReportLinkerReq::SharedDtor() {
   if (this != default_instance_) {
   }
 }
 
-void UpdateLinkerCapacityReq::SetCachedSize(int size) const {
+void ReportLinkerReq::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const ::google::protobuf::Descriptor* UpdateLinkerCapacityReq::descriptor() {
+const ::google::protobuf::Descriptor* ReportLinkerReq::descriptor() {
   protobuf_AssignDescriptorsOnce();
-  return UpdateLinkerCapacityReq_descriptor_;
+  return ReportLinkerReq_descriptor_;
 }
 
-const UpdateLinkerCapacityReq& UpdateLinkerCapacityReq::default_instance() {
+const ReportLinkerReq& ReportLinkerReq::default_instance() {
   if (default_instance_ == NULL) protobuf_AddDesc_proto_2fserver_5finternal_2eproto();
   return *default_instance_;
 }
 
-UpdateLinkerCapacityReq* UpdateLinkerCapacityReq::default_instance_ = NULL;
+ReportLinkerReq* ReportLinkerReq::default_instance_ = NULL;
 
-UpdateLinkerCapacityReq* UpdateLinkerCapacityReq::New() const {
-  return new UpdateLinkerCapacityReq;
+ReportLinkerReq* ReportLinkerReq::New() const {
+  return new ReportLinkerReq;
 }
 
-void UpdateLinkerCapacityReq::Clear() {
+void ReportLinkerReq::Clear() {
   load_ = 0u;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
 
-bool UpdateLinkerCapacityReq::MergePartialFromCodedStream(
+bool ReportLinkerReq::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:svr.UpdateLinkerCapacityReq)
+  // @@protoc_insertion_point(parse_start:svr.ReportLinkerReq)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
     tag = p.first;
@@ -5883,17 +5882,17 @@ bool UpdateLinkerCapacityReq::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:svr.UpdateLinkerCapacityReq)
+  // @@protoc_insertion_point(parse_success:svr.ReportLinkerReq)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:svr.UpdateLinkerCapacityReq)
+  // @@protoc_insertion_point(parse_failure:svr.ReportLinkerReq)
   return false;
 #undef DO_
 }
 
-void UpdateLinkerCapacityReq::SerializeWithCachedSizes(
+void ReportLinkerReq::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:svr.UpdateLinkerCapacityReq)
+  // @@protoc_insertion_point(serialize_start:svr.ReportLinkerReq)
   // required uint32 load = 1;
   if (has_load()) {
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->load(), output);
@@ -5903,12 +5902,12 @@ void UpdateLinkerCapacityReq::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
   }
-  // @@protoc_insertion_point(serialize_end:svr.UpdateLinkerCapacityReq)
+  // @@protoc_insertion_point(serialize_end:svr.ReportLinkerReq)
 }
 
-::google::protobuf::uint8* UpdateLinkerCapacityReq::SerializeWithCachedSizesToArray(
+::google::protobuf::uint8* ReportLinkerReq::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // @@protoc_insertion_point(serialize_to_array_start:svr.UpdateLinkerCapacityReq)
+  // @@protoc_insertion_point(serialize_to_array_start:svr.ReportLinkerReq)
   // required uint32 load = 1;
   if (has_load()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->load(), target);
@@ -5918,11 +5917,11 @@ void UpdateLinkerCapacityReq::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:svr.UpdateLinkerCapacityReq)
+  // @@protoc_insertion_point(serialize_to_array_end:svr.ReportLinkerReq)
   return target;
 }
 
-int UpdateLinkerCapacityReq::ByteSize() const {
+int ReportLinkerReq::ByteSize() const {
   int total_size = 0;
 
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
@@ -5945,10 +5944,10 @@ int UpdateLinkerCapacityReq::ByteSize() const {
   return total_size;
 }
 
-void UpdateLinkerCapacityReq::MergeFrom(const ::google::protobuf::Message& from) {
+void ReportLinkerReq::MergeFrom(const ::google::protobuf::Message& from) {
   GOOGLE_CHECK_NE(&from, this);
-  const UpdateLinkerCapacityReq* source =
-    ::google::protobuf::internal::dynamic_cast_if_available<const UpdateLinkerCapacityReq*>(
+  const ReportLinkerReq* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const ReportLinkerReq*>(
       &from);
   if (source == NULL) {
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
@@ -5957,7 +5956,7 @@ void UpdateLinkerCapacityReq::MergeFrom(const ::google::protobuf::Message& from)
   }
 }
 
-void UpdateLinkerCapacityReq::MergeFrom(const UpdateLinkerCapacityReq& from) {
+void ReportLinkerReq::MergeFrom(const ReportLinkerReq& from) {
   GOOGLE_CHECK_NE(&from, this);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (from.has_load()) {
@@ -5967,25 +5966,25 @@ void UpdateLinkerCapacityReq::MergeFrom(const UpdateLinkerCapacityReq& from) {
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
 
-void UpdateLinkerCapacityReq::CopyFrom(const ::google::protobuf::Message& from) {
+void ReportLinkerReq::CopyFrom(const ::google::protobuf::Message& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-void UpdateLinkerCapacityReq::CopyFrom(const UpdateLinkerCapacityReq& from) {
+void ReportLinkerReq::CopyFrom(const ReportLinkerReq& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool UpdateLinkerCapacityReq::IsInitialized() const {
+bool ReportLinkerReq::IsInitialized() const {
   if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
 
   return true;
 }
 
-void UpdateLinkerCapacityReq::Swap(UpdateLinkerCapacityReq* other) {
+void ReportLinkerReq::Swap(ReportLinkerReq* other) {
   if (other != this) {
     std::swap(load_, other->load_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
@@ -5994,11 +5993,11 @@ void UpdateLinkerCapacityReq::Swap(UpdateLinkerCapacityReq* other) {
   }
 }
 
-::google::protobuf::Metadata UpdateLinkerCapacityReq::GetMetadata() const {
+::google::protobuf::Metadata ReportLinkerReq::GetMetadata() const {
   protobuf_AssignDescriptorsOnce();
   ::google::protobuf::Metadata metadata;
-  metadata.descriptor = UpdateLinkerCapacityReq_descriptor_;
-  metadata.reflection = UpdateLinkerCapacityReq_reflection_;
+  metadata.descriptor = ReportLinkerReq_descriptor_;
+  metadata.reflection = ReportLinkerReq_reflection_;
   return metadata;
 }
 

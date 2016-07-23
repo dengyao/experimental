@@ -127,7 +127,7 @@ bool LoginManager::HandleLinkerMessage(SessionHandle &session, google::protobuf:
 	{
 		return OnLinkerLogin(session, message, buffer);
 	}
-	else if (dynamic_cast<svr::UpdateLinkerCapacityReq*>(message) != nullptr)
+	else if (dynamic_cast<svr::ReportLinkerReq*>(message) != nullptr)
 	{
 		return OnLinkerUpdateLoadCapacity(session, message, buffer);
 	}
@@ -256,7 +256,7 @@ bool LoginManager::OnLinkerLogin(SessionHandle &session, google::protobuf::Messa
 // Linker上报负载量
 bool LoginManager::OnLinkerUpdateLoadCapacity(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
-	auto request = static_cast<svr::UpdateLinkerCapacityReq*>(message);
+	auto request = static_cast<svr::ReportLinkerReq*>(message);
 
 	uint16_t linker_id = 0;
 	uint16_t partition_id = 0;

@@ -29,8 +29,7 @@ void SessionHandle::OnMessage(network::NetMessage &message)
 	auto request = ProtubufCodec::Decode(message);
 	if (request == nullptr)
 	{
-		login_manager_.RespondErrorCode(*this, message, pub::kInvalidProtocol);
-		return;
+		return login_manager_.RespondErrorCode(*this, message, pub::kInvalidProtocol);
 	}
 
 	// 注册Linker
@@ -48,9 +47,8 @@ void SessionHandle::OnMessage(network::NetMessage &message)
 	{
 		message.Clear();
 		pub::PongRsp response;
-		ProtubufCodec::Encode(&response, message);
-		Send(message);
-		return;
+		ProtubufCodec::Encode(&response, message);	
+		return Send(message);
 	}
 
 	// 处理消息

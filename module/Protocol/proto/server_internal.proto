@@ -147,7 +147,7 @@ message LinkerLoginRsp {
 }
 
 // 上报Linker负载量
-message UpdateLinkerCapacityReq {
+message ReportLinkerReq {
     required uint32 load = 1; // 负载量
 }
 

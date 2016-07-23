@@ -4,13 +4,18 @@
 #include <proto/public_struct.pb.h>
 #include <proto/server_internal.pb.h>
 #include "Logging.h"
+#include "GlobalObject.h"
+#include "ServerConfig.h"
 #include "SessionHandle.h"
+#include "LoginConnector.h"
 
 LinkerManager::LinkerManager(network::IOServiceThreadManager &threads)
 	: threads_(threads)
+	, counter_(ServerConfig::GetInstance()->GetReportInterval())
 	, timer_(threads.MainThread()->IOService(), std::chrono::seconds(1))
 	, wait_handler_(std::bind(&LinkerManager::OnUpdateTimer, this, std::placeholders::_1))
 {
+	timer_.async_wait(wait_handler_);
 }
 
 // 回复错误码
@@ -162,6 +167,16 @@ void LinkerManager::OnUpdateTimer(asio::error_code error_code)
 		{
 			++iter;
 		}
+	}
+
+	// 上报Linker在线人数
+	if (counter_ > 0 && --counter_ == 0)
+	{
+		svr::ReportLinkerReq request;
+		request.set_load(user_session_.size());
+		GlobalLoginConnector()->Send(&request);
+		counter_ = ServerConfig::GetInstance()->GetReportInterval();
+		logger()->info("上报当前在线人数: {}", user_session_.size());
 	}
 
 	timer_.expires_from_now(std::chrono::seconds(1));

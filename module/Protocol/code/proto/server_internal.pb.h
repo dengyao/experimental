@@ -53,7 +53,7 @@ class BroadcastReq;
 class RouterNotify;
 class LinkerLoginReq;
 class LinkerLoginRsp;
-class UpdateLinkerCapacityReq;
+class ReportLinkerReq;
 class UpdateTokenReq;
 
 enum QueryDBAgentReq_ActoinType {
@@ -1860,14 +1860,14 @@ class LinkerLoginRsp : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
-class UpdateLinkerCapacityReq : public ::google::protobuf::Message {
+class ReportLinkerReq : public ::google::protobuf::Message {
  public:
-  UpdateLinkerCapacityReq();
-  virtual ~UpdateLinkerCapacityReq();
+  ReportLinkerReq();
+  virtual ~ReportLinkerReq();
 
-  UpdateLinkerCapacityReq(const UpdateLinkerCapacityReq& from);
+  ReportLinkerReq(const ReportLinkerReq& from);
 
-  inline UpdateLinkerCapacityReq& operator=(const UpdateLinkerCapacityReq& from) {
+  inline ReportLinkerReq& operator=(const ReportLinkerReq& from) {
     CopyFrom(from);
     return *this;
   }
@@ -1881,17 +1881,17 @@ class UpdateLinkerCapacityReq : public ::google::protobuf::Message {
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
-  static const UpdateLinkerCapacityReq& default_instance();
+  static const ReportLinkerReq& default_instance();
 
-  void Swap(UpdateLinkerCapacityReq* other);
+  void Swap(ReportLinkerReq* other);
 
   // implements Message ----------------------------------------------
 
-  UpdateLinkerCapacityReq* New() const;
+  ReportLinkerReq* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const UpdateLinkerCapacityReq& from);
-  void MergeFrom(const UpdateLinkerCapacityReq& from);
+  void CopyFrom(const ReportLinkerReq& from);
+  void MergeFrom(const ReportLinkerReq& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -1920,7 +1920,7 @@ class UpdateLinkerCapacityReq : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 load() const;
   inline void set_load(::google::protobuf::uint32 value);
 
-  // @@protoc_insertion_point(class_scope:svr.UpdateLinkerCapacityReq)
+  // @@protoc_insertion_point(class_scope:svr.ReportLinkerReq)
  private:
   inline void set_has_load();
   inline void clear_has_load();
@@ -1935,7 +1935,7 @@ class UpdateLinkerCapacityReq : public ::google::protobuf::Message {
   friend void protobuf_ShutdownFile_proto_2fserver_5finternal_2eproto();
 
   void InitAsDefaultInstance();
-  static UpdateLinkerCapacityReq* default_instance_;
+  static ReportLinkerReq* default_instance_;
 };
 // -------------------------------------------------------------------
 
@@ -3548,30 +3548,30 @@ inline void LinkerLoginRsp::set_linker_id(::google::protobuf::uint32 value) {
 
 // -------------------------------------------------------------------
 
-// UpdateLinkerCapacityReq
+// ReportLinkerReq
 
 // required uint32 load = 1;
-inline bool UpdateLinkerCapacityReq::has_load() const {
+inline bool ReportLinkerReq::has_load() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void UpdateLinkerCapacityReq::set_has_load() {
+inline void ReportLinkerReq::set_has_load() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void UpdateLinkerCapacityReq::clear_has_load() {
+inline void ReportLinkerReq::clear_has_load() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void UpdateLinkerCapacityReq::clear_load() {
+inline void ReportLinkerReq::clear_load() {
   load_ = 0u;
   clear_has_load();
 }
-inline ::google::protobuf::uint32 UpdateLinkerCapacityReq::load() const {
-  // @@protoc_insertion_point(field_get:svr.UpdateLinkerCapacityReq.load)
+inline ::google::protobuf::uint32 ReportLinkerReq::load() const {
+  // @@protoc_insertion_point(field_get:svr.ReportLinkerReq.load)
   return load_;
 }
-inline void UpdateLinkerCapacityReq::set_load(::google::protobuf::uint32 value) {
+inline void ReportLinkerReq::set_load(::google::protobuf::uint32 value) {
   set_has_load();
   load_ = value;
-  // @@protoc_insertion_point(field_set:svr.UpdateLinkerCapacityReq.load)
+  // @@protoc_insertion_point(field_set:svr.ReportLinkerReq.load)
 }
 
 // -------------------------------------------------------------------
