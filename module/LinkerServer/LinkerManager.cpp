@@ -48,12 +48,14 @@ void LinkerManager::HandleMessageFromUser(SessionHandle *session, google::protob
 		auto request = dynamic_cast<cli::UserAuthReq*>(messsage);
 		if (request == nullptr)
 		{
+			logger()->debug("用户未验证，来自{}:{}", session->RemoteEndpoint().address().to_string(), session->RemoteEndpoint().port());
 			return RespondErrorCodeToUser(session, buffer, pub::kUserUnverified, messsage->GetTypeName().c_str());
 		}
 
 		auto auth_iter = user_auth_.find(request->token());
 		if (auth_iter == user_auth_.end())
-		{		
+		{
+			logger()->debug("用户验证失败，来自{}:{}", session->RemoteEndpoint().address().to_string(), session->RemoteEndpoint().port());
 			return RespondErrorCodeToUser(session, buffer, pub::kAuthenticationFailure, messsage->GetTypeName().c_str());
 		}
 
@@ -69,6 +71,7 @@ void LinkerManager::HandleMessageFromUser(SessionHandle *session, google::protob
 			if (session_ptr != nullptr)
 			{
 				session_ptr->Close();
+				logger()->warn("用户{}:{}被踢掉线!", session_ptr->RemoteEndpoint().address().to_string(), session_ptr->RemoteEndpoint().port());
 			}
 		}
 
@@ -85,7 +88,10 @@ void LinkerManager::HandleMessageFromUser(SessionHandle *session, google::protob
 		cli::UserAuthRsp response;
 		response.set_user_id(auth_iter->second.user_id);
 		ProtubufCodec::Encode(&response, buffer);
-		return session->Send(buffer);
+		session->Send(buffer);
+
+		logger()->info("用户[{}]验证成功!", auth_iter->second.user_id);
+		return;
 	}
 }
 
@@ -107,6 +113,7 @@ void LinkerManager::HandleUserClose(SessionHandle *session)
 			user_session_.erase(iter);
 		}
 		reverse_user_session_.erase(found);
+		logger()->info("用户[{}]关闭连接!", found->second);
 	}
 }
 
@@ -147,6 +154,7 @@ void LinkerManager::OnUpdateTimer(asio::error_code error_code)
 	{
 		if (std::chrono::steady_clock::now() - iter->second.time >= std::chrono::seconds(60))
 		{
+			logger()->debug("删除超时的Token {}", iter->first);
 			iter = user_auth_.erase(iter);
 		}
 		{
@@ -160,6 +168,7 @@ void LinkerManager::OnUpdateTimer(asio::error_code error_code)
 		auto session = static_cast<SessionHandle*>(threads_.SessionHandler(*iter).get());
 		if (session != nullptr && session->IsAuthTimeout())
 		{
+			logger()->debug("关闭长时间未验证连接，{}:{}", session->RemoteEndpoint().address().to_string(), session->RemoteEndpoint().port());
 			session->Close();
 			iter = unauth_user_session_.erase(iter);
 		}
