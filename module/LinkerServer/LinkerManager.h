@@ -25,6 +25,11 @@ struct SUserAuth
 {
 	uint32_t user_id;
 	std::chrono::steady_clock::time_point time;
+
+	SUserAuth()
+		: user_id(0), time(std::chrono::steady_clock::now())
+	{
+	}
 };
 
 class LinkerManager
@@ -41,6 +46,9 @@ public:
 
 	// 处理用户关闭连接
 	void HandleUserClose(SessionHandle *session);
+
+	// 回复错误码
+	void RespondErrorCodeToUser(SessionHandle *session, network::NetMessage &buffer, int error_code, const char *what = nullptr);
 
 	// 处理来自路由的消息
 	void HandleMessageFromRouter(router::Connector *connector, google::protobuf::Message *messsage, network::NetMessage &buffer);

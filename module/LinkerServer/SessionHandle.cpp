@@ -29,7 +29,7 @@ void SessionHandle::OnMessage(network::NetMessage &message)
 		return;
 	}
 
-	// 处理心跳请求
+	// 处理心跳
 	if (dynamic_cast<pub::PingReq*>(request.get()) != nullptr)
 	{
 		message.Clear();
@@ -38,6 +38,9 @@ void SessionHandle::OnMessage(network::NetMessage &message)
 		Send(message);
 		return;
 	}
+
+	// 处理请求
+	linker_manager_.HandleMessageFromUser(this, request.get(), message);
 }
 
 void SessionHandle::OnClose()

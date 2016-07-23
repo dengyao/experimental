@@ -49,11 +49,13 @@ enum ErrorCode {
   kCreateAccountFailed = 10013,
   kPartitionNotExist = 10014,
   kLinkerNotExist = 10015,
-  kUsernameOrPasswordError = 10016
+  kUsernameOrPasswordError = 10016,
+  kUserUnverified = 10017,
+  kAuthenticationFailure = 10018
 };
 bool ErrorCode_IsValid(int value);
 const ErrorCode ErrorCode_MIN = kNotLoggedIn;
-const ErrorCode ErrorCode_MAX = kUsernameOrPasswordError;
+const ErrorCode ErrorCode_MAX = kAuthenticationFailure;
 const int ErrorCode_ARRAYSIZE = ErrorCode_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* ErrorCode_descriptor();

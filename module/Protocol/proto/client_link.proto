@@ -7,4 +7,5 @@ message UserAuthReq {
 
 // 用户验证返回
 message UserAuthRsp {
+    required uint32 user_id = 1; // 用户id
 }

@@ -58,7 +58,7 @@ void protobuf_AddDesc_proto_2fpublic_5fenum_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\027proto/public_enum.proto\022\003pub*\207\003\n\tError"
+    "\n\027proto/public_enum.proto\022\003pub*\272\003\n\tError"
     "Code\022\021\n\014kNotLoggedIn\020\221N\022\020\n\013kDisconnect\020\222"
     "N\022\022\n\rkNotConnected\020\223N\022\025\n\020kInvalidProtoco"
     "l\020\224N\022\026\n\021kInvalidOperation\020\225N\022\026\n\021kNotFoun"
@@ -68,7 +68,8 @@ void protobuf_AddDesc_proto_2fpublic_5fenum_2eproto() {
     "validDataPacket\020\233N\022\023\n\016kDatabaseError\020\234N\022"
     "\031\n\024kCreateAccountFailed\020\235N\022\027\n\022kPartition"
     "NotExist\020\236N\022\024\n\017kLinkerNotExist\020\237N\022\035\n\030kUs"
-    "ernameOrPasswordError\020\240N", 424);
+    "ernameOrPasswordError\020\240N\022\024\n\017kUserUnverif"
+    "ied\020\241N\022\033\n\026kAuthenticationFailure\020\242N", 475);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "proto/public_enum.proto", &protobuf_RegisterTypes);
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_proto_2fpublic_5fenum_2eproto);
@@ -102,6 +103,8 @@ bool ErrorCode_IsValid(int value) {
     case 10014:
     case 10015:
     case 10016:
+    case 10017:
+    case 10018:
       return true;
     default:
       return false;
