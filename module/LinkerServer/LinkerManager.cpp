@@ -52,8 +52,35 @@ void LinkerManager::HandleMessageFromUser(SessionHandle *session, google::protob
 			return RespondErrorCodeToUser(session, buffer, pub::kAuthenticationFailure, messsage->GetTypeName().c_str());
 		}
 
+		// 是否已验证
+		auto session_iter = user_session_.find(auth_iter->second.user_id);
+		if (session_iter != user_session_.end())
+		{
+			// 踢掉上一个会话
+			auto session_id = session_iter->second.session_id;
+			user_session_.erase(session_iter);
+			reverse_user_session_.erase(session_id);
+			auto session_ptr = threads_.SessionHandler(session_id);
+			if (session_ptr != nullptr)
+			{
+				session_ptr->Close();
+			}
+		}
+
+		// 更新数据
+		SUserSession session_info;
+		session_info.token = request->token();
+		session_info.session_id = session->SessionID();
+		unauth_user_session_.erase(session->SessionID());
+		user_session_.insert(std::make_pair(auth_iter->second.user_id, session_info));
+		reverse_user_session_.insert(std::make_pair(session->SessionID(), auth_iter->second.user_id));
+
+		// 响应请求
+		buffer.Clear();
 		cli::UserAuthRsp response;
-		respo
+		response.set_user_id(auth_iter->second.user_id);
+		ProtubufCodec::Encode(&response, buffer);
+		return session->Send(buffer);
 	}
 }
 
@@ -64,7 +91,16 @@ void LinkerManager::HandleUserClose(SessionHandle *session)
 	auto found = reverse_user_session_.find(session->SessionID());
 	if (found != reverse_user_session_.end())
 	{
-		user_session_.erase(found->first);
+		auto iter = user_session_.find(found->first);
+		assert(iter != user_session_.end());
+		if (iter != user_session_.end())
+		{
+			// 断线后Token在一定时间内依然有效
+			SUserAuth auth;
+			auth.user_id = found->first;
+			user_auth_.insert(std::make_pair(iter->second.token, auth));
+			user_session_.erase(iter);
+		}
 		reverse_user_session_.erase(found);
 	}
 }

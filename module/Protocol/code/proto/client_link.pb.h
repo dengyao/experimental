@@ -170,13 +170,23 @@ class UserAuthRsp : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
+  // required uint32 user_id = 1;
+  inline bool has_user_id() const;
+  inline void clear_user_id();
+  static const int kUserIdFieldNumber = 1;
+  inline ::google::protobuf::uint32 user_id() const;
+  inline void set_user_id(::google::protobuf::uint32 value);
+
   // @@protoc_insertion_point(class_scope:cli.UserAuthRsp)
  private:
+  inline void set_has_user_id();
+  inline void clear_has_user_id();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
+  ::google::protobuf::uint32 user_id_;
   friend void  protobuf_AddDesc_proto_2fclient_5flink_2eproto();
   friend void protobuf_AssignDesc_proto_2fclient_5flink_2eproto();
   friend void protobuf_ShutdownFile_proto_2fclient_5flink_2eproto();
@@ -218,6 +228,30 @@ inline void UserAuthReq::set_token(::google::protobuf::uint64 value) {
 // -------------------------------------------------------------------
 
 // UserAuthRsp
+
+// required uint32 user_id = 1;
+inline bool UserAuthRsp::has_user_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void UserAuthRsp::set_has_user_id() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void UserAuthRsp::clear_has_user_id() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void UserAuthRsp::clear_user_id() {
+  user_id_ = 0u;
+  clear_has_user_id();
+}
+inline ::google::protobuf::uint32 UserAuthRsp::user_id() const {
+  // @@protoc_insertion_point(field_get:cli.UserAuthRsp.user_id)
+  return user_id_;
+}
+inline void UserAuthRsp::set_user_id(::google::protobuf::uint32 value) {
+  set_has_user_id();
+  user_id_ = value;
+  // @@protoc_insertion_point(field_set:cli.UserAuthRsp.user_id)
+}
 
 
 // @@protoc_insertion_point(namespace_scope)

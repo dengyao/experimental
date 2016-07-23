@@ -32,6 +32,18 @@ struct SUserAuth
 	}
 };
 
+// 用户会话信息
+struct SUserSession
+{
+	uint64_t token;
+	network::TCPSessionID session_id;
+
+	SUserSession()
+		: token(0), session_id(0)
+	{
+	}
+};
+
 class LinkerManager
 {
 public:
@@ -65,7 +77,7 @@ private:
 	const std::function<void(asio::error_code)>			wait_handler_;
 	network::IOServiceThreadManager&					threads_;
 	std::unordered_map<uint64_t, SUserAuth>				user_auth_;
-	std::unordered_map<uint32_t, network::TCPSessionID>	user_session_;
+	std::unordered_map<uint32_t, SUserSession>	        user_session_;
 	std::unordered_map<network::TCPSessionID, uint32_t>	reverse_user_session_;
 	std::unordered_set<network::TCPSessionID>			unauth_user_session_;
 };

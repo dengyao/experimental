@@ -53,6 +53,7 @@ void protobuf_AssignDesc_proto_2fclient_5flink_2eproto() {
       sizeof(UserAuthReq));
   UserAuthRsp_descriptor_ = file->message_type(1);
   static const int UserAuthRsp_offsets_[1] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UserAuthRsp, user_id_),
   };
   UserAuthRsp_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -100,7 +101,8 @@ void protobuf_AddDesc_proto_2fclient_5flink_2eproto() {
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\027proto/client_link.proto\022\003cli\"\034\n\013UserAu"
-    "thReq\022\r\n\005token\030\001 \002(\004\"\r\n\013UserAuthRsp", 75);
+    "thReq\022\r\n\005token\030\001 \002(\004\"\036\n\013UserAuthRsp\022\017\n\007u"
+    "ser_id\030\001 \002(\r", 92);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "proto/client_link.proto", &protobuf_RegisterTypes);
   UserAuthReq::default_instance_ = new UserAuthReq();
@@ -343,6 +345,7 @@ void UserAuthReq::Swap(UserAuthReq* other) {
 // ===================================================================
 
 #ifndef _MSC_VER
+const int UserAuthRsp::kUserIdFieldNumber;
 #endif  // !_MSC_VER
 
 UserAuthRsp::UserAuthRsp()
@@ -363,6 +366,7 @@ UserAuthRsp::UserAuthRsp(const UserAuthRsp& from)
 
 void UserAuthRsp::SharedCtor() {
   _cached_size_ = 0;
+  user_id_ = 0u;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -398,6 +402,7 @@ UserAuthRsp* UserAuthRsp::New() const {
 }
 
 void UserAuthRsp::Clear() {
+  user_id_ = 0u;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
@@ -411,14 +416,33 @@ bool UserAuthRsp::MergePartialFromCodedStream(
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
     tag = p.first;
     if (!p.second) goto handle_unusual;
-  handle_unusual:
-    if (tag == 0 ||
-        ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-        ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
-      goto success;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required uint32 user_id = 1;
+      case 1: {
+        if (tag == 8) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &user_id_)));
+          set_has_user_id();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
     }
-    DO_(::google::protobuf::internal::WireFormat::SkipField(
-          input, tag, mutable_unknown_fields()));
   }
 success:
   // @@protoc_insertion_point(parse_success:cli.UserAuthRsp)
@@ -432,6 +456,11 @@ failure:
 void UserAuthRsp::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:cli.UserAuthRsp)
+  // required uint32 user_id = 1;
+  if (has_user_id()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->user_id(), output);
+  }
+
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -442,6 +471,11 @@ void UserAuthRsp::SerializeWithCachedSizes(
 ::google::protobuf::uint8* UserAuthRsp::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // @@protoc_insertion_point(serialize_to_array_start:cli.UserAuthRsp)
+  // required uint32 user_id = 1;
+  if (has_user_id()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->user_id(), target);
+  }
+
   if (!unknown_fields().empty()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
@@ -453,6 +487,15 @@ void UserAuthRsp::SerializeWithCachedSizes(
 int UserAuthRsp::ByteSize() const {
   int total_size = 0;
 
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required uint32 user_id = 1;
+    if (has_user_id()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->user_id());
+    }
+
+  }
   if (!unknown_fields().empty()) {
     total_size +=
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
@@ -478,6 +521,11 @@ void UserAuthRsp::MergeFrom(const ::google::protobuf::Message& from) {
 
 void UserAuthRsp::MergeFrom(const UserAuthRsp& from) {
   GOOGLE_CHECK_NE(&from, this);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_user_id()) {
+      set_user_id(from.user_id());
+    }
+  }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
 
@@ -494,12 +542,15 @@ void UserAuthRsp::CopyFrom(const UserAuthRsp& from) {
 }
 
 bool UserAuthRsp::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
 
   return true;
 }
 
 void UserAuthRsp::Swap(UserAuthRsp* other) {
   if (other != this) {
+    std::swap(user_id_, other->user_id_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
   }
