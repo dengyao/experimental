@@ -25,8 +25,7 @@ void SessionHandle::OnMessage(network::NetMessage &message)
 	auto request = ProtubufCodec::Decode(message);
 	if (request == nullptr)
 	{
-		//login_manager_.RespondErrorCode(*this, message, pub::kInvalidProtocol);
-		return;
+		return linker_manager_.RespondErrorCodeToUser(this, message, pub::kInvalidProtocol);
 	}
 
 	// 处理心跳
@@ -34,9 +33,8 @@ void SessionHandle::OnMessage(network::NetMessage &message)
 	{
 		message.Clear();
 		pub::PongRsp response;
-		ProtubufCodec::Encode(&response, message);
-		Send(message);
-		return;
+		ProtubufCodec::Encode(&response, message);	
+		return Send(message);
 	}
 
 	// 处理请求
@@ -45,7 +43,7 @@ void SessionHandle::OnMessage(network::NetMessage &message)
 
 void SessionHandle::OnClose()
 {
-
+	linker_manager_.HandleUserClose(this);
 }
 
 /************************************************************************/
