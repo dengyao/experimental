@@ -28,7 +28,7 @@ void SessionHandle::OnMessage(network::NetMessage &message)
 	auto request = ProtubufCodec::Decode(message);
 	if (request == nullptr)
 	{	
-		return agent_manager_.RespondErrorCode(*this, 0, pub::kInvalidProtocol, message);
+		return agent_manager_.RespondErrorCode(this, 0, pub::kInvalidProtocol, message);
 	}
 
 	// 连接后必须登录
@@ -38,7 +38,7 @@ void SessionHandle::OnMessage(network::NetMessage &message)
 		{
 			if (dynamic_cast<svr::LoginDBAgentReq*>(request.get()) == nullptr)
 			{
-				agent_manager_.RespondErrorCode(*this, 0, pub::kNotLoggedIn, message);
+				agent_manager_.RespondErrorCode(this, 0, pub::kNotLoggedIn, message);
 				logger()->warn("操作前未发起登录请求，来自{}:{}", RemoteEndpoint().address().to_string(), RemoteEndpoint().port());
 			}
 			else
@@ -48,7 +48,7 @@ void SessionHandle::OnMessage(network::NetMessage &message)
 				svr::LoginDBAgentRsp response;
 				response.set_heartbeat_interval(ServerConfig::GetInstance()->GetHeartbeatInterval());
 				ProtubufCodec::Encode(&response, message);
-				Respond(message);
+				Write(message);
 			}
 		}
 	}
@@ -58,11 +58,11 @@ void SessionHandle::OnMessage(network::NetMessage &message)
 		message.Clear();
 		pub::PongRsp response;
 		ProtubufCodec::Encode(&response, message);
-		Respond(message);
+		Write(message);
 	}
 	else
 	{
-		agent_manager_.HandleMessage(*this, request.get(), message);
+		agent_manager_.HandleMessage(this, request.get(), message);
 	}
 }
 
@@ -71,8 +71,8 @@ void SessionHandle::OnClose()
 {
 }
 
-// 回复消息
-void SessionHandle::Respond(const network::NetMessage &message)
+// 写入消息
+void SessionHandle::Write(const network::NetMessage &message)
 {
 	StatisticalTools::GetInstance()->AccumulateDownVolume(message.Readable() + sizeof(network::DefaultMessageFilter::MessageHeader));
 	Send(message);

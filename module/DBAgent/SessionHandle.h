@@ -19,8 +19,8 @@ public:
 	SessionHandle(AgentManager &manager);
 
 public:
-	// 回复消息
-	void Respond(const network::NetMessage &message);
+	// 写入消息
+	void Write(const network::NetMessage &message);
 
 private:
 	// 连接事件

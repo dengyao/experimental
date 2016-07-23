@@ -52,10 +52,10 @@ void AgentManager::UpdateHandleResult(asio::error_code error_code)
 		return;
 	}
 
-	assert(completion_list_.empty());
 	network::NetMessage buffer;
-	mysql_agent_.GetCompletionQueue(completion_list_);
-	for (const auto &result : completion_list_)
+	assert(completion_lists_.empty());
+	mysql_agent_.GetCompletionLists(completion_lists_);
+	for (const auto &result : completion_lists_)
 	{
 		buffer.Clear();
 		auto found = requests_.find(result.GetSequence());
@@ -84,7 +84,7 @@ void AgentManager::UpdateHandleResult(asio::error_code error_code)
 		generator_.Put(result.GetSequence());
 		requests_.erase(found);
 	}
-	completion_list_.clear();
+	completion_lists_.clear();
 	timer_.async_wait(wait_handler_);
 }
 
@@ -113,7 +113,7 @@ void AgentManager::UpdateStatisicalData(asio::error_code error_code)
 }
 
 // 接受处理请求
-void AgentManager::HandleMessage(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
+void AgentManager::HandleMessage(SessionHandle *session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
 	if (dynamic_cast<svr::QueryDBAgentReq*>(message) != nullptr)
 	{
@@ -126,12 +126,12 @@ void AgentManager::HandleMessage(SessionHandle &session, google::protobuf::Messa
 	else
 	{
 		RespondErrorCode(session, 0, pub::kInvalidProtocol, buffer);
-		logger()->warn("协议无效，来自{}:{}", session.RemoteEndpoint().address().to_string(), session.RemoteEndpoint().port());
+		logger()->warn("协议无效，来自{}:{}", session->RemoteEndpoint().address().to_string(), session->RemoteEndpoint().port());
 	}	
 }
 
 // 查询服务器信息
-void AgentManager::OnQueryAgentInfo(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
+void AgentManager::OnQueryAgentInfo(SessionHandle *session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
 	buffer.Clear();
 	svr::DBAgentInfoRsp response;
@@ -144,11 +144,11 @@ void AgentManager::OnQueryAgentInfo(SessionHandle &session, google::protobuf::Me
 	response.set_handle_update_count(StatisticalTools::GetInstance()->HandleUpdateCount());
 	response.set_handle_delete_count(StatisticalTools::GetInstance()->HandleDeleteCount());
 	ProtubufCodec::Encode(&response, buffer);
-	session.Respond(buffer);
+	session->Write(buffer);
 }
 
 // 操作数据库
-void AgentManager::OnHandleDatabase(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
+void AgentManager::OnHandleDatabase(SessionHandle *session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
 	uint32_t sequence_native = 0;
 	svr::QueryDBAgentReq *request = static_cast<svr::QueryDBAgentReq*>(message);
@@ -161,7 +161,7 @@ void AgentManager::OnHandleDatabase(SessionHandle &session, google::protobuf::Me
 			{
 				// 添加新的数据库任务
 				svr::QueryDBAgentReq::DatabaseType dbtype = request->dbtype();
-				requests_.insert(std::make_pair(sequence_native, SSourceInfo(type_native, request->sequence(), session.SessionID())));
+				requests_.insert(std::make_pair(sequence_native, SSourceInfo(type_native, request->sequence(), session->SessionID())));
 				if (dbtype == svr::QueryDBAgentReq::kMySQL)
 				{
 					mysql_agent_.Append(sequence_native, type_native, request->dbname().c_str(), request->statement().c_str(), request->statement().size());
@@ -179,7 +179,7 @@ void AgentManager::OnHandleDatabase(SessionHandle &session, google::protobuf::Me
 				requests_.erase(sequence_native);
 				generator_.Put(sequence_native);
 				RespondErrorCode(session, request->sequence(), pub::kNotFoundDatabase, buffer);
-				logger()->warn("协议无效，来自{}:{}", session.RemoteEndpoint().address().to_string(), session.RemoteEndpoint().port());
+				logger()->warn("协议无效，来自{}:{}", session->RemoteEndpoint().address().to_string(), session->RemoteEndpoint().port());
 			}
 			catch (ResourceInsufficiency &)
 			{
@@ -195,7 +195,7 @@ void AgentManager::OnHandleDatabase(SessionHandle &session, google::protobuf::Me
 			// 无效的操作类型
 			generator_.Put(sequence_native);
 			RespondErrorCode(session, request->sequence(), pub::kInvalidOperation, buffer);
-			logger()->warn("无效的数据库操作，类型{}，来自{}:{}", request->action(), session.RemoteEndpoint().address().to_string(), session.RemoteEndpoint().port());
+			logger()->warn("无效的数据库操作，类型{}，来自{}:{}", request->action(), session->RemoteEndpoint().address().to_string(), session->RemoteEndpoint().port());
 		}
 	}
 	else
@@ -207,14 +207,14 @@ void AgentManager::OnHandleDatabase(SessionHandle &session, google::protobuf::Me
 }
 
 // 回复错误码
-void AgentManager::RespondErrorCode(SessionHandle &session, uint32_t sequence, int error_code, network::NetMessage &buffer)
+void AgentManager::RespondErrorCode(SessionHandle *session, uint32_t sequence, int error_code, network::NetMessage &buffer)
 {
 	buffer.Clear();
 	svr::DBAgentErrorRsp response;
 	response.set_sequence(sequence);
 	response.set_error_code(static_cast<pub::ErrorCode>(error_code));
 	ProtubufCodec::Encode(&response, buffer);
-	session.Respond(buffer);
+	session->Write(buffer);
 }
 
 // 回复处理结果
@@ -238,6 +238,6 @@ void AgentManager::RespondHandleResult(network::TCPSessionID id, uint32_t sequen
 			response.set_result(result.GetResult().data(), result.GetResult().size());
 			ProtubufCodec::Encode(&response, buffer);
 		}
-		static_cast<SessionHandle*>(session.get())->Respond(buffer);
+		static_cast<SessionHandle*>(session.get())->Write(buffer);
 	}
 }

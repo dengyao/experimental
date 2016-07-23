@@ -89,7 +89,7 @@ public:
 	}
 
 	// 获取处理完成的请求
-	size_t GetCompletionQueue(std::vector<Result> &lists)
+	size_t GetCompletionLists(std::vector<Result> &lists)
 	{
 		return completion_queue_.TakeAll(lists);
 	}

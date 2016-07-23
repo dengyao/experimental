@@ -70,7 +70,7 @@ void LoginManager::OnUpdateTimer(asio::error_code error_code)
 	}
 
 	// 关闭超时用户连接
-	for (auto iter = connection_map_.begin(); iter != connection_map_.end();)
+	for (auto iter = user_session_.begin(); iter != user_session_.end();)
 	{
 		auto duration = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::steady_clock::now() - iter->second.time).count();
 		if (duration >= ServerConfig::GetInstance()->GetMaxUserOnlineTime())
@@ -84,7 +84,7 @@ void LoginManager::OnUpdateTimer(asio::error_code error_code)
 					session->Close();
 				}
 			}
-			iter = connection_map_.erase(iter);
+			iter = user_session_.erase(iter);
 		}
 		else
 		{
@@ -100,7 +100,7 @@ void LoginManager::OnUpdateTimer(asio::error_code error_code)
 }
 
 // 回复错误码
-void LoginManager::RespondErrorCode(SessionHandle &session, network::NetMessage &buffer, int error_code, const char *what)
+void LoginManager::RespondErrorCode(SessionHandle *session, network::NetMessage &buffer, int error_code, const char *what)
 {
 	buffer.Clear();
 	pub::ErrorRsp response;
@@ -110,17 +110,17 @@ void LoginManager::RespondErrorCode(SessionHandle &session, network::NetMessage 
 		response.set_what(what);
 	}
 	ProtubufCodec::Encode(&response, buffer);
-	session.Send(buffer);
+	session->Send(buffer);
 }
 
 // 处理接受新连接
-void LoginManager::HandleAcceptConnection(SessionHandle &session)
+void LoginManager::HandleAcceptConnection(SessionHandle *session)
 {
-	connection_map_.insert(std::make_pair(session.SessionID(), SConnection()));
+	user_session_.insert(std::make_pair(session->SessionID(), SUserSession()));
 }
 
 // 处理用户消息
-bool LoginManager::HandleUserMessage(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
+bool LoginManager::HandleUserMessage(SessionHandle *session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
 	if (dynamic_cast<cli::QueryPartitionReq*>(message) != nullptr)
 	{
@@ -141,19 +141,19 @@ bool LoginManager::HandleUserMessage(SessionHandle &session, google::protobuf::M
 	else
 	{
 		RespondErrorCode(session, buffer, pub::kInvalidProtocol, message->GetTypeName().c_str());
-		logger()->warn("协议无效，来自{}:{}", session.RemoteEndpoint().address().to_string(), session.RemoteEndpoint().port());
+		logger()->warn("协议无效，来自{}:{}", session->RemoteEndpoint().address().to_string(), session->RemoteEndpoint().port());
 	}
 	return true;
 }
 
-// 处理用户离线
-void LoginManager::HandleUserOffline(SessionHandle &session)
+// 处理用户关闭连接
+void LoginManager::HandleUserClose(SessionHandle *session)
 {
-	connection_map_.erase(session.SessionID());
+	user_session_.erase(session->SessionID());
 }
 
 // 处理Linker消息
-bool LoginManager::HandleLinkerMessage(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
+bool LoginManager::HandleLinkerMessage(SessionHandle *session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
 	if (dynamic_cast<svr::LinkerLoginReq*>(message) != nullptr)
 	{
@@ -166,20 +166,20 @@ bool LoginManager::HandleLinkerMessage(SessionHandle &session, google::protobuf:
 	else
 	{
 		RespondErrorCode(session, buffer, pub::kInvalidProtocol, message->GetTypeName().c_str());
-		logger()->warn("Linker协议无效，来自{}:{}", session.RemoteEndpoint().address().to_string(), session.RemoteEndpoint().port());
+		logger()->warn("Linker协议无效，来自{}:{}", session->RemoteEndpoint().address().to_string(), session->RemoteEndpoint().port());
 		return false;
 	}
 }
 
 // 处理Linker下线
-void LoginManager::HandleLinkerOffline(SessionHandle &session)
+void LoginManager::HandleLinkerClose(SessionHandle *session)
 {
 	for (auto &partition : partition_map_)
 	{
 		auto &linker_lists = partition.second.linker_lists;
 		for (auto iter = linker_lists.begin(); iter != linker_lists.end(); ++iter)
 		{	
-			if (iter->session_id == session.SessionID())
+			if (iter->session_id == session->SessionID())
 			{
 				const uint16_t linker_id = iter->linker_id;
 				const uint16_t partition_id = partition.first;
@@ -192,7 +192,7 @@ void LoginManager::HandleLinkerOffline(SessionHandle &session)
 				}
 
 				logger()->info("partition[{}] linker[{}]下线，来自{}:{}", partition_id, linker_id,
-					session.RemoteEndpoint().address().to_string(), session.RemoteEndpoint().port());
+					session->RemoteEndpoint().address().to_string(), session->RemoteEndpoint().port());
 				return;
 			}
 		}
@@ -200,7 +200,7 @@ void LoginManager::HandleLinkerOffline(SessionHandle &session)
 }
 
 // Linker登录
-bool LoginManager::OnLinkerLogin(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
+bool LoginManager::OnLinkerLogin(SessionHandle *session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
 	auto request = static_cast<svr::LinkerLoginReq*>(message);
 
@@ -213,7 +213,7 @@ bool LoginManager::OnLinkerLogin(SessionHandle &session, google::protobuf::Messa
 	if (found == partition_lists_.end())
 	{
 		RespondErrorCode(session, buffer, pub::kRepeatLogin, message->GetTypeName().c_str());
-		logger()->warn("分区不存在，Linker登录失败，来自{}:{}", session.RemoteEndpoint().address().to_string(), session.RemoteEndpoint().port());
+		logger()->warn("分区不存在，Linker登录失败，来自{}:{}", session->RemoteEndpoint().address().to_string(), session->RemoteEndpoint().port());
 		return false;
 	}
 
@@ -221,7 +221,7 @@ bool LoginManager::OnLinkerLogin(SessionHandle &session, google::protobuf::Messa
 	if (found->status != cli::QueryPartitionRsp::kNormal)
 	{
 		RespondErrorCode(session, buffer, pub::kRepeatLogin, message->GetTypeName().c_str());
-		logger()->warn("分区停机维护中，Linker登录失败，来自{}:{}", session.RemoteEndpoint().address().to_string(), session.RemoteEndpoint().port());
+		logger()->warn("分区停机维护中，Linker登录失败，来自{}:{}", session->RemoteEndpoint().address().to_string(), session->RemoteEndpoint().port());
 		return false;
 	}
 
@@ -238,10 +238,10 @@ bool LoginManager::OnLinkerLogin(SessionHandle &session, google::protobuf::Messa
 	auto &linker_lists = partition_iter->second.linker_lists;
 	for (const auto &item : linker_lists)
 	{
-		if (item.session_id == session.SessionID() || (request->has_linker_id() && request->linker_id() == item.linker_id))
+		if (item.session_id == session->SessionID() || (request->has_linker_id() && request->linker_id() == item.linker_id))
 		{
 			RespondErrorCode(session, buffer, pub::kRepeatLogin, message->GetTypeName().c_str());
-			logger()->warn("Linker重复登录，来自{}:{}", session.RemoteEndpoint().address().to_string(), session.RemoteEndpoint().port());
+			logger()->warn("Linker重复登录，来自{}:{}", session->RemoteEndpoint().address().to_string(), session->RemoteEndpoint().port());
 			return false;
 		}
 	}
@@ -250,7 +250,7 @@ bool LoginManager::OnLinkerLogin(SessionHandle &session, google::protobuf::Messa
 	SLinkerItem linker_item;
 	linker_item.port = request->port();
 	linker_item.public_ip = request->public_ip();
-	linker_item.session_id = session.SessionID();
+	linker_item.session_id = session->SessionID();
 	if (request->has_linker_id())
 	{
 		linker_item.linker_id = request->linker_id();
@@ -265,7 +265,7 @@ bool LoginManager::OnLinkerLogin(SessionHandle &session, google::protobuf::Messa
 		}
 		else
 		{
-			logger()->warn("生成LinkerID失败!，来自{}:{}", session.RemoteEndpoint().address().to_string(), session.RemoteEndpoint().port());
+			logger()->warn("生成LinkerID失败!，来自{}:{}", session->RemoteEndpoint().address().to_string(), session->RemoteEndpoint().port());
 			return false;
 		}
 	}
@@ -277,16 +277,16 @@ bool LoginManager::OnLinkerLogin(SessionHandle &session, google::protobuf::Messa
 	response.set_linker_id(linker_item.linker_id);
 	response.set_heartbeat_interval(ServerConfig::GetInstance()->GetHeartbeatInterval());
 	ProtubufCodec::Encode(&response, buffer);
-	session.Send(buffer);
+	session->Send(buffer);
 
 	logger()->info("partition[{}] linker[{}]登录成功，来自{}:{}", request->partition_id(), linker_item.linker_id,
-		session.RemoteEndpoint().address().to_string(), session.RemoteEndpoint().port());
+		session->RemoteEndpoint().address().to_string(), session->RemoteEndpoint().port());
 
 	return true;
 }
 
 // Linker上报负载量
-bool LoginManager::OnLinkerUpdateLoadCapacity(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
+bool LoginManager::OnLinkerUpdateLoadCapacity(SessionHandle *session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
 	auto request = static_cast<svr::ReportLinkerReq*>(message);
 
@@ -296,7 +296,7 @@ bool LoginManager::OnLinkerUpdateLoadCapacity(SessionHandle &session, google::pr
 	{
 		for (auto &item : partition.second.linker_lists)
 		{
-			if (item.session_id == session.SessionID())
+			if (item.session_id == session->SessionID())
 			{
 				linker_id = item.linker_id;
 				partition_id = partition.first;
@@ -309,14 +309,14 @@ bool LoginManager::OnLinkerUpdateLoadCapacity(SessionHandle &session, google::pr
 	if (linker_id != 0 && partition_id != 0)
 	{
 		logger()->info("partition[{}] linker[{}]上报在线人数{}，来自{}:{}", partition_id, linker_id, request->load(),
-			session.RemoteEndpoint().address().to_string(), session.RemoteEndpoint().port());
+			session->RemoteEndpoint().address().to_string(), session->RemoteEndpoint().port());
 	}
 
 	return true;
 }
 
 // 查询分区
-void LoginManager::OnUserQueryPartition(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
+void LoginManager::OnUserQueryPartition(SessionHandle *session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
 	buffer.Clear();
 	cli::QueryPartitionRsp response;
@@ -339,23 +339,23 @@ void LoginManager::OnUserQueryPartition(SessionHandle &session, google::protobuf
 		data->set_is_recommend(partition.is_recommend);
 	}
 	ProtubufCodec::Encode(&response, buffer);
-	session.Send(buffer);
+	session->Send(buffer);
 }
 
 // 用户注册
-void LoginManager::OnUserSignUp(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
+void LoginManager::OnUserSignUp(SessionHandle *session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
 	auto request = static_cast<cli::SignUpReq*>(message);
 
 	// 拷贝回调数据
 	std::string msg_name = message->GetTypeName();
-	network::TCPSessionID session_id = session.SessionID();
+	network::TCPSessionID session_id = session->SessionID();
 
 	// 构造sql语句
 	std::string sql = string_helper::format("CALL sign_up('%s', '%s', '%s', '%s', '%s', '%s', '%s', @user_id); SELECT @user_id;",
 		request->user().c_str(),
 		request->passwd().c_str(),
-		session.RemoteEndpoint().address().to_string().c_str(),
+		session->RemoteEndpoint().address().to_string().c_str(),
 		request->has_platform() ? request->platform().c_str() : "",
 		request->has_os() ? request->os().c_str() : "",
 		request->has_model() ? request->model().c_str() : "",
@@ -386,14 +386,14 @@ void LoginManager::OnUserSignUp(SessionHandle &session, google::protobuf::Messag
 				else
 				{
 					// 创建账号失败			
-					RespondErrorCode(*static_cast<SessionHandle*>(session_ptr.get()), new_buffer, pub::kCreateAccountFailed, msg_name.c_str());
+					RespondErrorCode(static_cast<SessionHandle*>(session_ptr.get()), new_buffer, pub::kCreateAccountFailed, msg_name.c_str());
 					logger()->info("创建账号失败，来自{}:{}", session_ptr->RemoteEndpoint().address().to_string(), session_ptr->RemoteEndpoint().port());
 				}
 			}
 			else
 			{
 				// 操作数据库错误
-				RespondErrorCode(*static_cast<SessionHandle*>(session_ptr.get()), new_buffer, pub::kDatabaseError, msg_name.c_str());
+				RespondErrorCode(static_cast<SessionHandle*>(session_ptr.get()), new_buffer, pub::kDatabaseError, msg_name.c_str());
 				logger()->info("数据库错误，创建账号失败，来自{}:{}", session_ptr->RemoteEndpoint().address().to_string(), session_ptr->RemoteEndpoint().port());
 			}
 		}
@@ -402,19 +402,19 @@ void LoginManager::OnUserSignUp(SessionHandle &session, google::protobuf::Messag
 }
 
 // 用户登录
-void LoginManager::OnUserSignIn(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
+void LoginManager::OnUserSignIn(SessionHandle *session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
 	auto request = static_cast<cli::SignInReq*>(message);
 
 	// 拷贝回调数据
 	std::string msg_name = message->GetTypeName();
-	network::TCPSessionID session_id = session.SessionID();
+	network::TCPSessionID session_id = session->SessionID();
 
 	// 构造sql语句
 	std::string sql = string_helper::format("CALL sign_in('%s','%s','%s','%s',@userid); SELECT @userid;",
 		request->user().c_str(),
 		request->passwd().c_str(),
-		session.RemoteEndpoint().address().to_string().c_str(),
+		session->RemoteEndpoint().address().to_string().c_str(),
 		request->has_deviceid() ? request->deviceid().c_str() : "");
 
 	// 执行异步查询
@@ -433,8 +433,8 @@ void LoginManager::OnUserSignIn(SessionHandle &session, google::protobuf::Messag
 				if (user_id > 0)
 				{
 					// 更新连接
-					auto found = connection_map_.find(session_id);
-					if (found != connection_map_.end())
+					auto found = user_session_.find(session_id);
+					if (found != user_session_.end())
 					{
 						found->second.user_id = user_id;
 					}
@@ -449,14 +449,14 @@ void LoginManager::OnUserSignIn(SessionHandle &session, google::protobuf::Messag
 				else
 				{
 					// 登录失败			
-					RespondErrorCode(*static_cast<SessionHandle*>(session_ptr.get()), new_buffer, pub::kUsernameOrPasswordError, msg_name.c_str());
+					RespondErrorCode(static_cast<SessionHandle*>(session_ptr.get()), new_buffer, pub::kUsernameOrPasswordError, msg_name.c_str());
 					logger()->info("用户登录失败，来自{}:{}", session_ptr->RemoteEndpoint().address().to_string(), session_ptr->RemoteEndpoint().port());
 				}
 			}
 			else
 			{
 				// 操作数据库错误
-				RespondErrorCode(*static_cast<SessionHandle*>(session_ptr.get()), new_buffer, pub::kDatabaseError, msg_name.c_str());
+				RespondErrorCode(static_cast<SessionHandle*>(session_ptr.get()), new_buffer, pub::kDatabaseError, msg_name.c_str());
 				logger()->info("数据库错误，用户登录失败，来自{}:{}", session_ptr->RemoteEndpoint().address().to_string(), session_ptr->RemoteEndpoint().port());
 			}
 		}
@@ -465,16 +465,16 @@ void LoginManager::OnUserSignIn(SessionHandle &session, google::protobuf::Messag
 }
 
 // 进入分区
-void LoginManager::OnUserEntryPartition(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
+void LoginManager::OnUserEntryPartition(SessionHandle *session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
 	auto request = static_cast<cli::EntryPartitionReq*>(message);
 
 	// 是否已经验证
-	auto found =  connection_map_.find(session.SessionID());
-	if (found == connection_map_.end() || found->second.user_id == 0)
+	auto found = user_session_.find(session->SessionID());
+	if (found == user_session_.end() || found->second.user_id == 0)
 	{
 		RespondErrorCode(session, buffer, pub::kNotLoggedIn, request->GetTypeName().c_str());
-		logger()->info("进入分区失败，玩家未登录，来自{}:{}", session.RemoteEndpoint().address().to_string(), session.RemoteEndpoint().port());
+		logger()->info("进入分区失败，玩家未登录，来自{}:{}", session->RemoteEndpoint().address().to_string(), session->RemoteEndpoint().port());
 		return;
 	}
 
@@ -497,7 +497,7 @@ void LoginManager::OnUserEntryPartition(SessionHandle &session, google::protobuf
 	if (linker_map == nullptr)
 	{
 		RespondErrorCode(session, buffer, pub::kPartitionNotExist, request->GetTypeName().c_str());
-		logger()->info("进入分区失败，分区不存在，来自{}:{}", session.RemoteEndpoint().address().to_string(), session.RemoteEndpoint().port());
+		logger()->info("进入分区失败，分区不存在，来自{}:{}", session->RemoteEndpoint().address().to_string(), session->RemoteEndpoint().port());
 		return;
 	}
 
@@ -510,7 +510,7 @@ void LoginManager::OnUserEntryPartition(SessionHandle &session, google::protobuf
 	if (min_element == linker_map->end())
 	{
 		RespondErrorCode(session, buffer, pub::kLinkerNotExist, request->GetTypeName().c_str());
-		logger()->info("进入分区失败，没有可用的Linker，来自{}:{}", session.RemoteEndpoint().address().to_string(), session.RemoteEndpoint().port());
+		logger()->info("进入分区失败，没有可用的Linker，来自{}:{}", session->RemoteEndpoint().address().to_string(), session->RemoteEndpoint().port());
 		return;
 	}
 
@@ -520,7 +520,7 @@ void LoginManager::OnUserEntryPartition(SessionHandle &session, google::protobuf
 	if (linker_session == nullptr)
 	{
 		RespondErrorCode(session, buffer, pub::kLinkerNotExist, request->GetTypeName().c_str());
-		logger()->info("进入分区失败，没有可用的Linker，来自{}:{}", session.RemoteEndpoint().address().to_string(), session.RemoteEndpoint().port());
+		logger()->info("进入分区失败，没有可用的Linker，来自{}:{}", session->RemoteEndpoint().address().to_string(), session->RemoteEndpoint().port());
 		return;
 	}
 	buffer.Clear();
@@ -537,8 +537,8 @@ void LoginManager::OnUserEntryPartition(SessionHandle &session, google::protobuf
 	response.set_port(min_element->port);
 	response.set_token(token);
 	ProtubufCodec::Encode(&response, buffer);
-	session.Send(buffer);
+	session->Send(buffer);
 
 	// 进入分区成功关闭连接
-	session.Close();
+	session->Close();
 }

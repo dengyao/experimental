@@ -100,7 +100,7 @@ bool RouterManager::FindServerNodeSession(int node_type, int child_id, network::
 }
 
 // 回复错误码
-void RouterManager::RespondErrorCode(SessionHandle &session, network::NetMessage &buffer, int error_code, const char *what)
+void RouterManager::RespondErrorCode(SessionHandle *session, network::NetMessage &buffer, int error_code, const char *what)
 {
 	buffer.Clear();
 	pub::ErrorRsp response;
@@ -110,11 +110,11 @@ void RouterManager::RespondErrorCode(SessionHandle &session, network::NetMessage
 		response.set_what(what);
 	}
 	ProtubufCodec::Encode(&response, buffer);
-	session.Respond(buffer);
+	session->Write(buffer);
 }
 
 // 处理收到消息
-bool RouterManager::HandleMessage(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
+bool RouterManager::HandleMessage(SessionHandle *session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
 	if (dynamic_cast<svr::ForwardReq*>(message) != nullptr)
 	{
@@ -135,15 +135,15 @@ bool RouterManager::HandleMessage(SessionHandle &session, google::protobuf::Mess
 	else
 	{
 		RespondErrorCode(session, buffer, pub::kInvalidProtocol, message->GetTypeName().c_str());
-		logger()->warn("协议无效，来自{}:{}", session.RemoteEndpoint().address().to_string(), session.RemoteEndpoint().port());
+		logger()->warn("协议无效，来自{}:{}", session->RemoteEndpoint().address().to_string(), session->RemoteEndpoint().port());
 		return false;
 	}
 }
 
-// 处理服务器下线
-void RouterManager::HandleServerOffline(SessionHandle &session)
+// 处理服务器关闭连接
+void RouterManager::HandleServerClose(SessionHandle *session)
 {
-	auto found = node_index_.find(session.SessionID());
+	auto found = node_index_.find(session->SessionID());
 	if (found == node_index_.end())
 	{
 		return;
@@ -164,7 +164,7 @@ void RouterManager::HandleServerOffline(SessionHandle &session)
 	}
 
 	auto &session_lists = child_found->second.session_lists;
-	auto iter = std::find(session_lists.begin(), session_lists.end(), session.SessionID());
+	auto iter = std::find(session_lists.begin(), session_lists.end(), session->SessionID());
 	if (iter != session_lists.end())
 	{
 		session_lists.erase(iter);
@@ -180,30 +180,30 @@ void RouterManager::HandleServerOffline(SessionHandle &session)
 		server_lists_.erase(node_found);
 	}
 
-	node_index_.erase(session.SessionID());
+	node_index_.erase(session->SessionID());
 
 	logger()->info("服务器节点[{},{}]离线，来自{}:{}", node_type, child_id,
-		session.RemoteEndpoint().address().to_string(), session.RemoteEndpoint().port());
+		session->RemoteEndpoint().address().to_string(), session->RemoteEndpoint().port());
 }
 
 // 服务器登录
-bool RouterManager::OnServerLogin(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
+bool RouterManager::OnServerLogin(SessionHandle *session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
 	// 检查服务器类型是否合法
 	auto request = static_cast<svr::LoginRouterReq*>(message);
 	if (request->node().type() < svr::NodeType_MIN || request->node().type() > svr::NodeType_MAX)
 	{
 		RespondErrorCode(session, buffer, pub::kInvalidNodeType, request->GetTypeName().c_str());
-		logger()->warn("无效的服务器节类型{}，来自{}:{}", request->node().type(), session.RemoteEndpoint().address().to_string(), session.RemoteEndpoint().port());
+		logger()->warn("无效的服务器节类型{}，来自{}:{}", request->node().type(), session->RemoteEndpoint().address().to_string(), session->RemoteEndpoint().port());
 		return false;
 	}
 
 	// 是否重复登录
-	auto found = node_index_.find(session.SessionID());
+	auto found = node_index_.find(session->SessionID());
 	if (found != node_index_.end())
 	{
 		RespondErrorCode(session, buffer, pub::kInvalidNodeType, request->GetTypeName().c_str());
-		logger()->warn("服务器节点重复登录，来自{}:{}", session.RemoteEndpoint().address().to_string(), session.RemoteEndpoint().port());
+		logger()->warn("服务器节点重复登录，来自{}:{}", session->RemoteEndpoint().address().to_string(), session->RemoteEndpoint().port());
 		return false;
 	}
 
@@ -217,7 +217,7 @@ bool RouterManager::OnServerLogin(SessionHandle &session, google::protobuf::Mess
 		ChildNode &child_node_lists = node_lists.child_lists[request->node().child_id()];;
 		child_node_lists.node_type = request->node().type();
 		child_node_lists.child_id = request->node().child_id();
-		child_node_lists.session_lists.push_back(session.SessionID());
+		child_node_lists.session_lists.push_back(session->SessionID());
 	}
 	else
 	{
@@ -227,11 +227,11 @@ bool RouterManager::OnServerLogin(SessionHandle &session, google::protobuf::Mess
 			ChildNode &child_node_lists = node_found->second.child_lists[request->node().child_id()];
 			child_node_lists.node_type = request->node().type();
 			child_node_lists.child_id = request->node().child_id();
-			child_node_lists.session_lists.push_back(session.SessionID());
+			child_node_lists.session_lists.push_back(session->SessionID());
 		}
 		else
 		{
-			child_found->second.session_lists.push_back(session.SessionID());
+			child_found->second.session_lists.push_back(session->SessionID());
 		}
 	}
 
@@ -239,23 +239,23 @@ bool RouterManager::OnServerLogin(SessionHandle &session, google::protobuf::Mess
 	NodeIndex index;
 	index.node_type = request->node().type();
 	index.child_id = request->node().child_id();
-	node_index_.insert(std::make_pair(session.SessionID(), index));
+	node_index_.insert(std::make_pair(session->SessionID(), index));
 
 	// 返回结果
 	buffer.Clear();
 	svr::LoginRouterRsp response;
 	response.set_heartbeat_interval(ServerConfig::GetInstance()->GetHeartbeatInterval());
 	ProtubufCodec::Encode(&response, buffer);
-	session.Respond(buffer);
+	session->Write(buffer);
 
 	logger()->info("服务器节点[{},{}]登录成功，来自{}:{}", request->node().type(), request->node().child_id(),
-		session.RemoteEndpoint().address().to_string(), session.RemoteEndpoint().port());
+		session->RemoteEndpoint().address().to_string(), session->RemoteEndpoint().port());
 
 	return true;
 }
 
 // 查询路由信息
-bool RouterManager::OnQueryRouterInfo(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
+bool RouterManager::OnQueryRouterInfo(SessionHandle *session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
 	buffer.Clear();
 	svr::RouterInfoRsp response;
@@ -271,19 +271,19 @@ bool RouterManager::OnQueryRouterInfo(SessionHandle &session, google::protobuf::
 		}
 	}
 	ProtubufCodec::Encode(&response, buffer);
-	session.Respond(buffer);
+	session->Write(buffer);
 	return true;
 }
 
 // 转发服务器消息
-bool RouterManager::OnForwardServerMessage(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
+bool RouterManager::OnForwardServerMessage(SessionHandle *session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
 	ChildNode *child_node = nullptr;
 	auto request = static_cast<svr::ForwardReq*>(message);
-	if (!FindServerNodeBySessionID(session.SessionID(), child_node))
+	if (!FindServerNodeBySessionID(session->SessionID(), child_node))
 	{
 		RespondErrorCode(session, buffer, pub::kNotLoggedIn, request->GetTypeName().c_str());
-		logger()->warn("服务器节点未登录，来自{}:{}", session.RemoteEndpoint().address().to_string(), session.RemoteEndpoint().port());
+		logger()->warn("服务器节点未登录，来自{}:{}", session->RemoteEndpoint().address().to_string(), session->RemoteEndpoint().port());
 		return false;
 	}
 
@@ -292,7 +292,7 @@ bool RouterManager::OnForwardServerMessage(SessionHandle &session, google::proto
 	{
 		RespondErrorCode(session, buffer, pub::kDestinationUnreachable, request->GetTypeName().c_str());
 		logger()->warn("目标服务器节点[{},{}]不可到达，来自{}:{}", request->dst().type(), request->dst().child_id(),
-			session.RemoteEndpoint().address().to_string(), session.RemoteEndpoint().port());
+			session->RemoteEndpoint().address().to_string(), session->RemoteEndpoint().port());
 		return false;
 	}
 
@@ -302,19 +302,19 @@ bool RouterManager::OnForwardServerMessage(SessionHandle &session, google::proto
 	response.mutable_src()->set_child_id(child_node->child_id);
 	response.set_user_data(request->user_data().c_str(), request->user_data().size());
 	ProtubufCodec::Encode(&response, buffer);
-	static_cast<SessionHandle*>(dst_session.get())->Respond(buffer);
+	static_cast<SessionHandle*>(dst_session.get())->Write(buffer);
 	return true;
 }
 
 // 广播服务器消息
-bool RouterManager::OnBroadcastServerMessage(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
+bool RouterManager::OnBroadcastServerMessage(SessionHandle *session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
 	ChildNode *child_node = nullptr;
 	auto request = static_cast<svr::BroadcastReq*>(message);
-	if (!FindServerNodeBySessionID(session.SessionID(), child_node))
+	if (!FindServerNodeBySessionID(session->SessionID(), child_node))
 	{
 		RespondErrorCode(session, buffer, pub::kNotLoggedIn, request->GetTypeName().c_str());
-		logger()->warn("服务器节点未登录，来自{}:{}", session.RemoteEndpoint().address().to_string(), session.RemoteEndpoint().port());
+		logger()->warn("服务器节点未登录，来自{}:{}", session->RemoteEndpoint().address().to_string(), session->RemoteEndpoint().port());
 		return false;
 	}
 	
@@ -352,7 +352,7 @@ bool RouterManager::OnBroadcastServerMessage(SessionHandle &session, google::pro
 				dst_session = threads_.SessionHandler(session_id);
 				if (dst_session != nullptr)
 				{
-					static_cast<SessionHandle*>(dst_session.get())->Respond(buffer);
+					static_cast<SessionHandle*>(dst_session.get())->Write(buffer);
 				}
 			}
 		}

@@ -19,7 +19,7 @@ RoleType SessionHandle::GetRoleType() const
 // 连接事件
 void SessionHandle::OnConnect()
 {
-	login_manager_.HandleAcceptConnection(*this);
+	login_manager_.HandleAcceptConnection(this);
 }
 
 // 接收消息事件
@@ -29,13 +29,13 @@ void SessionHandle::OnMessage(network::NetMessage &message)
 	auto request = ProtubufCodec::Decode(message);
 	if (request == nullptr)
 	{
-		return login_manager_.RespondErrorCode(*this, message, pub::kInvalidProtocol);
+		return login_manager_.RespondErrorCode(this, message, pub::kInvalidProtocol);
 	}
 
 	// 注册Linker
 	if (dynamic_cast<svr::LinkerLoginReq*>(request.get()) != nullptr)
 	{
-		if (login_manager_.HandleLinkerMessage(*this, request.get(), message))
+		if (login_manager_.HandleLinkerMessage(this, request.get(), message))
 		{
 			type_ = RoleType::kLinker;
 		}
@@ -54,11 +54,11 @@ void SessionHandle::OnMessage(network::NetMessage &message)
 	// 处理消息
 	if (type_ == RoleType::kUser)
 	{
-		login_manager_.HandleUserMessage(*this, request.get(), message);
+		login_manager_.HandleUserMessage(this, request.get(), message);
 	}
 	else
 	{
-		login_manager_.HandleLinkerMessage(*this, request.get(), message);
+		login_manager_.HandleLinkerMessage(this, request.get(), message);
 	}
 }
 
@@ -67,11 +67,11 @@ void SessionHandle::OnClose()
 {
 	if (type_ == RoleType::kUser)
 	{
-		login_manager_.HandleUserOffline(*this);
+		login_manager_.HandleUserClose(this);
 	}
 	else
 	{
-		login_manager_.HandleLinkerOffline(*this);
+		login_manager_.HandleLinkerClose(this);
 	}
 }
 
