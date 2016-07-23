@@ -90,6 +90,9 @@ public:
 	void RespondErrorCode(SessionHandle &session, network::NetMessage &buffer, int error_code, const char *what = nullptr);
 
 private:
+	// 从数据库查询分区信息
+	void QueryPartitionInfoByDatabase();
+
 	// 更新定时器
 	void OnUpdateTimer(asio::error_code error_code);
 

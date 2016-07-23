@@ -31,6 +31,35 @@ LoginManager::LoginManager(network::IOServiceThreadManager &threads, const std::
 	timer_.async_wait(wait_handler_);
 }
 
+// 从数据库查询分区信息
+void LoginManager::QueryPartitionInfoByDatabase()
+{
+	auto callback = [this](google::protobuf::Message *message)
+	{
+		if (dynamic_cast<svr::QueryDBAgentRsp*>(message) != nullptr)
+		{
+			std::vector<SPartition> partition_lists;
+			auto response = static_cast<svr::QueryDBAgentRsp*>(message);
+			db::WrapResultSet result_set(response->result().data(), response->result().size());
+			for (unsigned int row = 0; row < result_set.NumRows(); ++row)
+			{
+				SPartition partition;
+				db::WrapResultItem item = result_set.GetRow(row);
+				partition.id = atoi(item["id"]);
+				partition.name = item["name"];
+				partition.status = atoi(item["status"]);
+				partition.is_recommend = atoi(item["recommend"]) != 0;
+				partition.createtime = item["createtime"];
+				partition_lists.push_back(partition);
+			}
+
+			partition_lists_ = std::move(partition_lists);
+			logger()->debug("更新分区信息成功，共有{}个分区", partition_lists_.size());
+		}
+	};
+	GlobalDBClient()->AsyncSelect(db::kMySQL, ServerConfig::GetInstance()->GetVerifyDBName(), "SELECT * FROM `partition`;", callback);
+}
+
 // 更新定时器
 void LoginManager::OnUpdateTimer(asio::error_code error_code)
 {
@@ -62,6 +91,9 @@ void LoginManager::OnUpdateTimer(asio::error_code error_code)
 			++iter;
 		}
 	}
+
+	// 更新分区信息
+	QueryPartitionInfoByDatabase();
 
 	timer_.expires_from_now(std::chrono::seconds(1));
 	timer_.async_wait(wait_handler_);
