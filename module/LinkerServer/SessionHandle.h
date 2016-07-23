@@ -11,14 +11,16 @@ public:
 	SessionHandle(LinkerManager &linker_manager);
 
 public:
-	virtual void OnConnect() = 0;
+	bool IsAuthTimeout() const;
 
-	virtual void OnMessage(network::NetMessage &message) = 0;
+public:
+	virtual void OnConnect() override;
 
-	virtual void OnClose() = 0;
+	virtual void OnMessage(network::NetMessage &message) override;
+
+	virtual void OnClose() override;
 	
 private:
-	bool									is_logged_;
 	LinkerManager&							linker_manager_;
 	std::chrono::steady_clock::time_point	connect_time_;
 };

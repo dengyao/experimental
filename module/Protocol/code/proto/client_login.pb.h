@@ -27,7 +27,7 @@
 #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
 
-namespace login {
+namespace cli {
 
 // Internal implementation detail -- do not call these.
 void  protobuf_AddDesc_proto_2fclient_5flogin_2eproto();
@@ -190,7 +190,7 @@ class SignUpReq : public ::google::protobuf::Message {
   inline ::std::string* release_deviceid();
   inline void set_allocated_deviceid(::std::string* deviceid);
 
-  // @@protoc_insertion_point(class_scope:login.SignUpReq)
+  // @@protoc_insertion_point(class_scope:cli.SignUpReq)
  private:
   inline void set_has_user();
   inline void clear_has_user();
@@ -284,7 +284,7 @@ class SignUpRsp : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 id() const;
   inline void set_id(::google::protobuf::uint32 value);
 
-  // @@protoc_insertion_point(class_scope:login.SignUpRsp)
+  // @@protoc_insertion_point(class_scope:cli.SignUpRsp)
  private:
   inline void set_has_id();
   inline void clear_has_id();
@@ -392,7 +392,7 @@ class SignInReq : public ::google::protobuf::Message {
   inline ::std::string* release_deviceid();
   inline void set_allocated_deviceid(::std::string* deviceid);
 
-  // @@protoc_insertion_point(class_scope:login.SignInReq)
+  // @@protoc_insertion_point(class_scope:cli.SignInReq)
  private:
   inline void set_has_user();
   inline void clear_has_user();
@@ -477,7 +477,7 @@ class SignInRsp : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 id() const;
   inline void set_id(::google::protobuf::uint32 value);
 
-  // @@protoc_insertion_point(class_scope:login.SignInRsp)
+  // @@protoc_insertion_point(class_scope:cli.SignInRsp)
  private:
   inline void set_has_id();
   inline void clear_has_id();
@@ -549,7 +549,7 @@ class QueryPartitionReq : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // @@protoc_insertion_point(class_scope:login.QueryPartitionReq)
+  // @@protoc_insertion_point(class_scope:cli.QueryPartitionReq)
  private:
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
@@ -637,12 +637,12 @@ class QueryPartitionRsp_Partition : public ::google::protobuf::Message {
   inline ::std::string* release_name();
   inline void set_allocated_name(::std::string* name);
 
-  // required .login.QueryPartitionRsp.StateType status = 3;
+  // required .cli.QueryPartitionRsp.StateType status = 3;
   inline bool has_status() const;
   inline void clear_status();
   static const int kStatusFieldNumber = 3;
-  inline ::login::QueryPartitionRsp_StateType status() const;
-  inline void set_status(::login::QueryPartitionRsp_StateType value);
+  inline ::cli::QueryPartitionRsp_StateType status() const;
+  inline void set_status(::cli::QueryPartitionRsp_StateType value);
 
   // required bool is_recommend = 4;
   inline bool has_is_recommend() const;
@@ -651,7 +651,7 @@ class QueryPartitionRsp_Partition : public ::google::protobuf::Message {
   inline bool is_recommend() const;
   inline void set_is_recommend(bool value);
 
-  // @@protoc_insertion_point(class_scope:login.QueryPartitionRsp.Partition)
+  // @@protoc_insertion_point(class_scope:cli.QueryPartitionRsp.Partition)
  private:
   inline void set_has_id();
   inline void clear_has_id();
@@ -758,26 +758,26 @@ class QueryPartitionRsp : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // repeated .login.QueryPartitionRsp.Partition lists = 1;
+  // repeated .cli.QueryPartitionRsp.Partition lists = 1;
   inline int lists_size() const;
   inline void clear_lists();
   static const int kListsFieldNumber = 1;
-  inline const ::login::QueryPartitionRsp_Partition& lists(int index) const;
-  inline ::login::QueryPartitionRsp_Partition* mutable_lists(int index);
-  inline ::login::QueryPartitionRsp_Partition* add_lists();
-  inline const ::google::protobuf::RepeatedPtrField< ::login::QueryPartitionRsp_Partition >&
+  inline const ::cli::QueryPartitionRsp_Partition& lists(int index) const;
+  inline ::cli::QueryPartitionRsp_Partition* mutable_lists(int index);
+  inline ::cli::QueryPartitionRsp_Partition* add_lists();
+  inline const ::google::protobuf::RepeatedPtrField< ::cli::QueryPartitionRsp_Partition >&
       lists() const;
-  inline ::google::protobuf::RepeatedPtrField< ::login::QueryPartitionRsp_Partition >*
+  inline ::google::protobuf::RepeatedPtrField< ::cli::QueryPartitionRsp_Partition >*
       mutable_lists();
 
-  // @@protoc_insertion_point(class_scope:login.QueryPartitionRsp)
+  // @@protoc_insertion_point(class_scope:cli.QueryPartitionRsp)
  private:
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
-  ::google::protobuf::RepeatedPtrField< ::login::QueryPartitionRsp_Partition > lists_;
+  ::google::protobuf::RepeatedPtrField< ::cli::QueryPartitionRsp_Partition > lists_;
   friend void  protobuf_AddDesc_proto_2fclient_5flogin_2eproto();
   friend void protobuf_AssignDesc_proto_2fclient_5flogin_2eproto();
   friend void protobuf_ShutdownFile_proto_2fclient_5flogin_2eproto();
@@ -847,7 +847,7 @@ class EntryPartitionReq : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 id() const;
   inline void set_id(::google::protobuf::uint32 value);
 
-  // @@protoc_insertion_point(class_scope:login.EntryPartitionReq)
+  // @@protoc_insertion_point(class_scope:cli.EntryPartitionReq)
  private:
   inline void set_has_id();
   inline void clear_has_id();
@@ -945,7 +945,7 @@ class EntryPartitionRsp : public ::google::protobuf::Message {
   inline ::google::protobuf::uint64 token() const;
   inline void set_token(::google::protobuf::uint64 value);
 
-  // @@protoc_insertion_point(class_scope:login.EntryPartitionRsp)
+  // @@protoc_insertion_point(class_scope:cli.EntryPartitionRsp)
  private:
   inline void set_has_ip();
   inline void clear_has_ip();
@@ -992,7 +992,7 @@ inline void SignUpReq::clear_user() {
   clear_has_user();
 }
 inline const ::std::string& SignUpReq::user() const {
-  // @@protoc_insertion_point(field_get:login.SignUpReq.user)
+  // @@protoc_insertion_point(field_get:cli.SignUpReq.user)
   return *user_;
 }
 inline void SignUpReq::set_user(const ::std::string& value) {
@@ -1001,7 +1001,7 @@ inline void SignUpReq::set_user(const ::std::string& value) {
     user_ = new ::std::string;
   }
   user_->assign(value);
-  // @@protoc_insertion_point(field_set:login.SignUpReq.user)
+  // @@protoc_insertion_point(field_set:cli.SignUpReq.user)
 }
 inline void SignUpReq::set_user(const char* value) {
   set_has_user();
@@ -1009,7 +1009,7 @@ inline void SignUpReq::set_user(const char* value) {
     user_ = new ::std::string;
   }
   user_->assign(value);
-  // @@protoc_insertion_point(field_set_char:login.SignUpReq.user)
+  // @@protoc_insertion_point(field_set_char:cli.SignUpReq.user)
 }
 inline void SignUpReq::set_user(const char* value, size_t size) {
   set_has_user();
@@ -1017,14 +1017,14 @@ inline void SignUpReq::set_user(const char* value, size_t size) {
     user_ = new ::std::string;
   }
   user_->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:login.SignUpReq.user)
+  // @@protoc_insertion_point(field_set_pointer:cli.SignUpReq.user)
 }
 inline ::std::string* SignUpReq::mutable_user() {
   set_has_user();
   if (user_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     user_ = new ::std::string;
   }
-  // @@protoc_insertion_point(field_mutable:login.SignUpReq.user)
+  // @@protoc_insertion_point(field_mutable:cli.SignUpReq.user)
   return user_;
 }
 inline ::std::string* SignUpReq::release_user() {
@@ -1048,7 +1048,7 @@ inline void SignUpReq::set_allocated_user(::std::string* user) {
     clear_has_user();
     user_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
-  // @@protoc_insertion_point(field_set_allocated:login.SignUpReq.user)
+  // @@protoc_insertion_point(field_set_allocated:cli.SignUpReq.user)
 }
 
 // required string passwd = 2;
@@ -1068,7 +1068,7 @@ inline void SignUpReq::clear_passwd() {
   clear_has_passwd();
 }
 inline const ::std::string& SignUpReq::passwd() const {
-  // @@protoc_insertion_point(field_get:login.SignUpReq.passwd)
+  // @@protoc_insertion_point(field_get:cli.SignUpReq.passwd)
   return *passwd_;
 }
 inline void SignUpReq::set_passwd(const ::std::string& value) {
@@ -1077,7 +1077,7 @@ inline void SignUpReq::set_passwd(const ::std::string& value) {
     passwd_ = new ::std::string;
   }
   passwd_->assign(value);
-  // @@protoc_insertion_point(field_set:login.SignUpReq.passwd)
+  // @@protoc_insertion_point(field_set:cli.SignUpReq.passwd)
 }
 inline void SignUpReq::set_passwd(const char* value) {
   set_has_passwd();
@@ -1085,7 +1085,7 @@ inline void SignUpReq::set_passwd(const char* value) {
     passwd_ = new ::std::string;
   }
   passwd_->assign(value);
-  // @@protoc_insertion_point(field_set_char:login.SignUpReq.passwd)
+  // @@protoc_insertion_point(field_set_char:cli.SignUpReq.passwd)
 }
 inline void SignUpReq::set_passwd(const char* value, size_t size) {
   set_has_passwd();
@@ -1093,14 +1093,14 @@ inline void SignUpReq::set_passwd(const char* value, size_t size) {
     passwd_ = new ::std::string;
   }
   passwd_->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:login.SignUpReq.passwd)
+  // @@protoc_insertion_point(field_set_pointer:cli.SignUpReq.passwd)
 }
 inline ::std::string* SignUpReq::mutable_passwd() {
   set_has_passwd();
   if (passwd_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     passwd_ = new ::std::string;
   }
-  // @@protoc_insertion_point(field_mutable:login.SignUpReq.passwd)
+  // @@protoc_insertion_point(field_mutable:cli.SignUpReq.passwd)
   return passwd_;
 }
 inline ::std::string* SignUpReq::release_passwd() {
@@ -1124,7 +1124,7 @@ inline void SignUpReq::set_allocated_passwd(::std::string* passwd) {
     clear_has_passwd();
     passwd_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
-  // @@protoc_insertion_point(field_set_allocated:login.SignUpReq.passwd)
+  // @@protoc_insertion_point(field_set_allocated:cli.SignUpReq.passwd)
 }
 
 // optional string platform = 3;
@@ -1144,7 +1144,7 @@ inline void SignUpReq::clear_platform() {
   clear_has_platform();
 }
 inline const ::std::string& SignUpReq::platform() const {
-  // @@protoc_insertion_point(field_get:login.SignUpReq.platform)
+  // @@protoc_insertion_point(field_get:cli.SignUpReq.platform)
   return *platform_;
 }
 inline void SignUpReq::set_platform(const ::std::string& value) {
@@ -1153,7 +1153,7 @@ inline void SignUpReq::set_platform(const ::std::string& value) {
     platform_ = new ::std::string;
   }
   platform_->assign(value);
-  // @@protoc_insertion_point(field_set:login.SignUpReq.platform)
+  // @@protoc_insertion_point(field_set:cli.SignUpReq.platform)
 }
 inline void SignUpReq::set_platform(const char* value) {
   set_has_platform();
@@ -1161,7 +1161,7 @@ inline void SignUpReq::set_platform(const char* value) {
     platform_ = new ::std::string;
   }
   platform_->assign(value);
-  // @@protoc_insertion_point(field_set_char:login.SignUpReq.platform)
+  // @@protoc_insertion_point(field_set_char:cli.SignUpReq.platform)
 }
 inline void SignUpReq::set_platform(const char* value, size_t size) {
   set_has_platform();
@@ -1169,14 +1169,14 @@ inline void SignUpReq::set_platform(const char* value, size_t size) {
     platform_ = new ::std::string;
   }
   platform_->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:login.SignUpReq.platform)
+  // @@protoc_insertion_point(field_set_pointer:cli.SignUpReq.platform)
 }
 inline ::std::string* SignUpReq::mutable_platform() {
   set_has_platform();
   if (platform_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     platform_ = new ::std::string;
   }
-  // @@protoc_insertion_point(field_mutable:login.SignUpReq.platform)
+  // @@protoc_insertion_point(field_mutable:cli.SignUpReq.platform)
   return platform_;
 }
 inline ::std::string* SignUpReq::release_platform() {
@@ -1200,7 +1200,7 @@ inline void SignUpReq::set_allocated_platform(::std::string* platform) {
     clear_has_platform();
     platform_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
-  // @@protoc_insertion_point(field_set_allocated:login.SignUpReq.platform)
+  // @@protoc_insertion_point(field_set_allocated:cli.SignUpReq.platform)
 }
 
 // optional string os = 4;
@@ -1220,7 +1220,7 @@ inline void SignUpReq::clear_os() {
   clear_has_os();
 }
 inline const ::std::string& SignUpReq::os() const {
-  // @@protoc_insertion_point(field_get:login.SignUpReq.os)
+  // @@protoc_insertion_point(field_get:cli.SignUpReq.os)
   return *os_;
 }
 inline void SignUpReq::set_os(const ::std::string& value) {
@@ -1229,7 +1229,7 @@ inline void SignUpReq::set_os(const ::std::string& value) {
     os_ = new ::std::string;
   }
   os_->assign(value);
-  // @@protoc_insertion_point(field_set:login.SignUpReq.os)
+  // @@protoc_insertion_point(field_set:cli.SignUpReq.os)
 }
 inline void SignUpReq::set_os(const char* value) {
   set_has_os();
@@ -1237,7 +1237,7 @@ inline void SignUpReq::set_os(const char* value) {
     os_ = new ::std::string;
   }
   os_->assign(value);
-  // @@protoc_insertion_point(field_set_char:login.SignUpReq.os)
+  // @@protoc_insertion_point(field_set_char:cli.SignUpReq.os)
 }
 inline void SignUpReq::set_os(const char* value, size_t size) {
   set_has_os();
@@ -1245,14 +1245,14 @@ inline void SignUpReq::set_os(const char* value, size_t size) {
     os_ = new ::std::string;
   }
   os_->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:login.SignUpReq.os)
+  // @@protoc_insertion_point(field_set_pointer:cli.SignUpReq.os)
 }
 inline ::std::string* SignUpReq::mutable_os() {
   set_has_os();
   if (os_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     os_ = new ::std::string;
   }
-  // @@protoc_insertion_point(field_mutable:login.SignUpReq.os)
+  // @@protoc_insertion_point(field_mutable:cli.SignUpReq.os)
   return os_;
 }
 inline ::std::string* SignUpReq::release_os() {
@@ -1276,7 +1276,7 @@ inline void SignUpReq::set_allocated_os(::std::string* os) {
     clear_has_os();
     os_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
-  // @@protoc_insertion_point(field_set_allocated:login.SignUpReq.os)
+  // @@protoc_insertion_point(field_set_allocated:cli.SignUpReq.os)
 }
 
 // optional string model = 5;
@@ -1296,7 +1296,7 @@ inline void SignUpReq::clear_model() {
   clear_has_model();
 }
 inline const ::std::string& SignUpReq::model() const {
-  // @@protoc_insertion_point(field_get:login.SignUpReq.model)
+  // @@protoc_insertion_point(field_get:cli.SignUpReq.model)
   return *model_;
 }
 inline void SignUpReq::set_model(const ::std::string& value) {
@@ -1305,7 +1305,7 @@ inline void SignUpReq::set_model(const ::std::string& value) {
     model_ = new ::std::string;
   }
   model_->assign(value);
-  // @@protoc_insertion_point(field_set:login.SignUpReq.model)
+  // @@protoc_insertion_point(field_set:cli.SignUpReq.model)
 }
 inline void SignUpReq::set_model(const char* value) {
   set_has_model();
@@ -1313,7 +1313,7 @@ inline void SignUpReq::set_model(const char* value) {
     model_ = new ::std::string;
   }
   model_->assign(value);
-  // @@protoc_insertion_point(field_set_char:login.SignUpReq.model)
+  // @@protoc_insertion_point(field_set_char:cli.SignUpReq.model)
 }
 inline void SignUpReq::set_model(const char* value, size_t size) {
   set_has_model();
@@ -1321,14 +1321,14 @@ inline void SignUpReq::set_model(const char* value, size_t size) {
     model_ = new ::std::string;
   }
   model_->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:login.SignUpReq.model)
+  // @@protoc_insertion_point(field_set_pointer:cli.SignUpReq.model)
 }
 inline ::std::string* SignUpReq::mutable_model() {
   set_has_model();
   if (model_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     model_ = new ::std::string;
   }
-  // @@protoc_insertion_point(field_mutable:login.SignUpReq.model)
+  // @@protoc_insertion_point(field_mutable:cli.SignUpReq.model)
   return model_;
 }
 inline ::std::string* SignUpReq::release_model() {
@@ -1352,7 +1352,7 @@ inline void SignUpReq::set_allocated_model(::std::string* model) {
     clear_has_model();
     model_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
-  // @@protoc_insertion_point(field_set_allocated:login.SignUpReq.model)
+  // @@protoc_insertion_point(field_set_allocated:cli.SignUpReq.model)
 }
 
 // optional string deviceid = 6;
@@ -1372,7 +1372,7 @@ inline void SignUpReq::clear_deviceid() {
   clear_has_deviceid();
 }
 inline const ::std::string& SignUpReq::deviceid() const {
-  // @@protoc_insertion_point(field_get:login.SignUpReq.deviceid)
+  // @@protoc_insertion_point(field_get:cli.SignUpReq.deviceid)
   return *deviceid_;
 }
 inline void SignUpReq::set_deviceid(const ::std::string& value) {
@@ -1381,7 +1381,7 @@ inline void SignUpReq::set_deviceid(const ::std::string& value) {
     deviceid_ = new ::std::string;
   }
   deviceid_->assign(value);
-  // @@protoc_insertion_point(field_set:login.SignUpReq.deviceid)
+  // @@protoc_insertion_point(field_set:cli.SignUpReq.deviceid)
 }
 inline void SignUpReq::set_deviceid(const char* value) {
   set_has_deviceid();
@@ -1389,7 +1389,7 @@ inline void SignUpReq::set_deviceid(const char* value) {
     deviceid_ = new ::std::string;
   }
   deviceid_->assign(value);
-  // @@protoc_insertion_point(field_set_char:login.SignUpReq.deviceid)
+  // @@protoc_insertion_point(field_set_char:cli.SignUpReq.deviceid)
 }
 inline void SignUpReq::set_deviceid(const char* value, size_t size) {
   set_has_deviceid();
@@ -1397,14 +1397,14 @@ inline void SignUpReq::set_deviceid(const char* value, size_t size) {
     deviceid_ = new ::std::string;
   }
   deviceid_->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:login.SignUpReq.deviceid)
+  // @@protoc_insertion_point(field_set_pointer:cli.SignUpReq.deviceid)
 }
 inline ::std::string* SignUpReq::mutable_deviceid() {
   set_has_deviceid();
   if (deviceid_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     deviceid_ = new ::std::string;
   }
-  // @@protoc_insertion_point(field_mutable:login.SignUpReq.deviceid)
+  // @@protoc_insertion_point(field_mutable:cli.SignUpReq.deviceid)
   return deviceid_;
 }
 inline ::std::string* SignUpReq::release_deviceid() {
@@ -1428,7 +1428,7 @@ inline void SignUpReq::set_allocated_deviceid(::std::string* deviceid) {
     clear_has_deviceid();
     deviceid_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
-  // @@protoc_insertion_point(field_set_allocated:login.SignUpReq.deviceid)
+  // @@protoc_insertion_point(field_set_allocated:cli.SignUpReq.deviceid)
 }
 
 // -------------------------------------------------------------------
@@ -1450,13 +1450,13 @@ inline void SignUpRsp::clear_id() {
   clear_has_id();
 }
 inline ::google::protobuf::uint32 SignUpRsp::id() const {
-  // @@protoc_insertion_point(field_get:login.SignUpRsp.id)
+  // @@protoc_insertion_point(field_get:cli.SignUpRsp.id)
   return id_;
 }
 inline void SignUpRsp::set_id(::google::protobuf::uint32 value) {
   set_has_id();
   id_ = value;
-  // @@protoc_insertion_point(field_set:login.SignUpRsp.id)
+  // @@protoc_insertion_point(field_set:cli.SignUpRsp.id)
 }
 
 // -------------------------------------------------------------------
@@ -1480,7 +1480,7 @@ inline void SignInReq::clear_user() {
   clear_has_user();
 }
 inline const ::std::string& SignInReq::user() const {
-  // @@protoc_insertion_point(field_get:login.SignInReq.user)
+  // @@protoc_insertion_point(field_get:cli.SignInReq.user)
   return *user_;
 }
 inline void SignInReq::set_user(const ::std::string& value) {
@@ -1489,7 +1489,7 @@ inline void SignInReq::set_user(const ::std::string& value) {
     user_ = new ::std::string;
   }
   user_->assign(value);
-  // @@protoc_insertion_point(field_set:login.SignInReq.user)
+  // @@protoc_insertion_point(field_set:cli.SignInReq.user)
 }
 inline void SignInReq::set_user(const char* value) {
   set_has_user();
@@ -1497,7 +1497,7 @@ inline void SignInReq::set_user(const char* value) {
     user_ = new ::std::string;
   }
   user_->assign(value);
-  // @@protoc_insertion_point(field_set_char:login.SignInReq.user)
+  // @@protoc_insertion_point(field_set_char:cli.SignInReq.user)
 }
 inline void SignInReq::set_user(const char* value, size_t size) {
   set_has_user();
@@ -1505,14 +1505,14 @@ inline void SignInReq::set_user(const char* value, size_t size) {
     user_ = new ::std::string;
   }
   user_->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:login.SignInReq.user)
+  // @@protoc_insertion_point(field_set_pointer:cli.SignInReq.user)
 }
 inline ::std::string* SignInReq::mutable_user() {
   set_has_user();
   if (user_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     user_ = new ::std::string;
   }
-  // @@protoc_insertion_point(field_mutable:login.SignInReq.user)
+  // @@protoc_insertion_point(field_mutable:cli.SignInReq.user)
   return user_;
 }
 inline ::std::string* SignInReq::release_user() {
@@ -1536,7 +1536,7 @@ inline void SignInReq::set_allocated_user(::std::string* user) {
     clear_has_user();
     user_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
-  // @@protoc_insertion_point(field_set_allocated:login.SignInReq.user)
+  // @@protoc_insertion_point(field_set_allocated:cli.SignInReq.user)
 }
 
 // required string passwd = 2;
@@ -1556,7 +1556,7 @@ inline void SignInReq::clear_passwd() {
   clear_has_passwd();
 }
 inline const ::std::string& SignInReq::passwd() const {
-  // @@protoc_insertion_point(field_get:login.SignInReq.passwd)
+  // @@protoc_insertion_point(field_get:cli.SignInReq.passwd)
   return *passwd_;
 }
 inline void SignInReq::set_passwd(const ::std::string& value) {
@@ -1565,7 +1565,7 @@ inline void SignInReq::set_passwd(const ::std::string& value) {
     passwd_ = new ::std::string;
   }
   passwd_->assign(value);
-  // @@protoc_insertion_point(field_set:login.SignInReq.passwd)
+  // @@protoc_insertion_point(field_set:cli.SignInReq.passwd)
 }
 inline void SignInReq::set_passwd(const char* value) {
   set_has_passwd();
@@ -1573,7 +1573,7 @@ inline void SignInReq::set_passwd(const char* value) {
     passwd_ = new ::std::string;
   }
   passwd_->assign(value);
-  // @@protoc_insertion_point(field_set_char:login.SignInReq.passwd)
+  // @@protoc_insertion_point(field_set_char:cli.SignInReq.passwd)
 }
 inline void SignInReq::set_passwd(const char* value, size_t size) {
   set_has_passwd();
@@ -1581,14 +1581,14 @@ inline void SignInReq::set_passwd(const char* value, size_t size) {
     passwd_ = new ::std::string;
   }
   passwd_->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:login.SignInReq.passwd)
+  // @@protoc_insertion_point(field_set_pointer:cli.SignInReq.passwd)
 }
 inline ::std::string* SignInReq::mutable_passwd() {
   set_has_passwd();
   if (passwd_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     passwd_ = new ::std::string;
   }
-  // @@protoc_insertion_point(field_mutable:login.SignInReq.passwd)
+  // @@protoc_insertion_point(field_mutable:cli.SignInReq.passwd)
   return passwd_;
 }
 inline ::std::string* SignInReq::release_passwd() {
@@ -1612,7 +1612,7 @@ inline void SignInReq::set_allocated_passwd(::std::string* passwd) {
     clear_has_passwd();
     passwd_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
-  // @@protoc_insertion_point(field_set_allocated:login.SignInReq.passwd)
+  // @@protoc_insertion_point(field_set_allocated:cli.SignInReq.passwd)
 }
 
 // optional string deviceid = 3;
@@ -1632,7 +1632,7 @@ inline void SignInReq::clear_deviceid() {
   clear_has_deviceid();
 }
 inline const ::std::string& SignInReq::deviceid() const {
-  // @@protoc_insertion_point(field_get:login.SignInReq.deviceid)
+  // @@protoc_insertion_point(field_get:cli.SignInReq.deviceid)
   return *deviceid_;
 }
 inline void SignInReq::set_deviceid(const ::std::string& value) {
@@ -1641,7 +1641,7 @@ inline void SignInReq::set_deviceid(const ::std::string& value) {
     deviceid_ = new ::std::string;
   }
   deviceid_->assign(value);
-  // @@protoc_insertion_point(field_set:login.SignInReq.deviceid)
+  // @@protoc_insertion_point(field_set:cli.SignInReq.deviceid)
 }
 inline void SignInReq::set_deviceid(const char* value) {
   set_has_deviceid();
@@ -1649,7 +1649,7 @@ inline void SignInReq::set_deviceid(const char* value) {
     deviceid_ = new ::std::string;
   }
   deviceid_->assign(value);
-  // @@protoc_insertion_point(field_set_char:login.SignInReq.deviceid)
+  // @@protoc_insertion_point(field_set_char:cli.SignInReq.deviceid)
 }
 inline void SignInReq::set_deviceid(const char* value, size_t size) {
   set_has_deviceid();
@@ -1657,14 +1657,14 @@ inline void SignInReq::set_deviceid(const char* value, size_t size) {
     deviceid_ = new ::std::string;
   }
   deviceid_->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:login.SignInReq.deviceid)
+  // @@protoc_insertion_point(field_set_pointer:cli.SignInReq.deviceid)
 }
 inline ::std::string* SignInReq::mutable_deviceid() {
   set_has_deviceid();
   if (deviceid_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     deviceid_ = new ::std::string;
   }
-  // @@protoc_insertion_point(field_mutable:login.SignInReq.deviceid)
+  // @@protoc_insertion_point(field_mutable:cli.SignInReq.deviceid)
   return deviceid_;
 }
 inline ::std::string* SignInReq::release_deviceid() {
@@ -1688,7 +1688,7 @@ inline void SignInReq::set_allocated_deviceid(::std::string* deviceid) {
     clear_has_deviceid();
     deviceid_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
-  // @@protoc_insertion_point(field_set_allocated:login.SignInReq.deviceid)
+  // @@protoc_insertion_point(field_set_allocated:cli.SignInReq.deviceid)
 }
 
 // -------------------------------------------------------------------
@@ -1710,13 +1710,13 @@ inline void SignInRsp::clear_id() {
   clear_has_id();
 }
 inline ::google::protobuf::uint32 SignInRsp::id() const {
-  // @@protoc_insertion_point(field_get:login.SignInRsp.id)
+  // @@protoc_insertion_point(field_get:cli.SignInRsp.id)
   return id_;
 }
 inline void SignInRsp::set_id(::google::protobuf::uint32 value) {
   set_has_id();
   id_ = value;
-  // @@protoc_insertion_point(field_set:login.SignInRsp.id)
+  // @@protoc_insertion_point(field_set:cli.SignInRsp.id)
 }
 
 // -------------------------------------------------------------------
@@ -1742,13 +1742,13 @@ inline void QueryPartitionRsp_Partition::clear_id() {
   clear_has_id();
 }
 inline ::google::protobuf::uint32 QueryPartitionRsp_Partition::id() const {
-  // @@protoc_insertion_point(field_get:login.QueryPartitionRsp.Partition.id)
+  // @@protoc_insertion_point(field_get:cli.QueryPartitionRsp.Partition.id)
   return id_;
 }
 inline void QueryPartitionRsp_Partition::set_id(::google::protobuf::uint32 value) {
   set_has_id();
   id_ = value;
-  // @@protoc_insertion_point(field_set:login.QueryPartitionRsp.Partition.id)
+  // @@protoc_insertion_point(field_set:cli.QueryPartitionRsp.Partition.id)
 }
 
 // required string name = 2;
@@ -1768,7 +1768,7 @@ inline void QueryPartitionRsp_Partition::clear_name() {
   clear_has_name();
 }
 inline const ::std::string& QueryPartitionRsp_Partition::name() const {
-  // @@protoc_insertion_point(field_get:login.QueryPartitionRsp.Partition.name)
+  // @@protoc_insertion_point(field_get:cli.QueryPartitionRsp.Partition.name)
   return *name_;
 }
 inline void QueryPartitionRsp_Partition::set_name(const ::std::string& value) {
@@ -1777,7 +1777,7 @@ inline void QueryPartitionRsp_Partition::set_name(const ::std::string& value) {
     name_ = new ::std::string;
   }
   name_->assign(value);
-  // @@protoc_insertion_point(field_set:login.QueryPartitionRsp.Partition.name)
+  // @@protoc_insertion_point(field_set:cli.QueryPartitionRsp.Partition.name)
 }
 inline void QueryPartitionRsp_Partition::set_name(const char* value) {
   set_has_name();
@@ -1785,7 +1785,7 @@ inline void QueryPartitionRsp_Partition::set_name(const char* value) {
     name_ = new ::std::string;
   }
   name_->assign(value);
-  // @@protoc_insertion_point(field_set_char:login.QueryPartitionRsp.Partition.name)
+  // @@protoc_insertion_point(field_set_char:cli.QueryPartitionRsp.Partition.name)
 }
 inline void QueryPartitionRsp_Partition::set_name(const char* value, size_t size) {
   set_has_name();
@@ -1793,14 +1793,14 @@ inline void QueryPartitionRsp_Partition::set_name(const char* value, size_t size
     name_ = new ::std::string;
   }
   name_->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:login.QueryPartitionRsp.Partition.name)
+  // @@protoc_insertion_point(field_set_pointer:cli.QueryPartitionRsp.Partition.name)
 }
 inline ::std::string* QueryPartitionRsp_Partition::mutable_name() {
   set_has_name();
   if (name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     name_ = new ::std::string;
   }
-  // @@protoc_insertion_point(field_mutable:login.QueryPartitionRsp.Partition.name)
+  // @@protoc_insertion_point(field_mutable:cli.QueryPartitionRsp.Partition.name)
   return name_;
 }
 inline ::std::string* QueryPartitionRsp_Partition::release_name() {
@@ -1824,10 +1824,10 @@ inline void QueryPartitionRsp_Partition::set_allocated_name(::std::string* name)
     clear_has_name();
     name_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
-  // @@protoc_insertion_point(field_set_allocated:login.QueryPartitionRsp.Partition.name)
+  // @@protoc_insertion_point(field_set_allocated:cli.QueryPartitionRsp.Partition.name)
 }
 
-// required .login.QueryPartitionRsp.StateType status = 3;
+// required .cli.QueryPartitionRsp.StateType status = 3;
 inline bool QueryPartitionRsp_Partition::has_status() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
@@ -1841,15 +1841,15 @@ inline void QueryPartitionRsp_Partition::clear_status() {
   status_ = 0;
   clear_has_status();
 }
-inline ::login::QueryPartitionRsp_StateType QueryPartitionRsp_Partition::status() const {
-  // @@protoc_insertion_point(field_get:login.QueryPartitionRsp.Partition.status)
-  return static_cast< ::login::QueryPartitionRsp_StateType >(status_);
+inline ::cli::QueryPartitionRsp_StateType QueryPartitionRsp_Partition::status() const {
+  // @@protoc_insertion_point(field_get:cli.QueryPartitionRsp.Partition.status)
+  return static_cast< ::cli::QueryPartitionRsp_StateType >(status_);
 }
-inline void QueryPartitionRsp_Partition::set_status(::login::QueryPartitionRsp_StateType value) {
-  assert(::login::QueryPartitionRsp_StateType_IsValid(value));
+inline void QueryPartitionRsp_Partition::set_status(::cli::QueryPartitionRsp_StateType value) {
+  assert(::cli::QueryPartitionRsp_StateType_IsValid(value));
   set_has_status();
   status_ = value;
-  // @@protoc_insertion_point(field_set:login.QueryPartitionRsp.Partition.status)
+  // @@protoc_insertion_point(field_set:cli.QueryPartitionRsp.Partition.status)
 }
 
 // required bool is_recommend = 4;
@@ -1867,46 +1867,46 @@ inline void QueryPartitionRsp_Partition::clear_is_recommend() {
   clear_has_is_recommend();
 }
 inline bool QueryPartitionRsp_Partition::is_recommend() const {
-  // @@protoc_insertion_point(field_get:login.QueryPartitionRsp.Partition.is_recommend)
+  // @@protoc_insertion_point(field_get:cli.QueryPartitionRsp.Partition.is_recommend)
   return is_recommend_;
 }
 inline void QueryPartitionRsp_Partition::set_is_recommend(bool value) {
   set_has_is_recommend();
   is_recommend_ = value;
-  // @@protoc_insertion_point(field_set:login.QueryPartitionRsp.Partition.is_recommend)
+  // @@protoc_insertion_point(field_set:cli.QueryPartitionRsp.Partition.is_recommend)
 }
 
 // -------------------------------------------------------------------
 
 // QueryPartitionRsp
 
-// repeated .login.QueryPartitionRsp.Partition lists = 1;
+// repeated .cli.QueryPartitionRsp.Partition lists = 1;
 inline int QueryPartitionRsp::lists_size() const {
   return lists_.size();
 }
 inline void QueryPartitionRsp::clear_lists() {
   lists_.Clear();
 }
-inline const ::login::QueryPartitionRsp_Partition& QueryPartitionRsp::lists(int index) const {
-  // @@protoc_insertion_point(field_get:login.QueryPartitionRsp.lists)
+inline const ::cli::QueryPartitionRsp_Partition& QueryPartitionRsp::lists(int index) const {
+  // @@protoc_insertion_point(field_get:cli.QueryPartitionRsp.lists)
   return lists_.Get(index);
 }
-inline ::login::QueryPartitionRsp_Partition* QueryPartitionRsp::mutable_lists(int index) {
-  // @@protoc_insertion_point(field_mutable:login.QueryPartitionRsp.lists)
+inline ::cli::QueryPartitionRsp_Partition* QueryPartitionRsp::mutable_lists(int index) {
+  // @@protoc_insertion_point(field_mutable:cli.QueryPartitionRsp.lists)
   return lists_.Mutable(index);
 }
-inline ::login::QueryPartitionRsp_Partition* QueryPartitionRsp::add_lists() {
-  // @@protoc_insertion_point(field_add:login.QueryPartitionRsp.lists)
+inline ::cli::QueryPartitionRsp_Partition* QueryPartitionRsp::add_lists() {
+  // @@protoc_insertion_point(field_add:cli.QueryPartitionRsp.lists)
   return lists_.Add();
 }
-inline const ::google::protobuf::RepeatedPtrField< ::login::QueryPartitionRsp_Partition >&
+inline const ::google::protobuf::RepeatedPtrField< ::cli::QueryPartitionRsp_Partition >&
 QueryPartitionRsp::lists() const {
-  // @@protoc_insertion_point(field_list:login.QueryPartitionRsp.lists)
+  // @@protoc_insertion_point(field_list:cli.QueryPartitionRsp.lists)
   return lists_;
 }
-inline ::google::protobuf::RepeatedPtrField< ::login::QueryPartitionRsp_Partition >*
+inline ::google::protobuf::RepeatedPtrField< ::cli::QueryPartitionRsp_Partition >*
 QueryPartitionRsp::mutable_lists() {
-  // @@protoc_insertion_point(field_mutable_list:login.QueryPartitionRsp.lists)
+  // @@protoc_insertion_point(field_mutable_list:cli.QueryPartitionRsp.lists)
   return &lists_;
 }
 
@@ -1929,13 +1929,13 @@ inline void EntryPartitionReq::clear_id() {
   clear_has_id();
 }
 inline ::google::protobuf::uint32 EntryPartitionReq::id() const {
-  // @@protoc_insertion_point(field_get:login.EntryPartitionReq.id)
+  // @@protoc_insertion_point(field_get:cli.EntryPartitionReq.id)
   return id_;
 }
 inline void EntryPartitionReq::set_id(::google::protobuf::uint32 value) {
   set_has_id();
   id_ = value;
-  // @@protoc_insertion_point(field_set:login.EntryPartitionReq.id)
+  // @@protoc_insertion_point(field_set:cli.EntryPartitionReq.id)
 }
 
 // -------------------------------------------------------------------
@@ -1959,7 +1959,7 @@ inline void EntryPartitionRsp::clear_ip() {
   clear_has_ip();
 }
 inline const ::std::string& EntryPartitionRsp::ip() const {
-  // @@protoc_insertion_point(field_get:login.EntryPartitionRsp.ip)
+  // @@protoc_insertion_point(field_get:cli.EntryPartitionRsp.ip)
   return *ip_;
 }
 inline void EntryPartitionRsp::set_ip(const ::std::string& value) {
@@ -1968,7 +1968,7 @@ inline void EntryPartitionRsp::set_ip(const ::std::string& value) {
     ip_ = new ::std::string;
   }
   ip_->assign(value);
-  // @@protoc_insertion_point(field_set:login.EntryPartitionRsp.ip)
+  // @@protoc_insertion_point(field_set:cli.EntryPartitionRsp.ip)
 }
 inline void EntryPartitionRsp::set_ip(const char* value) {
   set_has_ip();
@@ -1976,7 +1976,7 @@ inline void EntryPartitionRsp::set_ip(const char* value) {
     ip_ = new ::std::string;
   }
   ip_->assign(value);
-  // @@protoc_insertion_point(field_set_char:login.EntryPartitionRsp.ip)
+  // @@protoc_insertion_point(field_set_char:cli.EntryPartitionRsp.ip)
 }
 inline void EntryPartitionRsp::set_ip(const char* value, size_t size) {
   set_has_ip();
@@ -1984,14 +1984,14 @@ inline void EntryPartitionRsp::set_ip(const char* value, size_t size) {
     ip_ = new ::std::string;
   }
   ip_->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:login.EntryPartitionRsp.ip)
+  // @@protoc_insertion_point(field_set_pointer:cli.EntryPartitionRsp.ip)
 }
 inline ::std::string* EntryPartitionRsp::mutable_ip() {
   set_has_ip();
   if (ip_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     ip_ = new ::std::string;
   }
-  // @@protoc_insertion_point(field_mutable:login.EntryPartitionRsp.ip)
+  // @@protoc_insertion_point(field_mutable:cli.EntryPartitionRsp.ip)
   return ip_;
 }
 inline ::std::string* EntryPartitionRsp::release_ip() {
@@ -2015,7 +2015,7 @@ inline void EntryPartitionRsp::set_allocated_ip(::std::string* ip) {
     clear_has_ip();
     ip_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
-  // @@protoc_insertion_point(field_set_allocated:login.EntryPartitionRsp.ip)
+  // @@protoc_insertion_point(field_set_allocated:cli.EntryPartitionRsp.ip)
 }
 
 // required uint32 port = 2;
@@ -2033,13 +2033,13 @@ inline void EntryPartitionRsp::clear_port() {
   clear_has_port();
 }
 inline ::google::protobuf::uint32 EntryPartitionRsp::port() const {
-  // @@protoc_insertion_point(field_get:login.EntryPartitionRsp.port)
+  // @@protoc_insertion_point(field_get:cli.EntryPartitionRsp.port)
   return port_;
 }
 inline void EntryPartitionRsp::set_port(::google::protobuf::uint32 value) {
   set_has_port();
   port_ = value;
-  // @@protoc_insertion_point(field_set:login.EntryPartitionRsp.port)
+  // @@protoc_insertion_point(field_set:cli.EntryPartitionRsp.port)
 }
 
 // required uint64 token = 3;
@@ -2057,28 +2057,28 @@ inline void EntryPartitionRsp::clear_token() {
   clear_has_token();
 }
 inline ::google::protobuf::uint64 EntryPartitionRsp::token() const {
-  // @@protoc_insertion_point(field_get:login.EntryPartitionRsp.token)
+  // @@protoc_insertion_point(field_get:cli.EntryPartitionRsp.token)
   return token_;
 }
 inline void EntryPartitionRsp::set_token(::google::protobuf::uint64 value) {
   set_has_token();
   token_ = value;
-  // @@protoc_insertion_point(field_set:login.EntryPartitionRsp.token)
+  // @@protoc_insertion_point(field_set:cli.EntryPartitionRsp.token)
 }
 
 
 // @@protoc_insertion_point(namespace_scope)
 
-}  // namespace login
+}  // namespace cli
 
 #ifndef SWIG
 namespace google {
 namespace protobuf {
 
-template <> struct is_proto_enum< ::login::QueryPartitionRsp_StateType> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::cli::QueryPartitionRsp_StateType> : ::google::protobuf::internal::true_type {};
 template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::login::QueryPartitionRsp_StateType>() {
-  return ::login::QueryPartitionRsp_StateType_descriptor();
+inline const EnumDescriptor* GetEnumDescriptor< ::cli::QueryPartitionRsp_StateType>() {
+  return ::cli::QueryPartitionRsp_StateType_descriptor();
 }
 
 }  // namespace google

@@ -1,6 +1,7 @@
 ﻿#ifndef __LINKER_MANAGER_H__
 #define __LINKER_MANAGER_H__
 
+#include <unordered_set>
 #include <network.h>
 
 namespace router
@@ -32,8 +33,14 @@ public:
 	LinkerManager(network::IOServiceThreadManager &threads);
 
 public:
+	// 处理用户连接
+	void HandleUserConnected(SessionHandle *session);
+
 	// 处理来自用户的消息
 	void HandleMessageFromUser(SessionHandle *session, google::protobuf::Message *messsage, network::NetMessage &buffer);
+
+	// 处理用户关闭连接
+	void HandleUserClose(SessionHandle *session);
 
 	// 处理来自路由的消息
 	void HandleMessageFromRouter(router::Connector *connector, google::protobuf::Message *messsage, network::NetMessage &buffer);
@@ -51,6 +58,8 @@ private:
 	network::IOServiceThreadManager&					threads_;
 	std::unordered_map<uint64_t, SUserAuth>				user_auth_;
 	std::unordered_map<uint32_t, network::TCPSessionID>	user_session_;
+	std::unordered_map<network::TCPSessionID, uint32_t>	reverse_user_session_;
+	std::unordered_set<network::TCPSessionID>			unauth_user_session_;
 };
 
 #endif

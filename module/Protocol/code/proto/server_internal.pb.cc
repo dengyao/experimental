@@ -79,9 +79,9 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* UpdateLinkerCapacityReq_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   UpdateLinkerCapacityReq_reflection_ = NULL;
-const ::google::protobuf::Descriptor* UpdateUserTokenReq_descriptor_ = NULL;
+const ::google::protobuf::Descriptor* UpdateTokenReq_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
-  UpdateUserTokenReq_reflection_ = NULL;
+  UpdateTokenReq_reflection_ = NULL;
 const ::google::protobuf::EnumDescriptor* NodeType_descriptor_ = NULL;
 
 }  // namespace
@@ -402,22 +402,22 @@ void protobuf_AssignDesc_proto_2fserver_5finternal_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(UpdateLinkerCapacityReq));
-  UpdateUserTokenReq_descriptor_ = file->message_type(19);
-  static const int UpdateUserTokenReq_offsets_[2] = {
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UpdateUserTokenReq, user_id_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UpdateUserTokenReq, token_),
+  UpdateTokenReq_descriptor_ = file->message_type(19);
+  static const int UpdateTokenReq_offsets_[2] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UpdateTokenReq, user_id_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UpdateTokenReq, token_),
   };
-  UpdateUserTokenReq_reflection_ =
+  UpdateTokenReq_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
-      UpdateUserTokenReq_descriptor_,
-      UpdateUserTokenReq::default_instance_,
-      UpdateUserTokenReq_offsets_,
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UpdateUserTokenReq, _has_bits_[0]),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UpdateUserTokenReq, _unknown_fields_),
+      UpdateTokenReq_descriptor_,
+      UpdateTokenReq::default_instance_,
+      UpdateTokenReq_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UpdateTokenReq, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UpdateTokenReq, _unknown_fields_),
       -1,
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
-      sizeof(UpdateUserTokenReq));
+      sizeof(UpdateTokenReq));
   NodeType_descriptor_ = file->enum_type(0);
 }
 
@@ -470,7 +470,7 @@ void protobuf_RegisterTypes(const ::std::string&) {
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     UpdateLinkerCapacityReq_descriptor_, &UpdateLinkerCapacityReq::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-    UpdateUserTokenReq_descriptor_, &UpdateUserTokenReq::default_instance());
+    UpdateTokenReq_descriptor_, &UpdateTokenReq::default_instance());
 }
 
 }  // namespace
@@ -514,8 +514,8 @@ void protobuf_ShutdownFile_proto_2fserver_5finternal_2eproto() {
   delete LinkerLoginRsp_reflection_;
   delete UpdateLinkerCapacityReq::default_instance_;
   delete UpdateLinkerCapacityReq_reflection_;
-  delete UpdateUserTokenReq::default_instance_;
-  delete UpdateUserTokenReq_reflection_;
+  delete UpdateTokenReq::default_instance_;
+  delete UpdateTokenReq_reflection_;
 }
 
 void protobuf_AddDesc_proto_2fserver_5finternal_2eproto() {
@@ -563,10 +563,10 @@ void protobuf_AddDesc_proto_2fserver_5finternal_2eproto() {
     "\002(\r\022\021\n\tlinker_id\030\004 \001(\r\"\?\n\016LinkerLoginRsp"
     "\022\032\n\022heartbeat_interval\030\001 \002(\r\022\021\n\tlinker_i"
     "d\030\002 \002(\r\"\'\n\027UpdateLinkerCapacityReq\022\014\n\004lo"
-    "ad\030\001 \002(\r\"4\n\022UpdateUserTokenReq\022\017\n\007user_i"
-    "d\030\001 \002(\r\022\r\n\005token\030\002 \002(\004*D\n\010NodeType\022\020\n\014kL"
-    "oginServer\020\001\022\021\n\rkLinkerServer\020\002\022\023\n\017kMain"
-    "LogicSever\020\003", 1612);
+    "ad\030\001 \002(\r\"0\n\016UpdateTokenReq\022\017\n\007user_id\030\001 "
+    "\002(\r\022\r\n\005token\030\002 \002(\004*D\n\010NodeType\022\020\n\014kLogin"
+    "Server\020\001\022\021\n\rkLinkerServer\020\002\022\023\n\017kMainLogi"
+    "cSever\020\003", 1608);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "proto/server_internal.proto", &protobuf_RegisterTypes);
   LoginDBAgentReq::default_instance_ = new LoginDBAgentReq();
@@ -588,7 +588,7 @@ void protobuf_AddDesc_proto_2fserver_5finternal_2eproto() {
   LinkerLoginReq::default_instance_ = new LinkerLoginReq();
   LinkerLoginRsp::default_instance_ = new LinkerLoginRsp();
   UpdateLinkerCapacityReq::default_instance_ = new UpdateLinkerCapacityReq();
-  UpdateUserTokenReq::default_instance_ = new UpdateUserTokenReq();
+  UpdateTokenReq::default_instance_ = new UpdateTokenReq();
   LoginDBAgentReq::default_instance_->InitAsDefaultInstance();
   LoginDBAgentRsp::default_instance_->InitAsDefaultInstance();
   DBAgentInfoReq::default_instance_->InitAsDefaultInstance();
@@ -608,7 +608,7 @@ void protobuf_AddDesc_proto_2fserver_5finternal_2eproto() {
   LinkerLoginReq::default_instance_->InitAsDefaultInstance();
   LinkerLoginRsp::default_instance_->InitAsDefaultInstance();
   UpdateLinkerCapacityReq::default_instance_->InitAsDefaultInstance();
-  UpdateUserTokenReq::default_instance_->InitAsDefaultInstance();
+  UpdateTokenReq::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_proto_2fserver_5finternal_2eproto);
 }
 
@@ -6006,67 +6006,67 @@ void UpdateLinkerCapacityReq::Swap(UpdateLinkerCapacityReq* other) {
 // ===================================================================
 
 #ifndef _MSC_VER
-const int UpdateUserTokenReq::kUserIdFieldNumber;
-const int UpdateUserTokenReq::kTokenFieldNumber;
+const int UpdateTokenReq::kUserIdFieldNumber;
+const int UpdateTokenReq::kTokenFieldNumber;
 #endif  // !_MSC_VER
 
-UpdateUserTokenReq::UpdateUserTokenReq()
+UpdateTokenReq::UpdateTokenReq()
   : ::google::protobuf::Message() {
   SharedCtor();
-  // @@protoc_insertion_point(constructor:svr.UpdateUserTokenReq)
+  // @@protoc_insertion_point(constructor:svr.UpdateTokenReq)
 }
 
-void UpdateUserTokenReq::InitAsDefaultInstance() {
+void UpdateTokenReq::InitAsDefaultInstance() {
 }
 
-UpdateUserTokenReq::UpdateUserTokenReq(const UpdateUserTokenReq& from)
+UpdateTokenReq::UpdateTokenReq(const UpdateTokenReq& from)
   : ::google::protobuf::Message() {
   SharedCtor();
   MergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:svr.UpdateUserTokenReq)
+  // @@protoc_insertion_point(copy_constructor:svr.UpdateTokenReq)
 }
 
-void UpdateUserTokenReq::SharedCtor() {
+void UpdateTokenReq::SharedCtor() {
   _cached_size_ = 0;
   user_id_ = 0u;
   token_ = GOOGLE_ULONGLONG(0);
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
-UpdateUserTokenReq::~UpdateUserTokenReq() {
-  // @@protoc_insertion_point(destructor:svr.UpdateUserTokenReq)
+UpdateTokenReq::~UpdateTokenReq() {
+  // @@protoc_insertion_point(destructor:svr.UpdateTokenReq)
   SharedDtor();
 }
 
-void UpdateUserTokenReq::SharedDtor() {
+void UpdateTokenReq::SharedDtor() {
   if (this != default_instance_) {
   }
 }
 
-void UpdateUserTokenReq::SetCachedSize(int size) const {
+void UpdateTokenReq::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const ::google::protobuf::Descriptor* UpdateUserTokenReq::descriptor() {
+const ::google::protobuf::Descriptor* UpdateTokenReq::descriptor() {
   protobuf_AssignDescriptorsOnce();
-  return UpdateUserTokenReq_descriptor_;
+  return UpdateTokenReq_descriptor_;
 }
 
-const UpdateUserTokenReq& UpdateUserTokenReq::default_instance() {
+const UpdateTokenReq& UpdateTokenReq::default_instance() {
   if (default_instance_ == NULL) protobuf_AddDesc_proto_2fserver_5finternal_2eproto();
   return *default_instance_;
 }
 
-UpdateUserTokenReq* UpdateUserTokenReq::default_instance_ = NULL;
+UpdateTokenReq* UpdateTokenReq::default_instance_ = NULL;
 
-UpdateUserTokenReq* UpdateUserTokenReq::New() const {
-  return new UpdateUserTokenReq;
+UpdateTokenReq* UpdateTokenReq::New() const {
+  return new UpdateTokenReq;
 }
 
-void UpdateUserTokenReq::Clear() {
+void UpdateTokenReq::Clear() {
 #define OFFSET_OF_FIELD_(f) (reinterpret_cast<char*>(      \
-  &reinterpret_cast<UpdateUserTokenReq*>(16)->f) - \
+  &reinterpret_cast<UpdateTokenReq*>(16)->f) - \
    reinterpret_cast<char*>(16))
 
 #define ZR_(first, last) do {                              \
@@ -6084,11 +6084,11 @@ void UpdateUserTokenReq::Clear() {
   mutable_unknown_fields()->Clear();
 }
 
-bool UpdateUserTokenReq::MergePartialFromCodedStream(
+bool UpdateTokenReq::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:svr.UpdateUserTokenReq)
+  // @@protoc_insertion_point(parse_start:svr.UpdateTokenReq)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
     tag = p.first;
@@ -6137,17 +6137,17 @@ bool UpdateUserTokenReq::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:svr.UpdateUserTokenReq)
+  // @@protoc_insertion_point(parse_success:svr.UpdateTokenReq)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:svr.UpdateUserTokenReq)
+  // @@protoc_insertion_point(parse_failure:svr.UpdateTokenReq)
   return false;
 #undef DO_
 }
 
-void UpdateUserTokenReq::SerializeWithCachedSizes(
+void UpdateTokenReq::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:svr.UpdateUserTokenReq)
+  // @@protoc_insertion_point(serialize_start:svr.UpdateTokenReq)
   // required uint32 user_id = 1;
   if (has_user_id()) {
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->user_id(), output);
@@ -6162,12 +6162,12 @@ void UpdateUserTokenReq::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
   }
-  // @@protoc_insertion_point(serialize_end:svr.UpdateUserTokenReq)
+  // @@protoc_insertion_point(serialize_end:svr.UpdateTokenReq)
 }
 
-::google::protobuf::uint8* UpdateUserTokenReq::SerializeWithCachedSizesToArray(
+::google::protobuf::uint8* UpdateTokenReq::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // @@protoc_insertion_point(serialize_to_array_start:svr.UpdateUserTokenReq)
+  // @@protoc_insertion_point(serialize_to_array_start:svr.UpdateTokenReq)
   // required uint32 user_id = 1;
   if (has_user_id()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->user_id(), target);
@@ -6182,11 +6182,11 @@ void UpdateUserTokenReq::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:svr.UpdateUserTokenReq)
+  // @@protoc_insertion_point(serialize_to_array_end:svr.UpdateTokenReq)
   return target;
 }
 
-int UpdateUserTokenReq::ByteSize() const {
+int UpdateTokenReq::ByteSize() const {
   int total_size = 0;
 
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
@@ -6216,10 +6216,10 @@ int UpdateUserTokenReq::ByteSize() const {
   return total_size;
 }
 
-void UpdateUserTokenReq::MergeFrom(const ::google::protobuf::Message& from) {
+void UpdateTokenReq::MergeFrom(const ::google::protobuf::Message& from) {
   GOOGLE_CHECK_NE(&from, this);
-  const UpdateUserTokenReq* source =
-    ::google::protobuf::internal::dynamic_cast_if_available<const UpdateUserTokenReq*>(
+  const UpdateTokenReq* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const UpdateTokenReq*>(
       &from);
   if (source == NULL) {
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
@@ -6228,7 +6228,7 @@ void UpdateUserTokenReq::MergeFrom(const ::google::protobuf::Message& from) {
   }
 }
 
-void UpdateUserTokenReq::MergeFrom(const UpdateUserTokenReq& from) {
+void UpdateTokenReq::MergeFrom(const UpdateTokenReq& from) {
   GOOGLE_CHECK_NE(&from, this);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (from.has_user_id()) {
@@ -6241,25 +6241,25 @@ void UpdateUserTokenReq::MergeFrom(const UpdateUserTokenReq& from) {
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
 
-void UpdateUserTokenReq::CopyFrom(const ::google::protobuf::Message& from) {
+void UpdateTokenReq::CopyFrom(const ::google::protobuf::Message& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-void UpdateUserTokenReq::CopyFrom(const UpdateUserTokenReq& from) {
+void UpdateTokenReq::CopyFrom(const UpdateTokenReq& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool UpdateUserTokenReq::IsInitialized() const {
+bool UpdateTokenReq::IsInitialized() const {
   if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
 
   return true;
 }
 
-void UpdateUserTokenReq::Swap(UpdateUserTokenReq* other) {
+void UpdateTokenReq::Swap(UpdateTokenReq* other) {
   if (other != this) {
     std::swap(user_id_, other->user_id_);
     std::swap(token_, other->token_);
@@ -6269,11 +6269,11 @@ void UpdateUserTokenReq::Swap(UpdateUserTokenReq* other) {
   }
 }
 
-::google::protobuf::Metadata UpdateUserTokenReq::GetMetadata() const {
+::google::protobuf::Metadata UpdateTokenReq::GetMetadata() const {
   protobuf_AssignDescriptorsOnce();
   ::google::protobuf::Metadata metadata;
-  metadata.descriptor = UpdateUserTokenReq_descriptor_;
-  metadata.reflection = UpdateUserTokenReq_reflection_;
+  metadata.descriptor = UpdateTokenReq_descriptor_;
+  metadata.reflection = UpdateTokenReq_reflection_;
   return metadata;
 }
 

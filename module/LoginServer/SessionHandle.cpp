@@ -29,11 +29,7 @@ void SessionHandle::OnMessage(network::NetMessage &message)
 	auto request = ProtubufCodec::Decode(message);
 	if (request == nullptr)
 	{
-		message.Clear();
-		pub::ErrorRsp response;
-		response.set_error_code(pub::kInvalidProtocol);
-		ProtubufCodec::Encode(&response, message);
-		Send(message);
+		login_manager_.RespondErrorCode(*this, message, pub::kInvalidProtocol);
 		return;
 	}
 

@@ -16,7 +16,7 @@
 #include <google/protobuf/wire_format.h>
 // @@protoc_insertion_point(includes)
 
-namespace login {
+namespace cli {
 
 namespace {
 
@@ -267,21 +267,21 @@ void protobuf_AddDesc_proto_2fclient_5flogin_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\030proto/client_login.proto\022\005login\"h\n\tSig"
-    "nUpReq\022\014\n\004user\030\001 \002(\t\022\016\n\006passwd\030\002 \002(\t\022\020\n\010"
-    "platform\030\003 \001(\t\022\n\n\002os\030\004 \001(\t\022\r\n\005model\030\005 \001("
-    "\t\022\020\n\010deviceid\030\006 \001(\t\"\027\n\tSignUpRsp\022\n\n\002id\030\001"
-    " \002(\r\";\n\tSignInReq\022\014\n\004user\030\001 \002(\t\022\016\n\006passw"
-    "d\030\002 \002(\t\022\020\n\010deviceid\030\003 \001(\t\"\027\n\tSignInRsp\022\n"
-    "\n\002id\030\001 \002(\r\"\023\n\021QueryPartitionReq\"\340\001\n\021Quer"
-    "yPartitionRsp\0221\n\005lists\030\001 \003(\0132\".login.Que"
-    "ryPartitionRsp.Partition\032o\n\tPartition\022\n\n"
-    "\002id\030\001 \002(\r\022\014\n\004name\030\002 \002(\t\0222\n\006status\030\003 \002(\0162"
-    "\".login.QueryPartitionRsp.StateType\022\024\n\014i"
-    "s_recommend\030\004 \002(\010\"\'\n\tStateType\022\013\n\007kNorma"
-    "l\020\000\022\r\n\tkShutdown\020\001\"\037\n\021EntryPartitionReq\022"
-    "\n\n\002id\030\001 \002(\r\"<\n\021EntryPartitionRsp\022\n\n\002ip\030\001"
-    " \002(\t\022\014\n\004port\030\002 \002(\r\022\r\n\005token\030\003 \002(\004", 593);
+    "\n\030proto/client_login.proto\022\003cli\"h\n\tSignU"
+    "pReq\022\014\n\004user\030\001 \002(\t\022\016\n\006passwd\030\002 \002(\t\022\020\n\010pl"
+    "atform\030\003 \001(\t\022\n\n\002os\030\004 \001(\t\022\r\n\005model\030\005 \001(\t\022"
+    "\020\n\010deviceid\030\006 \001(\t\"\027\n\tSignUpRsp\022\n\n\002id\030\001 \002"
+    "(\r\";\n\tSignInReq\022\014\n\004user\030\001 \002(\t\022\016\n\006passwd\030"
+    "\002 \002(\t\022\020\n\010deviceid\030\003 \001(\t\"\027\n\tSignInRsp\022\n\n\002"
+    "id\030\001 \002(\r\"\023\n\021QueryPartitionReq\"\334\001\n\021QueryP"
+    "artitionRsp\022/\n\005lists\030\001 \003(\0132 .cli.QueryPa"
+    "rtitionRsp.Partition\032m\n\tPartition\022\n\n\002id\030"
+    "\001 \002(\r\022\014\n\004name\030\002 \002(\t\0220\n\006status\030\003 \002(\0162 .cl"
+    "i.QueryPartitionRsp.StateType\022\024\n\014is_reco"
+    "mmend\030\004 \002(\010\"\'\n\tStateType\022\013\n\007kNormal\020\000\022\r\n"
+    "\tkShutdown\020\001\"\037\n\021EntryPartitionReq\022\n\n\002id\030"
+    "\001 \002(\r\"<\n\021EntryPartitionRsp\022\n\n\002ip\030\001 \002(\t\022\014"
+    "\n\004port\030\002 \002(\r\022\r\n\005token\030\003 \002(\004", 587);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "proto/client_login.proto", &protobuf_RegisterTypes);
   SignUpReq::default_instance_ = new SignUpReq();
@@ -326,7 +326,7 @@ const int SignUpReq::kDeviceidFieldNumber;
 SignUpReq::SignUpReq()
   : ::google::protobuf::Message() {
   SharedCtor();
-  // @@protoc_insertion_point(constructor:login.SignUpReq)
+  // @@protoc_insertion_point(constructor:cli.SignUpReq)
 }
 
 void SignUpReq::InitAsDefaultInstance() {
@@ -336,7 +336,7 @@ SignUpReq::SignUpReq(const SignUpReq& from)
   : ::google::protobuf::Message() {
   SharedCtor();
   MergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:login.SignUpReq)
+  // @@protoc_insertion_point(copy_constructor:cli.SignUpReq)
 }
 
 void SignUpReq::SharedCtor() {
@@ -352,7 +352,7 @@ void SignUpReq::SharedCtor() {
 }
 
 SignUpReq::~SignUpReq() {
-  // @@protoc_insertion_point(destructor:login.SignUpReq)
+  // @@protoc_insertion_point(destructor:cli.SignUpReq)
   SharedDtor();
 }
 
@@ -441,7 +441,7 @@ bool SignUpReq::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:login.SignUpReq)
+  // @@protoc_insertion_point(parse_start:cli.SignUpReq)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
     tag = p.first;
@@ -562,17 +562,17 @@ bool SignUpReq::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:login.SignUpReq)
+  // @@protoc_insertion_point(parse_success:cli.SignUpReq)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:login.SignUpReq)
+  // @@protoc_insertion_point(parse_failure:cli.SignUpReq)
   return false;
 #undef DO_
 }
 
 void SignUpReq::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:login.SignUpReq)
+  // @@protoc_insertion_point(serialize_start:cli.SignUpReq)
   // required string user = 1;
   if (has_user()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
@@ -637,12 +637,12 @@ void SignUpReq::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
   }
-  // @@protoc_insertion_point(serialize_end:login.SignUpReq)
+  // @@protoc_insertion_point(serialize_end:cli.SignUpReq)
 }
 
 ::google::protobuf::uint8* SignUpReq::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // @@protoc_insertion_point(serialize_to_array_start:login.SignUpReq)
+  // @@protoc_insertion_point(serialize_to_array_start:cli.SignUpReq)
   // required string user = 1;
   if (has_user()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
@@ -713,7 +713,7 @@ void SignUpReq::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:login.SignUpReq)
+  // @@protoc_insertion_point(serialize_to_array_end:cli.SignUpReq)
   return target;
 }
 
@@ -862,7 +862,7 @@ const int SignUpRsp::kIdFieldNumber;
 SignUpRsp::SignUpRsp()
   : ::google::protobuf::Message() {
   SharedCtor();
-  // @@protoc_insertion_point(constructor:login.SignUpRsp)
+  // @@protoc_insertion_point(constructor:cli.SignUpRsp)
 }
 
 void SignUpRsp::InitAsDefaultInstance() {
@@ -872,7 +872,7 @@ SignUpRsp::SignUpRsp(const SignUpRsp& from)
   : ::google::protobuf::Message() {
   SharedCtor();
   MergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:login.SignUpRsp)
+  // @@protoc_insertion_point(copy_constructor:cli.SignUpRsp)
 }
 
 void SignUpRsp::SharedCtor() {
@@ -882,7 +882,7 @@ void SignUpRsp::SharedCtor() {
 }
 
 SignUpRsp::~SignUpRsp() {
-  // @@protoc_insertion_point(destructor:login.SignUpRsp)
+  // @@protoc_insertion_point(destructor:cli.SignUpRsp)
   SharedDtor();
 }
 
@@ -922,7 +922,7 @@ bool SignUpRsp::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:login.SignUpRsp)
+  // @@protoc_insertion_point(parse_start:cli.SignUpRsp)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
     tag = p.first;
@@ -956,17 +956,17 @@ bool SignUpRsp::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:login.SignUpRsp)
+  // @@protoc_insertion_point(parse_success:cli.SignUpRsp)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:login.SignUpRsp)
+  // @@protoc_insertion_point(parse_failure:cli.SignUpRsp)
   return false;
 #undef DO_
 }
 
 void SignUpRsp::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:login.SignUpRsp)
+  // @@protoc_insertion_point(serialize_start:cli.SignUpRsp)
   // required uint32 id = 1;
   if (has_id()) {
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->id(), output);
@@ -976,12 +976,12 @@ void SignUpRsp::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
   }
-  // @@protoc_insertion_point(serialize_end:login.SignUpRsp)
+  // @@protoc_insertion_point(serialize_end:cli.SignUpRsp)
 }
 
 ::google::protobuf::uint8* SignUpRsp::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // @@protoc_insertion_point(serialize_to_array_start:login.SignUpRsp)
+  // @@protoc_insertion_point(serialize_to_array_start:cli.SignUpRsp)
   // required uint32 id = 1;
   if (has_id()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->id(), target);
@@ -991,7 +991,7 @@ void SignUpRsp::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:login.SignUpRsp)
+  // @@protoc_insertion_point(serialize_to_array_end:cli.SignUpRsp)
   return target;
 }
 
@@ -1087,7 +1087,7 @@ const int SignInReq::kDeviceidFieldNumber;
 SignInReq::SignInReq()
   : ::google::protobuf::Message() {
   SharedCtor();
-  // @@protoc_insertion_point(constructor:login.SignInReq)
+  // @@protoc_insertion_point(constructor:cli.SignInReq)
 }
 
 void SignInReq::InitAsDefaultInstance() {
@@ -1097,7 +1097,7 @@ SignInReq::SignInReq(const SignInReq& from)
   : ::google::protobuf::Message() {
   SharedCtor();
   MergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:login.SignInReq)
+  // @@protoc_insertion_point(copy_constructor:cli.SignInReq)
 }
 
 void SignInReq::SharedCtor() {
@@ -1110,7 +1110,7 @@ void SignInReq::SharedCtor() {
 }
 
 SignInReq::~SignInReq() {
-  // @@protoc_insertion_point(destructor:login.SignInReq)
+  // @@protoc_insertion_point(destructor:cli.SignInReq)
   SharedDtor();
 }
 
@@ -1175,7 +1175,7 @@ bool SignInReq::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:login.SignInReq)
+  // @@protoc_insertion_point(parse_start:cli.SignInReq)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
     tag = p.first;
@@ -1245,17 +1245,17 @@ bool SignInReq::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:login.SignInReq)
+  // @@protoc_insertion_point(parse_success:cli.SignInReq)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:login.SignInReq)
+  // @@protoc_insertion_point(parse_failure:cli.SignInReq)
   return false;
 #undef DO_
 }
 
 void SignInReq::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:login.SignInReq)
+  // @@protoc_insertion_point(serialize_start:cli.SignInReq)
   // required string user = 1;
   if (has_user()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
@@ -1290,12 +1290,12 @@ void SignInReq::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
   }
-  // @@protoc_insertion_point(serialize_end:login.SignInReq)
+  // @@protoc_insertion_point(serialize_end:cli.SignInReq)
 }
 
 ::google::protobuf::uint8* SignInReq::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // @@protoc_insertion_point(serialize_to_array_start:login.SignInReq)
+  // @@protoc_insertion_point(serialize_to_array_start:cli.SignInReq)
   // required string user = 1;
   if (has_user()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
@@ -1333,7 +1333,7 @@ void SignInReq::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:login.SignInReq)
+  // @@protoc_insertion_point(serialize_to_array_end:cli.SignInReq)
   return target;
 }
 
@@ -1449,7 +1449,7 @@ const int SignInRsp::kIdFieldNumber;
 SignInRsp::SignInRsp()
   : ::google::protobuf::Message() {
   SharedCtor();
-  // @@protoc_insertion_point(constructor:login.SignInRsp)
+  // @@protoc_insertion_point(constructor:cli.SignInRsp)
 }
 
 void SignInRsp::InitAsDefaultInstance() {
@@ -1459,7 +1459,7 @@ SignInRsp::SignInRsp(const SignInRsp& from)
   : ::google::protobuf::Message() {
   SharedCtor();
   MergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:login.SignInRsp)
+  // @@protoc_insertion_point(copy_constructor:cli.SignInRsp)
 }
 
 void SignInRsp::SharedCtor() {
@@ -1469,7 +1469,7 @@ void SignInRsp::SharedCtor() {
 }
 
 SignInRsp::~SignInRsp() {
-  // @@protoc_insertion_point(destructor:login.SignInRsp)
+  // @@protoc_insertion_point(destructor:cli.SignInRsp)
   SharedDtor();
 }
 
@@ -1509,7 +1509,7 @@ bool SignInRsp::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:login.SignInRsp)
+  // @@protoc_insertion_point(parse_start:cli.SignInRsp)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
     tag = p.first;
@@ -1543,17 +1543,17 @@ bool SignInRsp::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:login.SignInRsp)
+  // @@protoc_insertion_point(parse_success:cli.SignInRsp)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:login.SignInRsp)
+  // @@protoc_insertion_point(parse_failure:cli.SignInRsp)
   return false;
 #undef DO_
 }
 
 void SignInRsp::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:login.SignInRsp)
+  // @@protoc_insertion_point(serialize_start:cli.SignInRsp)
   // required uint32 id = 1;
   if (has_id()) {
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->id(), output);
@@ -1563,12 +1563,12 @@ void SignInRsp::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
   }
-  // @@protoc_insertion_point(serialize_end:login.SignInRsp)
+  // @@protoc_insertion_point(serialize_end:cli.SignInRsp)
 }
 
 ::google::protobuf::uint8* SignInRsp::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // @@protoc_insertion_point(serialize_to_array_start:login.SignInRsp)
+  // @@protoc_insertion_point(serialize_to_array_start:cli.SignInRsp)
   // required uint32 id = 1;
   if (has_id()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->id(), target);
@@ -1578,7 +1578,7 @@ void SignInRsp::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:login.SignInRsp)
+  // @@protoc_insertion_point(serialize_to_array_end:cli.SignInRsp)
   return target;
 }
 
@@ -1671,7 +1671,7 @@ void SignInRsp::Swap(SignInRsp* other) {
 QueryPartitionReq::QueryPartitionReq()
   : ::google::protobuf::Message() {
   SharedCtor();
-  // @@protoc_insertion_point(constructor:login.QueryPartitionReq)
+  // @@protoc_insertion_point(constructor:cli.QueryPartitionReq)
 }
 
 void QueryPartitionReq::InitAsDefaultInstance() {
@@ -1681,7 +1681,7 @@ QueryPartitionReq::QueryPartitionReq(const QueryPartitionReq& from)
   : ::google::protobuf::Message() {
   SharedCtor();
   MergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:login.QueryPartitionReq)
+  // @@protoc_insertion_point(copy_constructor:cli.QueryPartitionReq)
 }
 
 void QueryPartitionReq::SharedCtor() {
@@ -1690,7 +1690,7 @@ void QueryPartitionReq::SharedCtor() {
 }
 
 QueryPartitionReq::~QueryPartitionReq() {
-  // @@protoc_insertion_point(destructor:login.QueryPartitionReq)
+  // @@protoc_insertion_point(destructor:cli.QueryPartitionReq)
   SharedDtor();
 }
 
@@ -1729,7 +1729,7 @@ bool QueryPartitionReq::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:login.QueryPartitionReq)
+  // @@protoc_insertion_point(parse_start:cli.QueryPartitionReq)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
     tag = p.first;
@@ -1744,32 +1744,32 @@ bool QueryPartitionReq::MergePartialFromCodedStream(
           input, tag, mutable_unknown_fields()));
   }
 success:
-  // @@protoc_insertion_point(parse_success:login.QueryPartitionReq)
+  // @@protoc_insertion_point(parse_success:cli.QueryPartitionReq)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:login.QueryPartitionReq)
+  // @@protoc_insertion_point(parse_failure:cli.QueryPartitionReq)
   return false;
 #undef DO_
 }
 
 void QueryPartitionReq::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:login.QueryPartitionReq)
+  // @@protoc_insertion_point(serialize_start:cli.QueryPartitionReq)
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
   }
-  // @@protoc_insertion_point(serialize_end:login.QueryPartitionReq)
+  // @@protoc_insertion_point(serialize_end:cli.QueryPartitionReq)
 }
 
 ::google::protobuf::uint8* QueryPartitionReq::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // @@protoc_insertion_point(serialize_to_array_start:login.QueryPartitionReq)
+  // @@protoc_insertion_point(serialize_to_array_start:cli.QueryPartitionReq)
   if (!unknown_fields().empty()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:login.QueryPartitionReq)
+  // @@protoc_insertion_point(serialize_to_array_end:cli.QueryPartitionReq)
   return target;
 }
 
@@ -1870,7 +1870,7 @@ const int QueryPartitionRsp_Partition::kIsRecommendFieldNumber;
 QueryPartitionRsp_Partition::QueryPartitionRsp_Partition()
   : ::google::protobuf::Message() {
   SharedCtor();
-  // @@protoc_insertion_point(constructor:login.QueryPartitionRsp.Partition)
+  // @@protoc_insertion_point(constructor:cli.QueryPartitionRsp.Partition)
 }
 
 void QueryPartitionRsp_Partition::InitAsDefaultInstance() {
@@ -1880,7 +1880,7 @@ QueryPartitionRsp_Partition::QueryPartitionRsp_Partition(const QueryPartitionRsp
   : ::google::protobuf::Message() {
   SharedCtor();
   MergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:login.QueryPartitionRsp.Partition)
+  // @@protoc_insertion_point(copy_constructor:cli.QueryPartitionRsp.Partition)
 }
 
 void QueryPartitionRsp_Partition::SharedCtor() {
@@ -1894,7 +1894,7 @@ void QueryPartitionRsp_Partition::SharedCtor() {
 }
 
 QueryPartitionRsp_Partition::~QueryPartitionRsp_Partition() {
-  // @@protoc_insertion_point(destructor:login.QueryPartitionRsp.Partition)
+  // @@protoc_insertion_point(destructor:cli.QueryPartitionRsp.Partition)
   SharedDtor();
 }
 
@@ -1958,7 +1958,7 @@ bool QueryPartitionRsp_Partition::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:login.QueryPartitionRsp.Partition)
+  // @@protoc_insertion_point(parse_start:cli.QueryPartitionRsp.Partition)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
     tag = p.first;
@@ -1995,7 +1995,7 @@ bool QueryPartitionRsp_Partition::MergePartialFromCodedStream(
         break;
       }
 
-      // required .login.QueryPartitionRsp.StateType status = 3;
+      // required .cli.QueryPartitionRsp.StateType status = 3;
       case 3: {
         if (tag == 24) {
          parse_status:
@@ -2003,8 +2003,8 @@ bool QueryPartitionRsp_Partition::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          if (::login::QueryPartitionRsp_StateType_IsValid(value)) {
-            set_status(static_cast< ::login::QueryPartitionRsp_StateType >(value));
+          if (::cli::QueryPartitionRsp_StateType_IsValid(value)) {
+            set_status(static_cast< ::cli::QueryPartitionRsp_StateType >(value));
           } else {
             mutable_unknown_fields()->AddVarint(3, value);
           }
@@ -2044,17 +2044,17 @@ bool QueryPartitionRsp_Partition::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:login.QueryPartitionRsp.Partition)
+  // @@protoc_insertion_point(parse_success:cli.QueryPartitionRsp.Partition)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:login.QueryPartitionRsp.Partition)
+  // @@protoc_insertion_point(parse_failure:cli.QueryPartitionRsp.Partition)
   return false;
 #undef DO_
 }
 
 void QueryPartitionRsp_Partition::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:login.QueryPartitionRsp.Partition)
+  // @@protoc_insertion_point(serialize_start:cli.QueryPartitionRsp.Partition)
   // required uint32 id = 1;
   if (has_id()) {
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->id(), output);
@@ -2070,7 +2070,7 @@ void QueryPartitionRsp_Partition::SerializeWithCachedSizes(
       2, this->name(), output);
   }
 
-  // required .login.QueryPartitionRsp.StateType status = 3;
+  // required .cli.QueryPartitionRsp.StateType status = 3;
   if (has_status()) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       3, this->status(), output);
@@ -2085,12 +2085,12 @@ void QueryPartitionRsp_Partition::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
   }
-  // @@protoc_insertion_point(serialize_end:login.QueryPartitionRsp.Partition)
+  // @@protoc_insertion_point(serialize_end:cli.QueryPartitionRsp.Partition)
 }
 
 ::google::protobuf::uint8* QueryPartitionRsp_Partition::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // @@protoc_insertion_point(serialize_to_array_start:login.QueryPartitionRsp.Partition)
+  // @@protoc_insertion_point(serialize_to_array_start:cli.QueryPartitionRsp.Partition)
   // required uint32 id = 1;
   if (has_id()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->id(), target);
@@ -2107,7 +2107,7 @@ void QueryPartitionRsp_Partition::SerializeWithCachedSizes(
         2, this->name(), target);
   }
 
-  // required .login.QueryPartitionRsp.StateType status = 3;
+  // required .cli.QueryPartitionRsp.StateType status = 3;
   if (has_status()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       3, this->status(), target);
@@ -2122,7 +2122,7 @@ void QueryPartitionRsp_Partition::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:login.QueryPartitionRsp.Partition)
+  // @@protoc_insertion_point(serialize_to_array_end:cli.QueryPartitionRsp.Partition)
   return target;
 }
 
@@ -2144,7 +2144,7 @@ int QueryPartitionRsp_Partition::ByteSize() const {
           this->name());
     }
 
-    // required .login.QueryPartitionRsp.StateType status = 3;
+    // required .cli.QueryPartitionRsp.StateType status = 3;
     if (has_status()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->status());
@@ -2246,7 +2246,7 @@ const int QueryPartitionRsp::kListsFieldNumber;
 QueryPartitionRsp::QueryPartitionRsp()
   : ::google::protobuf::Message() {
   SharedCtor();
-  // @@protoc_insertion_point(constructor:login.QueryPartitionRsp)
+  // @@protoc_insertion_point(constructor:cli.QueryPartitionRsp)
 }
 
 void QueryPartitionRsp::InitAsDefaultInstance() {
@@ -2256,7 +2256,7 @@ QueryPartitionRsp::QueryPartitionRsp(const QueryPartitionRsp& from)
   : ::google::protobuf::Message() {
   SharedCtor();
   MergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:login.QueryPartitionRsp)
+  // @@protoc_insertion_point(copy_constructor:cli.QueryPartitionRsp)
 }
 
 void QueryPartitionRsp::SharedCtor() {
@@ -2265,7 +2265,7 @@ void QueryPartitionRsp::SharedCtor() {
 }
 
 QueryPartitionRsp::~QueryPartitionRsp() {
-  // @@protoc_insertion_point(destructor:login.QueryPartitionRsp)
+  // @@protoc_insertion_point(destructor:cli.QueryPartitionRsp)
   SharedDtor();
 }
 
@@ -2305,13 +2305,13 @@ bool QueryPartitionRsp::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:login.QueryPartitionRsp)
+  // @@protoc_insertion_point(parse_start:cli.QueryPartitionRsp)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .login.QueryPartitionRsp.Partition lists = 1;
+      // repeated .cli.QueryPartitionRsp.Partition lists = 1;
       case 1: {
         if (tag == 10) {
          parse_lists:
@@ -2339,18 +2339,18 @@ bool QueryPartitionRsp::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:login.QueryPartitionRsp)
+  // @@protoc_insertion_point(parse_success:cli.QueryPartitionRsp)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:login.QueryPartitionRsp)
+  // @@protoc_insertion_point(parse_failure:cli.QueryPartitionRsp)
   return false;
 #undef DO_
 }
 
 void QueryPartitionRsp::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:login.QueryPartitionRsp)
-  // repeated .login.QueryPartitionRsp.Partition lists = 1;
+  // @@protoc_insertion_point(serialize_start:cli.QueryPartitionRsp)
+  // repeated .cli.QueryPartitionRsp.Partition lists = 1;
   for (int i = 0; i < this->lists_size(); i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       1, this->lists(i), output);
@@ -2360,13 +2360,13 @@ void QueryPartitionRsp::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
   }
-  // @@protoc_insertion_point(serialize_end:login.QueryPartitionRsp)
+  // @@protoc_insertion_point(serialize_end:cli.QueryPartitionRsp)
 }
 
 ::google::protobuf::uint8* QueryPartitionRsp::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // @@protoc_insertion_point(serialize_to_array_start:login.QueryPartitionRsp)
-  // repeated .login.QueryPartitionRsp.Partition lists = 1;
+  // @@protoc_insertion_point(serialize_to_array_start:cli.QueryPartitionRsp)
+  // repeated .cli.QueryPartitionRsp.Partition lists = 1;
   for (int i = 0; i < this->lists_size(); i++) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
@@ -2377,14 +2377,14 @@ void QueryPartitionRsp::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:login.QueryPartitionRsp)
+  // @@protoc_insertion_point(serialize_to_array_end:cli.QueryPartitionRsp)
   return target;
 }
 
 int QueryPartitionRsp::ByteSize() const {
   int total_size = 0;
 
-  // repeated .login.QueryPartitionRsp.Partition lists = 1;
+  // repeated .cli.QueryPartitionRsp.Partition lists = 1;
   total_size += 1 * this->lists_size();
   for (int i = 0; i < this->lists_size(); i++) {
     total_size +=
@@ -2466,7 +2466,7 @@ const int EntryPartitionReq::kIdFieldNumber;
 EntryPartitionReq::EntryPartitionReq()
   : ::google::protobuf::Message() {
   SharedCtor();
-  // @@protoc_insertion_point(constructor:login.EntryPartitionReq)
+  // @@protoc_insertion_point(constructor:cli.EntryPartitionReq)
 }
 
 void EntryPartitionReq::InitAsDefaultInstance() {
@@ -2476,7 +2476,7 @@ EntryPartitionReq::EntryPartitionReq(const EntryPartitionReq& from)
   : ::google::protobuf::Message() {
   SharedCtor();
   MergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:login.EntryPartitionReq)
+  // @@protoc_insertion_point(copy_constructor:cli.EntryPartitionReq)
 }
 
 void EntryPartitionReq::SharedCtor() {
@@ -2486,7 +2486,7 @@ void EntryPartitionReq::SharedCtor() {
 }
 
 EntryPartitionReq::~EntryPartitionReq() {
-  // @@protoc_insertion_point(destructor:login.EntryPartitionReq)
+  // @@protoc_insertion_point(destructor:cli.EntryPartitionReq)
   SharedDtor();
 }
 
@@ -2526,7 +2526,7 @@ bool EntryPartitionReq::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:login.EntryPartitionReq)
+  // @@protoc_insertion_point(parse_start:cli.EntryPartitionReq)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
     tag = p.first;
@@ -2560,17 +2560,17 @@ bool EntryPartitionReq::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:login.EntryPartitionReq)
+  // @@protoc_insertion_point(parse_success:cli.EntryPartitionReq)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:login.EntryPartitionReq)
+  // @@protoc_insertion_point(parse_failure:cli.EntryPartitionReq)
   return false;
 #undef DO_
 }
 
 void EntryPartitionReq::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:login.EntryPartitionReq)
+  // @@protoc_insertion_point(serialize_start:cli.EntryPartitionReq)
   // required uint32 id = 1;
   if (has_id()) {
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->id(), output);
@@ -2580,12 +2580,12 @@ void EntryPartitionReq::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
   }
-  // @@protoc_insertion_point(serialize_end:login.EntryPartitionReq)
+  // @@protoc_insertion_point(serialize_end:cli.EntryPartitionReq)
 }
 
 ::google::protobuf::uint8* EntryPartitionReq::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // @@protoc_insertion_point(serialize_to_array_start:login.EntryPartitionReq)
+  // @@protoc_insertion_point(serialize_to_array_start:cli.EntryPartitionReq)
   // required uint32 id = 1;
   if (has_id()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->id(), target);
@@ -2595,7 +2595,7 @@ void EntryPartitionReq::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:login.EntryPartitionReq)
+  // @@protoc_insertion_point(serialize_to_array_end:cli.EntryPartitionReq)
   return target;
 }
 
@@ -2691,7 +2691,7 @@ const int EntryPartitionRsp::kTokenFieldNumber;
 EntryPartitionRsp::EntryPartitionRsp()
   : ::google::protobuf::Message() {
   SharedCtor();
-  // @@protoc_insertion_point(constructor:login.EntryPartitionRsp)
+  // @@protoc_insertion_point(constructor:cli.EntryPartitionRsp)
 }
 
 void EntryPartitionRsp::InitAsDefaultInstance() {
@@ -2701,7 +2701,7 @@ EntryPartitionRsp::EntryPartitionRsp(const EntryPartitionRsp& from)
   : ::google::protobuf::Message() {
   SharedCtor();
   MergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:login.EntryPartitionRsp)
+  // @@protoc_insertion_point(copy_constructor:cli.EntryPartitionRsp)
 }
 
 void EntryPartitionRsp::SharedCtor() {
@@ -2714,7 +2714,7 @@ void EntryPartitionRsp::SharedCtor() {
 }
 
 EntryPartitionRsp::~EntryPartitionRsp() {
-  // @@protoc_insertion_point(destructor:login.EntryPartitionRsp)
+  // @@protoc_insertion_point(destructor:cli.EntryPartitionRsp)
   SharedDtor();
 }
 
@@ -2778,7 +2778,7 @@ bool EntryPartitionRsp::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:login.EntryPartitionRsp)
+  // @@protoc_insertion_point(parse_start:cli.EntryPartitionRsp)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
     tag = p.first;
@@ -2844,17 +2844,17 @@ bool EntryPartitionRsp::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:login.EntryPartitionRsp)
+  // @@protoc_insertion_point(parse_success:cli.EntryPartitionRsp)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:login.EntryPartitionRsp)
+  // @@protoc_insertion_point(parse_failure:cli.EntryPartitionRsp)
   return false;
 #undef DO_
 }
 
 void EntryPartitionRsp::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:login.EntryPartitionRsp)
+  // @@protoc_insertion_point(serialize_start:cli.EntryPartitionRsp)
   // required string ip = 1;
   if (has_ip()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
@@ -2879,12 +2879,12 @@ void EntryPartitionRsp::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
   }
-  // @@protoc_insertion_point(serialize_end:login.EntryPartitionRsp)
+  // @@protoc_insertion_point(serialize_end:cli.EntryPartitionRsp)
 }
 
 ::google::protobuf::uint8* EntryPartitionRsp::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // @@protoc_insertion_point(serialize_to_array_start:login.EntryPartitionRsp)
+  // @@protoc_insertion_point(serialize_to_array_start:cli.EntryPartitionRsp)
   // required string ip = 1;
   if (has_ip()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
@@ -2910,7 +2910,7 @@ void EntryPartitionRsp::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:login.EntryPartitionRsp)
+  // @@protoc_insertion_point(serialize_to_array_end:cli.EntryPartitionRsp)
   return target;
 }
 
@@ -3019,6 +3019,6 @@ void EntryPartitionRsp::Swap(EntryPartitionRsp* other) {
 
 // @@protoc_insertion_point(namespace_scope)
 
-}  // namespace login
+}  // namespace cli
 
 // @@protoc_insertion_point(global_scope)

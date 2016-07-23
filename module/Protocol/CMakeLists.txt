@@ -2,6 +2,7 @@ set(CURRENT_PROJECT_NAME Protocol)
 
 set(CURRENT_PROJECT_SRC_LISTS 
   code/ProtobufCodec.cpp
+  code/proto/client_link.pb.cc
   code/proto/client_login.pb.cc
   code/proto/public_enum.pb.cc
   code/proto/public_struct.pb.cc

@@ -156,7 +156,7 @@ message UpdateLinkerCapacityReq {
 /************************************************************************/
 
 // 更新用户Token请求
-message UpdateUserTokenReq {
+message UpdateTokenReq {
     required uint32 user_id = 1; // 用户id
     required uint64 token = 2;   // Token
 }

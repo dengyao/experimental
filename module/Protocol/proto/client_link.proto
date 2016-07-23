@@ -1,0 +1,10 @@
+package cli;
+
+// 用户验证请求
+message UserAuthReq {
+    required uint64 token = 1; // Token
+}
+
+// 用户验证返回
+message UserAuthRsp {
+}

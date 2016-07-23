@@ -1,4 +1,4 @@
-package login;
+package cli;
 
 // 注册账号请求
 message SignUpReq {

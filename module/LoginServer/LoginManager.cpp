@@ -19,10 +19,10 @@ LoginManager::LoginManager(network::IOServiceThreadManager &threads, const std::
 {
 	for (const auto &partition : partition_lists_)
 	{
-		assert(partition.status >= login::QueryPartitionRsp::StateType_MIN &&
-			partition.status <= login::QueryPartitionRsp::StateType_MAX);
-		if (partition.status < login::QueryPartitionRsp::StateType_MIN ||
-			partition.status > login::QueryPartitionRsp::StateType_MAX)
+		assert(partition.status >= cli::QueryPartitionRsp::StateType_MIN &&
+			partition.status <= cli::QueryPartitionRsp::StateType_MAX);
+		if (partition.status < cli::QueryPartitionRsp::StateType_MIN ||
+			partition.status > cli::QueryPartitionRsp::StateType_MAX)
 		{
 			logger()->critical("非法的分区状态码!");
 			exit(-1);
@@ -90,19 +90,19 @@ void LoginManager::HandleAcceptConnection(SessionHandle &session)
 // 处理用户消息
 bool LoginManager::HandleUserMessage(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
-	if (dynamic_cast<login::QueryPartitionReq*>(message) != nullptr)
+	if (dynamic_cast<cli::QueryPartitionReq*>(message) != nullptr)
 	{
 		OnUserQueryPartition(session, message, buffer);
 	}
-	else if (dynamic_cast<login::SignInReq*>(message) != nullptr)
+	else if (dynamic_cast<cli::SignInReq*>(message) != nullptr)
 	{
 		OnUserSignIn(session, message, buffer);
 	}
-	else if (dynamic_cast<login::EntryPartitionReq*>(message) != nullptr)
+	else if (dynamic_cast<cli::EntryPartitionReq*>(message) != nullptr)
 	{
 		OnUserEntryPartition(session, message, buffer);
 	}
-	else if (dynamic_cast<login::SignUpReq*>(message) != nullptr)
+	else if (dynamic_cast<cli::SignUpReq*>(message) != nullptr)
 	{
 		OnUserSignUp(session, message, buffer);
 	}
@@ -186,7 +186,7 @@ bool LoginManager::OnLinkerLogin(SessionHandle &session, google::protobuf::Messa
 	}
 
 	// 分区是否停机维护
-	if (found->status != login::QueryPartitionRsp::kNormal)
+	if (found->status != cli::QueryPartitionRsp::kNormal)
 	{
 		RespondErrorCode(session, buffer, pub::kRepeatLogin, message->GetTypeName().c_str());
 		logger()->warn("分区停机维护中，Linker登录失败，来自{}:{}", session.RemoteEndpoint().address().to_string(), session.RemoteEndpoint().port());
@@ -287,7 +287,7 @@ bool LoginManager::OnLinkerUpdateLoadCapacity(SessionHandle &session, google::pr
 void LoginManager::OnUserQueryPartition(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
 	buffer.Clear();
-	login::QueryPartitionRsp response;
+	cli::QueryPartitionRsp response;
 	for (const auto &partition : partition_lists_)
 	{
 		// 计算分区Linker数量
@@ -299,11 +299,11 @@ void LoginManager::OnUserQueryPartition(SessionHandle &session, google::protobuf
 		}
 
 		// 添加分区信息
-		auto status = static_cast<login::QueryPartitionRsp::StateType>(partition.status);
-		login::QueryPartitionRsp::Partition *data = response.add_lists();
+		auto status = static_cast<cli::QueryPartitionRsp::StateType>(partition.status);
+		cli::QueryPartitionRsp::Partition *data = response.add_lists();
 		data->set_id(partition.id);
 		data->set_name(partition.name);
-		data->set_status(linker_sum > 0 ? status : login::QueryPartitionRsp::kShutdown);
+		data->set_status(linker_sum > 0 ? status : cli::QueryPartitionRsp::kShutdown);
 		data->set_is_recommend(partition.is_recommend);
 	}
 	ProtubufCodec::Encode(&response, buffer);
@@ -313,7 +313,7 @@ void LoginManager::OnUserQueryPartition(SessionHandle &session, google::protobuf
 // 用户注册
 void LoginManager::OnUserSignUp(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
-	auto request = static_cast<login::SignUpReq*>(message);
+	auto request = static_cast<cli::SignUpReq*>(message);
 
 	// 拷贝回调数据
 	std::string msg_name = message->GetTypeName();
@@ -345,7 +345,7 @@ void LoginManager::OnUserSignUp(SessionHandle &session, google::protobuf::Messag
 				if (user_id > 0)
 				{
 					// 创建账号成功
-					login::SignUpRsp response;
+					cli::SignUpRsp response;
 					response.set_id(user_id);
 					ProtubufCodec::Encode(&response, new_buffer);
 					session_ptr->Send(new_buffer);
@@ -372,7 +372,7 @@ void LoginManager::OnUserSignUp(SessionHandle &session, google::protobuf::Messag
 // 用户登录
 void LoginManager::OnUserSignIn(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
-	auto request = static_cast<login::SignInReq*>(message);
+	auto request = static_cast<cli::SignInReq*>(message);
 
 	// 拷贝回调数据
 	std::string msg_name = message->GetTypeName();
@@ -408,7 +408,7 @@ void LoginManager::OnUserSignIn(SessionHandle &session, google::protobuf::Messag
 					}
 
 					// 登录成功
-					login::SignInRsp response;
+					cli::SignInRsp response;
 					response.set_id(user_id);
 					ProtubufCodec::Encode(&response, new_buffer);
 					session_ptr->Send(new_buffer);
@@ -435,7 +435,7 @@ void LoginManager::OnUserSignIn(SessionHandle &session, google::protobuf::Messag
 // 进入分区
 void LoginManager::OnUserEntryPartition(SessionHandle &session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
-	auto request = static_cast<login::EntryPartitionReq*>(message);
+	auto request = static_cast<cli::EntryPartitionReq*>(message);
 
 	// 是否已经验证
 	auto found =  connection_map_.find(session.SessionID());
@@ -453,7 +453,7 @@ void LoginManager::OnUserEntryPartition(SessionHandle &session, google::protobuf
 		return partition.id == request->id();
 	});
 
-	if (partition_found != partition_lists_.end() || partition_found->status != login::QueryPartitionRsp::kShutdown)
+	if (partition_found != partition_lists_.end() || partition_found->status != cli::QueryPartitionRsp::kShutdown)
 	{
 		auto partition_iter = partition_map_.find(request->id());
 		if (partition_iter != partition_map_.end())
@@ -492,7 +492,7 @@ void LoginManager::OnUserEntryPartition(SessionHandle &session, google::protobuf
 		return;
 	}
 	buffer.Clear();
-	svr::UpdateUserTokenReq update_token;
+	svr::UpdateTokenReq update_token;
 	update_token.set_user_id(found->second.user_id);
 	update_token.set_token(token);
 	ProtubufCodec::Encode(&update_token, buffer);
@@ -500,7 +500,7 @@ void LoginManager::OnUserEntryPartition(SessionHandle &session, google::protobuf
 
 	// 返回分区信息
 	buffer.Clear();
-	login::EntryPartitionRsp response;
+	cli::EntryPartitionRsp response;
 	response.set_ip(min_element->public_ip);
 	response.set_port(min_element->port);
 	response.set_token(token);

@@ -1,6 +1,7 @@
 ﻿#ifndef __INIT_DESCRIPTOR_H__
 #define __INIT_DESCRIPTOR_H__
 
+#include <proto/client_link.pb.h>
 #include <proto/client_login.pb.h>
 #include <proto/public_enum.pb.h>
 #include <proto/public_struct.pb.h>
@@ -11,15 +12,17 @@ class InitDescriptor
 public:
     InitDescriptor()
     {
-        login::SignUpReq::descriptor();
-        login::SignUpRsp::descriptor();
-        login::SignInReq::descriptor();
-        login::SignInRsp::descriptor();
-        login::QueryPartitionReq::descriptor();
-        login::QueryPartitionRsp::descriptor();
-        login::QueryPartitionRsp_Partition::descriptor();
-        login::EntryPartitionReq::descriptor();
-        login::EntryPartitionRsp::descriptor();
+        cli::UserAuthReq::descriptor();
+        cli::UserAuthRsp::descriptor();
+        cli::SignUpReq::descriptor();
+        cli::SignUpRsp::descriptor();
+        cli::SignInReq::descriptor();
+        cli::SignInRsp::descriptor();
+        cli::QueryPartitionReq::descriptor();
+        cli::QueryPartitionRsp::descriptor();
+        cli::QueryPartitionRsp_Partition::descriptor();
+        cli::EntryPartitionReq::descriptor();
+        cli::EntryPartitionRsp::descriptor();
         pub::PingReq::descriptor();
         pub::PongRsp::descriptor();
         pub::ErrorRsp::descriptor();
@@ -42,7 +45,7 @@ public:
         svr::LinkerLoginReq::descriptor();
         svr::LinkerLoginRsp::descriptor();
         svr::UpdateLinkerCapacityReq::descriptor();
-        svr::UpdateUserTokenReq::descriptor();
+        svr::UpdateTokenReq::descriptor();
     }
 };
 

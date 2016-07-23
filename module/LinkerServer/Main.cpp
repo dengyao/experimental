@@ -7,6 +7,7 @@
 #include "ServerConfig.h"
 #include "GlobalObject.h"
 #include "LinkerManager.h"
+#include "SessionHandle.h"
 #include "LoginConnector.h"
 
 std::unique_ptr<network::TCPServer> g_server;
@@ -17,7 +18,19 @@ network::IOServiceThreadManager*    g_thread_manager = nullptr;
 void RunLoginServer()
 {
 	g_linker_manager = std::make_unique<LinkerManager>(*g_thread_manager);
-	//GlobalLoginConnector()->SetMessageCallback();
+	asio::ip::tcp::endpoint endpoint(asio::ip::address_v4(), ServerConfig::GetInstance()->GetPort());
+
+	g_server = std::make_unique<network::TCPServer>(endpoint, *g_thread_manager,
+		std::bind(CreateSessionHandle, std::ref(*g_linker_manager.get())),
+		CreateMessageFilter, ServerConfig::GetInstance()->GetHeartbeatInterval());
+
+	GlobalConnector()->SetMessageCallback(std::bind(&LinkerManager::HandleMessageFromRouter, g_linker_manager.get(),
+		std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+
+	GlobalLoginConnector()->SetMessageCallback(std::bind(&LinkerManager::HandleMessageFromLoginServer, g_linker_manager.get(),
+		std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+
+	logger()->info("Linker服务器[ip:{} port:{}]启动成功!", g_server->LocalEndpoint().address().to_string().c_str(), g_server->LocalEndpoint().port());
 }
 
 // 连接路由服务器
