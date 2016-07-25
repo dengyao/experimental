@@ -2,6 +2,7 @@
 #define __ROUTER_MANAGER_H__
 
 #include <network.h>
+#include <ProtobufDispatcher.h>
 
 namespace google
 {
@@ -57,27 +58,30 @@ public:
 	~RouterManager();
 
 public:
-	// 处理消息
-	bool HandleMessage(SessionHandle *session, google::protobuf::Message *message, network::NetMessage &buffer);
+	// 接收消息
+	bool OnMessage(SessionHandle *session, google::protobuf::Message *message, network::NetMessage &buffer);
 
-	// 处理服务器关闭连接
-	void HandleServerClose(SessionHandle *session);
+	// 连接关闭
+	void OnClose(SessionHandle *session);
 
-	// 回复错误码
-	void RespondErrorCode(SessionHandle *session, network::NetMessage &buffer, int error_code, const char *what = nullptr);
+	// 发送错误码
+	void SendErrorCode(SessionHandle *session, network::NetMessage &buffer, int error_code, const char *what = nullptr);
 
 private:
+	// 未定义消息
+	bool OnUnknownMessage(network::TCPSessionHandler *session, google::protobuf::Message *message, network::NetMessage &buffer);
+
 	// 服务器登录
-	bool OnServerLogin(SessionHandle *session, google::protobuf::Message *message, network::NetMessage &buffer);
+	bool OnServerLogin(network::TCPSessionHandler *session, google::protobuf::Message *message, network::NetMessage &buffer);
 
 	// 查询路由信息
-	bool OnQueryRouterInfo(SessionHandle *session, google::protobuf::Message *message, network::NetMessage &buffer);
+	bool OnQueryRouterInfo(network::TCPSessionHandler *session, google::protobuf::Message *message, network::NetMessage &buffer);
 
 	// 转发服务器消息
-	bool OnForwardServerMessage(SessionHandle *session, google::protobuf::Message *message, network::NetMessage &buffer);
+	bool OnForwardServerMessage(network::TCPSessionHandler *session, google::protobuf::Message *message, network::NetMessage &buffer);
 
 	// 广播服务器消息
-	bool OnBroadcastServerMessage(SessionHandle *ession, google::protobuf::Message *message, network::NetMessage &buffer);
+	bool OnBroadcastServerMessage(network::TCPSessionHandler *ession, google::protobuf::Message *message, network::NetMessage &buffer);
 
 private:
 	// 更新统计数据
@@ -91,11 +95,12 @@ private:
 	bool FindServerNodeSession(int node_type, int child_id, network::SessionHandlePointer &out_session);
 
 private:
-	network::IOServiceThreadManager&                     threads_;
-	asio::steady_timer                                   timer_;
-	const std::function<void(asio::error_code)>          wait_handler_;
-	std::unordered_map<int, ServerNode>                  server_lists_;
-	std::unordered_map<network::TCPSessionID, NodeIndex> node_index_;
+	network::IOServiceThreadManager&						threads_;
+	asio::steady_timer										timer_;
+	const std::function<void(asio::error_code)>				wait_handler_;
+	std::unordered_map<int, ServerNode>						server_lists_;
+	std::unordered_map<network::TCPSessionID, NodeIndex>	node_index_;
+	ProtobufDispatcher										dispatcher_;
 };
 
 #endif

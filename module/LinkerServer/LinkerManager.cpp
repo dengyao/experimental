@@ -19,7 +19,7 @@ LinkerManager::LinkerManager(network::IOServiceThreadManager &threads)
 }
 
 // 回复错误码
-void LinkerManager::RespondErrorCodeToUser(SessionHandle *session, network::NetMessage &buffer, int error_code, const char *what)
+void LinkerManager::SenddErrorCodeToUser(SessionHandle *session, network::NetMessage &buffer, int error_code, const char *what)
 {
 	buffer.Clear();
 	pub::ErrorRsp response;
@@ -30,114 +30,6 @@ void LinkerManager::RespondErrorCodeToUser(SessionHandle *session, network::NetM
 	}
 	ProtubufCodec::Encode(&response, buffer);
 	session->Send(buffer);
-}
-
-// 处理用户连接
-void LinkerManager::HandleUserConnected(SessionHandle *session)
-{
-	unauth_user_session_.insert(session->SessionID());
-}
-
-// 处理来自用户的消息
-void LinkerManager::HandleMessageFromUser(SessionHandle *session, google::protobuf::Message *messsage, network::NetMessage &buffer)
-{
-	// 用户是否验证
-	auto found = reverse_user_session_.find(session->SessionID());
-	if (found == reverse_user_session_.end())
-	{
-		auto request = dynamic_cast<cli::UserAuthReq*>(messsage);
-		if (request == nullptr)
-		{
-			logger()->debug("用户未验证，来自{}:{}", session->RemoteEndpoint().address().to_string(), session->RemoteEndpoint().port());
-			return RespondErrorCodeToUser(session, buffer, pub::kUserUnverified, messsage->GetTypeName().c_str());
-		}
-
-		auto auth_iter = user_auth_.find(request->token());
-		if (auth_iter == user_auth_.end())
-		{
-			logger()->debug("用户验证失败，来自{}:{}", session->RemoteEndpoint().address().to_string(), session->RemoteEndpoint().port());
-			return RespondErrorCodeToUser(session, buffer, pub::kAuthenticationFailure, messsage->GetTypeName().c_str());
-		}
-
-		// 是否已验证
-		auto session_iter = user_session_.find(auth_iter->second.user_id);
-		if (session_iter != user_session_.end())
-		{
-			// 踢掉上一个会话
-			auto session_id = session_iter->second.session_id;
-			user_session_.erase(session_iter);
-			reverse_user_session_.erase(session_id);
-			auto session_ptr = threads_.SessionHandler(session_id);
-			if (session_ptr != nullptr)
-			{
-				session_ptr->Close();
-				logger()->warn("用户{}:{}被踢掉线!", session_ptr->RemoteEndpoint().address().to_string(), session_ptr->RemoteEndpoint().port());
-			}
-		}
-
-		// 更新数据
-		SUserSession session_info;
-		session_info.token = request->token();
-		session_info.session_id = session->SessionID();
-		unauth_user_session_.erase(session->SessionID());
-		user_session_.insert(std::make_pair(auth_iter->second.user_id, session_info));
-		reverse_user_session_.insert(std::make_pair(session->SessionID(), auth_iter->second.user_id));
-
-		// 响应请求
-		buffer.Clear();
-		cli::UserAuthRsp response;
-		response.set_user_id(auth_iter->second.user_id);
-		ProtubufCodec::Encode(&response, buffer);
-		session->Send(buffer);
-
-		logger()->info("用户[{}]验证成功!", auth_iter->second.user_id);
-		return;
-	}
-}
-
-// 处理用户关闭连接
-void LinkerManager::HandleUserClose(SessionHandle *session)
-{
-	unauth_user_session_.erase(session->SessionID());
-	auto found = reverse_user_session_.find(session->SessionID());
-	if (found != reverse_user_session_.end())
-	{
-		auto iter = user_session_.find(found->first);
-		assert(iter != user_session_.end());
-		if (iter != user_session_.end())
-		{
-			// 断线后Token在一定时间内依然有效
-			SUserAuth auth;
-			auth.user_id = found->first;
-			user_auth_.insert(std::make_pair(iter->second.token, auth));
-			user_session_.erase(iter);
-		}
-		reverse_user_session_.erase(found);
-		logger()->info("用户[{}]关闭连接!", found->second);
-	}
-}
-
-// 处理来自路由的消息
-void LinkerManager::HandleMessageFromRouter(router::Connector *connector, google::protobuf::Message *messsage, network::NetMessage &buffer)
-{
-}
-
-// 处理来自登录服务器的消息
-void LinkerManager::HandleMessageFromLoginServer(LoginConnector *connector, google::protobuf::Message *messsage, network::NetMessage &buffer)
-{
-	auto request = dynamic_cast<svr::UpdateTokenReq*>(messsage);
-	if (request != nullptr)
-	{
-		// 更新Token
-		SUserAuth auth;
-		auth.user_id = request->user_id();
-		user_auth_.insert(std::make_pair(request->token(), auth));
-		logger()->info("更新用户Token，{}:{}", request->user_id(), request->token());
-	}
-	else
-	{
-		logger()->warn("已忽略来自登录服务器的请求，{}", messsage->GetTypeName());
-	}
 }
 
 // 更新定时器
@@ -190,4 +82,112 @@ void LinkerManager::OnUpdateTimer(asio::error_code error_code)
 
 	timer_.expires_from_now(std::chrono::seconds(1));
 	timer_.async_wait(wait_handler_);
+}
+
+// 用户连接
+void LinkerManager::OnUserConnect(SessionHandle *session)
+{
+	unauth_user_session_.insert(session->SessionID());
+}
+
+// 用户消息
+void LinkerManager::OnUserMessage(SessionHandle *session, google::protobuf::Message *messsage, network::NetMessage &buffer)
+{
+	// 用户是否验证
+	auto found = reverse_user_session_.find(session->SessionID());
+	if (found == reverse_user_session_.end())
+	{
+		auto request = dynamic_cast<cli::UserAuthReq*>(messsage);
+		if (request == nullptr)
+		{
+			logger()->debug("用户未验证，来自{}:{}", session->RemoteEndpoint().address().to_string(), session->RemoteEndpoint().port());
+			return SenddErrorCodeToUser(session, buffer, pub::kUserUnverified, messsage->GetTypeName().c_str());
+		}
+
+		auto auth_iter = user_auth_.find(request->token());
+		if (auth_iter == user_auth_.end())
+		{
+			logger()->debug("用户验证失败，来自{}:{}", session->RemoteEndpoint().address().to_string(), session->RemoteEndpoint().port());
+			return SenddErrorCodeToUser(session, buffer, pub::kAuthenticationFailure, messsage->GetTypeName().c_str());
+		}
+
+		// 是否已验证
+		auto session_iter = user_session_.find(auth_iter->second.user_id);
+		if (session_iter != user_session_.end())
+		{
+			// 踢掉上一个会话
+			auto session_id = session_iter->second.session_id;
+			user_session_.erase(session_iter);
+			reverse_user_session_.erase(session_id);
+			auto session_ptr = threads_.SessionHandler(session_id);
+			if (session_ptr != nullptr)
+			{
+				session_ptr->Close();
+				logger()->warn("用户{}:{}被踢掉线!", session_ptr->RemoteEndpoint().address().to_string(), session_ptr->RemoteEndpoint().port());
+			}
+		}
+
+		// 更新数据
+		SUserSession session_info;
+		session_info.token = request->token();
+		session_info.session_id = session->SessionID();
+		unauth_user_session_.erase(session->SessionID());
+		user_session_.insert(std::make_pair(auth_iter->second.user_id, session_info));
+		reverse_user_session_.insert(std::make_pair(session->SessionID(), auth_iter->second.user_id));
+
+		// 响应请求
+		buffer.Clear();
+		cli::UserAuthRsp response;
+		response.set_user_id(auth_iter->second.user_id);
+		ProtubufCodec::Encode(&response, buffer);
+		session->Send(buffer);
+
+		logger()->info("用户[{}]验证成功!", auth_iter->second.user_id);
+		return;
+	}
+}
+
+// 用户关闭连接
+void LinkerManager::OnUserClose(SessionHandle *session)
+{
+	unauth_user_session_.erase(session->SessionID());
+	auto found = reverse_user_session_.find(session->SessionID());
+	if (found != reverse_user_session_.end())
+	{
+		auto iter = user_session_.find(found->first);
+		assert(iter != user_session_.end());
+		if (iter != user_session_.end())
+		{
+			// 断线后Token在一定时间内依然有效
+			SUserAuth auth;
+			auth.user_id = found->first;
+			user_auth_.insert(std::make_pair(iter->second.token, auth));
+			user_session_.erase(iter);
+		}
+		reverse_user_session_.erase(found);
+		logger()->info("用户[{}]关闭连接!", found->second);
+	}
+}
+
+// 路由消息
+void LinkerManager::OnRouterMessage(router::Connector *connector, google::protobuf::Message *messsage, network::NetMessage &buffer)
+{
+}
+
+// 登录服务器消息
+void LinkerManager::OnLoginServerMessage(LoginConnector *connector, google::protobuf::Message *messsage, network::NetMessage &buffer)
+{
+	auto request = dynamic_cast<svr::UpdateTokenReq*>(messsage);
+	if (request != nullptr)
+	{
+		// 更新Token
+		SUserAuth auth;
+		auth.user_id = request->user_id();
+		user_auth_.insert(std::make_pair(request->token(), auth));
+		logger()->info("更新用户Token，{}:{}", request->user_id(), request->token());
+	}
+	else
+	{
+		logger()->warn("已忽略来自登录服务器的请求，{}", messsage->GetTypeName());
+	}
 }

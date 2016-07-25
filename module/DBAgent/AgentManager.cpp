@@ -7,6 +7,8 @@
 #include "SessionHandle.h"
 #include "StatisticalTools.h"
 
+using namespace std::placeholders;
+
 // 类型转换
 inline bool ToNativeActionType(svr::QueryDBAgentReq::ActoinType type, ActionType &local_type)
 {
@@ -38,7 +40,13 @@ AgentManager::AgentManager(network::IOServiceThreadManager &threads, AgentImpl<M
 	, statisical_timer_(threads.MainThread()->IOService(), std::chrono::seconds(1))
 	, wait_handler_(std::bind(&AgentManager::UpdateHandleResult, this, std::placeholders::_1))
 	, statisical_wait_handler_(std::bind(&AgentManager::UpdateStatisicalData, this, std::placeholders::_1))
+	, dispatcher_(std::bind(&AgentManager::OnUnknownMessage, this, _1, _2, _3))
 {
+	dispatcher_.RegisterMessageCallback<svr::DBAgentInfoReq>(
+		std::bind(&AgentManager::OnQueryAgentInfo, this, _1, _2, _3));
+	dispatcher_.RegisterMessageCallback<svr::QueryDBAgentReq>(
+		std::bind(&AgentManager::OnHandleDatabase, this, _1, _2, _3));
+
 	timer_.async_wait(wait_handler_);
 	statisical_timer_.async_wait(statisical_wait_handler_);
 }
@@ -79,7 +87,7 @@ void AgentManager::UpdateHandleResult(asio::error_code error_code)
 			default:
 				break;
 			}
-			RespondHandleResult(found->second.session_id, found->second.sequence, result, buffer);
+			SendHandleResult(found->second.session_id, found->second.sequence, result, buffer);
 		}
 		generator_.Put(result.GetSequence());
 		requests_.erase(found);
@@ -112,26 +120,58 @@ void AgentManager::UpdateStatisicalData(asio::error_code error_code)
 	statisical_timer_.async_wait(statisical_wait_handler_);
 }
 
-// 接受处理请求
-void AgentManager::HandleMessage(SessionHandle *session, google::protobuf::Message *message, network::NetMessage &buffer)
+// 回复错误码
+void AgentManager::SendErrorCode(SessionHandle *session, uint32_t sequence, int error_code, network::NetMessage &buffer)
 {
-	if (dynamic_cast<svr::QueryDBAgentReq*>(message) != nullptr)
+	buffer.Clear();
+	svr::DBAgentErrorRsp response;
+	response.set_sequence(sequence);
+	response.set_error_code(static_cast<pub::ErrorCode>(error_code));
+	ProtubufCodec::Encode(&response, buffer);
+	session->Write(buffer);
+}
+
+// 回复处理结果
+void AgentManager::SendHandleResult(network::TCPSessionID id, uint32_t sequence, const Result &result, network::NetMessage &buffer)
+{
+	network::SessionHandlePointer session = threads_.SessionHandler(id);
+	if (session != nullptr)
 	{
-		OnHandleDatabase(session, message, buffer);
+		if (result.GetErrorCode())
+		{
+			svr::DBErrorRsp response;
+			response.set_sequence(sequence);
+			response.set_error_code(result.GetErrorCode().Value());
+			response.set_what(result.GetErrorCode().Message());
+			ProtubufCodec::Encode(&response, buffer);
+		}
+		else
+		{
+			svr::QueryDBAgentRsp response;
+			response.set_sequence(sequence);
+			response.set_result(result.GetResult().data(), result.GetResult().size());
+			ProtubufCodec::Encode(&response, buffer);
+		}
+		static_cast<SessionHandle*>(session.get())->Write(buffer);
 	}
-	else if (dynamic_cast<svr::DBAgentInfoReq*>(message) != nullptr)
-	{
-		OnQueryAgentInfo(session, message, buffer);
-	}
-	else
-	{
-		RespondErrorCode(session, 0, pub::kInvalidProtocol, buffer);
-		logger()->warn("协议无效，来自{}:{}", session->RemoteEndpoint().address().to_string(), session->RemoteEndpoint().port());
-	}	
+}
+
+// 接收消息
+bool AgentManager::OnMessage(SessionHandle *session, google::protobuf::Message *message, network::NetMessage &buffer)
+{
+	return dispatcher_.OnProtobufMessage(session, message, buffer);
+}
+
+// 未定义消息
+bool AgentManager::OnUnknownMessage(network::TCPSessionHandler *session, google::protobuf::Message *message, network::NetMessage &buffer)
+{
+	SendErrorCode(static_cast<SessionHandle*>(session), 0, pub::kInvalidProtocol, buffer);
+	logger()->warn("协议无效，来自{}:{}", session->RemoteEndpoint().address().to_string(), session->RemoteEndpoint().port());
+	return true;
 }
 
 // 查询服务器信息
-void AgentManager::OnQueryAgentInfo(SessionHandle *session, google::protobuf::Message *message, network::NetMessage &buffer)
+bool AgentManager::OnQueryAgentInfo(network::TCPSessionHandler *session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
 	buffer.Clear();
 	svr::DBAgentInfoRsp response;
@@ -144,11 +184,12 @@ void AgentManager::OnQueryAgentInfo(SessionHandle *session, google::protobuf::Me
 	response.set_handle_update_count(StatisticalTools::GetInstance()->HandleUpdateCount());
 	response.set_handle_delete_count(StatisticalTools::GetInstance()->HandleDeleteCount());
 	ProtubufCodec::Encode(&response, buffer);
-	session->Write(buffer);
+	static_cast<SessionHandle*>(session)->Write(buffer);
+	return true;
 }
 
 // 操作数据库
-void AgentManager::OnHandleDatabase(SessionHandle *session, google::protobuf::Message *message, network::NetMessage &buffer)
+bool AgentManager::OnHandleDatabase(network::TCPSessionHandler *session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
 	uint32_t sequence_native = 0;
 	svr::QueryDBAgentReq *request = static_cast<svr::QueryDBAgentReq*>(message);
@@ -178,7 +219,7 @@ void AgentManager::OnHandleDatabase(SessionHandle *session, google::protobuf::Me
 				// 不存在的目标数据库
 				requests_.erase(sequence_native);
 				generator_.Put(sequence_native);
-				RespondErrorCode(session, request->sequence(), pub::kNotFoundDatabase, buffer);
+				SendErrorCode(static_cast<SessionHandle*>(session), request->sequence(), pub::kNotFoundDatabase, buffer);
 				logger()->warn("协议无效，来自{}:{}", session->RemoteEndpoint().address().to_string(), session->RemoteEndpoint().port());
 			}
 			catch (ResourceInsufficiency &)
@@ -186,7 +227,7 @@ void AgentManager::OnHandleDatabase(SessionHandle *session, google::protobuf::Me
 				// 服务器资源达到上限
 				requests_.erase(sequence_native);
 				generator_.Put(sequence_native);
-				RespondErrorCode(session, request->sequence(), pub::kResourceInsufficiency, buffer);
+				SendErrorCode(static_cast<SessionHandle*>(session), request->sequence(), pub::kResourceInsufficiency, buffer);
 				logger()->warn("数据库任务队列已满!");
 			}
 		}
@@ -194,50 +235,15 @@ void AgentManager::OnHandleDatabase(SessionHandle *session, google::protobuf::Me
 		{
 			// 无效的操作类型
 			generator_.Put(sequence_native);
-			RespondErrorCode(session, request->sequence(), pub::kInvalidOperation, buffer);
+			SendErrorCode(static_cast<SessionHandle*>(session), request->sequence(), pub::kInvalidOperation, buffer);
 			logger()->warn("无效的数据库操作，类型{}，来自{}:{}", request->action(), session->RemoteEndpoint().address().to_string(), session->RemoteEndpoint().port());
 		}
 	}
 	else
 	{
 		// 生成序列号失败
-		RespondErrorCode(session, request->sequence(), pub::kResourceInsufficiency, buffer);
+		SendErrorCode(static_cast<SessionHandle*>(session), request->sequence(), pub::kResourceInsufficiency, buffer);
 		logger()->warn("数据库任务队列已满!");
 	}
-}
-
-// 回复错误码
-void AgentManager::RespondErrorCode(SessionHandle *session, uint32_t sequence, int error_code, network::NetMessage &buffer)
-{
-	buffer.Clear();
-	svr::DBAgentErrorRsp response;
-	response.set_sequence(sequence);
-	response.set_error_code(static_cast<pub::ErrorCode>(error_code));
-	ProtubufCodec::Encode(&response, buffer);
-	session->Write(buffer);
-}
-
-// 回复处理结果
-void AgentManager::RespondHandleResult(network::TCPSessionID id, uint32_t sequence, const Result &result, network::NetMessage &buffer)
-{
-	network::SessionHandlePointer session = threads_.SessionHandler(id);
-	if (session != nullptr)
-	{
-		if (result.GetErrorCode())
-		{
-			svr::DBErrorRsp response;
-			response.set_sequence(sequence);
-			response.set_error_code(result.GetErrorCode().Value());
-			response.set_what(result.GetErrorCode().Message());
-			ProtubufCodec::Encode(&response, buffer);
-		}
-		else
-		{
-			svr::QueryDBAgentRsp response;
-			response.set_sequence(sequence);
-			response.set_result(result.GetResult().data(), result.GetResult().size());
-			ProtubufCodec::Encode(&response, buffer);
-		}
-		static_cast<SessionHandle*>(session.get())->Write(buffer);
-	}
+	return true;
 }

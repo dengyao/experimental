@@ -17,7 +17,7 @@ void SessionHandle::OnConnect()
 {
 }
 
-// 接收消息事件
+// 接收消息
 void SessionHandle::OnMessage(network::NetMessage &message)
 {
 	// 统计上行流量
@@ -27,7 +27,7 @@ void SessionHandle::OnMessage(network::NetMessage &message)
 	auto request = ProtubufCodec::Decode(message);
 	if (request == nullptr)
 	{
-		return router_manager_.RespondErrorCode(this, message, pub::kInvalidProtocol);
+		return router_manager_.SendErrorCode(this, message, pub::kInvalidProtocol);
 	}
 
 	// 连接后必须登录
@@ -37,13 +37,13 @@ void SessionHandle::OnMessage(network::NetMessage &message)
 		{
 			if (dynamic_cast<svr::LoginRouterReq*>(request.get()) == nullptr)
 			{
-				router_manager_.RespondErrorCode(this, message, pub::kNotLoggedIn);
+				router_manager_.SendErrorCode(this, message, pub::kNotLoggedIn);
 				logger()->warn("操作前未发起登录请求，来自{}:{}", RemoteEndpoint().address().to_string(), RemoteEndpoint().port());
 				return;
 			}
 			else
 			{
-				is_logged_ = router_manager_.HandleMessage(this, request.get(), message);
+				is_logged_ = router_manager_.OnMessage(this, request.get(), message);
 				return;
 			}
 		}
@@ -59,14 +59,14 @@ void SessionHandle::OnMessage(network::NetMessage &message)
 	}
 	else
 	{
-		router_manager_.HandleMessage(this, request.get(), message);
+		router_manager_.OnMessage(this, request.get(), message);
 	}
 }
 
 // 关闭事件
 void SessionHandle::OnClose()
 {
-	router_manager_.HandleServerClose(this);
+	router_manager_.OnClose(this);
 }
 
 // 写入消息

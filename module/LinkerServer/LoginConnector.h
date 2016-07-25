@@ -46,7 +46,7 @@ private:
 	// 连接事件
 	void OnConnected(LoginSessionHandle *session);
 
-	// 接收消息事件
+	// 接收消息
 	void OnMessage(LoginSessionHandle *session, network::NetMessage &buffer);
 
 	// 断开连接事件

@@ -25,7 +25,7 @@ void SessionHandle::OnMessage(network::NetMessage &message)
 	auto request = ProtubufCodec::Decode(message);
 	if (request == nullptr)
 	{
-		return linker_manager_.RespondErrorCodeToUser(this, message, pub::kInvalidProtocol);
+		return linker_manager_.SenddErrorCodeToUser(this, message, pub::kInvalidProtocol);
 	}
 
 	// 处理心跳
@@ -38,12 +38,12 @@ void SessionHandle::OnMessage(network::NetMessage &message)
 	}
 
 	// 处理请求
-	linker_manager_.HandleMessageFromUser(this, request.get(), message);
+	linker_manager_.OnUserMessage(this, request.get(), message);
 }
 
 void SessionHandle::OnClose()
 {
-	linker_manager_.HandleUserClose(this);
+	linker_manager_.OnUserClose(this);
 }
 
 /************************************************************************/

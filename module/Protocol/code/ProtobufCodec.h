@@ -6,6 +6,7 @@
 namespace network
 {
 	class NetMessage;
+	class TCPSessionHandler;
 }
 
 namespace google

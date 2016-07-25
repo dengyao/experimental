@@ -50,23 +50,23 @@ public:
 	LinkerManager(network::IOServiceThreadManager &threads);
 
 public:
-	// 处理用户连接
-	void HandleUserConnected(SessionHandle *session);
+	// 用户连接
+	void OnUserConnect(SessionHandle *session);
 
-	// 处理来自用户的消息
-	void HandleMessageFromUser(SessionHandle *session, google::protobuf::Message *messsage, network::NetMessage &buffer);
+	// 用户消息
+	void OnUserMessage(SessionHandle *session, google::protobuf::Message *messsage, network::NetMessage &buffer);
 
-	// 处理用户关闭连接
-	void HandleUserClose(SessionHandle *session);
+	// 用户关闭连接
+	void OnUserClose(SessionHandle *session);
+
+	// 路由消息
+	void OnRouterMessage(router::Connector *connector, google::protobuf::Message *messsage, network::NetMessage &buffer);
+
+	// 登录服务器消息
+	void OnLoginServerMessage(LoginConnector *connector, google::protobuf::Message *messsage, network::NetMessage &buffer);
 
 	// 回复错误码
-	void RespondErrorCodeToUser(SessionHandle *session, network::NetMessage &buffer, int error_code, const char *what = nullptr);
-
-	// 处理来自路由的消息
-	void HandleMessageFromRouter(router::Connector *connector, google::protobuf::Message *messsage, network::NetMessage &buffer);
-
-	// 处理来自登录服务器的消息
-	void HandleMessageFromLoginServer(LoginConnector *connector, google::protobuf::Message *messsage, network::NetMessage &buffer);
+	void SenddErrorCodeToUser(SessionHandle *session, network::NetMessage &buffer, int error_code, const char *what = nullptr);
 
 private:
 	// 更新定时器

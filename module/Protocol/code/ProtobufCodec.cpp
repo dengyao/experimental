@@ -1,8 +1,7 @@
 ﻿#include "ProtobufCodec.h"
 #include <limits>
-#include <network/NetMessage.h>
+#include <network.h>
 #include <google/protobuf/message.h>
-#include "InitDescriptor.h"
 
 void ProtubufCodec::Encode(google::protobuf::Message *in_message, network::NetMessage &out_message)
 {

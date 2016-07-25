@@ -24,10 +24,10 @@ void RunLoginServer()
 		std::bind(CreateSessionHandle, std::ref(*g_linker_manager.get())),
 		CreateMessageFilter, ServerConfig::GetInstance()->GetHeartbeatInterval());
 
-	GlobalConnector()->SetMessageCallback(std::bind(&LinkerManager::HandleMessageFromRouter, g_linker_manager.get(),
+	GlobalConnector()->SetMessageCallback(std::bind(&LinkerManager::OnRouterMessage, g_linker_manager.get(),
 		std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 
-	GlobalLoginConnector()->SetMessageCallback(std::bind(&LinkerManager::HandleMessageFromLoginServer, g_linker_manager.get(),
+	GlobalLoginConnector()->SetMessageCallback(std::bind(&LinkerManager::OnLoginServerMessage, g_linker_manager.get(),
 		std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 
 	logger()->info("Linker服务器[ip:{} port:{}]启动成功!", g_server->LocalEndpoint().address().to_string().c_str(), g_server->LocalEndpoint().port());

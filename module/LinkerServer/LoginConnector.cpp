@@ -191,7 +191,7 @@ void LoginConnector::OnConnected(LoginSessionHandle *session)
 	}
 }
 
-// 接收消息事件
+// 接收消息
 void LoginConnector::OnMessage(LoginSessionHandle *session, network::NetMessage &buffer)
 {
 	auto request = ProtubufCodec::Decode(buffer);

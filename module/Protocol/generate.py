@@ -20,60 +20,6 @@ if __name__ == '__main__':
                 head_file_path = ''.join((relative_out_path, os.path.split(fullname)[0].lstrip(os.curdir), sep, name, '.pb.h'))
                 head_files.append(head_file_path)
 
-    """ 生成proto消息自动初始化代码 """
-    source_code = ''
-    source_code += '#ifndef __INIT_DESCRIPTOR_H__\r\n'
-    source_code += '#define __INIT_DESCRIPTOR_H__\r\n\r\n'
-    method_lists = []
-    for filename in head_files:
-        s = open(filename, 'r').read()
-        namespace = re.search('namespace\s+(\w+)\s+\{', s).groups()[0]
-        class_lists = re.findall('class\s+(\w+)\s*;', s)
-        for class_item in class_lists:
-            method = ''.join((namespace, '::', class_item, '::descriptor();'))
-            method_lists.append(method)
-
-        out_path_has_sep = ''.join((''.join((os.curdir, sep, out_path)), sep))
-        head_file = filename.replace(out_path_has_sep, '').replace(sep, '/')
-        source_code += ''.join(('#include <', head_file, '>\r\n'))
-
-    source_code += '\r\n'
-    source_code += 'class InitDescriptor\r\n' \
-                   '{\r\n' \
-                   'public:\r\n' \
-                   '    InitDescriptor()\r\n' \
-                   '    {\r\n'
-
-    for method in method_lists:
-        source_code += '        '
-        source_code += method
-        source_code += '\r\n'
-
-    source_code += '    }\r\n};\r\n\r\n'
-    source_code += 'static InitDescriptor g_once_init;\r\n\r\n'
-    source_code += '#endif\r\n'
-
-    out_cpp_filename = ''.join((os.curdir, sep, out_path, sep, 'InitDescriptor.h'))
-    handle = codecs.open(out_cpp_filename, 'w', 'utf_8_sig')
-    handle.write(source_code)
-    handle.close()
-
-    """ 包含头文件 """
-    helper_file = ''.join((os.curdir, sep, out_path, sep, 'ProtobufCodec.cpp'))
-    handle = codecs.open(helper_file, 'r+', 'utf_8_sig')
-    helper_source = handle.read()
-    handle.seek(0)
-    if helper_source.find('#include "InitDescriptor.h"') < 0:
-        result = re.findall('#\s*include\s*["|<][^"|>]+["|>]', helper_source)
-        if len(result) > 0:
-            pos = helper_source.find(result[-1]) + len(result[-1])
-            helper_source = helper_source[:pos] + "\r\n#include \"InitDescriptor.h\"" + helper_source[pos:]
-        else:
-            helper_source = "#include \"InitDescriptor.h\"\r\n" + helper_source
-
-        handle.write(helper_source)
-    handle.close()
-
     """ 生成CMake源文件列表 """
     cppfiles = []
     types = set(["c", ".cpp", ".cc", ".cxx"])

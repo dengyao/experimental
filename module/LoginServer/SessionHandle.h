@@ -32,7 +32,7 @@ private:
 	// 连接事件
 	virtual void OnConnect() override;
 
-	// 接收消息事件
+	// 接收消息
 	virtual void OnMessage(network::NetMessage &message) override;
 
 	// 关闭事件
