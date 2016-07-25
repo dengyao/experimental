@@ -344,7 +344,7 @@ bool LoginManager::OnUserSignUp(network::TCPSessionHandler *session, google::pro
 	network::TCPSessionID session_id = session->SessionID();
 
 	// 构造sql语句
-	std::string sql = string_helper::format("CALL sign_up('%s', '%s', '%s', '%s', '%s', '%s', '%s', @user_id); SELECT @user_id;",
+	std::string sql = string_helper::format("CALL sign_up('%s', '%s', '%s', '%s', '%s', '%s', '%s', @user_id);",
 		request->user().c_str(),
 		request->passwd().c_str(),
 		session->RemoteEndpoint().address().to_string().c_str(),
@@ -390,7 +390,8 @@ bool LoginManager::OnUserSignUp(network::TCPSessionHandler *session, google::pro
 			}
 		}
 	};
-	GlobalDBClient()->AsyncSelect(db::kMySQL, ServerConfig::GetInstance()->GetVerifyDBName(), sql.c_str(), callback);
+	GlobalDBClient()->AsyncSelect(db::kMySQL, ServerConfig::GetInstance()->GetVerifyDBName(), sql.c_str(), nullptr);
+	GlobalDBClient()->AsyncSelect(db::kMySQL, ServerConfig::GetInstance()->GetVerifyDBName(), "SELECT @user_id;", callback);
 	return true;
 }
 

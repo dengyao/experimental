@@ -67,3 +67,5 @@ add_subdirectory(module/DBAgent)
 add_subdirectory(module/DBClient)
 add_subdirectory(module/LoginServer)
 add_subdirectory(module/LinkerServer)
+
+add_subdirectory(module/Test)

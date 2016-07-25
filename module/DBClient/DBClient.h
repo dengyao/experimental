@@ -69,7 +69,7 @@ namespace db
 
 		// 异步删除
 		void AsyncDelete(DatabaseType dbtype, const char *dbname, const char *statement, QueryCallBack &&callback);
-
+		
 	private:
 		// 连接事件
 		void OnConnected(DBSessionHandle *session);

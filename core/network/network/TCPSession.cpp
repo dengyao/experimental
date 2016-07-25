@@ -112,7 +112,7 @@ namespace network
 
 	void TCPSession::HanldeClose()
 	{
-		if (!filter_->CompletedRead() || num_write_handlers_ > 0)
+		if (num_write_handlers_ > 0)
 		{
 			return;
 		}

@@ -15,7 +15,7 @@ class Result
 public:
 	Result(uint32_t sequence, ErrorCode &&code, ByteArray &&result)
 		: sequence_(sequence)
-		, error_code_(std::forward<ErrorCode>(error_code_))
+		, error_code_(std::forward<ErrorCode>(code))
 		, result_(std::forward<ByteArray>(result))
 	{
 	}
