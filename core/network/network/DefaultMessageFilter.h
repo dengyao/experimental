@@ -17,8 +17,6 @@ namespace network
 		DefaultMessageFilter();
 
 	public:
-		bool CompletedRead() override;
-
 		size_t BytesWannaRead() override;
 
 		size_t BytesWannaWrite(const std::vector<NetMessage> &messages_to_be_sent) override;

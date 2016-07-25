@@ -18,8 +18,6 @@ namespace network
 		virtual ~MessageFilterInterface() = default;
 
 	public:
-		virtual bool CompletedRead() = 0;
-
 		virtual size_t BytesWannaRead() = 0;
 
 		virtual size_t BytesWannaWrite(const std::vector<NetMessage> &messages_to_be_sent) = 0;
