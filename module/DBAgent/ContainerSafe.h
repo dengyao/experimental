@@ -4,6 +4,8 @@
 #include <map>
 #include <list>
 #include <deque>
+#include <vector>
+#include <mutex>
 
 template <typename Value>
 class QueueSafe

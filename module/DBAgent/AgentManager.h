@@ -31,7 +31,7 @@ class AgentManager
 	};
 
 public:
-	AgentManager(network::IOServiceThreadManager &threads, AgentImpl<MySQL> &mysql, unsigned int backlog);
+	AgentManager(network::IOServiceThreadManager &threads, AgentImpl &mysql, unsigned int backlog);
 
 public:
 	// 接收消息
@@ -41,7 +41,7 @@ public:
 	void SendErrorCode(SessionHandle *session, uint32_t sequence, int error_code, network::NetMessage &buffer);
 
 	// 回复处理结果
-	void SendHandleResult(network::TCPSessionID id, uint32_t sequence, const Result &result, network::NetMessage &buffer);
+	void SendHandleResult(network::TCPSessionID id, uint32_t sequence, const HandleResult &result, network::NetMessage &buffer);
 
 private:
 	// 更新处理结果
@@ -68,8 +68,8 @@ private:
 	network::IOServiceThreadManager&			threads_;
 	std::map<uint32_t, SSourceInfo>				requests_;
 	network::IDGenerator                        generator_;
-	AgentImpl<MySQL>&							mysql_agent_;
-	std::vector<Result>							completion_lists_;
+	AgentImpl&									mysql_agent_;
+	std::vector<HandleResult>					completion_lists_;
 	ProtobufDispatcher							dispatcher_;
 };
 

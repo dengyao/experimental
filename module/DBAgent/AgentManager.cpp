@@ -10,7 +10,7 @@
 using namespace std::placeholders;
 
 // 类型转换
-inline bool ToNativeActionType(svr::QueryDBAgentReq::ActoinType type, ActionType &local_type)
+inline bool ToLocalActionType(svr::QueryDBAgentReq::ActoinType type, ActionType &local_type)
 {
 	switch (type)
 	{
@@ -32,7 +32,7 @@ inline bool ToNativeActionType(svr::QueryDBAgentReq::ActoinType type, ActionType
 	return true;
 }
 
-AgentManager::AgentManager(network::IOServiceThreadManager &threads, AgentImpl<MySQL> &mysql, unsigned int backlog)
+AgentManager::AgentManager(network::IOServiceThreadManager &threads, AgentImpl &mysql, unsigned int backlog)
 	: threads_(threads)
 	, mysql_agent_(mysql)
 	, generator_(backlog)
@@ -62,7 +62,7 @@ void AgentManager::UpdateHandleResult(asio::error_code error_code)
 
 	network::NetMessage buffer;
 	assert(completion_lists_.empty());
-	mysql_agent_.GetCompletionLists(completion_lists_);
+	mysql_agent_.GetCompletedTask(completion_lists_);
 	for (const auto &result : completion_lists_)
 	{
 		buffer.Clear();
@@ -132,7 +132,7 @@ void AgentManager::SendErrorCode(SessionHandle *session, uint32_t sequence, int 
 }
 
 // 回复处理结果
-void AgentManager::SendHandleResult(network::TCPSessionID id, uint32_t sequence, const Result &result, network::NetMessage &buffer)
+void AgentManager::SendHandleResult(network::TCPSessionID id, uint32_t sequence, const HandleResult &result, network::NetMessage &buffer)
 {
 	network::SessionHandlePointer session = threads_.SessionHandler(id);
 	if (session != nullptr)
@@ -149,7 +149,7 @@ void AgentManager::SendHandleResult(network::TCPSessionID id, uint32_t sequence,
 		{
 			svr::QueryDBAgentRsp response;
 			response.set_sequence(sequence);
-			response.set_result(result.GetResult().data(), result.GetResult().size());
+			response.set_result(result.GetHandleResult().data(), result.GetHandleResult().size());
 			ProtubufCodec::Encode(&response, buffer);
 		}
 		static_cast<SessionHandle*>(session.get())->Write(buffer);
@@ -196,7 +196,7 @@ bool AgentManager::OnHandleDatabase(network::TCPSessionHandler *session, google:
 	if (generator_.Get(sequence_native))
 	{
 		ActionType type_native;
-		if (ToNativeActionType(request->action(), type_native))
+		if (ToLocalActionType(request->action(), type_native))
 		{
 			try
 			{
@@ -205,7 +205,7 @@ bool AgentManager::OnHandleDatabase(network::TCPSessionHandler *session, google:
 				requests_.insert(std::make_pair(sequence_native, SSourceInfo(type_native, request->sequence(), session->SessionID())));
 				if (dbtype == svr::QueryDBAgentReq::kMySQL)
 				{
-					mysql_agent_.Append(sequence_native, type_native, request->dbname().c_str(), request->statement().c_str(), request->statement().size());
+					mysql_agent_.AppendTask(sequence_native, type_native, request->dbname().c_str(), request->statement().c_str(), request->statement().size());
 				}
 				else
 				{

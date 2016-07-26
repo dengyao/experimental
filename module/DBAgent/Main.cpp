@@ -11,15 +11,15 @@
 #include "SessionHandle.h"
 
 // 创建数据库连接
-std::vector<std::unique_ptr<ConnectorMySQL>> CreateMySQLConnector()
+std::vector<ConnectorPointer> CreateMySQLConnector()
 {
-	std::vector<std::unique_ptr<ConnectorMySQL>> connectors;
+	std::vector<ConnectorPointer> connectors;
 	auto container = ServerConfig::GetInstance()->GetMySQLConnectionInfo();
 	for (size_t i = 0; i < container.size(); ++i)
 	{
 		for (size_t j = 0; j < container[i].connections; ++j)
 		{
-			std::unique_ptr<ConnectorMySQL> connector;
+			ConnectorPointer connector;
 			try
 			{
 				ErrorCode error_code;
@@ -29,7 +29,7 @@ std::vector<std::unique_ptr<ConnectorMySQL>> CreateMySQLConnector()
 					ServerConfig::GetInstance()->GetMySQLPassword(),
 					5);
 
-				connector->SelectDatabase(container[i].db_name.c_str(), error_code);
+				static_cast<ConnectorMySQL*>(connector.get())->SelectDatabase(container[i].db_name.c_str(), error_code);
 				if (error_code)
 				{
 					logger()->critical(error_code.Message());
@@ -37,7 +37,7 @@ std::vector<std::unique_ptr<ConnectorMySQL>> CreateMySQLConnector()
 					exit(-1);
 				}
 
-				connector->SetCharacterSet(ServerConfig::GetInstance()->GetMySQLCharset(), error_code);
+				static_cast<ConnectorMySQL*>(connector.get())->SetCharacterSet(ServerConfig::GetInstance()->GetMySQLCharset(), error_code);
 				if (error_code)
 				{
 					logger()->critical(error_code.Message());
@@ -46,7 +46,7 @@ std::vector<std::unique_ptr<ConnectorMySQL>> CreateMySQLConnector()
 				}
 				connectors.push_back(std::move(connector));
 			}
-			catch (const std::exception&)
+			catch (...)
 			{
 				logger()->critical("连接MySQL数据库失败!");
 				assert(false);
@@ -91,7 +91,7 @@ int main(int argc, char *argv[])
 	TaskPools pools(ServerConfig::GetInstance()->GetDBUseThreadNum());
 	network::IOServiceThreadManager threads(ServerConfig::GetInstance()->GetUseThreadNum());
 
-	AgentImpl<MySQL> mysql_agent(CreateMySQLConnector(), pools, ServerConfig::GetInstance()->GetMaxConnectionRequestBacklog());
+	AgentImpl mysql_agent(CreateMySQLConnector(), pools, ServerConfig::GetInstance()->GetMaxConnectionRequestBacklog());
 	AgentManager manager(threads, mysql_agent, ServerConfig::GetInstance()->GetMaxRequestBacklog());
 
 	asio::ip::tcp::endpoint endpoint(asio::ip::address_v4(), ServerConfig::GetInstance()->GetPort());
