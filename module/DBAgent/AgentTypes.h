@@ -9,10 +9,11 @@ typedef std::vector<char> ByteArray;
 
 enum class ActionType
 {
-	kSelect = 1,
-	kInsert = 2,
-	kUpdate = 3,
-	kDelete = 4,
+	kCall = 1,
+	kSelect = 2,
+	kInsert = 3,
+	kUpdate = 4,
+	kDelete = 5,
 };
 
 class ErrorCode

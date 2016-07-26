@@ -403,7 +403,8 @@ namespace db
 		static_assert(DatabaseType::kRedis == svr::QueryDBAgentReq::kRedis &&
 			DatabaseType::kMySQL == svr::QueryDBAgentReq::kMySQL, "type mismatch");
 
-		static_assert(DatabaseActionType::kSelect == svr::QueryDBAgentReq::kSelect &&
+		static_assert(DatabaseActionType::kCall == svr::QueryDBAgentReq::kCall &&
+			DatabaseActionType::kSelect == svr::QueryDBAgentReq::kSelect &&
 			DatabaseActionType::kInsert == svr::QueryDBAgentReq::kInsert &&
 			DatabaseActionType::kUpdate == svr::QueryDBAgentReq::kUpdate &&
 			DatabaseActionType::kDelete == svr::QueryDBAgentReq::kDelete, "type mismatch");
@@ -444,6 +445,12 @@ namespace db
 			ProtubufCodec::Encode(&request, message);
 			session->Send(message);
 		}
+	}
+
+	// 异步调用
+	void DBClient::AsyncCall(DatabaseType dbtype, const char *dbname, const char *statement, QueryCallBack &&callback)
+	{
+		AsyncQuery(dbtype, dbname, DatabaseActionType::kCall, statement, std::forward<QueryCallBack>(callback));
 	}
 
 	// 异步查询

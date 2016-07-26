@@ -3,6 +3,7 @@
 #include <limits>
 #include <cassert>
 #include <mysqld_error.h>
+#include "ProcedureMySQL.h"
 
 namespace mysql_stuff
 {
@@ -283,6 +284,52 @@ ByteArray ConnectorMySQL::AffectedRows(const ByteArray &command, ErrorCode &erro
 
 		ByteArray bytes;
 		mysql_stuff::SerializeAffectedRows(mysql_, &bytes);
+		return bytes;
+	}
+	else
+	{
+		throw NotConnected();
+	}
+}
+
+ByteArray ConnectorMySQL::Call(const ByteArray &command, ErrorCode &error_code)
+{
+	if (IsConnected())
+	{
+		mysql_real_query(&mysql_, command.data(), command.size());
+		int error = mysql_errno(&mysql_);
+		if (error != 0)
+		{
+			error_code.SetError(error, mysql_error(&mysql_));
+			return ByteArray();
+		}
+
+		ByteArray bytes;
+		MYSQL_RES *sql_result = mysql_store_result(&mysql_);
+		if (sql_result != nullptr)
+		{
+			mysql_stuff::Serialize(sql_result, &bytes);
+			mysql_free_result(sql_result);
+		}
+		else
+		{
+			ProcedureMySQL procedure(command);
+			if (procedure.HasVariable())
+			{
+				ByteArray query_variable = procedure.QueryVariableValue();
+				mysql_real_query(&mysql_, query_variable.data(), query_variable.size());
+				int error = mysql_errno(&mysql_);
+				if (error != 0)
+				{
+					error_code.SetError(error, mysql_error(&mysql_));
+					return ByteArray();
+				}
+
+				MYSQL_RES *sql_result = mysql_store_result(&mysql_);
+				mysql_stuff::Serialize(sql_result, &bytes);
+				mysql_free_result(sql_result);
+			}
+		}
 		return bytes;
 	}
 	else

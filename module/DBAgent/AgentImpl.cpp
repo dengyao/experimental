@@ -93,6 +93,9 @@ public:
 		{
 			switch (type_)
 			{
+			case ActionType::kCall:
+				bytes = connector_->Call(command_, error_code);
+				break;
 			case ActionType::kSelect:
 				bytes = connector_->Select(command_, error_code);
 				break;

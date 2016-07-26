@@ -16,6 +16,8 @@ public:
 public:
 	const char* Name() const override;
 
+	ByteArray Call(const ByteArray &command, ErrorCode &error_code) override;
+
 	ByteArray Select(const ByteArray &command, ErrorCode &error_code) override;
 
 	ByteArray Insert(const ByteArray &command, ErrorCode &error_code) override;

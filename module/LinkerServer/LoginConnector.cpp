@@ -240,7 +240,7 @@ void LoginConnector::OnMessage(LoginSessionHandle *session, network::NetMessage 
 			}
 		}
 
-		if (session_handle_ == nullptr && message_cb_ != nullptr)
+		if (session_handle_ != nullptr && message_cb_ != nullptr)
 		{
 			message_cb_(this, request.get(), buffer);
 		}

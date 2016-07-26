@@ -9,6 +9,7 @@ class StatisticalTools : public Singleton<StatisticalTools>
 	{
 		uint32_t up_volume;
 		uint32_t down_volume;
+		uint32_t handle_call_count;
 		uint32_t handle_select_count;
 		uint32_t handle_insert_count;
 		uint32_t handle_update_count;
@@ -23,6 +24,7 @@ class StatisticalTools : public Singleton<StatisticalTools>
 		{
 			up_volume = 0;
 			down_volume = 0;
+			handle_call_count = 0;
 			handle_select_count = 0;
 			handle_insert_count = 0;
 			handle_update_count = 0;
@@ -48,6 +50,12 @@ public:
 	uint32_t DownVolume() const
 	{
 		return last_data_.down_volume;
+	}
+
+	// 每秒处理调用数量
+	uint32_t HandleCallCount() const
+	{
+		return last_data_.handle_call_count;
 	}
 
 	// 每秒处理查询数量
@@ -85,6 +93,12 @@ public:
 	void AccumulateDownVolume(uint32_t value)
 	{
 		current_data_.down_volume += value;
+	}
+
+	// 累积每秒处理调用数量
+	void AccumulateHandleCallCount(uint32_t value)
+	{
+		current_data_.handle_call_count += value;
 	}
 
 	// 累积每秒处理查询数量

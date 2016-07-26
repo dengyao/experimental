@@ -154,7 +154,7 @@ void LinkerManager::OnUserClose(SessionHandle *session)
 	auto found = reverse_user_session_.find(session->SessionID());
 	if (found != reverse_user_session_.end())
 	{
-		auto iter = user_session_.find(found->first);
+		auto iter = user_session_.find(found->second);
 		assert(iter != user_session_.end());
 		if (iter != user_session_.end())
 		{
@@ -164,8 +164,9 @@ void LinkerManager::OnUserClose(SessionHandle *session)
 			user_auth_.insert(std::make_pair(iter->second.token, auth));
 			user_session_.erase(iter);
 		}
-		reverse_user_session_.erase(found);
+
 		logger()->info("用户[{}]关闭连接!", found->second);
+		reverse_user_session_.erase(found);	
 	}
 }
 
@@ -184,7 +185,7 @@ void LinkerManager::OnLoginServerMessage(LoginConnector *connector, google::prot
 		SUserAuth auth;
 		auth.user_id = request->user_id();
 		user_auth_.insert(std::make_pair(request->token(), auth));
-		logger()->info("更新用户Token，{}:{}", request->user_id(), request->token());
+		logger()->info("用户[{}]更新Token[{}]", request->user_id(), request->token());
 	}
 	else
 	{

@@ -344,7 +344,7 @@ bool LoginManager::OnUserSignUp(network::TCPSessionHandler *session, google::pro
 	network::TCPSessionID session_id = session->SessionID();
 
 	// 构造sql语句
-	std::string sql = string_helper::format("CALL sign_up('%s', '%s', '%s', '%s', '%s', '%s', '%s', @user_id); SELECT @user_id;",
+	std::string sql = string_helper::format("CALL sign_up('%s', '%s', '%s', '%s', '%s', '%s', '%s', @user_id);",
 		request->user().c_str(),
 		request->passwd().c_str(),
 		session->RemoteEndpoint().address().to_string().c_str(),
@@ -365,7 +365,7 @@ bool LoginManager::OnUserSignUp(network::TCPSessionHandler *session, google::pro
 				auto result = static_cast<svr::QueryDBAgentRsp*>(db_message);
 				db::WrapResultSet result_set(result->result().data(), result->result().size());
 				db::WrapResultItem item = result_set.GetRow();
-				uint32_t user_id = static_cast<uint32_t>(atoll(item[0]));
+				uint32_t user_id = static_cast<uint32_t>(atoll(item["@user_id"]));
 				if (user_id > 0)
 				{
 					// 创建账号成功
@@ -390,7 +390,7 @@ bool LoginManager::OnUserSignUp(network::TCPSessionHandler *session, google::pro
 			}
 		}
 	};
-	GlobalDBClient()->AsyncSelect(db::kMySQL, ServerConfig::GetInstance()->GetVerifyDBName(), sql.c_str(), callback);
+	GlobalDBClient()->AsyncCall(db::kMySQL, ServerConfig::GetInstance()->GetVerifyDBName(), sql.c_str(), callback);
 	return true;
 }
 
@@ -404,7 +404,7 @@ bool LoginManager::OnUserSignIn(network::TCPSessionHandler *session, google::pro
 	network::TCPSessionID session_id = session->SessionID();
 
 	// 构造sql语句
-	std::string sql = string_helper::format("CALL sign_in('%s','%s','%s','%s',@userid); SELECT @userid;",
+	std::string sql = string_helper::format("CALL sign_in('%s','%s','%s','%s',@userid);",
 		request->user().c_str(),
 		request->passwd().c_str(),
 		session->RemoteEndpoint().address().to_string().c_str(),
@@ -422,7 +422,7 @@ bool LoginManager::OnUserSignIn(network::TCPSessionHandler *session, google::pro
 				auto result = static_cast<svr::QueryDBAgentRsp*>(db_message);
 				db::WrapResultSet result_set(result->result().data(), result->result().size());
 				db::WrapResultItem item = result_set.GetRow();
-				uint32_t user_id = static_cast<uint32_t>(atoll(item[0]));
+				uint32_t user_id = static_cast<uint32_t>(atoll(item["@userid"]));
 				if (user_id > 0)
 				{
 					// 更新连接
@@ -454,7 +454,7 @@ bool LoginManager::OnUserSignIn(network::TCPSessionHandler *session, google::pro
 			}
 		}
 	};
-	GlobalDBClient()->AsyncSelect(db::kMySQL, ServerConfig::GetInstance()->GetVerifyDBName(), sql.c_str(), callback);
+	GlobalDBClient()->AsyncCall(db::kMySQL, ServerConfig::GetInstance()->GetVerifyDBName(), sql.c_str(), callback);
 	return true;
 }
 

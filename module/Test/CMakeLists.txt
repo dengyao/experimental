@@ -1,25 +1,14 @@
-set(CURRENT_PROJECT_NAME DBAgent)
+set(CURRENT_PROJECT_NAME Test)
 
-set(CURRENT_PROJECT_SRC_LISTS 
+set(CURRENT_PROJECT_SRC_LISTS
   Main.cpp
-  Logging.cpp
-  AgentImpl.cpp
-  AgentManager.cpp
-  ServerConfig.cpp
-  SessionHandle.cpp
-  ConnectorMySQL.cpp
-  ProcedureMySQL.cpp
 )
 
 include_directories(
   ${ASIO_INCLUDE_DIRS}
-  ${MYSQL_INCLUDE_DIRS}
-  ${SPDLOG_INCLUDE_DIRS}
-  ${COMMON_INCLUDE_DIRS}
   ${NETWORK_INCLUDE_DIRS}
   ${PROTOBUF_INCLUDE_DIRS}
   ${PROTOCOL_INCLUDE_DIRS}
-  ${RAPIDJSON_INCLUDE_DIRS}
 )
 
 link_directories(${BINARY_OUTPUT_DIR})
@@ -33,8 +22,6 @@ set_target_properties(${CURRENT_PROJECT_NAME}
 )
 
 target_link_libraries(${CURRENT_PROJECT_NAME}
-  ${MYSQL_LIBRARY_NAME}
-  ${COMMON_LIBRARY_NAME}
   ${NETWORK_LIBRARY_NAME}
   ${PROTOBUF_LIBRARY_NAME}
   ${PROTOCOL_LIBRARY_NAME}

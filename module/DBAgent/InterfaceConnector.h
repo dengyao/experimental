@@ -25,6 +25,8 @@ public:
 public:
 	virtual const char* Name() const = 0;
 
+	virtual ByteArray Call(const ByteArray &command, ErrorCode &error_code) = 0;
+
 	virtual ByteArray Select(const ByteArray &command, ErrorCode &error_code) = 0;
 
 	virtual ByteArray Insert(const ByteArray &command, ErrorCode &error_code) = 0;

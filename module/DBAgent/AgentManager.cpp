@@ -14,6 +14,9 @@ inline bool ToLocalActionType(svr::QueryDBAgentReq::ActoinType type, ActionType 
 {
 	switch (type)
 	{
+	case svr::QueryDBAgentReq::kCall:
+		local_type = ActionType::kCall;
+		break;
 	case svr::QueryDBAgentReq::kSelect:
 		local_type = ActionType::kSelect;
 		break;
@@ -72,6 +75,9 @@ void AgentManager::UpdateHandleResult(asio::error_code error_code)
 		{
 			switch (found->second.type)
 			{
+			case ActionType::kCall:
+				StatisticalTools::GetInstance()->AccumulateHandleCallCount(1);
+				break;
 			case ActionType::kSelect:
 				StatisticalTools::GetInstance()->AccumulateHandleSelectCount(1);
 				break;
@@ -106,11 +112,12 @@ void AgentManager::UpdateStatisicalData(asio::error_code error_code)
 	}
 
 	StatisticalTools::GetInstance()->Flush();
-	logger()->info("服务器信息：连接数{}，队列数量{}，上行流量{}，下行流量{}，查询次数{}，插入次数{}，更新次数{}，删除次数{}",
+	logger()->info("服务器信息：连接数{}，队列数量{}，上行流量{}，下行流量{}，调用次数{}，查询次数{}，插入次数{}，更新次数{}，删除次数{}",
 		threads_.SessionNumber(),
 		requests_.size(),
 		StatisticalTools::GetInstance()->UpVolume(),
 		StatisticalTools::GetInstance()->DownVolume(),
+		StatisticalTools::GetInstance()->HandleCallCount(),
 		StatisticalTools::GetInstance()->HandleSelectCount(),
 		StatisticalTools::GetInstance()->HandleInsertCount(),
 		StatisticalTools::GetInstance()->HandleUpdateCount(),
@@ -179,6 +186,7 @@ bool AgentManager::OnQueryAgentInfo(network::TCPSessionHandler *session, google:
 	response.set_client_num(threads_.SessionNumber());
 	response.set_up_volume(StatisticalTools::GetInstance()->UpVolume());
 	response.set_down_volume(StatisticalTools::GetInstance()->DownVolume());
+	response.set_handle_call_count(StatisticalTools::GetInstance()->HandleCallCount());
 	response.set_handle_select_count(StatisticalTools::GetInstance()->HandleSelectCount());
 	response.set_handle_insert_count(StatisticalTools::GetInstance()->HandleInsertCount());
 	response.set_handle_update_count(StatisticalTools::GetInstance()->HandleUpdateCount());

@@ -23,21 +23,23 @@ message DBAgentInfoReq {
 message DBAgentInfoRsp {
     required uint32 up_volume = 1;           // 每秒上行流量
     required uint32 down_volume = 2;         // 每秒下行流量
-    required uint32 handle_select_count = 3; // 每秒处理查询数量
-    required uint32 handle_insert_count = 4; // 每秒处理插入数量
-    required uint32 handle_update_count = 5; // 每秒处理更新数量
-    required uint32 handle_delete_count = 6; // 每秒处理删除数量
-    required uint32 client_num = 7;          // 客户端数量
-    required uint32 queue_num = 8;           // 队列中的数量
+    required uint32 handle_call_count = 3;   // 每秒处理调用数量
+    required uint32 handle_select_count = 4; // 每秒处理查询数量
+    required uint32 handle_insert_count = 5; // 每秒处理插入数量
+    required uint32 handle_update_count = 6; // 每秒处理更新数量
+    required uint32 handle_delete_count = 7; // 每秒处理删除数量
+    required uint32 client_num = 8;          // 客户端数量
+    required uint32 queue_num = 9;           // 队列中的数量
 }
 
 // 查询DBAgent请求
 message QueryDBAgentReq {
-    enum ActoinType { 
-        kSelect = 1; // 查询
-        kInsert = 2; // 插入
-        kUpdate = 3; // 更新
-        kDelete = 4; // 删除
+    enum ActoinType {
+        kCall = 1;   // 调用
+        kSelect = 2; // 查询
+        kInsert = 3; // 插入
+        kUpdate = 4; // 更新
+        kDelete = 5; // 删除
     }
     
     enum DatabaseType {

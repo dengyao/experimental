@@ -24,10 +24,11 @@ namespace db
 
 	enum DatabaseActionType
 	{
-		kSelect = 1,
-		kInsert = 2,
-		kUpdate = 3,
-		kDelete = 4
+		kCall = 1,
+		kSelect = 2,
+		kInsert = 3,
+		kUpdate = 4,
+		kDelete = 5,
 	};
 
 	class ConnectDBAgentFail : public std::runtime_error
@@ -57,6 +58,9 @@ namespace db
 	public:
 		// 获取有效连接数量
 		size_t GetKeepAliveConnectionNum() const;
+
+		// 异步调用
+		void AsyncCall(DatabaseType dbtype, const char *dbname, const char *statement, QueryCallBack &&callback);
 
 		// 异步查询
 		void AsyncSelect(DatabaseType dbtype, const char *dbname, const char *statement, QueryCallBack &&callback);
