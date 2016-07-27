@@ -45,7 +45,7 @@ const std::shared_ptr<spdlog::async_logger>& logger()
 
 bool OnceInitLogSettings(const std::string &out_dir, const std::string &process_name, bool use_multithread)
 {
-	static std::atomic_bool initialized = false;
+	static std::atomic_bool initialized;
 	if (initialized)
 	{
 		assert(!initialized);

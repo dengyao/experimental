@@ -14,7 +14,7 @@ const std::unique_ptr<db::DBClient>& GlobalDBClient()
 
 void OnceInitGlobalDBClient(std::unique_ptr<db::DBClient> &&db_client)
 {
-	static std::atomic_bool initialized = false;
+	static std::atomic_bool initialized;
 	assert(!initialized);
 	assert(db_client != nullptr);
 	if (initialized || db_client == nullptr)

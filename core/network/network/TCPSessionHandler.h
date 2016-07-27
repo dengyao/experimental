@@ -63,7 +63,7 @@ namespace network
 		TCPSessionHandler& operator= (const TCPSessionHandler&) = delete;
 
 	private:
-		void Init(TCPSessionID sid, IOThreadID tid, IOServiceThreadManager *manager, asio::ip::tcp::endpoint &remote_endpoint);
+		void Init(TCPSessionID sid, IOThreadID tid, IOServiceThreadManager *manager, const asio::ip::tcp::endpoint &remote_endpoint);
 
 	private:
 		TCPSessionID				session_id_;

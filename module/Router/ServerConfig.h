@@ -1,6 +1,7 @@
 ﻿#ifndef __SERVER_CONFIG_H__
 #define __SERVER_CONFIG_H__
 
+#include <string>
 #include <common/Singleton.h>
 
 class ServerConfig : public Singleton<ServerConfig>

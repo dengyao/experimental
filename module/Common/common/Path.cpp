@@ -90,7 +90,11 @@ time_t path::getmtime(const std::string &s)
 
 bool path::mkdir(const std::string &s)
 {
+# if defined(USE_WINDOWS_API)
 	return ::mkdir(s.c_str()) == 0;
+# else
+	return ::mkdir(s.c_str(), S_IRWXU) == 0;
+# endif	
 }
 
 bool path::rmdir(const std::string &s)

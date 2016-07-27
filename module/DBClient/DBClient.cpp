@@ -403,11 +403,11 @@ namespace db
 		static_assert(DatabaseType::kRedis == svr::QueryDBAgentReq::kRedis &&
 			DatabaseType::kMySQL == svr::QueryDBAgentReq::kMySQL, "type mismatch");
 
-		static_assert(DatabaseActionType::kCall == svr::QueryDBAgentReq::kCall &&
-			DatabaseActionType::kSelect == svr::QueryDBAgentReq::kSelect &&
-			DatabaseActionType::kInsert == svr::QueryDBAgentReq::kInsert &&
-			DatabaseActionType::kUpdate == svr::QueryDBAgentReq::kUpdate &&
-			DatabaseActionType::kDelete == svr::QueryDBAgentReq::kDelete, "type mismatch");
+		static_assert((int)DatabaseActionType::kCall == (int)svr::QueryDBAgentReq::kCall &&
+			(int)DatabaseActionType::kSelect == (int)svr::QueryDBAgentReq::kSelect &&
+			(int)DatabaseActionType::kInsert == (int)svr::QueryDBAgentReq::kInsert &&
+			(int)DatabaseActionType::kUpdate == (int)svr::QueryDBAgentReq::kUpdate &&
+			(int)DatabaseActionType::kDelete == (int)svr::QueryDBAgentReq::kDelete, "type mismatch");
 
 		if (session_handle_lists_.size() < connection_num_)
 		{

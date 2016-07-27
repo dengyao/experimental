@@ -16,7 +16,7 @@ const std::unique_ptr<LoginConnector>& GlobalLoginConnector()
 
 void OnceInitGlobalLoginConnector(std::unique_ptr<LoginConnector> &&connector)
 {
-	static std::atomic_bool initialized = false;
+	static std::atomic_bool initialized;
 	assert(!initialized);
 	assert(connector != nullptr);
 	if (initialized || connector == nullptr)
@@ -33,7 +33,7 @@ const std::unique_ptr<router::Connector>& GlobalConnector()
 
 void OnceInitGlobalConnector(std::unique_ptr<router::Connector> &&connector)
 {
-	static std::atomic_bool initialized = false;
+	static std::atomic_bool initialized;
 	assert(!initialized);
 	assert(connector != nullptr);
 	if (initialized || connector == nullptr)

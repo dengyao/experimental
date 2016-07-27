@@ -1,8 +1,8 @@
 ﻿#include "DBResult.h"
 #include <array>
-#include <cstring>
+#include <limits>
 #include <cassert>
-#include <numeric>
+#include <cstring>
 
 namespace db
 {
@@ -41,7 +41,7 @@ namespace db
 		assert(index < result_->NumField());
 		if (index >= result_->NumField())
 		{
-			return nullptr;
+			return true;
 		}
 		return strlen(result_->rows_[ToVecIndex(index)]) == 0;
 	}

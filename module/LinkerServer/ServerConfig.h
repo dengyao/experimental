@@ -2,6 +2,7 @@
 #define __SERVER_CONFIG_H__
 
 #include <vector>
+#include <string>
 #include <common/Singleton.h>
 
 class ServerConfig : public Singleton<ServerConfig>
