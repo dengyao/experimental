@@ -1,7 +1,7 @@
 # 说明
 protobuf-2.6.1.tar.gz 为protobuf源代码，最新版本的下载地址为[https://developers.google.com/protocol-buffers/docs/downloads](https://developers.google.com/protocol-buffers/docs/downloads)。
 
-libprotobuf.py 用于提取libprotobuf库中需要的C++源文件，方便cmake添加。使用方式是将protobuf-2.6.1.tar.gz解压，将这个脚本放到protobuf-2.6.1目录下执行，将生成libprotobuf.txt文件，这个文件里记录了libprotobuf库所需的c++源文件。
+libprotobuf.py 用于提取libprotobuf库中需要的C++源文件，方便cmake添加。使用方式是将protobuf-2.6.1.tar.gz解压，将这个脚本放到protobuf-2.6.1目录下执行，将生成libprotobuf.txt文件，这个文件里记录了libprotobuf库所需的c++源文件（linux下需手动添加google/protobuf/stubs/atomicops_internals_x86_gcc.cc）。
 
 # 编译libprotobuf
 首先将解压protobuf-2.6.1.tar.gz，将vsprojects/config.h和src目录下的google文件夹拷贝出来。如需libprotobuf编译通过必须修改config.h，以下：

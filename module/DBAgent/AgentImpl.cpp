@@ -1,5 +1,6 @@
 ﻿#include "AgentImpl.h"
 #include <cassert>
+#include <cstring>
 #include <common/TaskPools.h>
 
 /************************************************************************/

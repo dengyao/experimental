@@ -24,6 +24,7 @@ set(CURRENT_PROJECT_SRC_LISTS
   google/protobuf/reflection_ops.cc
   google/protobuf/repeated_field.cc
   google/protobuf/service.cc
+  google/protobuf/stubs/atomicops_internals_x86_gcc.cc
   google/protobuf/stubs/atomicops_internals_x86_msvc.cc
   google/protobuf/stubs/common.cc
   google/protobuf/stubs/once.cc

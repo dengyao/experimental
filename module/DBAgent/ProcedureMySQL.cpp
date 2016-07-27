@@ -1,5 +1,6 @@
 ﻿#include "ProcedureMySQL.h"
 #include <numeric>
+#include <cstring>
 
 namespace mysql_stuff
 {

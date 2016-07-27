@@ -2,6 +2,7 @@
 #include <array>
 #include <limits>
 #include <cassert>
+#include <cstring>
 #include <mysqld_error.h>
 #include "ProcedureMySQL.h"
 
