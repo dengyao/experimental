@@ -400,8 +400,8 @@ namespace db
 	// 异步操作
 	void DBClient::AsyncQuery(DatabaseType dbtype, const char *dbname, DatabaseActionType action, const char *statement, QueryCallBack &&callback)
 	{
-		static_assert(DatabaseType::kRedis == svr::QueryDBAgentReq::kRedis &&
-			DatabaseType::kMySQL == svr::QueryDBAgentReq::kMySQL, "type mismatch");
+		static_assert((int)DatabaseType::kRedis == (int)svr::QueryDBAgentReq::kRedis &&
+			(int)DatabaseType::kMySQL == (int)svr::QueryDBAgentReq::kMySQL, "type mismatch");
 
 		static_assert((int)DatabaseActionType::kCall == (int)svr::QueryDBAgentReq::kCall &&
 			(int)DatabaseActionType::kSelect == (int)svr::QueryDBAgentReq::kSelect &&
