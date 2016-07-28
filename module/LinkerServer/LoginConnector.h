@@ -13,6 +13,8 @@ namespace google
 }
 
 class LoginConnector;
+class LoginSessionHandle;
+class AsyncReconnectHandle;
 
 class ConnectLoginServerFail : public std::runtime_error
 {

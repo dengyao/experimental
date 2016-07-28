@@ -3,6 +3,8 @@
 
 #include <network.h>
 
+class LoginConnector;
+
 class LoginSessionHandle : public network::TCPSessionHandler
 {
 	friend class LoginConnector;

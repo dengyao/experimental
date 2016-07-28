@@ -23,7 +23,7 @@ public:
 
 private:
 	mutable std::default_random_engine generator_;
-	std::uniform_int_distribution<uint32_t> distribution_;
+	mutable std::uniform_int_distribution<uint32_t> distribution_;
 };
 
 #endif
