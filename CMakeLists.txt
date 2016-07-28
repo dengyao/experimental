@@ -27,11 +27,16 @@ set(BINARY_OUTPUT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
 set(COMMON_LIBRARY_NAME common)
 set(NETWORK_LIBRARY_NAME network)
-set(MYSQL_LIBRARY_NAME mysqlclient)
 set(PROTOBUF_LIBRARY_NAME protobuf)
 set(PROTOCOL_LIBRARY_NAME protocol)
 set(DBCLIENT_LIBRARY_NAME dbclient)
 set(CONNECTOR_LIBRARY_NAME connector)
+
+if (WIN32)
+  set(MYSQL_LIBRARY_NAME libmysql)
+else()
+  set(MYSQL_LIBRARY_NAME mysqlclient)
+endif()
 
 set(ASIO_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/core/asio)
 set(NETWORK_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/core/network)
