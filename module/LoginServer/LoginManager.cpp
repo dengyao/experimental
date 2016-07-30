@@ -17,7 +17,7 @@ LoginManager::LoginManager(network::IOServiceThreadManager &threads, const std::
 	: threads_(threads)
 	, partition_lists_(partition)
 	, timer_(threads.MainThread()->IOService(), std::chrono::seconds(1))
-	, wait_handler_(std::bind(&LoginManager::OnUpdateTimer, this, std::placeholders::_1))
+	, wait_handler_(std::bind(&LoginManager::OnUpdateTimer, this, _1))
 	, dispatcher_(std::bind(&LoginManager::OnUnknownMessage, this, _1, _2, _3))
 {
 	for (const auto &partition : partition_lists_)
@@ -110,7 +110,7 @@ void LoginManager::OnUpdateTimer(asio::error_code error_code)
 	}
 
 	// 更新分区信息
-	//QueryPartitionInfoByDatabase();
+	QueryPartitionInfoByDatabase();
 
 	timer_.expires_from_now(std::chrono::seconds(1));
 	timer_.async_wait(wait_handler_);
