@@ -24,8 +24,8 @@ namespace router
 		{
 		}
 
-		// 获取计数器
-		std::shared_ptr<bool>& GetShared()
+		// 获取生命周期
+		std::weak_ptr<bool>& GetLife()
 		{
 			return client_life_;
 		}
@@ -33,7 +33,7 @@ namespace router
 		// 连接成功
 		virtual void OnConnect() override
 		{
-			if (client_life_.unique())
+			if (client_life_.expired())
 			{
 				Close();
 			}
@@ -52,7 +52,7 @@ namespace router
 		// 接收消息
 		virtual void OnMessage(network::NetMessage &message) override
 		{
-			if (client_life_.unique())
+			if (client_life_.expired())
 			{
 				Close();
 				return;
@@ -95,7 +95,7 @@ namespace router
 		virtual void OnClose() override
 		{
 			is_logged_ = false;
-			if (!client_life_.unique())
+			if (!client_life_.expired())
 			{
 				client_->OnDisconnect(this);
 			}
@@ -118,11 +118,11 @@ namespace router
 		}
 
 	private:
-		Connector*            client_;
-		bool                  is_logged_;
-		std::shared_ptr<bool> client_life_;
-		uint32_t              counter_;
-		uint32_t              heartbeat_interval_;
+		Connector*          client_;
+		bool                is_logged_;
+		std::weak_ptr<bool> client_life_;
+		uint32_t            counter_;
+		uint32_t            heartbeat_interval_;
 	};
 
 	/************************************************************************/
@@ -137,8 +137,8 @@ namespace router
 		{
 		}
 
-		// 获取计数器
-		std::shared_ptr<bool>& GetShared()
+		// 获取生命周期
+		std::weak_ptr<bool>& GetLife()
 		{
 			return client_life_;
 		}
@@ -146,15 +146,15 @@ namespace router
 		// 连接结果回调
 		void ConnectCallback(asio::error_code error_code)
 		{
-			if (!client_life_.unique())
+			if (!client_life_.expired())
 			{
 				client_->AsyncReconnectResult(*this, error_code);
 			}
 		}
 
 	private:
-		Connector*         client_;
-		std::shared_ptr<bool> client_life_;
+		Connector*          client_;
+		std::weak_ptr<bool> client_life_;
 	};
 
 	/************************************************************************/
@@ -291,7 +291,7 @@ namespace router
 		{
 			++connecting_num_;
 		}
-		lifetimes_.erase(handler.GetShared());
+		lifetimes_.erase(handler.GetLife().lock());
 	}
 
 	// 获取会话处理器
@@ -350,7 +350,7 @@ namespace router
 	// 断开连接事件
 	void Connector::OnDisconnect(SessionHandle *session)
 	{
-		lifetimes_.erase(session->GetShared());
+		lifetimes_.erase(session->GetLife().lock());
 		auto session_iter = std::find(session_handle_lists_.begin(), session_handle_lists_.end(), session);
 		if (session_iter != session_handle_lists_.end())
 		{

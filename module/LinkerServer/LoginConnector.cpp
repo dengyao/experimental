@@ -15,8 +15,8 @@ public:
 	{
 	}
 
-	// 获取计数器
-	std::shared_ptr<bool>& GetShared()
+	// 获取生命周期
+	std::weak_ptr<bool>& GetLife()
 	{
 		return connector_life_;
 	}
@@ -24,15 +24,15 @@ public:
 	// 连接结果回调
 	void ConnectCallback(asio::error_code error_code)
 	{
-		if (!connector_life_.unique())
+		if (!connector_life_.expired())
 		{
 			connector_->AsyncReconnectResult(*this, error_code);
 		}
 	}
 
 private:
-	LoginConnector*       connector_;
-	std::shared_ptr<bool> connector_life_;
+	LoginConnector*     connector_;
+	std::weak_ptr<bool> connector_life_;
 };
 
 /************************************************************************/
@@ -123,7 +123,7 @@ void LoginConnector::AsyncReconnectResult(AsyncReconnectHandle &handler, asio::e
 		reconnecting_ = false;
 		logger()->error("重连登录服务器失败，{}", error_code.message());
 	}
-	lifetimes_.erase(handler.GetShared());
+	lifetimes_.erase(handler.GetLife().lock());
 }
 
 // 更新计时器
