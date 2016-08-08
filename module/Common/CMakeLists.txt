@@ -9,6 +9,7 @@ set(CURRENT_PROJECT_SRC_LISTS
   common/Singleton.cpp
   common/StringHelper.cpp
   common/ConfigManager.cpp
+  common/BlockAllocator.cpp
 )
 
 add_library(${CURRENT_PROJECT_NAME} ${COMPOLE_LIBRARY_TYPE}
