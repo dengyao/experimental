@@ -1,6 +1,6 @@
 ﻿#include <iostream>
 #include <network.h>
-#include <Connector.h>
+#include <GWClient.h>
 #include <common/Path.h>
 #include <proto/server_internal.pb.h>
 #include "Logging.h"
@@ -24,17 +24,17 @@ void RunLoginServer()
 		std::bind(CreateSessionHandle, std::ref(*g_linker_manager.get())),
 		CreateMessageFilter, ServerConfig::GetInstance()->GetHeartbeatInterval());
 
-	GlobalConnector()->SetMessageCallback(std::bind(&LinkerManager::OnRouterMessage, g_linker_manager.get(),
+	GlobalLoginConnector()->SetMessageCallback(std::bind(&LinkerManager::OnLoginServerMessage, g_linker_manager.get(),
 		std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 
-	GlobalLoginConnector()->SetMessageCallback(std::bind(&LinkerManager::OnLoginServerMessage, g_linker_manager.get(),
+	GlobalGatewayClient()->SetMessageCallback(std::bind(&LinkerManager::OnGatewayServerMessage, g_linker_manager.get(),
 		std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 
 	logger()->info("Linker服务器[ip:{} port:{}]启动成功!", g_server->LocalEndpoint().address().to_string().c_str(), g_server->LocalEndpoint().port());
 }
 
-// 连接路由服务器
-void ConnectRouter(uint16_t linker_id)
+// 连接网关服务器
+void ConnectGatewayServer(uint16_t linker_id)
 {
 	if (linker_id == 0)
 	{
@@ -46,21 +46,21 @@ void ConnectRouter(uint16_t linker_id)
 	{
 		logger()->info("与登录服务器验证成功!");
 
-		std::unique_ptr<router::Connector> connector;
+		std::unique_ptr<gateway::GatewayClient> connector;
 		try
 		{
-			asio::ip::tcp::endpoint endpoint(asio::ip::address_v4::from_string(ServerConfig::GetInstance()->GetRouterIP()),
-				ServerConfig::GetInstance()->GetRouterPort());
-			connector = std::make_unique<router::Connector>(*g_thread_manager, endpoint, ServerConfig::GetInstance()->GetRouterConnections(), svr::kLinkerServer, linker_id);
-			logger()->info("连接路由服务器成功!");
+			asio::ip::tcp::endpoint endpoint(asio::ip::address_v4::from_string(ServerConfig::GetInstance()->GetGWServerIP()),
+				ServerConfig::GetInstance()->GetGWServerPort());
+			connector = std::make_unique<gateway::GatewayClient>(*g_thread_manager, endpoint, ServerConfig::GetInstance()->GetGWServerConnections(), svr::kLinkerServer, linker_id);
+			logger()->info("连接网关服务器成功!");
 		}
 		catch (...)
 		{
-			logger()->critical("连接路由服务器失败!");
+			logger()->critical("连接网关服务器失败!");
 			assert(false);
 			exit(-1);
 		}
-		OnceInitGlobalConnector(std::move(connector));
+		OnceInitGlobalGatewayConnector(std::move(connector));
 		RunLoginServer();
 	}
 }
@@ -96,7 +96,7 @@ int main(int argc, char *argv[])
 		ServerConfig::GetInstance()->GetLoginServerPort());
 	try
 	{
-		login_connector = std::make_unique<LoginConnector>(threads, endpoint, ConnectRouter);
+		login_connector = std::make_unique<LoginConnector>(threads, endpoint, ConnectGatewayServer);
 		OnceInitGlobalLoginConnector(std::move(login_connector));
 	}
 	catch (...)

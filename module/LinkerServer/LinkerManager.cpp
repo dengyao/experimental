@@ -170,11 +170,6 @@ void LinkerManager::OnUserClose(SessionHandle *session)
 	}
 }
 
-// 路由消息
-void LinkerManager::OnRouterMessage(router::Connector *connector, google::protobuf::Message *messsage, network::NetMessage &buffer)
-{
-}
-
 // 登录服务器消息
 void LinkerManager::OnLoginServerMessage(LoginConnector *connector, google::protobuf::Message *messsage, network::NetMessage &buffer)
 {
@@ -191,4 +186,9 @@ void LinkerManager::OnLoginServerMessage(LoginConnector *connector, google::prot
 	{
 		logger()->warn("已忽略来自登录服务器的请求，{}", messsage->GetTypeName());
 	}
+}
+
+// 网关服务器消息
+void LinkerManager::OnGatewayServerMessage(gateway::GatewayClient *connector, google::protobuf::Message *messsage, network::NetMessage &buffer)
+{
 }

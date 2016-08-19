@@ -3,9 +3,9 @@
 
 #include <memory>
 
-namespace router
+namespace gateway
 {
-	class Connector;
+	class GatewayClient;
 }
 
 class LoginConnector;
@@ -13,8 +13,8 @@ class LoginConnector;
 const std::unique_ptr<LoginConnector> &GlobalLoginConnector();
 void OnceInitGlobalLoginConnector(std::unique_ptr<LoginConnector> &&connector);
 
-const std::unique_ptr<router::Connector>& GlobalConnector();
-void OnceInitGlobalConnector(std::unique_ptr<router::Connector> &&connector);
+const std::unique_ptr<gateway::GatewayClient>& GlobalGatewayClient();
+void OnceInitGlobalGatewayConnector(std::unique_ptr<gateway::GatewayClient> &&connector);
 
 
 #endif

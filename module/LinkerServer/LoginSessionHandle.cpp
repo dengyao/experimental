@@ -44,7 +44,7 @@ void LoginSessionHandle::OnMessage(network::NetMessage &message)
 }
 
 // 连接关闭
-void LoginSessionHandle::LoginSessionHandle::OnClose()
+void LoginSessionHandle::OnClose()
 {
 	if (!connector_life_.unique())
 	{

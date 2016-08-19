@@ -4,9 +4,9 @@
 #include <unordered_set>
 #include <network.h>
 
-namespace router
+namespace gateway
 {
-	class Connector;
+	class GatewayClient;
 }
 
 namespace google
@@ -59,11 +59,11 @@ public:
 	// 用户关闭连接
 	void OnUserClose(SessionHandle *session);
 
-	// 路由消息
-	void OnRouterMessage(router::Connector *connector, google::protobuf::Message *messsage, network::NetMessage &buffer);
-
 	// 登录服务器消息
 	void OnLoginServerMessage(LoginConnector *connector, google::protobuf::Message *messsage, network::NetMessage &buffer);
+
+	// 网关服务器消息
+	void OnGatewayServerMessage(gateway::GatewayClient *connector, google::protobuf::Message *messsage, network::NetMessage &buffer);
 
 	// 回复错误码
 	void SenddErrorCodeToUser(SessionHandle *session, network::NetMessage &buffer, int error_code, const char *what = nullptr);

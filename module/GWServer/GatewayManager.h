@@ -1,5 +1,5 @@
-﻿#ifndef __ROUTER_MANAGER_H__
-#define __ROUTER_MANAGER_H__
+﻿#ifndef __GATEWAY_MANAGER_H__
+#define __GATEWAY_MANAGER_H__
 
 #include <network.h>
 #include <ProtobufDispatcher.h>
@@ -14,7 +14,7 @@ namespace google
 
 class SessionHandle;
 
-class RouterManager
+class GatewayManager
 {
 	// 节点索引(快速查找)
 	struct NodeIndex
@@ -54,8 +54,8 @@ class RouterManager
 	};
 
 public:
-	RouterManager(network::IOServiceThreadManager &threads);
-	~RouterManager();
+	GatewayManager(network::IOServiceThreadManager &threads);
+	~GatewayManager();
 
 public:
 	// 接收消息

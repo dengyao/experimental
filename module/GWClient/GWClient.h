@@ -1,5 +1,5 @@
-﻿#ifndef __ROUTER_CONNECTOR_H__
-#define __ROUTER_CONNECTOR_H__
+﻿#ifndef __GATEWAY_CLIENT_H__
+#define __GATEWAY_CLIENT_H__
 
 #include <set>
 #include <network.h>
@@ -12,12 +12,12 @@ namespace google
 	}
 }
 
-namespace router
+namespace gateway
 {
-	class ConnectRouterFail : public std::runtime_error
+	class ConnectGatewayFail : public std::runtime_error
 	{
 	public:
-		ConnectRouterFail(const char *message)
+		ConnectGatewayFail(const char *message)
 			: std::runtime_error(message)
 		{
 		}
@@ -26,7 +26,7 @@ namespace router
 	class SessionHandle;
 	class AsyncReconnectHandle;
 
-	class Connector
+	class GatewayClient
 	{
 		friend class SessionHandle;
 		friend class AsyncReconnectHandle;
@@ -42,11 +42,11 @@ namespace router
 			}
 		};
 
-		typedef std::function<void(Connector*, google::protobuf::Message*, network::NetMessage&)> Callback;
+		typedef std::function<void(GatewayClient*, google::protobuf::Message*, network::NetMessage&)> Callback;
 
 	public:
-		Connector(network::IOServiceThreadManager &threads, asio::ip::tcp::endpoint &endpoint, size_t connection_num, int node_type, int child_id = 1);
-		~Connector();
+		GatewayClient(network::IOServiceThreadManager &threads, asio::ip::tcp::endpoint &endpoint, size_t connection_num, int node_type, int child_id = 1);
+		~GatewayClient();
 
 	public:
 		// 服务器节点类型

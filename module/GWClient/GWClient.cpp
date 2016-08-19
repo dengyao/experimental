@@ -1,10 +1,10 @@
-﻿#include "Connector.h"
+﻿#include "GWClient.h"
 #include <iostream>
 #include <ProtobufCodec.h>
 #include <proto/public_struct.pb.h>
 #include <proto/server_internal.pb.h>
 
-namespace router
+namespace gateway
 {
 	static const size_t kExtrabufSize = 4096;
 
@@ -12,10 +12,10 @@ namespace router
 
 	class SessionHandle : public network::TCPSessionHandler
 	{
-		friend class Connector;
+		friend class GatewayClient;
 
 	public:
-		SessionHandle(Connector *client, std::shared_ptr<bool> &life)
+		SessionHandle(GatewayClient *client, std::shared_ptr<bool> &life)
 			: counter_(0)
 			, client_(client)
 			, is_logged_(false)
@@ -118,7 +118,7 @@ namespace router
 		}
 
 	private:
-		Connector*          client_;
+		GatewayClient*          client_;
 		bool                is_logged_;
 		std::weak_ptr<bool> client_life_;
 		uint32_t            counter_;
@@ -131,7 +131,7 @@ namespace router
 	class AsyncReconnectHandle : public std::enable_shared_from_this< AsyncReconnectHandle >
 	{
 	public:
-		AsyncReconnectHandle(Connector *client, std::shared_ptr<bool> &life)
+		AsyncReconnectHandle(GatewayClient *client, std::shared_ptr<bool> &life)
 			: client_(client)
 			, client_life_(life)
 		{
@@ -153,7 +153,7 @@ namespace router
 		}
 
 	private:
-		Connector*          client_;
+		GatewayClient*      client_;
 		std::weak_ptr<bool> client_life_;
 	};
 
@@ -165,7 +165,7 @@ namespace router
 		return std::make_shared<network::DefaultMessageFilter>();
 	}
 
-	Connector::Connector(network::IOServiceThreadManager &threads, asio::ip::tcp::endpoint &endpoint, size_t connection_num, int node_type, int child_id)
+	GatewayClient::GatewayClient(network::IOServiceThreadManager &threads, asio::ip::tcp::endpoint &endpoint, size_t connection_num, int node_type, int child_id)
 		: threads_(threads)
 		, connecting_num_(0)
 		, endpoint_(endpoint)
@@ -174,8 +174,8 @@ namespace router
 		, next_client_index_(0)
 		, connection_num_(connection_num)
 		, timer_(threads.MainThread()->IOService(), std::chrono::seconds(1))
-		, wait_handler_(std::bind(&Connector::OnUpdateTimer, this, std::placeholders::_1))
-		, session_handle_creator_(threads_, std::bind(&Connector::CreateSessionHandle, this), std::bind(CreaterMessageFilter))
+		, wait_handler_(std::bind(&GatewayClient::OnUpdateTimer, this, std::placeholders::_1))
+		, session_handle_creator_(threads_, std::bind(&GatewayClient::CreateSessionHandle, this), std::bind(CreaterMessageFilter))
 	{
 		assert(connection_num > 0);
 		assert(node_type_ >= svr::NodeType_MIN && node_type_ <= svr::NodeType_MAX);
@@ -183,31 +183,31 @@ namespace router
 		timer_.async_wait(wait_handler_);
 	}
 
-	Connector::~Connector()
+	GatewayClient::~GatewayClient()
 	{
 		Clear();
 	}
 
 	// 服务器节点类型
-	int Connector::GetNodeType() const
+	int GatewayClient::GetNodeType() const
 	{
 		return node_type_;
 	}
 
 	// 服务器子节点id
-	int Connector::GetChildNodeID() const
+	int GatewayClient::GetChildNodeID() const
 	{
 		return child_id_;
 	}
 
 	// 设置消息回调
-	void Connector::SetMessageCallback(const Callback &cb)
+	void GatewayClient::SetMessageCallback(const Callback &cb)
 	{
 		message_cb_ = cb;
 	}
 
 	// 清理所有连接
-	void Connector::Clear()
+	void GatewayClient::Clear()
 	{
 		lifetimes_.clear();
 		for (auto session : session_handle_lists_)
@@ -221,7 +221,7 @@ namespace router
 	}
 
 	// 创建会话处理器
-	network::SessionHandlePointer Connector::CreateSessionHandle()
+	network::SessionHandlePointer GatewayClient::CreateSessionHandle()
 	{
 		auto life = std::make_shared<bool>();
 		lifetimes_.insert(life);
@@ -229,7 +229,7 @@ namespace router
 	}
 
 	// 初始化连接
-	void Connector::InitConnections()
+	void GatewayClient::InitConnections()
 	{
 		asio::error_code error_code;
 		for (size_t i = 0; i < connection_num_; ++i)
@@ -241,19 +241,19 @@ namespace router
 			catch (const std::exception&)
 			{
 				Clear();
-				throw ConnectRouterFail(error_code.message().c_str());
+				throw ConnectGatewayFail(error_code.message().c_str());
 			}
 
 			if (error_code)
 			{
 				Clear();
-				throw ConnectRouterFail(error_code.message().c_str());
+				throw ConnectGatewayFail(error_code.message().c_str());
 			}
 		}
 	}
 
 	// 重新连接
-	void Connector::AsyncReconnect()
+	void GatewayClient::AsyncReconnect()
 	{
 		if (session_handle_lists_.size() < connection_num_)
 		{
@@ -277,7 +277,7 @@ namespace router
 	}
 
 	// 异步重连结果
-	void Connector::AsyncReconnectResult(AsyncReconnectHandle &handler, asio::error_code error_code)
+	void GatewayClient::AsyncReconnectResult(AsyncReconnectHandle &handler, asio::error_code error_code)
 	{
 		if (error_code)
 		{
@@ -295,7 +295,7 @@ namespace router
 	}
 
 	// 获取会话处理器
-	SessionHandle* Connector::GetSessionHandle()
+	SessionHandle* GatewayClient::GetSessionHandle()
 	{
 		if (session_handle_lists_.size() < connection_num_)
 		{
@@ -315,7 +315,7 @@ namespace router
 	}
 
 	// 更新计时器
-	void Connector::OnUpdateTimer(asio::error_code error_code)
+	void GatewayClient::OnUpdateTimer(asio::error_code error_code)
 	{
 		if (error_code)
 		{
@@ -332,7 +332,7 @@ namespace router
 	}
 
 	// 连接事件
-	void Connector::OnConnected(SessionHandle *session)
+	void GatewayClient::OnConnected(SessionHandle *session)
 	{
 		if (session_handle_lists_.size() >= connection_num_)
 		{
@@ -348,7 +348,7 @@ namespace router
 	}
 
 	// 断开连接事件
-	void Connector::OnDisconnect(SessionHandle *session)
+	void GatewayClient::OnDisconnect(SessionHandle *session)
 	{
 		lifetimes_.erase(session->GetLife().lock());
 		auto session_iter = std::find(session_handle_lists_.begin(), session_handle_lists_.end(), session);
@@ -359,7 +359,7 @@ namespace router
 	}
 
 	// 接受消息事件
-	void Connector::OnMessage(SessionHandle *session, google::protobuf::Message *message, network::NetMessage &buffer)
+	void GatewayClient::OnMessage(SessionHandle *session, google::protobuf::Message *message, network::NetMessage &buffer)
 	{
 		if (dynamic_cast<svr::RouterNotify*>(message) != nullptr)
 		{
@@ -379,7 +379,7 @@ namespace router
 		else if (dynamic_cast<pub::ErrorRsp*>(message) != nullptr)
 		{
 			auto response = static_cast<pub::ErrorRsp*>(message);
-			std::cerr << "router error code: " << response->error_code() << std::endl;
+			std::cerr << "gateway error code: " << response->error_code() << std::endl;
 		}
 		else
 		{
@@ -388,24 +388,24 @@ namespace router
 	}
 
 	// 回复消息
-	void Connector::Reply(google::protobuf::Message *message)
+	void GatewayClient::Reply(google::protobuf::Message *message)
 	{
 		Send(context_.node_type, context_.child_id, message);
 	}
 
-	void Connector::Reply(google::protobuf::Message *message, network::NetMessage &buffer)
+	void GatewayClient::Reply(google::protobuf::Message *message, network::NetMessage &buffer)
 	{
 		Send(context_.node_type, context_.child_id, message, buffer);
 	}
 
 	// 发送消息
-	void Connector::Send(int dst_node_type, int dst_child_id, google::protobuf::Message *message)
+	void GatewayClient::Send(int dst_node_type, int dst_child_id, google::protobuf::Message *message)
 	{
 		network::NetMessage buffer;
 		Send(dst_node_type, dst_child_id, message, buffer);
 	}
 
-	void Connector::Send(int dst_node_type, int dst_child_id, google::protobuf::Message *message, network::NetMessage &buffer)
+	void GatewayClient::Send(int dst_node_type, int dst_child_id, google::protobuf::Message *message, network::NetMessage &buffer)
 	{
 		assert(dst_node_type >= svr::NodeType_MIN && dst_node_type <= svr::NodeType_MAX);
 		SessionHandle *session = GetSessionHandle();
@@ -437,13 +437,13 @@ namespace router
 	}
 
 	// 广播消息
-	void Connector::Broadcast(const std::vector<int> &dst_type_lists, google::protobuf::Message *message)
+	void GatewayClient::Broadcast(const std::vector<int> &dst_type_lists, google::protobuf::Message *message)
 	{
 		network::NetMessage buffer;
 		Broadcast(dst_type_lists, message, buffer);
 	}
 
-	void Connector::Broadcast(const std::vector<int> &dst_type_lists, google::protobuf::Message *message, network::NetMessage &buffer)
+	void GatewayClient::Broadcast(const std::vector<int> &dst_type_lists, google::protobuf::Message *message, network::NetMessage &buffer)
 	{
 		SessionHandle *session = GetSessionHandle();
 		if (session != nullptr)

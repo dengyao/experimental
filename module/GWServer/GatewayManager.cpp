@@ -1,4 +1,4 @@
-﻿#include "RouterManager.h"
+﻿#include "GatewayManager.h"
 #include <ProtobufCodec.h>
 #include <proto/public_struct.pb.h>
 #include <proto/server_internal.pb.h>
@@ -9,30 +9,30 @@
 
 using namespace std::placeholders;
 
-RouterManager::RouterManager(network::IOServiceThreadManager &threads)
+GatewayManager::GatewayManager(network::IOServiceThreadManager &threads)
 	: threads_(threads)
 	, timer_(threads.MainThread()->IOService(), std::chrono::seconds(1))
-	, wait_handler_(std::bind(&RouterManager::UpdateStatisicalData, this, std::placeholders::_1))
-	, dispatcher_(std::bind(&RouterManager::OnUnknownMessage, this, _1, _2, _3))
+	, wait_handler_(std::bind(&GatewayManager::UpdateStatisicalData, this, std::placeholders::_1))
+	, dispatcher_(std::bind(&GatewayManager::OnUnknownMessage, this, _1, _2, _3))
 {
 	dispatcher_.RegisterMessageCallback<svr::ForwardReq>(
-		std::bind(&RouterManager::OnForwardServerMessage, this, _1, _2, _3));
+		std::bind(&GatewayManager::OnForwardServerMessage, this, _1, _2, _3));
 	dispatcher_.RegisterMessageCallback<svr::BroadcastReq>(
-		std::bind(&RouterManager::OnBroadcastServerMessage, this, _1, _2, _3));
+		std::bind(&GatewayManager::OnBroadcastServerMessage, this, _1, _2, _3));
 	dispatcher_.RegisterMessageCallback<svr::RouterInfoReq>(
-		std::bind(&RouterManager::OnQueryRouterInfo, this, _1, _2, _3));
+		std::bind(&GatewayManager::OnQueryRouterInfo, this, _1, _2, _3));
 	dispatcher_.RegisterMessageCallback<svr::LoginRouterReq>(
-		std::bind(&RouterManager::OnServerLogin, this, _1, _2, _3));
+		std::bind(&GatewayManager::OnServerLogin, this, _1, _2, _3));
 
 	timer_.async_wait(wait_handler_);
 }
 
-RouterManager::~RouterManager()
+GatewayManager::~GatewayManager()
 {
 }
 
 // 更新统计数据
-void RouterManager::UpdateStatisicalData(asio::error_code error_code)
+void GatewayManager::UpdateStatisicalData(asio::error_code error_code)
 {
 	if (error_code)
 	{
@@ -50,7 +50,7 @@ void RouterManager::UpdateStatisicalData(asio::error_code error_code)
 }
 
 // 查找服务器节点
-bool RouterManager::FindServerNode(int node_type, int child_id, ChildNode *&out_child_node)
+bool GatewayManager::FindServerNode(int node_type, int child_id, ChildNode *&out_child_node)
 {
 	out_child_node = nullptr;
 	auto node_found = server_lists_.find(node_type);
@@ -68,7 +68,7 @@ bool RouterManager::FindServerNode(int node_type, int child_id, ChildNode *&out_
 	return true;
 }
 
-bool RouterManager::FindServerNodeBySessionID(network::TCPSessionID session_id, ChildNode *&out_child_node)
+bool GatewayManager::FindServerNodeBySessionID(network::TCPSessionID session_id, ChildNode *&out_child_node)
 {
 	auto found = node_index_.find(session_id);
 	if (found == node_index_.end())
@@ -79,7 +79,7 @@ bool RouterManager::FindServerNodeBySessionID(network::TCPSessionID session_id, 
 }
 
 // 查找节点会话
-bool RouterManager::FindServerNodeSession(int node_type, int child_id, network::SessionHandlePointer &out_session)
+bool GatewayManager::FindServerNodeSession(int node_type, int child_id, network::SessionHandlePointer &out_session)
 {
 	auto node_found = server_lists_.find(node_type);
 	if (node_found == server_lists_.end())
@@ -112,7 +112,7 @@ bool RouterManager::FindServerNodeSession(int node_type, int child_id, network::
 }
 
 // 回复错误码
-void RouterManager::SendErrorCode(SessionHandle *session, network::NetMessage &buffer, int error_code, const char *what)
+void GatewayManager::SendErrorCode(SessionHandle *session, network::NetMessage &buffer, int error_code, const char *what)
 {
 	buffer.Clear();
 	pub::ErrorRsp response;
@@ -126,13 +126,13 @@ void RouterManager::SendErrorCode(SessionHandle *session, network::NetMessage &b
 }
 
 // 接收消息
-bool RouterManager::OnMessage(SessionHandle *session, google::protobuf::Message *message, network::NetMessage &buffer)
+bool GatewayManager::OnMessage(SessionHandle *session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
 	return dispatcher_.OnProtobufMessage(session, message, buffer);
 }
 
 // 连接关闭
-void RouterManager::OnClose(SessionHandle *session)
+void GatewayManager::OnClose(SessionHandle *session)
 {
 	auto found = node_index_.find(session->SessionID());
 	if (found == node_index_.end())
@@ -178,7 +178,7 @@ void RouterManager::OnClose(SessionHandle *session)
 }
 
 // 未定义消息
-bool RouterManager::OnUnknownMessage(network::TCPSessionHandler *session, google::protobuf::Message *message, network::NetMessage &buffer)
+bool GatewayManager::OnUnknownMessage(network::TCPSessionHandler *session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
 	SendErrorCode(static_cast<SessionHandle*>(session), buffer, pub::kInvalidProtocol, message->GetTypeName().c_str());
 	logger()->warn("协议无效，来自{}:{}", session->RemoteEndpoint().address().to_string(), session->RemoteEndpoint().port());
@@ -186,7 +186,7 @@ bool RouterManager::OnUnknownMessage(network::TCPSessionHandler *session, google
 }
 
 // 服务器登录
-bool RouterManager::OnServerLogin(network::TCPSessionHandler *session, google::protobuf::Message *message, network::NetMessage &buffer)
+bool GatewayManager::OnServerLogin(network::TCPSessionHandler *session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
 	// 检查服务器类型是否合法
 	auto request = static_cast<svr::LoginRouterReq*>(message);
@@ -254,7 +254,7 @@ bool RouterManager::OnServerLogin(network::TCPSessionHandler *session, google::p
 }
 
 // 查询路由信息
-bool RouterManager::OnQueryRouterInfo(network::TCPSessionHandler *session, google::protobuf::Message *message, network::NetMessage &buffer)
+bool GatewayManager::OnQueryRouterInfo(network::TCPSessionHandler *session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
 	buffer.Clear();
 	svr::RouterInfoRsp response;
@@ -275,7 +275,7 @@ bool RouterManager::OnQueryRouterInfo(network::TCPSessionHandler *session, googl
 }
 
 // 转发服务器消息
-bool RouterManager::OnForwardServerMessage(network::TCPSessionHandler *session, google::protobuf::Message *message, network::NetMessage &buffer)
+bool GatewayManager::OnForwardServerMessage(network::TCPSessionHandler *session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
 	ChildNode *child_node = nullptr;
 	auto request = static_cast<svr::ForwardReq*>(message);
@@ -306,7 +306,7 @@ bool RouterManager::OnForwardServerMessage(network::TCPSessionHandler *session, 
 }
 
 // 广播服务器消息
-bool RouterManager::OnBroadcastServerMessage(network::TCPSessionHandler *session, google::protobuf::Message *message, network::NetMessage &buffer)
+bool GatewayManager::OnBroadcastServerMessage(network::TCPSessionHandler *session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
 	ChildNode *child_node = nullptr;
 	auto request = static_cast<svr::BroadcastReq*>(message);

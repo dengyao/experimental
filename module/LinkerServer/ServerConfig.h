@@ -25,14 +25,14 @@ public:
 	// 获取用户最大验证时长
 	unsigned int GetMaxUserVerifyTime() const;
 
-	// 获取路由服务器IP
-	const char* GetRouterIP() const;
+	// 获取网关服务器IP
+	const char* GetGWServerIP() const;
 
-	// 获取路由服务器端口
-	unsigned short GetRouterPort() const;
+	// 获取网关服务器端口
+	unsigned short GetGWServerPort() const;
 
-	// 获取与路由服务器最大连接数
-	unsigned short GetRouterConnections() const;
+	// 获取与网关服务器最大连接数
+	unsigned short GetGWServerConnections() const;
 
 	// 获取登录服务器ip
 	const char* GetLoginSeverIP() const;
@@ -62,9 +62,9 @@ private:
 	unsigned short          thread_num_;
 	unsigned int            heartbeat_interval_;
 	unsigned int            max_user_verify_time_;
-	std::string             router_ip_;
-	unsigned short          router_port_;
-	unsigned short          router_connections_;
+	std::string             gws_ip_;
+	unsigned short          gws_port_;
+	unsigned short          gws_connections_;
 	std::string             login_server_ip_;
 	unsigned short          login_server_port_;
 	unsigned short          patition_id_;

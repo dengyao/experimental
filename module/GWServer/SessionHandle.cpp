@@ -3,12 +3,12 @@
 #include <proto/public_struct.pb.h>
 #include <proto/server_internal.pb.h>
 #include "Logging.h"
-#include "RouterManager.h"
+#include "GatewayManager.h"
 #include "StatisticalTools.h"
 
-SessionHandle::SessionHandle(RouterManager &router_manager)
+SessionHandle::SessionHandle(GatewayManager &gateway_manager)
 	: is_logged_(false)
-	, router_manager_(router_manager)
+	, gateway_manager_(gateway_manager)
 {
 }
 
@@ -27,7 +27,7 @@ void SessionHandle::OnMessage(network::NetMessage &message)
 	auto request = ProtubufCodec::Decode(message);
 	if (request == nullptr)
 	{
-		return router_manager_.SendErrorCode(this, message, pub::kInvalidProtocol);
+		return gateway_manager_.SendErrorCode(this, message, pub::kInvalidProtocol);
 	}
 
 	// 连接后必须登录
@@ -37,13 +37,13 @@ void SessionHandle::OnMessage(network::NetMessage &message)
 		{
 			if (dynamic_cast<svr::LoginRouterReq*>(request.get()) == nullptr)
 			{
-				router_manager_.SendErrorCode(this, message, pub::kNotLoggedIn);
+				gateway_manager_.SendErrorCode(this, message, pub::kNotLoggedIn);
 				logger()->warn("操作前未发起登录请求，来自{}:{}", RemoteEndpoint().address().to_string(), RemoteEndpoint().port());
 				return;
 			}
 			else
 			{
-				is_logged_ = router_manager_.OnMessage(this, request.get(), message);
+				is_logged_ = gateway_manager_.OnMessage(this, request.get(), message);
 				return;
 			}
 		}
@@ -59,14 +59,14 @@ void SessionHandle::OnMessage(network::NetMessage &message)
 	}
 	else
 	{
-		router_manager_.OnMessage(this, request.get(), message);
+		gateway_manager_.OnMessage(this, request.get(), message);
 	}
 }
 
 // 关闭事件
 void SessionHandle::OnClose()
 {
-	router_manager_.OnClose(this);
+	gateway_manager_.OnClose(this);
 }
 
 // 写入消息
@@ -83,8 +83,8 @@ network::MessageFilterPointer CreateMessageFilter()
 	return std::make_shared<network::DefaultMessageFilter>();
 }
 
-network::SessionHandlePointer CreateSessionHandle(RouterManager &router_manager)
+network::SessionHandlePointer CreateSessionHandle(GatewayManager &gateway_manager)
 {
-	return std::make_shared<SessionHandle>(router_manager);
+	return std::make_shared<SessionHandle>(gateway_manager);
 }
 /************************************************************************/

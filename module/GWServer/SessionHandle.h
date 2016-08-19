@@ -11,12 +11,12 @@ namespace google
 	}
 }
 
-class RouterManager;
+class GatewayManager;
 
 class SessionHandle : public network::TCPSessionHandler
 {
 public:
-	SessionHandle(RouterManager &router_manager);
+	SessionHandle(GatewayManager &gateway_manager);
 
 public:
 	// 写入消息
@@ -34,13 +34,13 @@ private:
 
 private:
 	bool is_logged_;
-	RouterManager& router_manager_;
+	GatewayManager& gateway_manager_;
 };
 
 // 创建消息筛选器
 network::MessageFilterPointer CreateMessageFilter();
 
 // 创建Session处理器
-network::SessionHandlePointer CreateSessionHandle(RouterManager &router_manager);
+network::SessionHandlePointer CreateSessionHandle(GatewayManager &gateway_manager);
 
 #endif

@@ -6,8 +6,8 @@
 ServerConfig::ServerConfig()
 	: port_(0)
 	, thread_num_(0)
-	, router_port_(0)
-	, router_connections_(0)
+	, gws_port_(0)
+	, gws_connections_(0)
 	, heartbeat_interval_(0)
 	, max_user_verify_time_(0)
 	, login_server_port_(0)
@@ -50,22 +50,22 @@ unsigned int ServerConfig::GetMaxUserVerifyTime() const
 	return max_user_verify_time_;
 }
 
-// 获取路由服务器IP
-const char* ServerConfig::GetRouterIP() const
+// 获取网关服务器IP
+const char* ServerConfig::GetGWServerIP() const
 {
-	return router_ip_.c_str();
+	return gws_ip_.c_str();
 }
 
-// 获取路由服务器端口
-unsigned short ServerConfig::GetRouterPort() const
+// 获取网关服务器端口
+unsigned short ServerConfig::GetGWServerPort() const
 {
-	return router_port_;
+	return gws_port_;
 }
 
-// 获取与路由服务器最大连接数
-unsigned short ServerConfig::GetRouterConnections() const
+// 获取与网关服务器最大连接数
+unsigned short ServerConfig::GetGWServerConnections() const
 {
-	return router_connections_;
+	return gws_connections_;
 }
 
 // 获取登录服务器ip
@@ -145,23 +145,23 @@ bool ServerConfig::Load(const std::string &filename)
 	}
 	max_user_verify_time_ = document["max_user_verify_time"].GetUint();
 
-	if (!document.HasMember("router_ip") || !document["router_ip"].IsString())
+	if (!document.HasMember("gws_ip") || !document["gws_ip"].IsString())
 	{
 		return false;
 	}
-	router_ip_ = document["router_ip"].GetString();
+	gws_ip_ = document["gws_ip"].GetString();
 
-	if (!document.HasMember("router_port") || !document["router_port"].IsUint())
+	if (!document.HasMember("gws_port") || !document["gws_port"].IsUint())
 	{
 		return false;
 	}
-	router_port_ = document["router_port"].GetUint();
+	gws_port_ = document["gws_port"].GetUint();
 
-	if (!document.HasMember("router_connections") || !document["router_connections"].IsUint())
+	if (!document.HasMember("gws_connections") || !document["gws_connections"].IsUint())
 	{
 		return false;
 	}
-	router_connections_ = document["router_connections"].GetUint();
+	gws_connections_ = document["gws_connections"].GetUint();
 
 	if (!document.HasMember("ls_ip") || !document["ls_ip"].IsString())
 	{
