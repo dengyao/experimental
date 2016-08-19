@@ -1,5 +1,5 @@
-﻿#ifndef __AGENT_IMPL_H__
-#define __AGENT_IMPL_H__
+﻿#ifndef __AGENT_MYSQL_H__
+#define __AGENT_MYSQL_H__
 
 #include "ContainerSafe.h"
 #include "InterfaceConnector.h"
@@ -37,20 +37,20 @@ private:
 
 /************************************************************************/
 
-class AgentImpl
+class AgentMySQL
 {
 public:
 	typedef std::function<void(ActorPointer &actor, ErrorCode&&, ByteArray&&)> CompleteCallback;
 
 public:
-	AgentImpl(std::vector<ConnectorPointer> &&connectors, TaskPools &pools, unsigned int backlog);
+	AgentMySQL(std::vector<ConnectorPointer> &&connectors, TaskPools &pools, unsigned int backlog);
 
 public:
-	// 添加任务
-	void AppendTask(uint32_t sequence, ActionType type, const char *db, const char *command, const size_t length);
-
 	// 获取已完成任务
 	size_t GetCompletedTask(std::vector<HandleResult> &tasks);
+
+	// 添加任务
+	void AppendTask(uint32_t sequence, ActionType type, const std::string &db, std::string &&command);
 
 private:
 	void OnCompletionTask(ActorPointer &actor, ErrorCode &&code, ByteArray &&result);

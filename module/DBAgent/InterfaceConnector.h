@@ -25,15 +25,15 @@ public:
 public:
 	virtual const char* Name() const = 0;
 
-	virtual ByteArray Call(const ByteArray &command, ErrorCode &error_code) = 0;
+	virtual ByteArray Call(const std::string &command, ErrorCode &error_code) = 0;
 
-	virtual ByteArray Select(const ByteArray &command, ErrorCode &error_code) = 0;
+	virtual ByteArray Select(const std::string &command, ErrorCode &error_code) = 0;
 
-	virtual ByteArray Insert(const ByteArray &command, ErrorCode &error_code) = 0;
+	virtual ByteArray Insert(const std::string &command, ErrorCode &error_code) = 0;
 
-	virtual ByteArray Update(const ByteArray &command, ErrorCode &error_code) = 0;
+	virtual ByteArray Update(const std::string &command, ErrorCode &error_code) = 0;
 
-	virtual ByteArray Delete(const ByteArray &command, ErrorCode &error_code) = 0;
+	virtual ByteArray Delete(const std::string &command, ErrorCode &error_code) = 0;
 
 protected:
 	const std::string		host_;

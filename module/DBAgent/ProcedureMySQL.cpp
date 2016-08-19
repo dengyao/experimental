@@ -22,7 +22,7 @@ namespace mysql_stuff
 	}
 
 	// 获取语句中的变量
-	static void GetVariableLists(const ByteArray &call_procedure, std::vector<Slice> *out_lists)
+	static void GetVariableLists(const std::string &call_procedure, std::vector<Slice> *out_lists)
 	{
 		for (size_t i = 1; i < call_procedure.size(); ++i)
 		{
@@ -42,7 +42,7 @@ namespace mysql_stuff
 	}
 
 	// 获取语句中的引号区间
-	static void GetQuotesAround(const ByteArray &call_procedure, const char quotes, std::vector<Slice> *out_lists)
+	static void GetQuotesAround(const std::string &call_procedure, const char quotes, std::vector<Slice> *out_lists)
 	{
 		for (size_t i = 0; i < call_procedure.size(); ++i)
 		{
@@ -62,7 +62,7 @@ namespace mysql_stuff
 	}
 
 	// 获取引号之外的变量
-	static std::vector<std::string> GetDisjointVariableLists(const ByteArray &call_procedure, const std::vector<Slice> &variable_lists, const std::vector<Slice> &segment_lists)
+	static std::vector<std::string> GetDisjointVariableLists(const std::string &call_procedure, const std::vector<Slice> &variable_lists, const std::vector<Slice> &segment_lists)
 	{
 		std::vector<std::string> variables;
 		std::vector<Slice> clone_lists = variable_lists;
@@ -134,7 +134,7 @@ namespace mysql_stuff
 
 /************************************************************************/
 
-ProcedureMySQL::ProcedureMySQL(const ByteArray &statement)
+ProcedureMySQL::ProcedureMySQL(const std::string &statement)
 {
 	std::vector<mysql_stuff::Slice> segment_lists;
 	std::vector<mysql_stuff::Slice> variable_lists;

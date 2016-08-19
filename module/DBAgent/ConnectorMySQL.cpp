@@ -271,7 +271,7 @@ void ConnectorMySQL::SetCharacterSet(const char *csname, ErrorCode &error_code)
 }
 
 
-ByteArray ConnectorMySQL::AffectedRows(const ByteArray &command, ErrorCode &error_code)
+ByteArray ConnectorMySQL::AffectedRows(const std::string &command, ErrorCode &error_code)
 {
 	if (IsConnected())
 	{
@@ -293,7 +293,7 @@ ByteArray ConnectorMySQL::AffectedRows(const ByteArray &command, ErrorCode &erro
 	}
 }
 
-ByteArray ConnectorMySQL::Call(const ByteArray &command, ErrorCode &error_code)
+ByteArray ConnectorMySQL::Call(const std::string &command, ErrorCode &error_code)
 {
 	if (IsConnected())
 	{
@@ -339,7 +339,7 @@ ByteArray ConnectorMySQL::Call(const ByteArray &command, ErrorCode &error_code)
 	}
 }
 
-ByteArray ConnectorMySQL::Select(const ByteArray &command, ErrorCode &error_code)
+ByteArray ConnectorMySQL::Select(const std::string &command, ErrorCode &error_code)
 {
 	if (IsConnected())
 	{
@@ -363,7 +363,7 @@ ByteArray ConnectorMySQL::Select(const ByteArray &command, ErrorCode &error_code
 	}
 }
 
-ByteArray ConnectorMySQL::Insert(const ByteArray &command, ErrorCode &error_code)
+ByteArray ConnectorMySQL::Insert(const std::string &command, ErrorCode &error_code)
 {
 	if (IsConnected())
 	{
@@ -385,12 +385,12 @@ ByteArray ConnectorMySQL::Insert(const ByteArray &command, ErrorCode &error_code
 	}
 }
 
-ByteArray ConnectorMySQL::Update(const ByteArray &command, ErrorCode &error_code)
+ByteArray ConnectorMySQL::Update(const std::string &command, ErrorCode &error_code)
 {
 	return AffectedRows(command, error_code);
 }
 
-ByteArray ConnectorMySQL::Delete(const ByteArray &command, ErrorCode &error_code)
+ByteArray ConnectorMySQL::Delete(const std::string &command, ErrorCode &error_code)
 {
 	return AffectedRows(command, error_code);
 }

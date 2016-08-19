@@ -1,4 +1,4 @@
-﻿#include "AgentImpl.h"
+﻿#include "AgentMySQL.h"
 #include <cassert>
 #include <cstring>
 #include <common/TaskPools.h>
@@ -57,15 +57,13 @@ class Actor : public std::enable_shared_from_this<Actor>
 	Actor& operator= (const Actor&) = delete;
 
 public:
-	Actor(uint32_t sequence, ActionType type, const char *command,
-		const size_t length, ConnectorPointer &&connector, const AgentImpl::CompleteCallback &callback)
+	Actor(uint32_t sequence, ActionType type, std::string &&command, ConnectorPointer &&connector, const AgentMySQL::CompleteCallback &callback)
 		: type_(type)
 		, sequence_(sequence)
 		, complete_callback_(callback)
+		, command_(std::forward<std::string>(command))
 		, connector_(std::forward<ConnectorPointer>(connector))
 	{
-		command_.resize(length);
-		memcpy(command_.data(), command, length);
 		assert(complete_callback_ != nullptr);
 	}
 
@@ -121,18 +119,18 @@ public:
 private:
 	const ActionType					type_;
 	const uint32_t						sequence_;
-	ByteArray							command_;
+	std::string							command_;
 	ConnectorPointer					connector_;
-	const AgentImpl::CompleteCallback&	complete_callback_;
+	const AgentMySQL::CompleteCallback&	complete_callback_;
 };
 
 /************************************************************************/
 /************************************************************************/
 
-AgentImpl::AgentImpl(std::vector<ConnectorPointer> &&connectors, TaskPools &pools, unsigned int backlog)
+AgentMySQL::AgentMySQL(std::vector<ConnectorPointer> &&connectors, TaskPools &pools, unsigned int backlog)
 	: pools_(pools)
 	, bocklog_(backlog)
-	, complete_callback_(std::bind(&AgentImpl::OnCompletionTask, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3))
+	, complete_callback_(std::bind(&AgentMySQL::OnCompletionTask, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3))
 {
 	for (size_t i = 0; i < connectors.size(); ++i)
 	{
@@ -142,8 +140,14 @@ AgentImpl::AgentImpl(std::vector<ConnectorPointer> &&connectors, TaskPools &pool
 	}
 }
 
+// 获取已完成任务
+size_t AgentMySQL::GetCompletedTask(std::vector<HandleResult> &tasks)
+{
+	return completed_queue_.TakeAll(tasks);
+}
+
 // 添加任务
-void AgentImpl::AppendTask(uint32_t sequence, ActionType type, const char *db, const char *command, const size_t length)
+void AgentMySQL::AppendTask(uint32_t sequence, ActionType type, const std::string &db, std::string &&command)
 {
 	QueueSafe<ActorPointer> *waiting = nullptr;
 	if (!waiting_queue_.Get(db, waiting))
@@ -167,26 +171,20 @@ void AgentImpl::AppendTask(uint32_t sequence, ActionType type, const char *db, c
 	ConnectorPointer connector;
 	if (free_connectors_.Take(db, connector))
 	{
-		ActorPointer actor = std::make_shared<Actor>(sequence, type, command, length, std::move(connector), complete_callback_);
+		ActorPointer actor = std::make_shared<Actor>(sequence, type, std::forward<std::string>(command), std::move(connector), complete_callback_);
 		TaskQueue::Task task = std::bind(&Actor::Processing, actor);
 		ongoing_queue_.Append(sequence, actor);
 		pools_.Append(task);
 	}
 	else
 	{
-		ActorPointer actor = std::make_shared<Actor>(sequence, type, command, length, std::move(connector), complete_callback_);
+		ActorPointer actor = std::make_shared<Actor>(sequence, type, std::forward<std::string>(command), std::move(connector), complete_callback_);
 		waiting->Append(std::move(actor));
 	}
 }
 
-// 获取已完成任务
-size_t AgentImpl::GetCompletedTask(std::vector<HandleResult> &tasks)
-{
-	return completed_queue_.TakeAll(tasks);
-}
-
 // 处理完成回调
-void AgentImpl::OnCompletionTask(ActorPointer &actor, ErrorCode &&code, ByteArray &&result)
+void AgentMySQL::OnCompletionTask(ActorPointer &actor, ErrorCode &&code, ByteArray &&result)
 {
 	ConnectorPointer connector(std::move(actor->GetConnector()));
 	completed_queue_.Append(HandleResult(actor->GetSequence(), std::forward<ErrorCode>(code), std::forward<ByteArray>(result)));

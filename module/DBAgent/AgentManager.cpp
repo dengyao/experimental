@@ -35,7 +35,7 @@ inline bool ToLocalActionType(svr::QueryDBAgentReq::ActoinType type, ActionType 
 	return true;
 }
 
-AgentManager::AgentManager(network::IOServiceThreadManager &threads, AgentImpl &mysql, unsigned int backlog)
+AgentManager::AgentManager(network::IOServiceThreadManager &threads, AgentMySQL &mysql, unsigned int backlog)
 	: threads_(threads)
 	, mysql_agent_(mysql)
 	, generator_(backlog)
@@ -209,18 +209,8 @@ bool AgentManager::OnHandleDatabase(network::TCPSessionHandler *session, google:
 			try
 			{
 				// 添加新的数据库任务
-				svr::QueryDBAgentReq::DatabaseType dbtype = request->dbtype();
 				requests_.insert(std::make_pair(sequence_native, SSourceInfo(type_native, request->sequence(), session->SessionID())));
-				if (dbtype == svr::QueryDBAgentReq::kMySQL)
-				{
-					mysql_agent_.AppendTask(sequence_native, type_native, request->dbname().c_str(), request->statement().c_str(), request->statement().size());
-				}
-				else
-				{
-					requests_.erase(sequence_native);
-					generator_.Put(sequence_native);
-					assert(false);
-				}
+				mysql_agent_.AppendTask(sequence_native, type_native, request->dbname(), std::move(const_cast<std::string&>(request->statement())));
 			}
 			catch (NotFoundDatabase &)
 			{

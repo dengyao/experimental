@@ -12,7 +12,7 @@ class ProcedureMySQL
 	ProcedureMySQL& operator= (const ProcedureMySQL&&) = delete;
 
 public:
-	ProcedureMySQL(const ByteArray &statement);
+	ProcedureMySQL(const std::string &statement);
 
 public:
 	// 是否有变量

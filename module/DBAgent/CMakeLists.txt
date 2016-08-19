@@ -3,7 +3,7 @@ set(CURRENT_PROJECT_NAME DBAgent)
 set(CURRENT_PROJECT_SRC_LISTS 
   Main.cpp
   Logging.cpp
-  AgentImpl.cpp
+  AgentMySQL.cpp
   AgentManager.cpp
   ServerConfig.cpp
   SessionHandle.cpp

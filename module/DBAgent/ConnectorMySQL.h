@@ -16,15 +16,15 @@ public:
 public:
 	const char* Name() const override;
 
-	ByteArray Call(const ByteArray &command, ErrorCode &error_code) override;
+	ByteArray Call(const std::string &command, ErrorCode &error_code) override;
 
-	ByteArray Select(const ByteArray &command, ErrorCode &error_code) override;
+	ByteArray Select(const std::string &command, ErrorCode &error_code) override;
 
-	ByteArray Insert(const ByteArray &command, ErrorCode &error_code) override;
+	ByteArray Insert(const std::string &command, ErrorCode &error_code) override;
 
-	ByteArray Update(const ByteArray &command, ErrorCode &error_code) override;
+	ByteArray Update(const std::string &command, ErrorCode &error_code) override;
 
-	ByteArray Delete(const ByteArray &command, ErrorCode &error_code) override;
+	ByteArray Delete(const std::string &command, ErrorCode &error_code) override;
 
 public:
 	void SelectDatabase(const char *db, ErrorCode &error_code);
@@ -40,7 +40,7 @@ private:
 
 	bool IsConnected() const;
 
-	ByteArray AffectedRows(const ByteArray &command, ErrorCode &error_code);
+	ByteArray AffectedRows(const std::string &command, ErrorCode &error_code);
 
 private:
 	MYSQL		mysql_;
