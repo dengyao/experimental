@@ -35,13 +35,13 @@ public:
         svr::DBErrorRsp::descriptor();
         svr::DBAgentErrorRsp::descriptor();
         svr::ChildNode::descriptor();
-        svr::LoginRouterReq::descriptor();
-        svr::LoginRouterRsp::descriptor();
-        svr::RouterInfoReq::descriptor();
-        svr::RouterInfoRsp::descriptor();
+        svr::LoginGWReq::descriptor();
+        svr::LoginGWRsp::descriptor();
+        svr::GWInfoReq::descriptor();
+        svr::GWInfoRsp::descriptor();
         svr::ForwardReq::descriptor();
         svr::BroadcastReq::descriptor();
-        svr::RouterNotify::descriptor();
+        svr::GWNotify::descriptor();
         svr::LinkerLoginReq::descriptor();
         svr::LinkerLoginRsp::descriptor();
         svr::ReportLinkerReq::descriptor();

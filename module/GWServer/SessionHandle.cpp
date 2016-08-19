@@ -35,7 +35,7 @@ void SessionHandle::OnMessage(network::NetMessage &message)
 	{
 		if (dynamic_cast<pub::PingReq*>(request.get()) == nullptr)
 		{
-			if (dynamic_cast<svr::LoginRouterReq*>(request.get()) == nullptr)
+			if (dynamic_cast<svr::LoginGWReq*>(request.get()) == nullptr)
 			{
 				gateway_manager_.SendErrorCode(this, message, pub::kNotLoggedIn);
 				logger()->warn("操作前未发起登录请求，来自{}:{}", RemoteEndpoint().address().to_string(), RemoteEndpoint().port());

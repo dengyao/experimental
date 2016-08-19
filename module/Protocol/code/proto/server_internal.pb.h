@@ -44,13 +44,13 @@ class QueryDBAgentRsp;
 class DBErrorRsp;
 class DBAgentErrorRsp;
 class ChildNode;
-class LoginRouterReq;
-class LoginRouterRsp;
-class RouterInfoReq;
-class RouterInfoRsp;
+class LoginGWReq;
+class LoginGWRsp;
+class GWInfoReq;
+class GWInfoRsp;
 class ForwardReq;
 class BroadcastReq;
-class RouterNotify;
+class GWNotify;
 class LinkerLoginReq;
 class LinkerLoginRsp;
 class ReportLinkerReq;
@@ -1051,14 +1051,14 @@ class ChildNode : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
-class LoginRouterReq : public ::google::protobuf::Message {
+class LoginGWReq : public ::google::protobuf::Message {
  public:
-  LoginRouterReq();
-  virtual ~LoginRouterReq();
+  LoginGWReq();
+  virtual ~LoginGWReq();
 
-  LoginRouterReq(const LoginRouterReq& from);
+  LoginGWReq(const LoginGWReq& from);
 
-  inline LoginRouterReq& operator=(const LoginRouterReq& from) {
+  inline LoginGWReq& operator=(const LoginGWReq& from) {
     CopyFrom(from);
     return *this;
   }
@@ -1072,17 +1072,17 @@ class LoginRouterReq : public ::google::protobuf::Message {
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
-  static const LoginRouterReq& default_instance();
+  static const LoginGWReq& default_instance();
 
-  void Swap(LoginRouterReq* other);
+  void Swap(LoginGWReq* other);
 
   // implements Message ----------------------------------------------
 
-  LoginRouterReq* New() const;
+  LoginGWReq* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const LoginRouterReq& from);
-  void MergeFrom(const LoginRouterReq& from);
+  void CopyFrom(const LoginGWReq& from);
+  void MergeFrom(const LoginGWReq& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -1113,7 +1113,7 @@ class LoginRouterReq : public ::google::protobuf::Message {
   inline ::svr::ChildNode* release_node();
   inline void set_allocated_node(::svr::ChildNode* node);
 
-  // @@protoc_insertion_point(class_scope:svr.LoginRouterReq)
+  // @@protoc_insertion_point(class_scope:svr.LoginGWReq)
  private:
   inline void set_has_node();
   inline void clear_has_node();
@@ -1128,18 +1128,18 @@ class LoginRouterReq : public ::google::protobuf::Message {
   friend void protobuf_ShutdownFile_proto_2fserver_5finternal_2eproto();
 
   void InitAsDefaultInstance();
-  static LoginRouterReq* default_instance_;
+  static LoginGWReq* default_instance_;
 };
 // -------------------------------------------------------------------
 
-class LoginRouterRsp : public ::google::protobuf::Message {
+class LoginGWRsp : public ::google::protobuf::Message {
  public:
-  LoginRouterRsp();
-  virtual ~LoginRouterRsp();
+  LoginGWRsp();
+  virtual ~LoginGWRsp();
 
-  LoginRouterRsp(const LoginRouterRsp& from);
+  LoginGWRsp(const LoginGWRsp& from);
 
-  inline LoginRouterRsp& operator=(const LoginRouterRsp& from) {
+  inline LoginGWRsp& operator=(const LoginGWRsp& from) {
     CopyFrom(from);
     return *this;
   }
@@ -1153,17 +1153,17 @@ class LoginRouterRsp : public ::google::protobuf::Message {
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
-  static const LoginRouterRsp& default_instance();
+  static const LoginGWRsp& default_instance();
 
-  void Swap(LoginRouterRsp* other);
+  void Swap(LoginGWRsp* other);
 
   // implements Message ----------------------------------------------
 
-  LoginRouterRsp* New() const;
+  LoginGWRsp* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const LoginRouterRsp& from);
-  void MergeFrom(const LoginRouterRsp& from);
+  void CopyFrom(const LoginGWRsp& from);
+  void MergeFrom(const LoginGWRsp& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -1192,7 +1192,7 @@ class LoginRouterRsp : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 heartbeat_interval() const;
   inline void set_heartbeat_interval(::google::protobuf::uint32 value);
 
-  // @@protoc_insertion_point(class_scope:svr.LoginRouterRsp)
+  // @@protoc_insertion_point(class_scope:svr.LoginGWRsp)
  private:
   inline void set_has_heartbeat_interval();
   inline void clear_has_heartbeat_interval();
@@ -1207,18 +1207,18 @@ class LoginRouterRsp : public ::google::protobuf::Message {
   friend void protobuf_ShutdownFile_proto_2fserver_5finternal_2eproto();
 
   void InitAsDefaultInstance();
-  static LoginRouterRsp* default_instance_;
+  static LoginGWRsp* default_instance_;
 };
 // -------------------------------------------------------------------
 
-class RouterInfoReq : public ::google::protobuf::Message {
+class GWInfoReq : public ::google::protobuf::Message {
  public:
-  RouterInfoReq();
-  virtual ~RouterInfoReq();
+  GWInfoReq();
+  virtual ~GWInfoReq();
 
-  RouterInfoReq(const RouterInfoReq& from);
+  GWInfoReq(const GWInfoReq& from);
 
-  inline RouterInfoReq& operator=(const RouterInfoReq& from) {
+  inline GWInfoReq& operator=(const GWInfoReq& from) {
     CopyFrom(from);
     return *this;
   }
@@ -1232,17 +1232,17 @@ class RouterInfoReq : public ::google::protobuf::Message {
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
-  static const RouterInfoReq& default_instance();
+  static const GWInfoReq& default_instance();
 
-  void Swap(RouterInfoReq* other);
+  void Swap(GWInfoReq* other);
 
   // implements Message ----------------------------------------------
 
-  RouterInfoReq* New() const;
+  GWInfoReq* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const RouterInfoReq& from);
-  void MergeFrom(const RouterInfoReq& from);
+  void CopyFrom(const GWInfoReq& from);
+  void MergeFrom(const GWInfoReq& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -1264,7 +1264,7 @@ class RouterInfoReq : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // @@protoc_insertion_point(class_scope:svr.RouterInfoReq)
+  // @@protoc_insertion_point(class_scope:svr.GWInfoReq)
  private:
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
@@ -1276,18 +1276,18 @@ class RouterInfoReq : public ::google::protobuf::Message {
   friend void protobuf_ShutdownFile_proto_2fserver_5finternal_2eproto();
 
   void InitAsDefaultInstance();
-  static RouterInfoReq* default_instance_;
+  static GWInfoReq* default_instance_;
 };
 // -------------------------------------------------------------------
 
-class RouterInfoRsp : public ::google::protobuf::Message {
+class GWInfoRsp : public ::google::protobuf::Message {
  public:
-  RouterInfoRsp();
-  virtual ~RouterInfoRsp();
+  GWInfoRsp();
+  virtual ~GWInfoRsp();
 
-  RouterInfoRsp(const RouterInfoRsp& from);
+  GWInfoRsp(const GWInfoRsp& from);
 
-  inline RouterInfoRsp& operator=(const RouterInfoRsp& from) {
+  inline GWInfoRsp& operator=(const GWInfoRsp& from) {
     CopyFrom(from);
     return *this;
   }
@@ -1301,17 +1301,17 @@ class RouterInfoRsp : public ::google::protobuf::Message {
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
-  static const RouterInfoRsp& default_instance();
+  static const GWInfoRsp& default_instance();
 
-  void Swap(RouterInfoRsp* other);
+  void Swap(GWInfoRsp* other);
 
   // implements Message ----------------------------------------------
 
-  RouterInfoRsp* New() const;
+  GWInfoRsp* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const RouterInfoRsp& from);
-  void MergeFrom(const RouterInfoRsp& from);
+  void CopyFrom(const GWInfoRsp& from);
+  void MergeFrom(const GWInfoRsp& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -1359,7 +1359,7 @@ class RouterInfoRsp : public ::google::protobuf::Message {
   inline ::google::protobuf::RepeatedPtrField< ::svr::ChildNode >*
       mutable_node_lists();
 
-  // @@protoc_insertion_point(class_scope:svr.RouterInfoRsp)
+  // @@protoc_insertion_point(class_scope:svr.GWInfoRsp)
  private:
   inline void set_has_up_volume();
   inline void clear_has_up_volume();
@@ -1378,7 +1378,7 @@ class RouterInfoRsp : public ::google::protobuf::Message {
   friend void protobuf_ShutdownFile_proto_2fserver_5finternal_2eproto();
 
   void InitAsDefaultInstance();
-  static RouterInfoRsp* default_instance_;
+  static GWInfoRsp* default_instance_;
 };
 // -------------------------------------------------------------------
 
@@ -1573,14 +1573,14 @@ class BroadcastReq : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
-class RouterNotify : public ::google::protobuf::Message {
+class GWNotify : public ::google::protobuf::Message {
  public:
-  RouterNotify();
-  virtual ~RouterNotify();
+  GWNotify();
+  virtual ~GWNotify();
 
-  RouterNotify(const RouterNotify& from);
+  GWNotify(const GWNotify& from);
 
-  inline RouterNotify& operator=(const RouterNotify& from) {
+  inline GWNotify& operator=(const GWNotify& from) {
     CopyFrom(from);
     return *this;
   }
@@ -1594,17 +1594,17 @@ class RouterNotify : public ::google::protobuf::Message {
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
-  static const RouterNotify& default_instance();
+  static const GWNotify& default_instance();
 
-  void Swap(RouterNotify* other);
+  void Swap(GWNotify* other);
 
   // implements Message ----------------------------------------------
 
-  RouterNotify* New() const;
+  GWNotify* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const RouterNotify& from);
-  void MergeFrom(const RouterNotify& from);
+  void CopyFrom(const GWNotify& from);
+  void MergeFrom(const GWNotify& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -1647,7 +1647,7 @@ class RouterNotify : public ::google::protobuf::Message {
   inline ::std::string* release_user_data();
   inline void set_allocated_user_data(::std::string* user_data);
 
-  // @@protoc_insertion_point(class_scope:svr.RouterNotify)
+  // @@protoc_insertion_point(class_scope:svr.GWNotify)
  private:
   inline void set_has_src();
   inline void clear_has_src();
@@ -1665,7 +1665,7 @@ class RouterNotify : public ::google::protobuf::Message {
   friend void protobuf_ShutdownFile_proto_2fserver_5finternal_2eproto();
 
   void InitAsDefaultInstance();
-  static RouterNotify* default_instance_;
+  static GWNotify* default_instance_;
 };
 // -------------------------------------------------------------------
 
@@ -2867,39 +2867,39 @@ inline void ChildNode::set_child_id(::google::protobuf::uint32 value) {
 
 // -------------------------------------------------------------------
 
-// LoginRouterReq
+// LoginGWReq
 
 // required .svr.ChildNode node = 1;
-inline bool LoginRouterReq::has_node() const {
+inline bool LoginGWReq::has_node() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void LoginRouterReq::set_has_node() {
+inline void LoginGWReq::set_has_node() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void LoginRouterReq::clear_has_node() {
+inline void LoginGWReq::clear_has_node() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void LoginRouterReq::clear_node() {
+inline void LoginGWReq::clear_node() {
   if (node_ != NULL) node_->::svr::ChildNode::Clear();
   clear_has_node();
 }
-inline const ::svr::ChildNode& LoginRouterReq::node() const {
-  // @@protoc_insertion_point(field_get:svr.LoginRouterReq.node)
+inline const ::svr::ChildNode& LoginGWReq::node() const {
+  // @@protoc_insertion_point(field_get:svr.LoginGWReq.node)
   return node_ != NULL ? *node_ : *default_instance_->node_;
 }
-inline ::svr::ChildNode* LoginRouterReq::mutable_node() {
+inline ::svr::ChildNode* LoginGWReq::mutable_node() {
   set_has_node();
   if (node_ == NULL) node_ = new ::svr::ChildNode;
-  // @@protoc_insertion_point(field_mutable:svr.LoginRouterReq.node)
+  // @@protoc_insertion_point(field_mutable:svr.LoginGWReq.node)
   return node_;
 }
-inline ::svr::ChildNode* LoginRouterReq::release_node() {
+inline ::svr::ChildNode* LoginGWReq::release_node() {
   clear_has_node();
   ::svr::ChildNode* temp = node_;
   node_ = NULL;
   return temp;
 }
-inline void LoginRouterReq::set_allocated_node(::svr::ChildNode* node) {
+inline void LoginGWReq::set_allocated_node(::svr::ChildNode* node) {
   delete node_;
   node_ = node;
   if (node) {
@@ -2907,120 +2907,120 @@ inline void LoginRouterReq::set_allocated_node(::svr::ChildNode* node) {
   } else {
     clear_has_node();
   }
-  // @@protoc_insertion_point(field_set_allocated:svr.LoginRouterReq.node)
+  // @@protoc_insertion_point(field_set_allocated:svr.LoginGWReq.node)
 }
 
 // -------------------------------------------------------------------
 
-// LoginRouterRsp
+// LoginGWRsp
 
 // required uint32 heartbeat_interval = 1;
-inline bool LoginRouterRsp::has_heartbeat_interval() const {
+inline bool LoginGWRsp::has_heartbeat_interval() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void LoginRouterRsp::set_has_heartbeat_interval() {
+inline void LoginGWRsp::set_has_heartbeat_interval() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void LoginRouterRsp::clear_has_heartbeat_interval() {
+inline void LoginGWRsp::clear_has_heartbeat_interval() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void LoginRouterRsp::clear_heartbeat_interval() {
+inline void LoginGWRsp::clear_heartbeat_interval() {
   heartbeat_interval_ = 0u;
   clear_has_heartbeat_interval();
 }
-inline ::google::protobuf::uint32 LoginRouterRsp::heartbeat_interval() const {
-  // @@protoc_insertion_point(field_get:svr.LoginRouterRsp.heartbeat_interval)
+inline ::google::protobuf::uint32 LoginGWRsp::heartbeat_interval() const {
+  // @@protoc_insertion_point(field_get:svr.LoginGWRsp.heartbeat_interval)
   return heartbeat_interval_;
 }
-inline void LoginRouterRsp::set_heartbeat_interval(::google::protobuf::uint32 value) {
+inline void LoginGWRsp::set_heartbeat_interval(::google::protobuf::uint32 value) {
   set_has_heartbeat_interval();
   heartbeat_interval_ = value;
-  // @@protoc_insertion_point(field_set:svr.LoginRouterRsp.heartbeat_interval)
+  // @@protoc_insertion_point(field_set:svr.LoginGWRsp.heartbeat_interval)
 }
 
 // -------------------------------------------------------------------
 
-// RouterInfoReq
+// GWInfoReq
 
 // -------------------------------------------------------------------
 
-// RouterInfoRsp
+// GWInfoRsp
 
 // required uint32 up_volume = 1;
-inline bool RouterInfoRsp::has_up_volume() const {
+inline bool GWInfoRsp::has_up_volume() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void RouterInfoRsp::set_has_up_volume() {
+inline void GWInfoRsp::set_has_up_volume() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void RouterInfoRsp::clear_has_up_volume() {
+inline void GWInfoRsp::clear_has_up_volume() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void RouterInfoRsp::clear_up_volume() {
+inline void GWInfoRsp::clear_up_volume() {
   up_volume_ = 0u;
   clear_has_up_volume();
 }
-inline ::google::protobuf::uint32 RouterInfoRsp::up_volume() const {
-  // @@protoc_insertion_point(field_get:svr.RouterInfoRsp.up_volume)
+inline ::google::protobuf::uint32 GWInfoRsp::up_volume() const {
+  // @@protoc_insertion_point(field_get:svr.GWInfoRsp.up_volume)
   return up_volume_;
 }
-inline void RouterInfoRsp::set_up_volume(::google::protobuf::uint32 value) {
+inline void GWInfoRsp::set_up_volume(::google::protobuf::uint32 value) {
   set_has_up_volume();
   up_volume_ = value;
-  // @@protoc_insertion_point(field_set:svr.RouterInfoRsp.up_volume)
+  // @@protoc_insertion_point(field_set:svr.GWInfoRsp.up_volume)
 }
 
 // required uint32 down_volume = 2;
-inline bool RouterInfoRsp::has_down_volume() const {
+inline bool GWInfoRsp::has_down_volume() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void RouterInfoRsp::set_has_down_volume() {
+inline void GWInfoRsp::set_has_down_volume() {
   _has_bits_[0] |= 0x00000002u;
 }
-inline void RouterInfoRsp::clear_has_down_volume() {
+inline void GWInfoRsp::clear_has_down_volume() {
   _has_bits_[0] &= ~0x00000002u;
 }
-inline void RouterInfoRsp::clear_down_volume() {
+inline void GWInfoRsp::clear_down_volume() {
   down_volume_ = 0u;
   clear_has_down_volume();
 }
-inline ::google::protobuf::uint32 RouterInfoRsp::down_volume() const {
-  // @@protoc_insertion_point(field_get:svr.RouterInfoRsp.down_volume)
+inline ::google::protobuf::uint32 GWInfoRsp::down_volume() const {
+  // @@protoc_insertion_point(field_get:svr.GWInfoRsp.down_volume)
   return down_volume_;
 }
-inline void RouterInfoRsp::set_down_volume(::google::protobuf::uint32 value) {
+inline void GWInfoRsp::set_down_volume(::google::protobuf::uint32 value) {
   set_has_down_volume();
   down_volume_ = value;
-  // @@protoc_insertion_point(field_set:svr.RouterInfoRsp.down_volume)
+  // @@protoc_insertion_point(field_set:svr.GWInfoRsp.down_volume)
 }
 
 // repeated .svr.ChildNode node_lists = 3;
-inline int RouterInfoRsp::node_lists_size() const {
+inline int GWInfoRsp::node_lists_size() const {
   return node_lists_.size();
 }
-inline void RouterInfoRsp::clear_node_lists() {
+inline void GWInfoRsp::clear_node_lists() {
   node_lists_.Clear();
 }
-inline const ::svr::ChildNode& RouterInfoRsp::node_lists(int index) const {
-  // @@protoc_insertion_point(field_get:svr.RouterInfoRsp.node_lists)
+inline const ::svr::ChildNode& GWInfoRsp::node_lists(int index) const {
+  // @@protoc_insertion_point(field_get:svr.GWInfoRsp.node_lists)
   return node_lists_.Get(index);
 }
-inline ::svr::ChildNode* RouterInfoRsp::mutable_node_lists(int index) {
-  // @@protoc_insertion_point(field_mutable:svr.RouterInfoRsp.node_lists)
+inline ::svr::ChildNode* GWInfoRsp::mutable_node_lists(int index) {
+  // @@protoc_insertion_point(field_mutable:svr.GWInfoRsp.node_lists)
   return node_lists_.Mutable(index);
 }
-inline ::svr::ChildNode* RouterInfoRsp::add_node_lists() {
-  // @@protoc_insertion_point(field_add:svr.RouterInfoRsp.node_lists)
+inline ::svr::ChildNode* GWInfoRsp::add_node_lists() {
+  // @@protoc_insertion_point(field_add:svr.GWInfoRsp.node_lists)
   return node_lists_.Add();
 }
 inline const ::google::protobuf::RepeatedPtrField< ::svr::ChildNode >&
-RouterInfoRsp::node_lists() const {
-  // @@protoc_insertion_point(field_list:svr.RouterInfoRsp.node_lists)
+GWInfoRsp::node_lists() const {
+  // @@protoc_insertion_point(field_list:svr.GWInfoRsp.node_lists)
   return node_lists_;
 }
 inline ::google::protobuf::RepeatedPtrField< ::svr::ChildNode >*
-RouterInfoRsp::mutable_node_lists() {
-  // @@protoc_insertion_point(field_mutable_list:svr.RouterInfoRsp.node_lists)
+GWInfoRsp::mutable_node_lists() {
+  // @@protoc_insertion_point(field_mutable_list:svr.GWInfoRsp.node_lists)
   return &node_lists_;
 }
 
@@ -3259,39 +3259,39 @@ inline void BroadcastReq::set_allocated_user_data(::std::string* user_data) {
 
 // -------------------------------------------------------------------
 
-// RouterNotify
+// GWNotify
 
 // required .svr.ChildNode src = 1;
-inline bool RouterNotify::has_src() const {
+inline bool GWNotify::has_src() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void RouterNotify::set_has_src() {
+inline void GWNotify::set_has_src() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void RouterNotify::clear_has_src() {
+inline void GWNotify::clear_has_src() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void RouterNotify::clear_src() {
+inline void GWNotify::clear_src() {
   if (src_ != NULL) src_->::svr::ChildNode::Clear();
   clear_has_src();
 }
-inline const ::svr::ChildNode& RouterNotify::src() const {
-  // @@protoc_insertion_point(field_get:svr.RouterNotify.src)
+inline const ::svr::ChildNode& GWNotify::src() const {
+  // @@protoc_insertion_point(field_get:svr.GWNotify.src)
   return src_ != NULL ? *src_ : *default_instance_->src_;
 }
-inline ::svr::ChildNode* RouterNotify::mutable_src() {
+inline ::svr::ChildNode* GWNotify::mutable_src() {
   set_has_src();
   if (src_ == NULL) src_ = new ::svr::ChildNode;
-  // @@protoc_insertion_point(field_mutable:svr.RouterNotify.src)
+  // @@protoc_insertion_point(field_mutable:svr.GWNotify.src)
   return src_;
 }
-inline ::svr::ChildNode* RouterNotify::release_src() {
+inline ::svr::ChildNode* GWNotify::release_src() {
   clear_has_src();
   ::svr::ChildNode* temp = src_;
   src_ = NULL;
   return temp;
 }
-inline void RouterNotify::set_allocated_src(::svr::ChildNode* src) {
+inline void GWNotify::set_allocated_src(::svr::ChildNode* src) {
   delete src_;
   src_ = src;
   if (src) {
@@ -3299,62 +3299,62 @@ inline void RouterNotify::set_allocated_src(::svr::ChildNode* src) {
   } else {
     clear_has_src();
   }
-  // @@protoc_insertion_point(field_set_allocated:svr.RouterNotify.src)
+  // @@protoc_insertion_point(field_set_allocated:svr.GWNotify.src)
 }
 
 // required bytes user_data = 2;
-inline bool RouterNotify::has_user_data() const {
+inline bool GWNotify::has_user_data() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void RouterNotify::set_has_user_data() {
+inline void GWNotify::set_has_user_data() {
   _has_bits_[0] |= 0x00000002u;
 }
-inline void RouterNotify::clear_has_user_data() {
+inline void GWNotify::clear_has_user_data() {
   _has_bits_[0] &= ~0x00000002u;
 }
-inline void RouterNotify::clear_user_data() {
+inline void GWNotify::clear_user_data() {
   if (user_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     user_data_->clear();
   }
   clear_has_user_data();
 }
-inline const ::std::string& RouterNotify::user_data() const {
-  // @@protoc_insertion_point(field_get:svr.RouterNotify.user_data)
+inline const ::std::string& GWNotify::user_data() const {
+  // @@protoc_insertion_point(field_get:svr.GWNotify.user_data)
   return *user_data_;
 }
-inline void RouterNotify::set_user_data(const ::std::string& value) {
+inline void GWNotify::set_user_data(const ::std::string& value) {
   set_has_user_data();
   if (user_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     user_data_ = new ::std::string;
   }
   user_data_->assign(value);
-  // @@protoc_insertion_point(field_set:svr.RouterNotify.user_data)
+  // @@protoc_insertion_point(field_set:svr.GWNotify.user_data)
 }
-inline void RouterNotify::set_user_data(const char* value) {
+inline void GWNotify::set_user_data(const char* value) {
   set_has_user_data();
   if (user_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     user_data_ = new ::std::string;
   }
   user_data_->assign(value);
-  // @@protoc_insertion_point(field_set_char:svr.RouterNotify.user_data)
+  // @@protoc_insertion_point(field_set_char:svr.GWNotify.user_data)
 }
-inline void RouterNotify::set_user_data(const void* value, size_t size) {
+inline void GWNotify::set_user_data(const void* value, size_t size) {
   set_has_user_data();
   if (user_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     user_data_ = new ::std::string;
   }
   user_data_->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:svr.RouterNotify.user_data)
+  // @@protoc_insertion_point(field_set_pointer:svr.GWNotify.user_data)
 }
-inline ::std::string* RouterNotify::mutable_user_data() {
+inline ::std::string* GWNotify::mutable_user_data() {
   set_has_user_data();
   if (user_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     user_data_ = new ::std::string;
   }
-  // @@protoc_insertion_point(field_mutable:svr.RouterNotify.user_data)
+  // @@protoc_insertion_point(field_mutable:svr.GWNotify.user_data)
   return user_data_;
 }
-inline ::std::string* RouterNotify::release_user_data() {
+inline ::std::string* GWNotify::release_user_data() {
   clear_has_user_data();
   if (user_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
@@ -3364,7 +3364,7 @@ inline ::std::string* RouterNotify::release_user_data() {
     return temp;
   }
 }
-inline void RouterNotify::set_allocated_user_data(::std::string* user_data) {
+inline void GWNotify::set_allocated_user_data(::std::string* user_data) {
   if (user_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete user_data_;
   }
@@ -3375,7 +3375,7 @@ inline void RouterNotify::set_allocated_user_data(::std::string* user_data) {
     clear_has_user_data();
     user_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
-  // @@protoc_insertion_point(field_set_allocated:svr.RouterNotify.user_data)
+  // @@protoc_insertion_point(field_set_allocated:svr.GWNotify.user_data)
 }
 
 // -------------------------------------------------------------------

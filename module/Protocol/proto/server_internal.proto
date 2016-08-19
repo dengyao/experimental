@@ -75,7 +75,7 @@ message DBAgentErrorRsp {
 }
 
 /************************************************************************/
-/* 与Router的协议                                                        */
+/* 与GWServer的协议                                                      */
 /************************************************************************/
 
 // 节点类型
@@ -91,22 +91,22 @@ message ChildNode {
     optional uint32 child_id = 2 [default = 1]; // 服务器子节点id
 }
 
-// 登录Router请求
-message LoginRouterReq {
+// 登录网关请求
+message LoginGWReq {
     required ChildNode node = 1; // 服务器节点
 }
 
-// 登录Router返回
-message LoginRouterRsp {
+// 登录网关返回
+message LoginGWRsp {
     required uint32 heartbeat_interval = 1; // 心跳包间隔
 }
 
-// 查询Router信息请求
-message RouterInfoReq {
+// 查询网关信息请求
+message GWInfoReq {
 }
 
-// 查询Router信息返回
-message RouterInfoRsp {
+// 查询网关信息返回
+message GWInfoRsp {
     required uint32 up_volume = 1;     // 每秒上行流量
     required uint32 down_volume = 2;   // 每秒下行流量
     repeated ChildNode node_lists = 3; // 节点列表
@@ -125,7 +125,7 @@ message BroadcastReq {
 }
 
 // 新消息通知
-message RouterNotify {
+message GWNotify {
 	required ChildNode src = 1;   // 目标服务器节点
     required bytes user_data = 2; // 用户数据
 }

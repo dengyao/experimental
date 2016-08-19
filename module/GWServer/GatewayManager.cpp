@@ -19,9 +19,9 @@ GatewayManager::GatewayManager(network::IOServiceThreadManager &threads)
 		std::bind(&GatewayManager::OnForwardServerMessage, this, _1, _2, _3));
 	dispatcher_.RegisterMessageCallback<svr::BroadcastReq>(
 		std::bind(&GatewayManager::OnBroadcastServerMessage, this, _1, _2, _3));
-	dispatcher_.RegisterMessageCallback<svr::RouterInfoReq>(
+	dispatcher_.RegisterMessageCallback<svr::GWInfoReq>(
 		std::bind(&GatewayManager::OnQueryRouterInfo, this, _1, _2, _3));
-	dispatcher_.RegisterMessageCallback<svr::LoginRouterReq>(
+	dispatcher_.RegisterMessageCallback<svr::LoginGWReq>(
 		std::bind(&GatewayManager::OnServerLogin, this, _1, _2, _3));
 
 	timer_.async_wait(wait_handler_);
@@ -189,7 +189,7 @@ bool GatewayManager::OnUnknownMessage(network::TCPSessionHandler *session, googl
 bool GatewayManager::OnServerLogin(network::TCPSessionHandler *session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
 	// 检查服务器类型是否合法
-	auto request = static_cast<svr::LoginRouterReq*>(message);
+	auto request = static_cast<svr::LoginGWReq*>(message);
 	if (request->node().type() < svr::NodeType_MIN || request->node().type() > svr::NodeType_MAX)
 	{
 		SendErrorCode(static_cast<SessionHandle*>(session), buffer, pub::kInvalidNodeType, request->GetTypeName().c_str());
@@ -242,7 +242,7 @@ bool GatewayManager::OnServerLogin(network::TCPSessionHandler *session, google::
 
 	// 返回结果
 	buffer.Clear();
-	svr::LoginRouterRsp response;
+	svr::LoginGWRsp response;
 	response.set_heartbeat_interval(ServerConfig::GetInstance()->GetHeartbeatInterval());
 	ProtubufCodec::Encode(&response, buffer);
 	static_cast<SessionHandle*>(session)->Write(buffer);
@@ -257,7 +257,7 @@ bool GatewayManager::OnServerLogin(network::TCPSessionHandler *session, google::
 bool GatewayManager::OnQueryRouterInfo(network::TCPSessionHandler *session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
 	buffer.Clear();
-	svr::RouterInfoRsp response;
+	svr::GWInfoRsp response;
 	response.set_up_volume(StatisticalTools::GetInstance()->UpVolume());
 	response.set_down_volume(StatisticalTools::GetInstance()->DownVolume());
 	for (const auto &node : server_lists_)
@@ -296,7 +296,7 @@ bool GatewayManager::OnForwardServerMessage(network::TCPSessionHandler *session,
 	}
 
 	buffer.Clear();
-	svr::RouterNotify response;
+	svr::GWNotify response;
 	response.mutable_src()->set_type(static_cast<svr::NodeType>(child_node->node_type));
 	response.mutable_src()->set_child_id(child_node->child_id);
 	response.set_user_data(request->user_data().c_str(), request->user_data().size());
@@ -318,7 +318,7 @@ bool GatewayManager::OnBroadcastServerMessage(network::TCPSessionHandler *sessio
 	}
 	
 	buffer.Clear();
-	svr::RouterNotify response;
+	svr::GWNotify response;
 	response.mutable_src()->set_type(static_cast<svr::NodeType>(child_node->node_type));
 	response.mutable_src()->set_child_id(child_node->child_id);
 	response.set_user_data(request->user_data().c_str(), request->user_data().size());

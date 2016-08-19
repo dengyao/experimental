@@ -39,8 +39,8 @@ namespace gateway
 			}
 			else
 			{
+				svr::LoginGWReq request;
 				network::NetMessage message;
-				svr::LoginRouterReq request;
 				request.mutable_node()->set_child_id(client_->GetChildNodeID());
 				request.mutable_node()->set_type(static_cast<svr::NodeType>(client_->GetNodeType()));
 				ProtubufCodec::Encode(&request, message);
@@ -69,10 +69,10 @@ namespace gateway
 			{
 				if (dynamic_cast<pub::PongRsp*>(response.get()) == nullptr)
 				{
-					if (dynamic_cast<svr::LoginRouterRsp*>(response.get()) != nullptr)
+					if (dynamic_cast<svr::LoginGWRsp*>(response.get()) != nullptr)
 					{
 						is_logged_ = true;
-						counter_ = heartbeat_interval_ = static_cast<svr::LoginRouterRsp*>(response.get())->heartbeat_interval() / 2;
+						counter_ = heartbeat_interval_ = static_cast<svr::LoginGWRsp*>(response.get())->heartbeat_interval() / 2;
 					}
 					else
 					{
@@ -361,9 +361,9 @@ namespace gateway
 	// 接受消息事件
 	void GatewayClient::OnMessage(SessionHandle *session, google::protobuf::Message *message, network::NetMessage &buffer)
 	{
-		if (dynamic_cast<svr::RouterNotify*>(message) != nullptr)
+		if (dynamic_cast<svr::GWNotify*>(message) != nullptr)
 		{
-			auto response = static_cast<svr::RouterNotify*>(message);
+			auto response = static_cast<svr::GWNotify*>(message);
 			context_.node_type = response->src().type();
 			context_.child_id = response->src().child_id();
 
