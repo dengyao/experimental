@@ -74,7 +74,7 @@ void LoginManager::QueryPartitionInfoByDatabase()
 			logger()->debug("更新分区信息成功，共有{}个分区", partition_lists_.size());
 		}
 	};
-	GlobalDBClient()->AsyncSelect(db::kMySQL, ServerConfig::GetInstance()->GetVerifyDBName(), "SELECT * FROM `partition`;", callback);
+	GlobalDBClient()->AsyncSelect(ServerConfig::GetInstance()->GetVerifyDBName(), "SELECT * FROM `partition`;", callback);
 }
 
 // 更新定时器
@@ -390,7 +390,7 @@ bool LoginManager::OnUserSignUp(network::TCPSessionHandler *session, google::pro
 			}
 		}
 	};
-	GlobalDBClient()->AsyncCall(db::kMySQL, ServerConfig::GetInstance()->GetVerifyDBName(), sql.c_str(), callback);
+	GlobalDBClient()->AsyncCall(ServerConfig::GetInstance()->GetVerifyDBName(), sql.c_str(), callback);
 	return true;
 }
 
@@ -454,7 +454,7 @@ bool LoginManager::OnUserSignIn(network::TCPSessionHandler *session, google::pro
 			}
 		}
 	};
-	GlobalDBClient()->AsyncCall(db::kMySQL, ServerConfig::GetInstance()->GetVerifyDBName(), sql.c_str(), callback);
+	GlobalDBClient()->AsyncCall(ServerConfig::GetInstance()->GetVerifyDBName(), sql.c_str(), callback);
 	return true;
 }
 
