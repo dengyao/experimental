@@ -1,12 +1,12 @@
 set(CURRENT_PROJECT_NAME Protocol)
 
 set(CURRENT_PROJECT_SRC_LISTS 
-  code/ProtobufCodec.cpp
-  code/proto/client_link.pb.cc
-  code/proto/client_login.pb.cc
-  code/proto/public_enum.pb.cc
-  code/proto/public_struct.pb.cc
-  code/proto/server_internal.pb.cc
+  src/ProtobufCodec.cpp
+  src/proto/client_link.pb.cc
+  src/proto/client_login.pb.cc
+  src/proto/public_enum.pb.cc
+  src/proto/public_struct.pb.cc
+  src/proto/server_internal.pb.cc
 )
 
 include_directories(

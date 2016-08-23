@@ -8,7 +8,7 @@ if __name__ == '__main__':
     """ 查找所有proto文件并生成c++源码 """
     head_files = []
     sep = os.path.sep
-    out_path = 'code'
+    out_path = 'src'
     proto_path = 'proto'
     for root, dirs, files in os.walk(''.join((os.curdir, os.path.sep, proto_path))):
         for filename in files:
