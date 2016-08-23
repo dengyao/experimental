@@ -8,6 +8,7 @@ set(CURRENT_PROJECT_SRC_LISTS
   common/TaskQueue.cpp
   common/Singleton.cpp
   common/StringHelper.cpp
+  common/ModuleManager.cpp
   common/ConfigManager.cpp
   common/BlockAllocator.cpp
 )

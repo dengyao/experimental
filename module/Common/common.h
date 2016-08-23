@@ -9,6 +9,7 @@
 #include "common/TaskPools.h"
 #include "common/TaskQueue.h"
 #include "common/StringHelper.h"
+#include "common/ModuleManager.h"
 #include "common/ConfigManager.h"
 #include "common/ConfigInterface.h"
 
