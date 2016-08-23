@@ -2,6 +2,7 @@
 #define __SINGLETON_H__
 
 #include <list>
+#include <cstddef>
 #include <algorithm>
 
 class SingletonBase
@@ -55,7 +56,7 @@ class Singleton : public SingletonBase
 public:
 	static T* GetInstance()
 	{
-		if (s_singleton_ == NULL)
+		if (s_singleton_ == nullptr)
 		{
 			s_singleton_ = new T();
 		}
@@ -71,11 +72,11 @@ public:
 	}
 
 protected:
-	Singleton() {}
+	Singleton() = default;
 
 	virtual ~Singleton()
 	{
-		s_singleton_ = NULL;
+		s_singleton_ = nullptr;
 	}
 
 private:
@@ -86,7 +87,7 @@ private:
 	static T* s_singleton_;
 };
 
-template<typename T> T* Singleton<T>::s_singleton_ = NULL;
+template<typename T> T* Singleton<T>::s_singleton_ = nullptr;
 
 #define SINGLETON(_class_name_)					\
 	private:									\
