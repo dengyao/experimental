@@ -1,0 +1,12 @@
+{
+  "port": 10040,
+  "thread_num": 2,
+  "gws_ip": "192.168.1.109",
+  "gws_port": 10010,
+  "gws_connections": 1,
+  "dba_ip" : "192.168.1.109",
+  "dba_port" : 10000,
+  "db_name" : "db_verify",
+  "dba_connections" : 2,
+  "sync_interval" : 60000
+}

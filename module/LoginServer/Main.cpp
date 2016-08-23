@@ -107,6 +107,7 @@ int main(int argc, char *argv[])
 			ServerConfig::GetInstance()->GetDBAgentPort());
 		db_client = std::make_unique<db::DBClient>(threads, endpoint, ServerConfig::GetInstance()->GetDBAgentConnections());
 		OnceInitGlobalDBClient(std::move(db_client));
+		logger()->info("连接数据库代理服务器成功！");
 	}
 	catch (...)
 	{

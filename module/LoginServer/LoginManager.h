@@ -3,7 +3,7 @@
 
 #include <network.h>
 #include "TokenGenerator.h"
-#include "ProtobufDispatcher.h"
+#include <ProtobufDispatcher.h>
 
 namespace google
 {
