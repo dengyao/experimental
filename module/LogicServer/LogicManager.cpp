@@ -9,13 +9,17 @@ LogicManager::LogicManager(network::IOServiceThreadManager &threads)
 {
 }
 
-// 网关服务器消息
-void LogicManager::OnGatewayServerMessage(gateway::GatewayClient *connector, google::protobuf::Message *messsage, network::NetMessage &buffer)
-{
-}
-
 // 未定义消息
 bool LogicManager::OnUnknownMessage(network::TCPSessionHandler *session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
 	return false;
+}
+
+// 网关消息
+void LogicManager::OnGatewayServerMessage(gateway::GatewayClient *connector, google::protobuf::Message *messsage, network::NetMessage &buffer)
+{
+	if (!dispatcher_.OnProtobufMessage(connector->ContextSession(), messsage, buffer))
+	{
+		logger()->error("消息[{}]处理失败!", messsage->GetTypeName());
+	}
 }

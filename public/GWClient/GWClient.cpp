@@ -172,6 +172,7 @@ namespace gateway
 		, child_id_(child_id)
 		, node_type_(node_type)
 		, next_client_index_(0)
+		, context_session_(nullptr)
 		, connection_num_(connection_num)
 		, timer_(threads.MainThread()->IOService(), std::chrono::seconds(1))
 		, wait_handler_(std::bind(&GatewayClient::OnUpdateTimer, this, std::placeholders::_1))
@@ -204,6 +205,12 @@ namespace gateway
 	void GatewayClient::SetMessageCallback(const Callback &cb)
 	{
 		message_cb_ = cb;
+	}
+
+	// 获取上下文Session
+	network::TCPSessionHandler* GatewayClient::ContextSession() const
+	{
+		return context_session_;
 	}
 
 	// 清理所有连接
@@ -361,6 +368,7 @@ namespace gateway
 	// 接受消息事件
 	void GatewayClient::OnMessage(SessionHandle *session, google::protobuf::Message *message, network::NetMessage &buffer)
 	{
+		context_session_ = session;
 		if (dynamic_cast<svr::GWNotify*>(message) != nullptr)
 		{
 			auto response = static_cast<svr::GWNotify*>(message);
@@ -385,6 +393,7 @@ namespace gateway
 		{
 			assert(false);
 		}
+		context_session_ = nullptr;
 	}
 
 	// 回复消息

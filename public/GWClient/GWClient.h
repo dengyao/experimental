@@ -58,6 +58,9 @@ namespace gateway
 		// 设置消息回调
 		void SetMessageCallback(const Callback &cb);
 
+		// 获取上下文Session
+		network::TCPSessionHandler* ContextSession() const;
+
 		// 回复消息
 		void Reply(google::protobuf::Message *message);
 		void Reply(google::protobuf::Message *message, network::NetMessage &buffer);
@@ -116,6 +119,7 @@ namespace gateway
 		asio::ip::tcp::endpoint                     endpoint_;
 		asio::steady_timer                          timer_;
 		const std::function<void(asio::error_code)> wait_handler_;
+		network::TCPSessionHandler*					context_session_;
 		size_t                                      next_client_index_;
 	};
 }

@@ -14,7 +14,7 @@ public:
 	LogicManager(network::IOServiceThreadManager &threads);
 
 public:
-	// 网关服务器消息
+	// 网关消息
 	void OnGatewayServerMessage(gateway::GatewayClient *connector, google::protobuf::Message *messsage, network::NetMessage &buffer);
 
 private:
