@@ -78,25 +78,6 @@ inline bool QueryDBAgentReq_ActoinType_Parse(
   return ::google::protobuf::internal::ParseNamedEnum<QueryDBAgentReq_ActoinType>(
     QueryDBAgentReq_ActoinType_descriptor(), name, value);
 }
-enum QueryDBAgentReq_DatabaseType {
-  QueryDBAgentReq_DatabaseType_kRedis = 1,
-  QueryDBAgentReq_DatabaseType_kMySQL = 2
-};
-bool QueryDBAgentReq_DatabaseType_IsValid(int value);
-const QueryDBAgentReq_DatabaseType QueryDBAgentReq_DatabaseType_DatabaseType_MIN = QueryDBAgentReq_DatabaseType_kRedis;
-const QueryDBAgentReq_DatabaseType QueryDBAgentReq_DatabaseType_DatabaseType_MAX = QueryDBAgentReq_DatabaseType_kMySQL;
-const int QueryDBAgentReq_DatabaseType_DatabaseType_ARRAYSIZE = QueryDBAgentReq_DatabaseType_DatabaseType_MAX + 1;
-
-const ::google::protobuf::EnumDescriptor* QueryDBAgentReq_DatabaseType_descriptor();
-inline const ::std::string& QueryDBAgentReq_DatabaseType_Name(QueryDBAgentReq_DatabaseType value) {
-  return ::google::protobuf::internal::NameOfEnum(
-    QueryDBAgentReq_DatabaseType_descriptor(), value);
-}
-inline bool QueryDBAgentReq_DatabaseType_Parse(
-    const ::std::string& name, QueryDBAgentReq_DatabaseType* value) {
-  return ::google::protobuf::internal::ParseNamedEnum<QueryDBAgentReq_DatabaseType>(
-    QueryDBAgentReq_DatabaseType_descriptor(), name, value);
-}
 enum NodeType {
   kLoginServer = 1,
   kLinkerServer = 2,
@@ -573,30 +554,6 @@ class QueryDBAgentReq : public ::google::protobuf::Message {
     return QueryDBAgentReq_ActoinType_Parse(name, value);
   }
 
-  typedef QueryDBAgentReq_DatabaseType DatabaseType;
-  static const DatabaseType kRedis = QueryDBAgentReq_DatabaseType_kRedis;
-  static const DatabaseType kMySQL = QueryDBAgentReq_DatabaseType_kMySQL;
-  static inline bool DatabaseType_IsValid(int value) {
-    return QueryDBAgentReq_DatabaseType_IsValid(value);
-  }
-  static const DatabaseType DatabaseType_MIN =
-    QueryDBAgentReq_DatabaseType_DatabaseType_MIN;
-  static const DatabaseType DatabaseType_MAX =
-    QueryDBAgentReq_DatabaseType_DatabaseType_MAX;
-  static const int DatabaseType_ARRAYSIZE =
-    QueryDBAgentReq_DatabaseType_DatabaseType_ARRAYSIZE;
-  static inline const ::google::protobuf::EnumDescriptor*
-  DatabaseType_descriptor() {
-    return QueryDBAgentReq_DatabaseType_descriptor();
-  }
-  static inline const ::std::string& DatabaseType_Name(DatabaseType value) {
-    return QueryDBAgentReq_DatabaseType_Name(value);
-  }
-  static inline bool DatabaseType_Parse(const ::std::string& name,
-      DatabaseType* value) {
-    return QueryDBAgentReq_DatabaseType_Parse(name, value);
-  }
-
   // accessors -------------------------------------------------------
 
   // required uint32 sequence = 1;
@@ -606,24 +563,17 @@ class QueryDBAgentReq : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 sequence() const;
   inline void set_sequence(::google::protobuf::uint32 value);
 
-  // required .svr.QueryDBAgentReq.DatabaseType dbtype = 2;
-  inline bool has_dbtype() const;
-  inline void clear_dbtype();
-  static const int kDbtypeFieldNumber = 2;
-  inline ::svr::QueryDBAgentReq_DatabaseType dbtype() const;
-  inline void set_dbtype(::svr::QueryDBAgentReq_DatabaseType value);
-
-  // required .svr.QueryDBAgentReq.ActoinType action = 3;
+  // required .svr.QueryDBAgentReq.ActoinType action = 2;
   inline bool has_action() const;
   inline void clear_action();
-  static const int kActionFieldNumber = 3;
+  static const int kActionFieldNumber = 2;
   inline ::svr::QueryDBAgentReq_ActoinType action() const;
   inline void set_action(::svr::QueryDBAgentReq_ActoinType value);
 
-  // required string dbname = 4;
+  // required string dbname = 3;
   inline bool has_dbname() const;
   inline void clear_dbname();
-  static const int kDbnameFieldNumber = 4;
+  static const int kDbnameFieldNumber = 3;
   inline const ::std::string& dbname() const;
   inline void set_dbname(const ::std::string& value);
   inline void set_dbname(const char* value);
@@ -632,10 +582,10 @@ class QueryDBAgentReq : public ::google::protobuf::Message {
   inline ::std::string* release_dbname();
   inline void set_allocated_dbname(::std::string* dbname);
 
-  // optional string statement = 5;
+  // optional string statement = 4;
   inline bool has_statement() const;
   inline void clear_statement();
-  static const int kStatementFieldNumber = 5;
+  static const int kStatementFieldNumber = 4;
   inline const ::std::string& statement() const;
   inline void set_statement(const ::std::string& value);
   inline void set_statement(const char* value);
@@ -648,8 +598,6 @@ class QueryDBAgentReq : public ::google::protobuf::Message {
  private:
   inline void set_has_sequence();
   inline void clear_has_sequence();
-  inline void set_has_dbtype();
-  inline void clear_has_dbtype();
   inline void set_has_action();
   inline void clear_has_action();
   inline void set_has_dbname();
@@ -662,10 +610,9 @@ class QueryDBAgentReq : public ::google::protobuf::Message {
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
   ::google::protobuf::uint32 sequence_;
-  int dbtype_;
+  int action_;
   ::std::string* dbname_;
   ::std::string* statement_;
-  int action_;
   friend void  protobuf_AddDesc_proto_2fserver_5finternal_2eproto();
   friend void protobuf_AssignDesc_proto_2fserver_5finternal_2eproto();
   friend void protobuf_ShutdownFile_proto_2fserver_5finternal_2eproto();
@@ -2325,40 +2272,15 @@ inline void QueryDBAgentReq::set_sequence(::google::protobuf::uint32 value) {
   // @@protoc_insertion_point(field_set:svr.QueryDBAgentReq.sequence)
 }
 
-// required .svr.QueryDBAgentReq.DatabaseType dbtype = 2;
-inline bool QueryDBAgentReq::has_dbtype() const {
+// required .svr.QueryDBAgentReq.ActoinType action = 2;
+inline bool QueryDBAgentReq::has_action() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void QueryDBAgentReq::set_has_dbtype() {
+inline void QueryDBAgentReq::set_has_action() {
   _has_bits_[0] |= 0x00000002u;
 }
-inline void QueryDBAgentReq::clear_has_dbtype() {
-  _has_bits_[0] &= ~0x00000002u;
-}
-inline void QueryDBAgentReq::clear_dbtype() {
-  dbtype_ = 1;
-  clear_has_dbtype();
-}
-inline ::svr::QueryDBAgentReq_DatabaseType QueryDBAgentReq::dbtype() const {
-  // @@protoc_insertion_point(field_get:svr.QueryDBAgentReq.dbtype)
-  return static_cast< ::svr::QueryDBAgentReq_DatabaseType >(dbtype_);
-}
-inline void QueryDBAgentReq::set_dbtype(::svr::QueryDBAgentReq_DatabaseType value) {
-  assert(::svr::QueryDBAgentReq_DatabaseType_IsValid(value));
-  set_has_dbtype();
-  dbtype_ = value;
-  // @@protoc_insertion_point(field_set:svr.QueryDBAgentReq.dbtype)
-}
-
-// required .svr.QueryDBAgentReq.ActoinType action = 3;
-inline bool QueryDBAgentReq::has_action() const {
-  return (_has_bits_[0] & 0x00000004u) != 0;
-}
-inline void QueryDBAgentReq::set_has_action() {
-  _has_bits_[0] |= 0x00000004u;
-}
 inline void QueryDBAgentReq::clear_has_action() {
-  _has_bits_[0] &= ~0x00000004u;
+  _has_bits_[0] &= ~0x00000002u;
 }
 inline void QueryDBAgentReq::clear_action() {
   action_ = 1;
@@ -2375,15 +2297,15 @@ inline void QueryDBAgentReq::set_action(::svr::QueryDBAgentReq_ActoinType value)
   // @@protoc_insertion_point(field_set:svr.QueryDBAgentReq.action)
 }
 
-// required string dbname = 4;
+// required string dbname = 3;
 inline bool QueryDBAgentReq::has_dbname() const {
-  return (_has_bits_[0] & 0x00000008u) != 0;
+  return (_has_bits_[0] & 0x00000004u) != 0;
 }
 inline void QueryDBAgentReq::set_has_dbname() {
-  _has_bits_[0] |= 0x00000008u;
+  _has_bits_[0] |= 0x00000004u;
 }
 inline void QueryDBAgentReq::clear_has_dbname() {
-  _has_bits_[0] &= ~0x00000008u;
+  _has_bits_[0] &= ~0x00000004u;
 }
 inline void QueryDBAgentReq::clear_dbname() {
   if (dbname_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
@@ -2451,15 +2373,15 @@ inline void QueryDBAgentReq::set_allocated_dbname(::std::string* dbname) {
   // @@protoc_insertion_point(field_set_allocated:svr.QueryDBAgentReq.dbname)
 }
 
-// optional string statement = 5;
+// optional string statement = 4;
 inline bool QueryDBAgentReq::has_statement() const {
-  return (_has_bits_[0] & 0x00000010u) != 0;
+  return (_has_bits_[0] & 0x00000008u) != 0;
 }
 inline void QueryDBAgentReq::set_has_statement() {
-  _has_bits_[0] |= 0x00000010u;
+  _has_bits_[0] |= 0x00000008u;
 }
 inline void QueryDBAgentReq::clear_has_statement() {
-  _has_bits_[0] &= ~0x00000010u;
+  _has_bits_[0] &= ~0x00000008u;
 }
 inline void QueryDBAgentReq::clear_statement() {
   if (statement_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
@@ -3675,11 +3597,6 @@ template <> struct is_proto_enum< ::svr::QueryDBAgentReq_ActoinType> : ::google:
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::svr::QueryDBAgentReq_ActoinType>() {
   return ::svr::QueryDBAgentReq_ActoinType_descriptor();
-}
-template <> struct is_proto_enum< ::svr::QueryDBAgentReq_DatabaseType> : ::google::protobuf::internal::true_type {};
-template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::svr::QueryDBAgentReq_DatabaseType>() {
-  return ::svr::QueryDBAgentReq_DatabaseType_descriptor();
 }
 template <> struct is_proto_enum< ::svr::NodeType> : ::google::protobuf::internal::true_type {};
 template <>

@@ -5,7 +5,7 @@
 #include <common/TaskPools.h>
 #include <common/StringHelper.h>
 #include "Logging.h"
-#include "AgentImpl.h"
+#include "AgentMySQL.h"
 #include "AgentManager.h"
 #include "ServerConfig.h"
 #include "SessionHandle.h"
@@ -91,7 +91,7 @@ int main(int argc, char *argv[])
 	TaskPools pools(ServerConfig::GetInstance()->GetDBUseThreadNum());
 	network::IOServiceThreadManager threads(ServerConfig::GetInstance()->GetUseThreadNum());
 
-	AgentImpl mysql_agent(CreateMySQLConnector(), pools, ServerConfig::GetInstance()->GetMaxConnectionRequestBacklog());
+	AgentMySQL mysql_agent(CreateMySQLConnector(), pools, ServerConfig::GetInstance()->GetMaxConnectionRequestBacklog());
 	AgentManager manager(threads, mysql_agent, ServerConfig::GetInstance()->GetMaxRequestBacklog());
 
 	asio::ip::tcp::endpoint endpoint(asio::ip::address_v4(), ServerConfig::GetInstance()->GetPort());

@@ -398,11 +398,8 @@ namespace db
 	}
 
 	// 异步操作
-	void DBClient::AsyncQuery(DatabaseType dbtype, const char *dbname, DatabaseActionType action, const char *statement, QueryCallBack &&callback)
+	void DBClient::AsyncQuery(const char *dbname, DatabaseActionType action, const char *statement, QueryCallBack &&callback)
 	{
-		static_assert((int)DatabaseType::kRedis == (int)svr::QueryDBAgentReq::kRedis &&
-			(int)DatabaseType::kMySQL == (int)svr::QueryDBAgentReq::kMySQL, "type mismatch");
-
 		static_assert((int)DatabaseActionType::kCall == (int)svr::QueryDBAgentReq::kCall &&
 			(int)DatabaseActionType::kSelect == (int)svr::QueryDBAgentReq::kSelect &&
 			(int)DatabaseActionType::kInsert == (int)svr::QueryDBAgentReq::kInsert &&
@@ -435,8 +432,7 @@ namespace db
 			request.set_statement(statement);
 			request.set_sequence(sequence);
 			request.set_action(static_cast<svr::QueryDBAgentReq::ActoinType>(action));
-			request.set_dbtype(static_cast<svr::QueryDBAgentReq::DatabaseType>(dbtype));
-
+	
 			DBSessionHandle *session = session_handle_lists_[next_client_index_++];
 			assigned_lists_[session].insert(sequence);
 			ongoing_lists_.insert(std::make_pair(sequence, std::forward<QueryCallBack>(callback)));
@@ -448,33 +444,33 @@ namespace db
 	}
 
 	// 异步调用
-	void DBClient::AsyncCall(DatabaseType dbtype, const char *dbname, const char *statement, QueryCallBack &&callback)
+	void DBClient::AsyncCall(const char *dbname, const char *statement, QueryCallBack &&callback)
 	{
-		AsyncQuery(dbtype, dbname, DatabaseActionType::kCall, statement, std::forward<QueryCallBack>(callback));
+		AsyncQuery(dbname, DatabaseActionType::kCall, statement, std::forward<QueryCallBack>(callback));
 	}
 
 	// 异步查询
-	void DBClient::AsyncSelect(DatabaseType dbtype, const char *dbname, const char *statement, QueryCallBack &&callback)
+	void DBClient::AsyncSelect(const char *dbname, const char *statement, QueryCallBack &&callback)
 	{
-		AsyncQuery(dbtype, dbname, DatabaseActionType::kSelect, statement, std::forward<QueryCallBack>(callback));
+		AsyncQuery(dbname, DatabaseActionType::kSelect, statement, std::forward<QueryCallBack>(callback));
 	}
 
 	// 异步插入
-	void DBClient::AsyncInsert(DatabaseType dbtype, const char *dbname, const char *statement, QueryCallBack &&callback)
+	void DBClient::AsyncInsert(const char *dbname, const char *statement, QueryCallBack &&callback)
 	{
-		AsyncQuery(dbtype, dbname, DatabaseActionType::kInsert, statement, std::forward<QueryCallBack>(callback));
+		AsyncQuery(dbname, DatabaseActionType::kInsert, statement, std::forward<QueryCallBack>(callback));
 	}
 
 	// 异步更新
-	void DBClient::AsyncUpdate(DatabaseType dbtype, const char *dbname, const char *statement, QueryCallBack &&callback)
+	void DBClient::AsyncUpdate(const char *dbname, const char *statement, QueryCallBack &&callback)
 	{
-		AsyncQuery(dbtype, dbname, DatabaseActionType::kUpdate, statement, std::forward<QueryCallBack>(callback));
+		AsyncQuery(dbname, DatabaseActionType::kUpdate, statement, std::forward<QueryCallBack>(callback));
 	}
 
 	// 异步删除
-	void DBClient::AsyncDelete(DatabaseType dbtype, const char *dbname, const char *statement, QueryCallBack &&callback)
+	void DBClient::AsyncDelete(const char *dbname, const char *statement, QueryCallBack &&callback)
 	{
-		AsyncQuery(dbtype, dbname, DatabaseActionType::kDelete, statement, std::forward<QueryCallBack>(callback));
+		AsyncQuery(dbname, DatabaseActionType::kDelete, statement, std::forward<QueryCallBack>(callback));
 	}
 
 	/************************************************************************/

@@ -72,7 +72,7 @@ void QueryPartitionInfo()
 			exit(-1);
 		}
 	};
-	GlobalDBClient()->AsyncSelect(db::kMySQL, ServerConfig::GetInstance()->GetVerifyDBName(), "SELECT * FROM `partition`;", callback);
+	GlobalDBClient()->AsyncSelect(ServerConfig::GetInstance()->GetVerifyDBName(), "SELECT * FROM `partition`;", callback);
 }
 
 int main(int argc, char *argv[])

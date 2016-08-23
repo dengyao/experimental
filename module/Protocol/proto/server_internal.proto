@@ -41,17 +41,11 @@ message QueryDBAgentReq {
         kUpdate = 4; // 更新
         kDelete = 5; // 删除
     }
-    
-    enum DatabaseType {
-        kRedis = 1; // redis数据库
-        kMySQL = 2; // MySQL数据库
-    }
 
     required uint32 sequence = 1;     // 序列号
-    required DatabaseType dbtype = 2; // 数据库类型
-    required ActoinType action = 3;   // 操作类型
-    required string dbname = 4;       // 数据库名称
-    optional string statement = 5;    // 操作语句
+    required ActoinType action = 2;   // 操作类型
+    required string dbname = 3;       // 数据库名称
+    optional string statement = 4;    // 操作语句
 }
 
 // 查询DBAgent返回

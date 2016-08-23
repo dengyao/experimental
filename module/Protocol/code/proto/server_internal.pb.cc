@@ -36,7 +36,6 @@ const ::google::protobuf::Descriptor* QueryDBAgentReq_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   QueryDBAgentReq_reflection_ = NULL;
 const ::google::protobuf::EnumDescriptor* QueryDBAgentReq_ActoinType_descriptor_ = NULL;
-const ::google::protobuf::EnumDescriptor* QueryDBAgentReq_DatabaseType_descriptor_ = NULL;
 const ::google::protobuf::Descriptor* QueryDBAgentRsp_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   QueryDBAgentRsp_reflection_ = NULL;
@@ -160,9 +159,8 @@ void protobuf_AssignDesc_proto_2fserver_5finternal_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(DBAgentInfoRsp));
   QueryDBAgentReq_descriptor_ = file->message_type(4);
-  static const int QueryDBAgentReq_offsets_[5] = {
+  static const int QueryDBAgentReq_offsets_[4] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QueryDBAgentReq, sequence_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QueryDBAgentReq, dbtype_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QueryDBAgentReq, action_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QueryDBAgentReq, dbname_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QueryDBAgentReq, statement_),
@@ -179,7 +177,6 @@ void protobuf_AssignDesc_proto_2fserver_5finternal_2eproto() {
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(QueryDBAgentReq));
   QueryDBAgentReq_ActoinType_descriptor_ = QueryDBAgentReq_descriptor_->enum_type(0);
-  QueryDBAgentReq_DatabaseType_descriptor_ = QueryDBAgentReq_descriptor_->enum_type(1);
   QueryDBAgentRsp_descriptor_ = file->message_type(5);
   static const int QueryDBAgentRsp_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(QueryDBAgentRsp, sequence_),
@@ -536,38 +533,36 @@ void protobuf_AddDesc_proto_2fserver_5finternal_2eproto() {
     "select_count\030\004 \002(\r\022\033\n\023handle_insert_coun"
     "t\030\005 \002(\r\022\033\n\023handle_update_count\030\006 \002(\r\022\033\n\023"
     "handle_delete_count\030\007 \002(\r\022\022\n\nclient_num\030"
-    "\010 \002(\r\022\021\n\tqueue_num\030\t \002(\r\"\237\002\n\017QueryDBAgen"
-    "tReq\022\020\n\010sequence\030\001 \002(\r\0221\n\006dbtype\030\002 \002(\0162!"
-    ".svr.QueryDBAgentReq.DatabaseType\022/\n\006act"
-    "ion\030\003 \002(\0162\037.svr.QueryDBAgentReq.ActoinTy"
-    "pe\022\016\n\006dbname\030\004 \002(\t\022\021\n\tstatement\030\005 \001(\t\"K\n"
-    "\nActoinType\022\t\n\005kCall\020\001\022\013\n\007kSelect\020\002\022\013\n\007k"
-    "Insert\020\003\022\013\n\007kUpdate\020\004\022\013\n\007kDelete\020\005\"&\n\014Da"
-    "tabaseType\022\n\n\006kRedis\020\001\022\n\n\006kMySQL\020\002\"3\n\017Qu"
-    "eryDBAgentRsp\022\020\n\010sequence\030\001 \002(\r\022\016\n\006resul"
-    "t\030\002 \001(\014\"@\n\nDBErrorRsp\022\020\n\010sequence\030\001 \002(\r\022"
-    "\022\n\nerror_code\030\002 \002(\005\022\014\n\004what\030\003 \001(\t\"G\n\017DBA"
-    "gentErrorRsp\022\"\n\nerror_code\030\001 \002(\0162\016.pub.E"
-    "rrorCode\022\020\n\010sequence\030\002 \001(\r\"=\n\tChildNode\022"
-    "\033\n\004type\030\001 \002(\0162\r.svr.NodeType\022\023\n\010child_id"
-    "\030\002 \001(\r:\0011\"*\n\nLoginGWReq\022\034\n\004node\030\001 \002(\0132\016."
-    "svr.ChildNode\"(\n\nLoginGWRsp\022\032\n\022heartbeat"
-    "_interval\030\001 \002(\r\"\013\n\tGWInfoReq\"W\n\tGWInfoRs"
-    "p\022\021\n\tup_volume\030\001 \002(\r\022\023\n\013down_volume\030\002 \002("
-    "\r\022\"\n\nnode_lists\030\003 \003(\0132\016.svr.ChildNode\"<\n"
-    "\nForwardReq\022\033\n\003dst\030\001 \002(\0132\016.svr.ChildNode"
-    "\022\021\n\tuser_data\030\002 \002(\014\"C\n\014BroadcastReq\022 \n\td"
-    "st_lists\030\001 \003(\0162\r.svr.NodeType\022\021\n\tuser_da"
-    "ta\030\002 \002(\014\":\n\010GWNotify\022\033\n\003src\030\001 \002(\0132\016.svr."
-    "ChildNode\022\021\n\tuser_data\030\002 \002(\014\"Z\n\016LinkerLo"
-    "ginReq\022\024\n\014partition_id\030\001 \002(\r\022\021\n\tpublic_i"
-    "p\030\002 \002(\t\022\014\n\004port\030\003 \002(\r\022\021\n\tlinker_id\030\004 \001(\r"
-    "\"\?\n\016LinkerLoginRsp\022\032\n\022heartbeat_interval"
-    "\030\001 \002(\r\022\021\n\tlinker_id\030\002 \002(\r\"\037\n\017ReportLinke"
-    "rReq\022\014\n\004load\030\001 \002(\r\"0\n\016UpdateTokenReq\022\017\n\007"
-    "user_id\030\001 \002(\r\022\r\n\005token\030\002 \002(\004*D\n\010NodeType"
-    "\022\020\n\014kLoginServer\020\001\022\021\n\rkLinkerServer\020\002\022\023\n"
-    "\017kMainLogicSever\020\003", 1618);
+    "\010 \002(\r\022\021\n\tqueue_num\030\t \002(\r\"\304\001\n\017QueryDBAgen"
+    "tReq\022\020\n\010sequence\030\001 \002(\r\022/\n\006action\030\002 \002(\0162\037"
+    ".svr.QueryDBAgentReq.ActoinType\022\016\n\006dbnam"
+    "e\030\003 \002(\t\022\021\n\tstatement\030\004 \001(\t\"K\n\nActoinType"
+    "\022\t\n\005kCall\020\001\022\013\n\007kSelect\020\002\022\013\n\007kInsert\020\003\022\013\n"
+    "\007kUpdate\020\004\022\013\n\007kDelete\020\005\"3\n\017QueryDBAgentR"
+    "sp\022\020\n\010sequence\030\001 \002(\r\022\016\n\006result\030\002 \001(\014\"@\n\n"
+    "DBErrorRsp\022\020\n\010sequence\030\001 \002(\r\022\022\n\nerror_co"
+    "de\030\002 \002(\005\022\014\n\004what\030\003 \001(\t\"G\n\017DBAgentErrorRs"
+    "p\022\"\n\nerror_code\030\001 \002(\0162\016.pub.ErrorCode\022\020\n"
+    "\010sequence\030\002 \001(\r\"=\n\tChildNode\022\033\n\004type\030\001 \002"
+    "(\0162\r.svr.NodeType\022\023\n\010child_id\030\002 \001(\r:\0011\"*"
+    "\n\nLoginGWReq\022\034\n\004node\030\001 \002(\0132\016.svr.ChildNo"
+    "de\"(\n\nLoginGWRsp\022\032\n\022heartbeat_interval\030\001"
+    " \002(\r\"\013\n\tGWInfoReq\"W\n\tGWInfoRsp\022\021\n\tup_vol"
+    "ume\030\001 \002(\r\022\023\n\013down_volume\030\002 \002(\r\022\"\n\nnode_l"
+    "ists\030\003 \003(\0132\016.svr.ChildNode\"<\n\nForwardReq"
+    "\022\033\n\003dst\030\001 \002(\0132\016.svr.ChildNode\022\021\n\tuser_da"
+    "ta\030\002 \002(\014\"C\n\014BroadcastReq\022 \n\tdst_lists\030\001 "
+    "\003(\0162\r.svr.NodeType\022\021\n\tuser_data\030\002 \002(\014\":\n"
+    "\010GWNotify\022\033\n\003src\030\001 \002(\0132\016.svr.ChildNode\022\021"
+    "\n\tuser_data\030\002 \002(\014\"Z\n\016LinkerLoginReq\022\024\n\014p"
+    "artition_id\030\001 \002(\r\022\021\n\tpublic_ip\030\002 \002(\t\022\014\n\004"
+    "port\030\003 \002(\r\022\021\n\tlinker_id\030\004 \001(\r\"\?\n\016LinkerL"
+    "oginRsp\022\032\n\022heartbeat_interval\030\001 \002(\r\022\021\n\tl"
+    "inker_id\030\002 \002(\r\"\037\n\017ReportLinkerReq\022\014\n\004loa"
+    "d\030\001 \002(\r\"0\n\016UpdateTokenReq\022\017\n\007user_id\030\001 \002"
+    "(\r\022\r\n\005token\030\002 \002(\004*D\n\010NodeType\022\020\n\014kLoginS"
+    "erver\020\001\022\021\n\rkLinkerServer\020\002\022\023\n\017kMainLogic"
+    "Sever\020\003", 1527);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "proto/server_internal.proto", &protobuf_RegisterTypes);
   LoginDBAgentReq::default_instance_ = new LoginDBAgentReq();
@@ -1783,30 +1778,8 @@ const QueryDBAgentReq_ActoinType QueryDBAgentReq::ActoinType_MIN;
 const QueryDBAgentReq_ActoinType QueryDBAgentReq::ActoinType_MAX;
 const int QueryDBAgentReq::ActoinType_ARRAYSIZE;
 #endif  // _MSC_VER
-const ::google::protobuf::EnumDescriptor* QueryDBAgentReq_DatabaseType_descriptor() {
-  protobuf_AssignDescriptorsOnce();
-  return QueryDBAgentReq_DatabaseType_descriptor_;
-}
-bool QueryDBAgentReq_DatabaseType_IsValid(int value) {
-  switch(value) {
-    case 1:
-    case 2:
-      return true;
-    default:
-      return false;
-  }
-}
-
-#ifndef _MSC_VER
-const QueryDBAgentReq_DatabaseType QueryDBAgentReq::kRedis;
-const QueryDBAgentReq_DatabaseType QueryDBAgentReq::kMySQL;
-const QueryDBAgentReq_DatabaseType QueryDBAgentReq::DatabaseType_MIN;
-const QueryDBAgentReq_DatabaseType QueryDBAgentReq::DatabaseType_MAX;
-const int QueryDBAgentReq::DatabaseType_ARRAYSIZE;
-#endif  // _MSC_VER
 #ifndef _MSC_VER
 const int QueryDBAgentReq::kSequenceFieldNumber;
-const int QueryDBAgentReq::kDbtypeFieldNumber;
 const int QueryDBAgentReq::kActionFieldNumber;
 const int QueryDBAgentReq::kDbnameFieldNumber;
 const int QueryDBAgentReq::kStatementFieldNumber;
@@ -1832,7 +1805,6 @@ void QueryDBAgentReq::SharedCtor() {
   ::google::protobuf::internal::GetEmptyString();
   _cached_size_ = 0;
   sequence_ = 0u;
-  dbtype_ = 1;
   action_ = 1;
   dbname_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   statement_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
@@ -1877,9 +1849,8 @@ QueryDBAgentReq* QueryDBAgentReq::New() const {
 }
 
 void QueryDBAgentReq::Clear() {
-  if (_has_bits_[0 / 32] & 31) {
+  if (_has_bits_[0 / 32] & 15) {
     sequence_ = 0u;
-    dbtype_ = 1;
     action_ = 1;
     if (has_dbname()) {
       if (dbname_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
@@ -1916,33 +1887,13 @@ bool QueryDBAgentReq::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(16)) goto parse_dbtype;
+        if (input->ExpectTag(16)) goto parse_action;
         break;
       }
 
-      // required .svr.QueryDBAgentReq.DatabaseType dbtype = 2;
+      // required .svr.QueryDBAgentReq.ActoinType action = 2;
       case 2: {
         if (tag == 16) {
-         parse_dbtype:
-          int value;
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
-                 input, &value)));
-          if (::svr::QueryDBAgentReq_DatabaseType_IsValid(value)) {
-            set_dbtype(static_cast< ::svr::QueryDBAgentReq_DatabaseType >(value));
-          } else {
-            mutable_unknown_fields()->AddVarint(2, value);
-          }
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(24)) goto parse_action;
-        break;
-      }
-
-      // required .svr.QueryDBAgentReq.ActoinType action = 3;
-      case 3: {
-        if (tag == 24) {
          parse_action:
           int value;
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
@@ -1951,18 +1902,18 @@ bool QueryDBAgentReq::MergePartialFromCodedStream(
           if (::svr::QueryDBAgentReq_ActoinType_IsValid(value)) {
             set_action(static_cast< ::svr::QueryDBAgentReq_ActoinType >(value));
           } else {
-            mutable_unknown_fields()->AddVarint(3, value);
+            mutable_unknown_fields()->AddVarint(2, value);
           }
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(34)) goto parse_dbname;
+        if (input->ExpectTag(26)) goto parse_dbname;
         break;
       }
 
-      // required string dbname = 4;
-      case 4: {
-        if (tag == 34) {
+      // required string dbname = 3;
+      case 3: {
+        if (tag == 26) {
          parse_dbname:
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->mutable_dbname()));
@@ -1973,13 +1924,13 @@ bool QueryDBAgentReq::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(42)) goto parse_statement;
+        if (input->ExpectTag(34)) goto parse_statement;
         break;
       }
 
-      // optional string statement = 5;
-      case 5: {
-        if (tag == 42) {
+      // optional string statement = 4;
+      case 4: {
+        if (tag == 34) {
          parse_statement:
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->mutable_statement()));
@@ -2024,36 +1975,30 @@ void QueryDBAgentReq::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->sequence(), output);
   }
 
-  // required .svr.QueryDBAgentReq.DatabaseType dbtype = 2;
-  if (has_dbtype()) {
-    ::google::protobuf::internal::WireFormatLite::WriteEnum(
-      2, this->dbtype(), output);
-  }
-
-  // required .svr.QueryDBAgentReq.ActoinType action = 3;
+  // required .svr.QueryDBAgentReq.ActoinType action = 2;
   if (has_action()) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
-      3, this->action(), output);
+      2, this->action(), output);
   }
 
-  // required string dbname = 4;
+  // required string dbname = 3;
   if (has_dbname()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
       this->dbname().data(), this->dbname().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE,
       "dbname");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      4, this->dbname(), output);
+      3, this->dbname(), output);
   }
 
-  // optional string statement = 5;
+  // optional string statement = 4;
   if (has_statement()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
       this->statement().data(), this->statement().length(),
       ::google::protobuf::internal::WireFormat::SERIALIZE,
       "statement");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      5, this->statement(), output);
+      4, this->statement(), output);
   }
 
   if (!unknown_fields().empty()) {
@@ -2071,19 +2016,13 @@ void QueryDBAgentReq::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->sequence(), target);
   }
 
-  // required .svr.QueryDBAgentReq.DatabaseType dbtype = 2;
-  if (has_dbtype()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
-      2, this->dbtype(), target);
-  }
-
-  // required .svr.QueryDBAgentReq.ActoinType action = 3;
+  // required .svr.QueryDBAgentReq.ActoinType action = 2;
   if (has_action()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
-      3, this->action(), target);
+      2, this->action(), target);
   }
 
-  // required string dbname = 4;
+  // required string dbname = 3;
   if (has_dbname()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
       this->dbname().data(), this->dbname().length(),
@@ -2091,10 +2030,10 @@ void QueryDBAgentReq::SerializeWithCachedSizes(
       "dbname");
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        4, this->dbname(), target);
+        3, this->dbname(), target);
   }
 
-  // optional string statement = 5;
+  // optional string statement = 4;
   if (has_statement()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
       this->statement().data(), this->statement().length(),
@@ -2102,7 +2041,7 @@ void QueryDBAgentReq::SerializeWithCachedSizes(
       "statement");
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        5, this->statement(), target);
+        4, this->statement(), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -2124,26 +2063,20 @@ int QueryDBAgentReq::ByteSize() const {
           this->sequence());
     }
 
-    // required .svr.QueryDBAgentReq.DatabaseType dbtype = 2;
-    if (has_dbtype()) {
-      total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::EnumSize(this->dbtype());
-    }
-
-    // required .svr.QueryDBAgentReq.ActoinType action = 3;
+    // required .svr.QueryDBAgentReq.ActoinType action = 2;
     if (has_action()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->action());
     }
 
-    // required string dbname = 4;
+    // required string dbname = 3;
     if (has_dbname()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::StringSize(
           this->dbname());
     }
 
-    // optional string statement = 5;
+    // optional string statement = 4;
     if (has_statement()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::StringSize(
@@ -2180,9 +2113,6 @@ void QueryDBAgentReq::MergeFrom(const QueryDBAgentReq& from) {
     if (from.has_sequence()) {
       set_sequence(from.sequence());
     }
-    if (from.has_dbtype()) {
-      set_dbtype(from.dbtype());
-    }
     if (from.has_action()) {
       set_action(from.action());
     }
@@ -2209,7 +2139,7 @@ void QueryDBAgentReq::CopyFrom(const QueryDBAgentReq& from) {
 }
 
 bool QueryDBAgentReq::IsInitialized() const {
-  if ((_has_bits_[0] & 0x0000000f) != 0x0000000f) return false;
+  if ((_has_bits_[0] & 0x00000007) != 0x00000007) return false;
 
   return true;
 }
@@ -2217,7 +2147,6 @@ bool QueryDBAgentReq::IsInitialized() const {
 void QueryDBAgentReq::Swap(QueryDBAgentReq* other) {
   if (other != this) {
     std::swap(sequence_, other->sequence_);
-    std::swap(dbtype_, other->dbtype_);
     std::swap(action_, other->action_);
     std::swap(dbname_, other->dbname_);
     std::swap(statement_, other->statement_);

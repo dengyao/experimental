@@ -2,7 +2,7 @@
 #define __AGENT_MANAGER_H__
 
 #include <network.h>
-#include "AgentImpl.h"
+#include "AgentMySQL.h"
 #include "ConnectorMySQL.h"
 #include <ProtobufDispatcher.h>
 
@@ -31,7 +31,7 @@ class AgentManager
 	};
 
 public:
-	AgentManager(network::IOServiceThreadManager &threads, AgentImpl &mysql, unsigned int backlog);
+	AgentManager(network::IOServiceThreadManager &threads, AgentMySQL &mysql, unsigned int backlog);
 
 public:
 	// 接收消息
@@ -68,7 +68,7 @@ private:
 	network::IOServiceThreadManager&			threads_;
 	std::map<uint32_t, SSourceInfo>				requests_;
 	network::IDGenerator                        generator_;
-	AgentImpl&									mysql_agent_;
+	AgentMySQL&									mysql_agent_;
 	std::vector<HandleResult>					completion_lists_;
 	ProtobufDispatcher							dispatcher_;
 };

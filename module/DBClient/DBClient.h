@@ -1,5 +1,5 @@
-﻿#ifndef __DBCLIENT_MANAGER_H__
-#define __DBCLIENT_MANAGER_H__
+﻿#ifndef __DBCLIENT_H__
+#define __DBCLIENT_H__
 
 #include <set>
 #include <map>
@@ -16,12 +16,6 @@ namespace google
 
 namespace db
 {
-	enum DatabaseType
-	{
-		kRedis = 1,
-		kMySQL = 2,
-	};
-
 	enum DatabaseActionType
 	{
 		kCall = 1,
@@ -60,19 +54,19 @@ namespace db
 		size_t GetKeepAliveConnectionNum() const;
 
 		// 异步调用
-		void AsyncCall(DatabaseType dbtype, const char *dbname, const char *statement, QueryCallBack &&callback);
+		void AsyncCall(const char *dbname, const char *statement, QueryCallBack &&callback);
 
 		// 异步查询
-		void AsyncSelect(DatabaseType dbtype, const char *dbname, const char *statement, QueryCallBack &&callback);
+		void AsyncSelect(const char *dbname, const char *statement, QueryCallBack &&callback);
 
 		// 异步插入
-		void AsyncInsert(DatabaseType dbtype, const char *dbname, const char *statement, QueryCallBack &&callback);
+		void AsyncInsert(const char *dbname, const char *statement, QueryCallBack &&callback);
 
 		// 异步更新
-		void AsyncUpdate(DatabaseType dbtype, const char *dbname, const char *statement, QueryCallBack &&callback);
+		void AsyncUpdate(const char *dbname, const char *statement, QueryCallBack &&callback);
 
 		// 异步删除
-		void AsyncDelete(DatabaseType dbtype, const char *dbname, const char *statement, QueryCallBack &&callback);
+		void AsyncDelete(const char *dbname, const char *statement, QueryCallBack &&callback);
 		
 	private:
 		// 连接事件
@@ -104,7 +98,7 @@ namespace db
 		network::SessionHandlePointer CreateSessionHandle();
 
 		// 异步操作
-		void AsyncQuery(DatabaseType dbtype, const char *dbname, DatabaseActionType action, const char *statement, QueryCallBack &&callback);
+		void AsyncQuery(const char *dbname, DatabaseActionType action, const char *statement, QueryCallBack &&callback);
 
 	private:
 		const size_t                                    connection_num_;
