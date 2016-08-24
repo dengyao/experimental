@@ -2,6 +2,7 @@
 #define __ID_GENERATOR_H__
 
 #include <deque>
+#include <limits>
 #include <cstdint>
 
 namespace network
@@ -13,6 +14,7 @@ namespace network
 
 	public:
 		static const uint32_t kInvalidID = 0;
+		static const uint32_t kDefaultThreshold = 8192;
 
 	public:
 		explicit IDGenerator(uint32_t threshold = kDefaultThreshold)
