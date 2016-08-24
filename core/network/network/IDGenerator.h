@@ -47,7 +47,7 @@ namespace network
 			pools_.push_back(id);
 		}
 
-		void erase(uint32_t id)
+		void Erase(uint32_t id)
 		{
 			for (auto iter = pools_.begin(); iter != pools_.end(); ++iter)
 			{
