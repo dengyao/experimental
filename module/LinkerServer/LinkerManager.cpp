@@ -186,7 +186,7 @@ void LinkerManager::OnBroadcastUserEnter(uint32_t user_id)
 	std::vector<int> dst_type_lists;
 	dst_type_lists.push_back(static_cast<int>(svr::NodeType::kChatServer));
 	dst_type_lists.push_back(static_cast<int>(svr::NodeType::kLogicSever));
-	GlobalGWClient()->Broadcast(dst_type_lists, );
+	//GlobalGWClient()->Broadcast(dst_type_lists, );
 }
 
 // 广播用户离开

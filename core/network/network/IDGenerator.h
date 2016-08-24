@@ -3,6 +3,7 @@
 
 #include <deque>
 #include <limits>
+#include <cassert>
 #include <cstdint>
 
 namespace network
@@ -20,6 +21,14 @@ namespace network
 		explicit IDGenerator(uint32_t threshold = kDefaultThreshold)
 			: next_(kInvalidID), threshold_(threshold)
 		{
+		}
+
+		IDGenerator(IDGenerator &&other)
+			: next_(other.next_)
+			, threshold_(other.threshold_)
+			, pools_(std::move(other.pools_))
+		{
+			other.next_ = kInvalidID;
 		}
 
 		~IDGenerator() = default;
@@ -42,7 +51,7 @@ namespace network
 
 		void Put(uint32_t id)
 		{
-#ifdef DEBUG
+#ifdef _DEBUG
 			for (size_t i = 0; i < pools_.size(); ++i)
 			{
 				assert(pools_[i] != id);

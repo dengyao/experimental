@@ -221,7 +221,7 @@ bool LoginManager::OnLinkerLogin(network::TCPSessionHandler *session, google::pr
 	{
 		SLinkerGroup group;
 		group.partition_id = request->partition_id();
-		partition_map_.insert(std::make_pair(group.partition_id, group));
+		partition_map_.insert(std::make_pair(group.partition_id, std::move(group)));
 		partition_iter = partition_map_.find(request->partition_id());
 	}
 
@@ -245,7 +245,7 @@ bool LoginManager::OnLinkerLogin(network::TCPSessionHandler *session, google::pr
 	if (request->has_linker_id())
 	{
 		linker_item.linker_id = request->linker_id();
-		partition_iter->second.generator.erase(linker_item.linker_id);
+		partition_iter->second.generator.Erase(linker_item.linker_id);
 	}
 	else
 	{

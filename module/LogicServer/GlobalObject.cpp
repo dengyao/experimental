@@ -1,6 +1,7 @@
 ﻿#include "GlobalObject.h"
 #include <atomic>
 #include <DBClient.h>
+#include <GWClient.h>
 
 namespace global_stuff
 {

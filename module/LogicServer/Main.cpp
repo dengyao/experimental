@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
 		std::unique_ptr<gw::GWClient> connector;
 		asio::ip::tcp::endpoint endpoint(asio::ip::address_v4::from_string(ServerConfig::GetInstance()->GetGWServerIP()),
 			ServerConfig::GetInstance()->GetGWServerPort());
-		connector = std::make_unique<gw::GWClient>(threads, endpoint, ServerConfig::GetInstance()->GetGWServerConnections(), svr::kMainLogicSever);
+		connector = std::make_unique<gw::GWClient>(threads, endpoint, ServerConfig::GetInstance()->GetGWServerConnections(), svr::kLogicSever);
 		OnceInitGlobalGatewayConnector(std::move(connector));
 		logger()->info("连接网关服务器成功!");
 	}
