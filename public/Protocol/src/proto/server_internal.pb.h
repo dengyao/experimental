@@ -54,6 +54,9 @@ class GWNotify;
 class LinkerLoginReq;
 class LinkerLoginRsp;
 class ReportLinkerReq;
+class UserLeave;
+class LinkerForward;
+class LinkerBroadcast;
 class UpdateTokenReq;
 
 enum QueryDBAgentReq_ActoinType {
@@ -81,11 +84,13 @@ inline bool QueryDBAgentReq_ActoinType_Parse(
 enum NodeType {
   kLoginServer = 1,
   kLinkerServer = 2,
-  kMainLogicSever = 3
+  kLogicSever = 3,
+  kChatServer = 4,
+  kGameSever = 5
 };
 bool NodeType_IsValid(int value);
 const NodeType NodeType_MIN = kLoginServer;
-const NodeType NodeType_MAX = kMainLogicSever;
+const NodeType NodeType_MAX = kGameSever;
 const int NodeType_ARRAYSIZE = NodeType_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* NodeType_descriptor();
@@ -1898,6 +1903,269 @@ class ReportLinkerReq : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
+class UserLeave : public ::google::protobuf::Message {
+ public:
+  UserLeave();
+  virtual ~UserLeave();
+
+  UserLeave(const UserLeave& from);
+
+  inline UserLeave& operator=(const UserLeave& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const UserLeave& default_instance();
+
+  void Swap(UserLeave* other);
+
+  // implements Message ----------------------------------------------
+
+  UserLeave* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const UserLeave& from);
+  void MergeFrom(const UserLeave& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated uint32 user_id = 1;
+  inline int user_id_size() const;
+  inline void clear_user_id();
+  static const int kUserIdFieldNumber = 1;
+  inline ::google::protobuf::uint32 user_id(int index) const;
+  inline void set_user_id(int index, ::google::protobuf::uint32 value);
+  inline void add_user_id(::google::protobuf::uint32 value);
+  inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+      user_id() const;
+  inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+      mutable_user_id();
+
+  // @@protoc_insertion_point(class_scope:svr.UserLeave)
+ private:
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 > user_id_;
+  friend void  protobuf_AddDesc_proto_2fserver_5finternal_2eproto();
+  friend void protobuf_AssignDesc_proto_2fserver_5finternal_2eproto();
+  friend void protobuf_ShutdownFile_proto_2fserver_5finternal_2eproto();
+
+  void InitAsDefaultInstance();
+  static UserLeave* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class LinkerForward : public ::google::protobuf::Message {
+ public:
+  LinkerForward();
+  virtual ~LinkerForward();
+
+  LinkerForward(const LinkerForward& from);
+
+  inline LinkerForward& operator=(const LinkerForward& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const LinkerForward& default_instance();
+
+  void Swap(LinkerForward* other);
+
+  // implements Message ----------------------------------------------
+
+  LinkerForward* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const LinkerForward& from);
+  void MergeFrom(const LinkerForward& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated uint32 user_id = 1;
+  inline int user_id_size() const;
+  inline void clear_user_id();
+  static const int kUserIdFieldNumber = 1;
+  inline ::google::protobuf::uint32 user_id(int index) const;
+  inline void set_user_id(int index, ::google::protobuf::uint32 value);
+  inline void add_user_id(::google::protobuf::uint32 value);
+  inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+      user_id() const;
+  inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+      mutable_user_id();
+
+  // required bytes user_data = 2;
+  inline bool has_user_data() const;
+  inline void clear_user_data();
+  static const int kUserDataFieldNumber = 2;
+  inline const ::std::string& user_data() const;
+  inline void set_user_data(const ::std::string& value);
+  inline void set_user_data(const char* value);
+  inline void set_user_data(const void* value, size_t size);
+  inline ::std::string* mutable_user_data();
+  inline ::std::string* release_user_data();
+  inline void set_allocated_user_data(::std::string* user_data);
+
+  // @@protoc_insertion_point(class_scope:svr.LinkerForward)
+ private:
+  inline void set_has_user_data();
+  inline void clear_has_user_data();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint32 > user_id_;
+  ::std::string* user_data_;
+  friend void  protobuf_AddDesc_proto_2fserver_5finternal_2eproto();
+  friend void protobuf_AssignDesc_proto_2fserver_5finternal_2eproto();
+  friend void protobuf_ShutdownFile_proto_2fserver_5finternal_2eproto();
+
+  void InitAsDefaultInstance();
+  static LinkerForward* default_instance_;
+};
+// -------------------------------------------------------------------
+
+class LinkerBroadcast : public ::google::protobuf::Message {
+ public:
+  LinkerBroadcast();
+  virtual ~LinkerBroadcast();
+
+  LinkerBroadcast(const LinkerBroadcast& from);
+
+  inline LinkerBroadcast& operator=(const LinkerBroadcast& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const LinkerBroadcast& default_instance();
+
+  void Swap(LinkerBroadcast* other);
+
+  // implements Message ----------------------------------------------
+
+  LinkerBroadcast* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const LinkerBroadcast& from);
+  void MergeFrom(const LinkerBroadcast& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required bytes user_data = 1;
+  inline bool has_user_data() const;
+  inline void clear_user_data();
+  static const int kUserDataFieldNumber = 1;
+  inline const ::std::string& user_data() const;
+  inline void set_user_data(const ::std::string& value);
+  inline void set_user_data(const char* value);
+  inline void set_user_data(const void* value, size_t size);
+  inline ::std::string* mutable_user_data();
+  inline ::std::string* release_user_data();
+  inline void set_allocated_user_data(::std::string* user_data);
+
+  // @@protoc_insertion_point(class_scope:svr.LinkerBroadcast)
+ private:
+  inline void set_has_user_data();
+  inline void clear_has_user_data();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::std::string* user_data_;
+  friend void  protobuf_AddDesc_proto_2fserver_5finternal_2eproto();
+  friend void protobuf_AssignDesc_proto_2fserver_5finternal_2eproto();
+  friend void protobuf_ShutdownFile_proto_2fserver_5finternal_2eproto();
+
+  void InitAsDefaultInstance();
+  static LinkerBroadcast* default_instance_;
+};
+// -------------------------------------------------------------------
+
 class UpdateTokenReq : public ::google::protobuf::Message {
  public:
   UpdateTokenReq();
@@ -3530,6 +3798,230 @@ inline void ReportLinkerReq::set_load(::google::protobuf::uint32 value) {
   set_has_load();
   load_ = value;
   // @@protoc_insertion_point(field_set:svr.ReportLinkerReq.load)
+}
+
+// -------------------------------------------------------------------
+
+// UserLeave
+
+// repeated uint32 user_id = 1;
+inline int UserLeave::user_id_size() const {
+  return user_id_.size();
+}
+inline void UserLeave::clear_user_id() {
+  user_id_.Clear();
+}
+inline ::google::protobuf::uint32 UserLeave::user_id(int index) const {
+  // @@protoc_insertion_point(field_get:svr.UserLeave.user_id)
+  return user_id_.Get(index);
+}
+inline void UserLeave::set_user_id(int index, ::google::protobuf::uint32 value) {
+  user_id_.Set(index, value);
+  // @@protoc_insertion_point(field_set:svr.UserLeave.user_id)
+}
+inline void UserLeave::add_user_id(::google::protobuf::uint32 value) {
+  user_id_.Add(value);
+  // @@protoc_insertion_point(field_add:svr.UserLeave.user_id)
+}
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+UserLeave::user_id() const {
+  // @@protoc_insertion_point(field_list:svr.UserLeave.user_id)
+  return user_id_;
+}
+inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+UserLeave::mutable_user_id() {
+  // @@protoc_insertion_point(field_mutable_list:svr.UserLeave.user_id)
+  return &user_id_;
+}
+
+// -------------------------------------------------------------------
+
+// LinkerForward
+
+// repeated uint32 user_id = 1;
+inline int LinkerForward::user_id_size() const {
+  return user_id_.size();
+}
+inline void LinkerForward::clear_user_id() {
+  user_id_.Clear();
+}
+inline ::google::protobuf::uint32 LinkerForward::user_id(int index) const {
+  // @@protoc_insertion_point(field_get:svr.LinkerForward.user_id)
+  return user_id_.Get(index);
+}
+inline void LinkerForward::set_user_id(int index, ::google::protobuf::uint32 value) {
+  user_id_.Set(index, value);
+  // @@protoc_insertion_point(field_set:svr.LinkerForward.user_id)
+}
+inline void LinkerForward::add_user_id(::google::protobuf::uint32 value) {
+  user_id_.Add(value);
+  // @@protoc_insertion_point(field_add:svr.LinkerForward.user_id)
+}
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >&
+LinkerForward::user_id() const {
+  // @@protoc_insertion_point(field_list:svr.LinkerForward.user_id)
+  return user_id_;
+}
+inline ::google::protobuf::RepeatedField< ::google::protobuf::uint32 >*
+LinkerForward::mutable_user_id() {
+  // @@protoc_insertion_point(field_mutable_list:svr.LinkerForward.user_id)
+  return &user_id_;
+}
+
+// required bytes user_data = 2;
+inline bool LinkerForward::has_user_data() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void LinkerForward::set_has_user_data() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void LinkerForward::clear_has_user_data() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void LinkerForward::clear_user_data() {
+  if (user_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    user_data_->clear();
+  }
+  clear_has_user_data();
+}
+inline const ::std::string& LinkerForward::user_data() const {
+  // @@protoc_insertion_point(field_get:svr.LinkerForward.user_data)
+  return *user_data_;
+}
+inline void LinkerForward::set_user_data(const ::std::string& value) {
+  set_has_user_data();
+  if (user_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    user_data_ = new ::std::string;
+  }
+  user_data_->assign(value);
+  // @@protoc_insertion_point(field_set:svr.LinkerForward.user_data)
+}
+inline void LinkerForward::set_user_data(const char* value) {
+  set_has_user_data();
+  if (user_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    user_data_ = new ::std::string;
+  }
+  user_data_->assign(value);
+  // @@protoc_insertion_point(field_set_char:svr.LinkerForward.user_data)
+}
+inline void LinkerForward::set_user_data(const void* value, size_t size) {
+  set_has_user_data();
+  if (user_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    user_data_ = new ::std::string;
+  }
+  user_data_->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:svr.LinkerForward.user_data)
+}
+inline ::std::string* LinkerForward::mutable_user_data() {
+  set_has_user_data();
+  if (user_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    user_data_ = new ::std::string;
+  }
+  // @@protoc_insertion_point(field_mutable:svr.LinkerForward.user_data)
+  return user_data_;
+}
+inline ::std::string* LinkerForward::release_user_data() {
+  clear_has_user_data();
+  if (user_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    return NULL;
+  } else {
+    ::std::string* temp = user_data_;
+    user_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    return temp;
+  }
+}
+inline void LinkerForward::set_allocated_user_data(::std::string* user_data) {
+  if (user_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete user_data_;
+  }
+  if (user_data) {
+    set_has_user_data();
+    user_data_ = user_data;
+  } else {
+    clear_has_user_data();
+    user_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  }
+  // @@protoc_insertion_point(field_set_allocated:svr.LinkerForward.user_data)
+}
+
+// -------------------------------------------------------------------
+
+// LinkerBroadcast
+
+// required bytes user_data = 1;
+inline bool LinkerBroadcast::has_user_data() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void LinkerBroadcast::set_has_user_data() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void LinkerBroadcast::clear_has_user_data() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void LinkerBroadcast::clear_user_data() {
+  if (user_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    user_data_->clear();
+  }
+  clear_has_user_data();
+}
+inline const ::std::string& LinkerBroadcast::user_data() const {
+  // @@protoc_insertion_point(field_get:svr.LinkerBroadcast.user_data)
+  return *user_data_;
+}
+inline void LinkerBroadcast::set_user_data(const ::std::string& value) {
+  set_has_user_data();
+  if (user_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    user_data_ = new ::std::string;
+  }
+  user_data_->assign(value);
+  // @@protoc_insertion_point(field_set:svr.LinkerBroadcast.user_data)
+}
+inline void LinkerBroadcast::set_user_data(const char* value) {
+  set_has_user_data();
+  if (user_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    user_data_ = new ::std::string;
+  }
+  user_data_->assign(value);
+  // @@protoc_insertion_point(field_set_char:svr.LinkerBroadcast.user_data)
+}
+inline void LinkerBroadcast::set_user_data(const void* value, size_t size) {
+  set_has_user_data();
+  if (user_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    user_data_ = new ::std::string;
+  }
+  user_data_->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:svr.LinkerBroadcast.user_data)
+}
+inline ::std::string* LinkerBroadcast::mutable_user_data() {
+  set_has_user_data();
+  if (user_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    user_data_ = new ::std::string;
+  }
+  // @@protoc_insertion_point(field_mutable:svr.LinkerBroadcast.user_data)
+  return user_data_;
+}
+inline ::std::string* LinkerBroadcast::release_user_data() {
+  clear_has_user_data();
+  if (user_data_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    return NULL;
+  } else {
+    ::std::string* temp = user_data_;
+    user_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    return temp;
+  }
+}
+inline void LinkerBroadcast::set_allocated_user_data(::std::string* user_data) {
+  if (user_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete user_data_;
+  }
+  if (user_data) {
+    set_has_user_data();
+    user_data_ = user_data;
+  } else {
+    clear_has_user_data();
+    user_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  }
+  // @@protoc_insertion_point(field_set_allocated:svr.LinkerBroadcast.user_data)
 }
 
 // -------------------------------------------------------------------

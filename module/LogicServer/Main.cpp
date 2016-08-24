@@ -53,10 +53,10 @@ int main(int argc, char *argv[])
 	// 连接网关服务器
 	try
 	{
-		std::unique_ptr<gateway::GatewayClient> connector;
+		std::unique_ptr<gw::GWClient> connector;
 		asio::ip::tcp::endpoint endpoint(asio::ip::address_v4::from_string(ServerConfig::GetInstance()->GetGWServerIP()),
 			ServerConfig::GetInstance()->GetGWServerPort());
-		connector = std::make_unique<gateway::GatewayClient>(threads, endpoint, ServerConfig::GetInstance()->GetGWServerConnections(), svr::kMainLogicSever);
+		connector = std::make_unique<gw::GWClient>(threads, endpoint, ServerConfig::GetInstance()->GetGWServerConnections(), svr::kMainLogicSever);
 		OnceInitGlobalGatewayConnector(std::move(connector));
 		logger()->info("连接网关服务器成功!");
 	}

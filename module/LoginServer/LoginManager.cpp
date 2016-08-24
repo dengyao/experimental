@@ -22,10 +22,10 @@ LoginManager::LoginManager(network::IOServiceThreadManager &threads, const std::
 {
 	for (const auto &partition : partition_lists_)
 	{
-		assert(partition.status >= cli::QueryPartitionRsp::StateType_MIN &&
-			partition.status <= cli::QueryPartitionRsp::StateType_MAX);
-		if (partition.status < cli::QueryPartitionRsp::StateType_MIN ||
-			partition.status > cli::QueryPartitionRsp::StateType_MAX)
+		assert(partition.status >= cli::QueryPartRsp::Status_MIN &&
+			partition.status <= cli::QueryPartRsp::Status_MAX);
+		if (partition.status < cli::QueryPartRsp::Status_MIN ||
+			partition.status > cli::QueryPartRsp::Status_MAX)
 		{
 			logger()->critical("非法的分区状态码!");
 			exit(-1);
@@ -36,11 +36,11 @@ LoginManager::LoginManager(network::IOServiceThreadManager &threads, const std::
 		std::bind(&LoginManager::OnLinkerLogin, this, _1, _2, _3));
 	dispatcher_.RegisterMessageCallback<svr::ReportLinkerReq>(
 		std::bind(&LoginManager::OnReportLinker, this, _1, _2, _3));
-	dispatcher_.RegisterMessageCallback<cli::QueryPartitionReq>(
+	dispatcher_.RegisterMessageCallback<cli::QueryPartReq>(
 		std::bind(&LoginManager::OnUserQueryPartition, this, _1, _2, _3));
 	dispatcher_.RegisterMessageCallback<cli::SignInReq>(
 		std::bind(&LoginManager::OnUserSignIn, this, _1, _2, _3));
-	dispatcher_.RegisterMessageCallback<cli::EntryPartitionReq>(
+	dispatcher_.RegisterMessageCallback<cli::QueryPartReq>(
 		std::bind(&LoginManager::OnUserEntryPartition, this, _1, _2, _3));
 	dispatcher_.RegisterMessageCallback<cli::SignUpReq>(
 		std::bind(&LoginManager::OnUserSignUp, this, _1, _2, _3));
@@ -209,7 +209,7 @@ bool LoginManager::OnLinkerLogin(network::TCPSessionHandler *session, google::pr
 	}
 
 	// 分区是否停机维护
-	if (found->status != cli::QueryPartitionRsp::kNormal)
+	if (found->status != cli::QueryPartRsp::kNormal)
 	{
 		SendErrorCode(static_cast<SessionHandle*>(session), buffer, pub::kRepeatLogin, message->GetTypeName().c_str());
 		logger()->warn("分区停机维护中，Linker登录失败，来自{}:{}", session->RemoteEndpoint().address().to_string(), session->RemoteEndpoint().port());
@@ -310,7 +310,7 @@ bool LoginManager::OnReportLinker(network::TCPSessionHandler *session, google::p
 bool LoginManager::OnUserQueryPartition(network::TCPSessionHandler *session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
 	buffer.Clear();
-	cli::QueryPartitionRsp response;
+	cli::QueryPartRsp response;
 	for (const auto &partition : partition_lists_)
 	{
 		// 计算分区Linker数量
@@ -322,11 +322,11 @@ bool LoginManager::OnUserQueryPartition(network::TCPSessionHandler *session, goo
 		}
 
 		// 添加分区信息
-		auto status = static_cast<cli::QueryPartitionRsp::StateType>(partition.status);
-		cli::QueryPartitionRsp::Partition *data = response.add_lists();
+		auto status = static_cast<cli::QueryPartRsp::Status>(partition.status);
+		cli::QueryPartRsp::Part *data = response.add_lists();
 		data->set_id(partition.id);
 		data->set_name(partition.name);
-		data->set_status(linker_sum > 0 ? status : cli::QueryPartitionRsp::kShutdown);
+		data->set_status(linker_sum > 0 ? status : cli::QueryPartRsp::kShutdown);
 		data->set_is_recommend(partition.is_recommend);
 	}
 	ProtubufCodec::Encode(&response, buffer);
@@ -461,7 +461,7 @@ bool LoginManager::OnUserSignIn(network::TCPSessionHandler *session, google::pro
 // 进入分区
 bool LoginManager::OnUserEntryPartition(network::TCPSessionHandler *session, google::protobuf::Message *message, network::NetMessage &buffer)
 {
-	auto request = static_cast<cli::EntryPartitionReq*>(message);
+	auto request = static_cast<cli::EnterPartReq*>(message);
 
 	// 是否已经验证
 	auto found = user_session_.find(session->SessionID());
@@ -479,7 +479,7 @@ bool LoginManager::OnUserEntryPartition(network::TCPSessionHandler *session, goo
 		return partition.id == request->id();
 	});
 
-	if (partition_found != partition_lists_.end() || partition_found->status != cli::QueryPartitionRsp::kShutdown)
+	if (partition_found != partition_lists_.end() || partition_found->status != cli::QueryPartRsp::kShutdown)
 	{
 		auto partition_iter = partition_map_.find(request->id());
 		if (partition_iter != partition_map_.end())
@@ -526,7 +526,7 @@ bool LoginManager::OnUserEntryPartition(network::TCPSessionHandler *session, goo
 
 	// 返回分区信息
 	buffer.Clear();
-	cli::EntryPartitionRsp response;
+	cli::EnterPartRsp response;
 	response.set_ip(min_element->public_ip);
 	response.set_port(min_element->port);
 	response.set_token(token);

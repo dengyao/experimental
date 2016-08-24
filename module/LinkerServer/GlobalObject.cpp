@@ -6,7 +6,7 @@
 namespace global_stuff
 {
 	std::unique_ptr<LoginConnector> g_login_connector;
-	std::unique_ptr<gateway::GatewayClient> g_gateway_connector;
+	std::unique_ptr<gw::GWClient> g_gateway_connector;
 }
 
 const std::unique_ptr<LoginConnector>& GlobalLoginConnector()
@@ -26,12 +26,12 @@ void OnceInitGlobalLoginConnector(std::unique_ptr<LoginConnector> &&connector)
 	global_stuff::g_login_connector = std::forward<std::unique_ptr<LoginConnector>>(connector);
 }
 
-const std::unique_ptr<gateway::GatewayClient>& GlobalGatewayClient()
+const std::unique_ptr<gw::GWClient>& GlobalGWClient()
 {
 	return global_stuff::g_gateway_connector;
 }
 
-void OnceInitGlobalGatewayConnector(std::unique_ptr<gateway::GatewayClient> &&connector)
+void OnceInitGlobalGatewayConnector(std::unique_ptr<gw::GWClient> &&connector)
 {
 	static std::atomic_bool initialized;
 	assert(!initialized);
@@ -40,5 +40,5 @@ void OnceInitGlobalGatewayConnector(std::unique_ptr<gateway::GatewayClient> &&co
 	{	
 		exit(-1);
 	}
-	global_stuff::g_gateway_connector = std::forward<std::unique_ptr<gateway::GatewayClient>>(connector);
+	global_stuff::g_gateway_connector = std::forward<std::unique_ptr<gw::GWClient>>(connector);
 }

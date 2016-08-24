@@ -1,4 +1,5 @@
 ﻿#include "LinkerManager.h"
+#include <GWClient.h>
 #include <ProtobufCodec.h>
 #include <proto/client_link.pb.h>
 #include <proto/public_struct.pb.h>
@@ -16,20 +17,6 @@ LinkerManager::LinkerManager(network::IOServiceThreadManager &threads)
 	, wait_handler_(std::bind(&LinkerManager::OnUpdateTimer, this, std::placeholders::_1))
 {
 	timer_.async_wait(wait_handler_);
-}
-
-// 回复错误码
-void LinkerManager::SenddErrorCodeToUser(SessionHandle *session, network::NetMessage &buffer, int error_code, const char *what)
-{
-	buffer.Clear();
-	pub::ErrorRsp response;
-	response.set_error_code(static_cast<pub::ErrorCode>(error_code));
-	if (what != nullptr)
-	{
-		response.set_what(what);
-	}
-	ProtubufCodec::Encode(&response, buffer);
-	session->Send(buffer);
 }
 
 // 更新定时器
@@ -84,12 +71,6 @@ void LinkerManager::OnUpdateTimer(asio::error_code error_code)
 	timer_.async_wait(wait_handler_);
 }
 
-// 用户连接
-void LinkerManager::OnUserConnect(SessionHandle *session)
-{
-	unauth_user_session_.insert(session->SessionID());
-}
-
 // 用户消息
 void LinkerManager::OnUserMessage(SessionHandle *session, google::protobuf::Message *messsage, network::NetMessage &buffer)
 {
@@ -142,9 +123,35 @@ void LinkerManager::OnUserMessage(SessionHandle *session, google::protobuf::Mess
 		ProtubufCodec::Encode(&response, buffer);
 		session->Send(buffer);
 
+		// 用户进入通知
+		OnBroadcastUserEnter(auth_iter->second.user_id);
+
 		logger()->info("用户[{}]验证成功!", auth_iter->second.user_id);
-		return;
 	}
+	else
+	{
+		// 消息转发
+	}
+}
+
+// 回复错误码
+void LinkerManager::SenddErrorCodeToUser(SessionHandle *session, network::NetMessage &buffer, int error_code, const char *what)
+{
+	buffer.Clear();
+	pub::ErrorRsp response;
+	response.set_error_code(static_cast<pub::ErrorCode>(error_code));
+	if (what != nullptr)
+	{
+		response.set_what(what);
+	}
+	ProtubufCodec::Encode(&response, buffer);
+	session->Send(buffer);
+}
+
+// 用户连接
+void LinkerManager::OnUserConnect(SessionHandle *session)
+{
+	unauth_user_session_.insert(session->SessionID());
 }
 
 // 用户关闭连接
@@ -158,6 +165,9 @@ void LinkerManager::OnUserClose(SessionHandle *session)
 		assert(iter != user_session_.end());
 		if (iter != user_session_.end())
 		{
+			// 用户离开通知
+			OnBroadcastUserLeave(found->first);
+
 			// 断线后Token在一定时间内依然有效
 			SUserAuth auth;
 			auth.user_id = found->first;
@@ -166,8 +176,23 @@ void LinkerManager::OnUserClose(SessionHandle *session)
 		}
 
 		logger()->info("用户[{}]关闭连接!", found->second);
-		reverse_user_session_.erase(found);	
+		reverse_user_session_.erase(found);
 	}
+}
+
+// 广播用户进入
+void LinkerManager::OnBroadcastUserEnter(uint32_t user_id)
+{
+	std::vector<int> dst_type_lists;
+	dst_type_lists.push_back(static_cast<int>(svr::NodeType::kChatServer));
+	dst_type_lists.push_back(static_cast<int>(svr::NodeType::kLogicSever));
+	GlobalGWClient()->Broadcast(dst_type_lists, );
+}
+
+// 广播用户离开
+void LinkerManager::OnBroadcastUserLeave(uint32_t user_id)
+{
+
 }
 
 // 登录服务器消息
@@ -189,6 +214,7 @@ void LinkerManager::OnLoginServerMessage(LoginConnector *connector, google::prot
 }
 
 // 网关服务器消息
-void LinkerManager::OnGatewayServerMessage(gateway::GatewayClient *connector, google::protobuf::Message *messsage, network::NetMessage &buffer)
+void LinkerManager::OnGatewayServerMessage(gw::GWClient *connector, google::protobuf::Message *messsage, network::NetMessage &buffer)
 {
+
 }

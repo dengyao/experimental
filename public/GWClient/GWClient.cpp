@@ -4,7 +4,7 @@
 #include <proto/public_struct.pb.h>
 #include <proto/server_internal.pb.h>
 
-namespace gateway
+namespace gw
 {
 	static const size_t kExtrabufSize = 4096;
 
@@ -12,10 +12,10 @@ namespace gateway
 
 	class SessionHandle : public network::TCPSessionHandler
 	{
-		friend class GatewayClient;
+		friend class GWClient;
 
 	public:
-		SessionHandle(GatewayClient *client, std::shared_ptr<bool> &life)
+		SessionHandle(GWClient *client, std::shared_ptr<bool> &life)
 			: counter_(0)
 			, client_(client)
 			, is_logged_(false)
@@ -118,7 +118,7 @@ namespace gateway
 		}
 
 	private:
-		GatewayClient*          client_;
+		GWClient*          client_;
 		bool                is_logged_;
 		std::weak_ptr<bool> client_life_;
 		uint32_t            counter_;
@@ -131,7 +131,7 @@ namespace gateway
 	class AsyncReconnectHandle : public std::enable_shared_from_this< AsyncReconnectHandle >
 	{
 	public:
-		AsyncReconnectHandle(GatewayClient *client, std::shared_ptr<bool> &life)
+		AsyncReconnectHandle(GWClient *client, std::shared_ptr<bool> &life)
 			: client_(client)
 			, client_life_(life)
 		{
@@ -153,7 +153,7 @@ namespace gateway
 		}
 
 	private:
-		GatewayClient*      client_;
+		GWClient*      client_;
 		std::weak_ptr<bool> client_life_;
 	};
 
@@ -165,7 +165,7 @@ namespace gateway
 		return std::make_shared<network::DefaultMessageFilter>();
 	}
 
-	GatewayClient::GatewayClient(network::IOServiceThreadManager &threads, asio::ip::tcp::endpoint &endpoint, size_t connection_num, int node_type, int child_id)
+	GWClient::GWClient(network::IOServiceThreadManager &threads, asio::ip::tcp::endpoint &endpoint, size_t connection_num, int node_type, int child_id)
 		: threads_(threads)
 		, connecting_num_(0)
 		, endpoint_(endpoint)
@@ -175,8 +175,8 @@ namespace gateway
 		, context_session_(nullptr)
 		, connection_num_(connection_num)
 		, timer_(threads.MainThread()->IOService(), std::chrono::seconds(1))
-		, wait_handler_(std::bind(&GatewayClient::OnUpdateTimer, this, std::placeholders::_1))
-		, session_handle_creator_(threads_, std::bind(&GatewayClient::CreateSessionHandle, this), std::bind(CreaterMessageFilter))
+		, wait_handler_(std::bind(&GWClient::OnUpdateTimer, this, std::placeholders::_1))
+		, session_handle_creator_(threads_, std::bind(&GWClient::CreateSessionHandle, this), std::bind(CreaterMessageFilter))
 	{
 		assert(connection_num > 0);
 		assert(node_type_ >= svr::NodeType_MIN && node_type_ <= svr::NodeType_MAX);
@@ -184,37 +184,37 @@ namespace gateway
 		timer_.async_wait(wait_handler_);
 	}
 
-	GatewayClient::~GatewayClient()
+	GWClient::~GWClient()
 	{
 		Clear();
 	}
 
 	// 服务器节点类型
-	int GatewayClient::GetNodeType() const
+	int GWClient::GetNodeType() const
 	{
 		return node_type_;
 	}
 
 	// 服务器子节点id
-	int GatewayClient::GetChildNodeID() const
+	int GWClient::GetChildNodeID() const
 	{
 		return child_id_;
 	}
 
 	// 设置消息回调
-	void GatewayClient::SetMessageCallback(const Callback &cb)
+	void GWClient::SetMessageCallback(const Callback &cb)
 	{
 		message_cb_ = cb;
 	}
 
 	// 获取上下文Session
-	network::TCPSessionHandler* GatewayClient::ContextSession() const
+	network::TCPSessionHandler* GWClient::ContextSession() const
 	{
 		return context_session_;
 	}
 
 	// 清理所有连接
-	void GatewayClient::Clear()
+	void GWClient::Clear()
 	{
 		lifetimes_.clear();
 		for (auto session : session_handle_lists_)
@@ -228,7 +228,7 @@ namespace gateway
 	}
 
 	// 创建会话处理器
-	network::SessionHandlePointer GatewayClient::CreateSessionHandle()
+	network::SessionHandlePointer GWClient::CreateSessionHandle()
 	{
 		auto life = std::make_shared<bool>();
 		lifetimes_.insert(life);
@@ -236,7 +236,7 @@ namespace gateway
 	}
 
 	// 初始化连接
-	void GatewayClient::InitConnections()
+	void GWClient::InitConnections()
 	{
 		asio::error_code error_code;
 		for (size_t i = 0; i < connection_num_; ++i)
@@ -260,7 +260,7 @@ namespace gateway
 	}
 
 	// 重新连接
-	void GatewayClient::AsyncReconnect()
+	void GWClient::AsyncReconnect()
 	{
 		if (session_handle_lists_.size() < connection_num_)
 		{
@@ -284,7 +284,7 @@ namespace gateway
 	}
 
 	// 异步重连结果
-	void GatewayClient::AsyncReconnectResult(AsyncReconnectHandle &handler, asio::error_code error_code)
+	void GWClient::AsyncReconnectResult(AsyncReconnectHandle &handler, asio::error_code error_code)
 	{
 		if (error_code)
 		{
@@ -302,7 +302,7 @@ namespace gateway
 	}
 
 	// 获取会话处理器
-	SessionHandle* GatewayClient::GetSessionHandle()
+	SessionHandle* GWClient::GetSessionHandle()
 	{
 		if (session_handle_lists_.size() < connection_num_)
 		{
@@ -322,7 +322,7 @@ namespace gateway
 	}
 
 	// 更新计时器
-	void GatewayClient::OnUpdateTimer(asio::error_code error_code)
+	void GWClient::OnUpdateTimer(asio::error_code error_code)
 	{
 		if (error_code)
 		{
@@ -339,7 +339,7 @@ namespace gateway
 	}
 
 	// 连接事件
-	void GatewayClient::OnConnected(SessionHandle *session)
+	void GWClient::OnConnected(SessionHandle *session)
 	{
 		if (session_handle_lists_.size() >= connection_num_)
 		{
@@ -355,7 +355,7 @@ namespace gateway
 	}
 
 	// 断开连接事件
-	void GatewayClient::OnDisconnect(SessionHandle *session)
+	void GWClient::OnDisconnect(SessionHandle *session)
 	{
 		lifetimes_.erase(session->GetLife().lock());
 		auto session_iter = std::find(session_handle_lists_.begin(), session_handle_lists_.end(), session);
@@ -366,7 +366,7 @@ namespace gateway
 	}
 
 	// 接受消息事件
-	void GatewayClient::OnMessage(SessionHandle *session, google::protobuf::Message *message, network::NetMessage &buffer)
+	void GWClient::OnMessage(SessionHandle *session, google::protobuf::Message *message, network::NetMessage &buffer)
 	{
 		context_session_ = session;
 		if (dynamic_cast<svr::GWNotify*>(message) != nullptr)
@@ -397,24 +397,24 @@ namespace gateway
 	}
 
 	// 回复消息
-	void GatewayClient::Reply(google::protobuf::Message *message)
+	void GWClient::Reply(google::protobuf::Message *message)
 	{
 		Send(context_.node_type, context_.child_id, message);
 	}
 
-	void GatewayClient::Reply(google::protobuf::Message *message, network::NetMessage &buffer)
+	void GWClient::Reply(google::protobuf::Message *message, network::NetMessage &buffer)
 	{
 		Send(context_.node_type, context_.child_id, message, buffer);
 	}
 
 	// 发送消息
-	void GatewayClient::Send(int dst_node_type, int dst_child_id, google::protobuf::Message *message)
+	void GWClient::Send(int dst_node_type, int dst_child_id, google::protobuf::Message *message)
 	{
 		network::NetMessage buffer;
 		Send(dst_node_type, dst_child_id, message, buffer);
 	}
 
-	void GatewayClient::Send(int dst_node_type, int dst_child_id, google::protobuf::Message *message, network::NetMessage &buffer)
+	void GWClient::Send(int dst_node_type, int dst_child_id, google::protobuf::Message *message, network::NetMessage &buffer)
 	{
 		assert(dst_node_type >= svr::NodeType_MIN && dst_node_type <= svr::NodeType_MAX);
 		SessionHandle *session = GetSessionHandle();
@@ -446,13 +446,13 @@ namespace gateway
 	}
 
 	// 广播消息
-	void GatewayClient::Broadcast(const std::vector<int> &dst_type_lists, google::protobuf::Message *message)
+	void GWClient::Broadcast(const std::vector<int> &dst_type_lists, google::protobuf::Message *message)
 	{
 		network::NetMessage buffer;
 		Broadcast(dst_type_lists, message, buffer);
 	}
 
-	void GatewayClient::Broadcast(const std::vector<int> &dst_type_lists, google::protobuf::Message *message, network::NetMessage &buffer)
+	void GWClient::Broadcast(const std::vector<int> &dst_type_lists, google::protobuf::Message *message, network::NetMessage &buffer)
 	{
 		SessionHandle *session = GetSessionHandle();
 		if (session != nullptr)

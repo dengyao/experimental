@@ -1,0 +1,17 @@
+package cli;
+
+// 用户进入请求
+message UserEnterReq {
+}
+
+// 用户进入返回
+message UserEnterRsp {
+    required uint32 user_id = 1;  // 用户id
+    //required string nickname = 2; // 昵称
+    //required uint32 age = 3;      // 年龄
+    //required uint32 gender = 4;   // 性别
+}
+
+// 用户离开请求
+message UserLeaveReq {
+}

@@ -4,9 +4,9 @@
 #include <unordered_set>
 #include <network.h>
 
-namespace gateway
+namespace gw
 {
-	class GatewayClient;
+	class GWClient;
 }
 
 namespace google
@@ -63,12 +63,18 @@ public:
 	void OnLoginServerMessage(LoginConnector *connector, google::protobuf::Message *messsage, network::NetMessage &buffer);
 
 	// 网关服务器消息
-	void OnGatewayServerMessage(gateway::GatewayClient *connector, google::protobuf::Message *messsage, network::NetMessage &buffer);
+	void OnGatewayServerMessage(gw::GWClient *connector, google::protobuf::Message *messsage, network::NetMessage &buffer);
 
 	// 回复错误码
 	void SenddErrorCodeToUser(SessionHandle *session, network::NetMessage &buffer, int error_code, const char *what = nullptr);
 
 private:
+	// 广播用户进入
+	void OnBroadcastUserEnter(uint32_t user_id);
+
+	// 广播用户离开
+	void OnBroadcastUserLeave(uint32_t user_id);
+
 	// 更新定时器
 	void OnUpdateTimer(asio::error_code error_code);
 

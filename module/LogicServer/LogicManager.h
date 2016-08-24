@@ -3,9 +3,9 @@
 
 #include <ProtobufDispatcher.h>
 
-namespace gateway
+namespace gw
 {
-	class GatewayClient;
+	class GWClient;
 }
 
 class LogicManager
@@ -15,7 +15,7 @@ public:
 
 public:
 	// 网关消息
-	void OnGatewayServerMessage(gateway::GatewayClient *connector, google::protobuf::Message *messsage, network::NetMessage &buffer);
+	void OnGatewayServerMessage(gw::GWClient *connector, google::protobuf::Message *messsage, network::NetMessage &buffer);
 
 private:
 	// 未定义消息

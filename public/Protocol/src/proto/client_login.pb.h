@@ -38,30 +38,30 @@ class SignUpReq;
 class SignUpRsp;
 class SignInReq;
 class SignInRsp;
-class QueryPartitionReq;
-class QueryPartitionRsp;
-class QueryPartitionRsp_Partition;
-class EntryPartitionReq;
-class EntryPartitionRsp;
+class QueryPartReq;
+class QueryPartRsp;
+class QueryPartRsp_Part;
+class EnterPartReq;
+class EnterPartRsp;
 
-enum QueryPartitionRsp_StateType {
-  QueryPartitionRsp_StateType_kNormal = 0,
-  QueryPartitionRsp_StateType_kShutdown = 1
+enum QueryPartRsp_Status {
+  QueryPartRsp_Status_kNormal = 0,
+  QueryPartRsp_Status_kShutdown = 1
 };
-bool QueryPartitionRsp_StateType_IsValid(int value);
-const QueryPartitionRsp_StateType QueryPartitionRsp_StateType_StateType_MIN = QueryPartitionRsp_StateType_kNormal;
-const QueryPartitionRsp_StateType QueryPartitionRsp_StateType_StateType_MAX = QueryPartitionRsp_StateType_kShutdown;
-const int QueryPartitionRsp_StateType_StateType_ARRAYSIZE = QueryPartitionRsp_StateType_StateType_MAX + 1;
+bool QueryPartRsp_Status_IsValid(int value);
+const QueryPartRsp_Status QueryPartRsp_Status_Status_MIN = QueryPartRsp_Status_kNormal;
+const QueryPartRsp_Status QueryPartRsp_Status_Status_MAX = QueryPartRsp_Status_kShutdown;
+const int QueryPartRsp_Status_Status_ARRAYSIZE = QueryPartRsp_Status_Status_MAX + 1;
 
-const ::google::protobuf::EnumDescriptor* QueryPartitionRsp_StateType_descriptor();
-inline const ::std::string& QueryPartitionRsp_StateType_Name(QueryPartitionRsp_StateType value) {
+const ::google::protobuf::EnumDescriptor* QueryPartRsp_Status_descriptor();
+inline const ::std::string& QueryPartRsp_Status_Name(QueryPartRsp_Status value) {
   return ::google::protobuf::internal::NameOfEnum(
-    QueryPartitionRsp_StateType_descriptor(), value);
+    QueryPartRsp_Status_descriptor(), value);
 }
-inline bool QueryPartitionRsp_StateType_Parse(
-    const ::std::string& name, QueryPartitionRsp_StateType* value) {
-  return ::google::protobuf::internal::ParseNamedEnum<QueryPartitionRsp_StateType>(
-    QueryPartitionRsp_StateType_descriptor(), name, value);
+inline bool QueryPartRsp_Status_Parse(
+    const ::std::string& name, QueryPartRsp_Status* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<QueryPartRsp_Status>(
+    QueryPartRsp_Status_descriptor(), name, value);
 }
 // ===================================================================
 
@@ -496,14 +496,14 @@ class SignInRsp : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
-class QueryPartitionReq : public ::google::protobuf::Message {
+class QueryPartReq : public ::google::protobuf::Message {
  public:
-  QueryPartitionReq();
-  virtual ~QueryPartitionReq();
+  QueryPartReq();
+  virtual ~QueryPartReq();
 
-  QueryPartitionReq(const QueryPartitionReq& from);
+  QueryPartReq(const QueryPartReq& from);
 
-  inline QueryPartitionReq& operator=(const QueryPartitionReq& from) {
+  inline QueryPartReq& operator=(const QueryPartReq& from) {
     CopyFrom(from);
     return *this;
   }
@@ -517,17 +517,17 @@ class QueryPartitionReq : public ::google::protobuf::Message {
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
-  static const QueryPartitionReq& default_instance();
+  static const QueryPartReq& default_instance();
 
-  void Swap(QueryPartitionReq* other);
+  void Swap(QueryPartReq* other);
 
   // implements Message ----------------------------------------------
 
-  QueryPartitionReq* New() const;
+  QueryPartReq* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const QueryPartitionReq& from);
-  void MergeFrom(const QueryPartitionReq& from);
+  void CopyFrom(const QueryPartReq& from);
+  void MergeFrom(const QueryPartReq& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -549,7 +549,7 @@ class QueryPartitionReq : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // @@protoc_insertion_point(class_scope:cli.QueryPartitionReq)
+  // @@protoc_insertion_point(class_scope:cli.QueryPartReq)
  private:
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
@@ -561,18 +561,18 @@ class QueryPartitionReq : public ::google::protobuf::Message {
   friend void protobuf_ShutdownFile_proto_2fclient_5flogin_2eproto();
 
   void InitAsDefaultInstance();
-  static QueryPartitionReq* default_instance_;
+  static QueryPartReq* default_instance_;
 };
 // -------------------------------------------------------------------
 
-class QueryPartitionRsp_Partition : public ::google::protobuf::Message {
+class QueryPartRsp_Part : public ::google::protobuf::Message {
  public:
-  QueryPartitionRsp_Partition();
-  virtual ~QueryPartitionRsp_Partition();
+  QueryPartRsp_Part();
+  virtual ~QueryPartRsp_Part();
 
-  QueryPartitionRsp_Partition(const QueryPartitionRsp_Partition& from);
+  QueryPartRsp_Part(const QueryPartRsp_Part& from);
 
-  inline QueryPartitionRsp_Partition& operator=(const QueryPartitionRsp_Partition& from) {
+  inline QueryPartRsp_Part& operator=(const QueryPartRsp_Part& from) {
     CopyFrom(from);
     return *this;
   }
@@ -586,17 +586,17 @@ class QueryPartitionRsp_Partition : public ::google::protobuf::Message {
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
-  static const QueryPartitionRsp_Partition& default_instance();
+  static const QueryPartRsp_Part& default_instance();
 
-  void Swap(QueryPartitionRsp_Partition* other);
+  void Swap(QueryPartRsp_Part* other);
 
   // implements Message ----------------------------------------------
 
-  QueryPartitionRsp_Partition* New() const;
+  QueryPartRsp_Part* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const QueryPartitionRsp_Partition& from);
-  void MergeFrom(const QueryPartitionRsp_Partition& from);
+  void CopyFrom(const QueryPartRsp_Part& from);
+  void MergeFrom(const QueryPartRsp_Part& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -637,12 +637,12 @@ class QueryPartitionRsp_Partition : public ::google::protobuf::Message {
   inline ::std::string* release_name();
   inline void set_allocated_name(::std::string* name);
 
-  // required .cli.QueryPartitionRsp.StateType status = 3;
+  // required .cli.QueryPartRsp.Status status = 3;
   inline bool has_status() const;
   inline void clear_status();
   static const int kStatusFieldNumber = 3;
-  inline ::cli::QueryPartitionRsp_StateType status() const;
-  inline void set_status(::cli::QueryPartitionRsp_StateType value);
+  inline ::cli::QueryPartRsp_Status status() const;
+  inline void set_status(::cli::QueryPartRsp_Status value);
 
   // required bool is_recommend = 4;
   inline bool has_is_recommend() const;
@@ -651,7 +651,7 @@ class QueryPartitionRsp_Partition : public ::google::protobuf::Message {
   inline bool is_recommend() const;
   inline void set_is_recommend(bool value);
 
-  // @@protoc_insertion_point(class_scope:cli.QueryPartitionRsp.Partition)
+  // @@protoc_insertion_point(class_scope:cli.QueryPartRsp.Part)
  private:
   inline void set_has_id();
   inline void clear_has_id();
@@ -675,18 +675,18 @@ class QueryPartitionRsp_Partition : public ::google::protobuf::Message {
   friend void protobuf_ShutdownFile_proto_2fclient_5flogin_2eproto();
 
   void InitAsDefaultInstance();
-  static QueryPartitionRsp_Partition* default_instance_;
+  static QueryPartRsp_Part* default_instance_;
 };
 // -------------------------------------------------------------------
 
-class QueryPartitionRsp : public ::google::protobuf::Message {
+class QueryPartRsp : public ::google::protobuf::Message {
  public:
-  QueryPartitionRsp();
-  virtual ~QueryPartitionRsp();
+  QueryPartRsp();
+  virtual ~QueryPartRsp();
 
-  QueryPartitionRsp(const QueryPartitionRsp& from);
+  QueryPartRsp(const QueryPartRsp& from);
 
-  inline QueryPartitionRsp& operator=(const QueryPartitionRsp& from) {
+  inline QueryPartRsp& operator=(const QueryPartRsp& from) {
     CopyFrom(from);
     return *this;
   }
@@ -700,17 +700,17 @@ class QueryPartitionRsp : public ::google::protobuf::Message {
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
-  static const QueryPartitionRsp& default_instance();
+  static const QueryPartRsp& default_instance();
 
-  void Swap(QueryPartitionRsp* other);
+  void Swap(QueryPartRsp* other);
 
   // implements Message ----------------------------------------------
 
-  QueryPartitionRsp* New() const;
+  QueryPartRsp* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const QueryPartitionRsp& from);
-  void MergeFrom(const QueryPartitionRsp& from);
+  void CopyFrom(const QueryPartRsp& from);
+  void MergeFrom(const QueryPartRsp& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -730,71 +730,71 @@ class QueryPartitionRsp : public ::google::protobuf::Message {
 
   // nested types ----------------------------------------------------
 
-  typedef QueryPartitionRsp_Partition Partition;
+  typedef QueryPartRsp_Part Part;
 
-  typedef QueryPartitionRsp_StateType StateType;
-  static const StateType kNormal = QueryPartitionRsp_StateType_kNormal;
-  static const StateType kShutdown = QueryPartitionRsp_StateType_kShutdown;
-  static inline bool StateType_IsValid(int value) {
-    return QueryPartitionRsp_StateType_IsValid(value);
+  typedef QueryPartRsp_Status Status;
+  static const Status kNormal = QueryPartRsp_Status_kNormal;
+  static const Status kShutdown = QueryPartRsp_Status_kShutdown;
+  static inline bool Status_IsValid(int value) {
+    return QueryPartRsp_Status_IsValid(value);
   }
-  static const StateType StateType_MIN =
-    QueryPartitionRsp_StateType_StateType_MIN;
-  static const StateType StateType_MAX =
-    QueryPartitionRsp_StateType_StateType_MAX;
-  static const int StateType_ARRAYSIZE =
-    QueryPartitionRsp_StateType_StateType_ARRAYSIZE;
+  static const Status Status_MIN =
+    QueryPartRsp_Status_Status_MIN;
+  static const Status Status_MAX =
+    QueryPartRsp_Status_Status_MAX;
+  static const int Status_ARRAYSIZE =
+    QueryPartRsp_Status_Status_ARRAYSIZE;
   static inline const ::google::protobuf::EnumDescriptor*
-  StateType_descriptor() {
-    return QueryPartitionRsp_StateType_descriptor();
+  Status_descriptor() {
+    return QueryPartRsp_Status_descriptor();
   }
-  static inline const ::std::string& StateType_Name(StateType value) {
-    return QueryPartitionRsp_StateType_Name(value);
+  static inline const ::std::string& Status_Name(Status value) {
+    return QueryPartRsp_Status_Name(value);
   }
-  static inline bool StateType_Parse(const ::std::string& name,
-      StateType* value) {
-    return QueryPartitionRsp_StateType_Parse(name, value);
+  static inline bool Status_Parse(const ::std::string& name,
+      Status* value) {
+    return QueryPartRsp_Status_Parse(name, value);
   }
 
   // accessors -------------------------------------------------------
 
-  // repeated .cli.QueryPartitionRsp.Partition lists = 1;
+  // repeated .cli.QueryPartRsp.Part lists = 1;
   inline int lists_size() const;
   inline void clear_lists();
   static const int kListsFieldNumber = 1;
-  inline const ::cli::QueryPartitionRsp_Partition& lists(int index) const;
-  inline ::cli::QueryPartitionRsp_Partition* mutable_lists(int index);
-  inline ::cli::QueryPartitionRsp_Partition* add_lists();
-  inline const ::google::protobuf::RepeatedPtrField< ::cli::QueryPartitionRsp_Partition >&
+  inline const ::cli::QueryPartRsp_Part& lists(int index) const;
+  inline ::cli::QueryPartRsp_Part* mutable_lists(int index);
+  inline ::cli::QueryPartRsp_Part* add_lists();
+  inline const ::google::protobuf::RepeatedPtrField< ::cli::QueryPartRsp_Part >&
       lists() const;
-  inline ::google::protobuf::RepeatedPtrField< ::cli::QueryPartitionRsp_Partition >*
+  inline ::google::protobuf::RepeatedPtrField< ::cli::QueryPartRsp_Part >*
       mutable_lists();
 
-  // @@protoc_insertion_point(class_scope:cli.QueryPartitionRsp)
+  // @@protoc_insertion_point(class_scope:cli.QueryPartRsp)
  private:
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
-  ::google::protobuf::RepeatedPtrField< ::cli::QueryPartitionRsp_Partition > lists_;
+  ::google::protobuf::RepeatedPtrField< ::cli::QueryPartRsp_Part > lists_;
   friend void  protobuf_AddDesc_proto_2fclient_5flogin_2eproto();
   friend void protobuf_AssignDesc_proto_2fclient_5flogin_2eproto();
   friend void protobuf_ShutdownFile_proto_2fclient_5flogin_2eproto();
 
   void InitAsDefaultInstance();
-  static QueryPartitionRsp* default_instance_;
+  static QueryPartRsp* default_instance_;
 };
 // -------------------------------------------------------------------
 
-class EntryPartitionReq : public ::google::protobuf::Message {
+class EnterPartReq : public ::google::protobuf::Message {
  public:
-  EntryPartitionReq();
-  virtual ~EntryPartitionReq();
+  EnterPartReq();
+  virtual ~EnterPartReq();
 
-  EntryPartitionReq(const EntryPartitionReq& from);
+  EnterPartReq(const EnterPartReq& from);
 
-  inline EntryPartitionReq& operator=(const EntryPartitionReq& from) {
+  inline EnterPartReq& operator=(const EnterPartReq& from) {
     CopyFrom(from);
     return *this;
   }
@@ -808,17 +808,17 @@ class EntryPartitionReq : public ::google::protobuf::Message {
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
-  static const EntryPartitionReq& default_instance();
+  static const EnterPartReq& default_instance();
 
-  void Swap(EntryPartitionReq* other);
+  void Swap(EnterPartReq* other);
 
   // implements Message ----------------------------------------------
 
-  EntryPartitionReq* New() const;
+  EnterPartReq* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const EntryPartitionReq& from);
-  void MergeFrom(const EntryPartitionReq& from);
+  void CopyFrom(const EnterPartReq& from);
+  void MergeFrom(const EnterPartReq& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -847,7 +847,7 @@ class EntryPartitionReq : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 id() const;
   inline void set_id(::google::protobuf::uint32 value);
 
-  // @@protoc_insertion_point(class_scope:cli.EntryPartitionReq)
+  // @@protoc_insertion_point(class_scope:cli.EnterPartReq)
  private:
   inline void set_has_id();
   inline void clear_has_id();
@@ -862,18 +862,18 @@ class EntryPartitionReq : public ::google::protobuf::Message {
   friend void protobuf_ShutdownFile_proto_2fclient_5flogin_2eproto();
 
   void InitAsDefaultInstance();
-  static EntryPartitionReq* default_instance_;
+  static EnterPartReq* default_instance_;
 };
 // -------------------------------------------------------------------
 
-class EntryPartitionRsp : public ::google::protobuf::Message {
+class EnterPartRsp : public ::google::protobuf::Message {
  public:
-  EntryPartitionRsp();
-  virtual ~EntryPartitionRsp();
+  EnterPartRsp();
+  virtual ~EnterPartRsp();
 
-  EntryPartitionRsp(const EntryPartitionRsp& from);
+  EnterPartRsp(const EnterPartRsp& from);
 
-  inline EntryPartitionRsp& operator=(const EntryPartitionRsp& from) {
+  inline EnterPartRsp& operator=(const EnterPartRsp& from) {
     CopyFrom(from);
     return *this;
   }
@@ -887,17 +887,17 @@ class EntryPartitionRsp : public ::google::protobuf::Message {
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
-  static const EntryPartitionRsp& default_instance();
+  static const EnterPartRsp& default_instance();
 
-  void Swap(EntryPartitionRsp* other);
+  void Swap(EnterPartRsp* other);
 
   // implements Message ----------------------------------------------
 
-  EntryPartitionRsp* New() const;
+  EnterPartRsp* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const EntryPartitionRsp& from);
-  void MergeFrom(const EntryPartitionRsp& from);
+  void CopyFrom(const EnterPartRsp& from);
+  void MergeFrom(const EnterPartRsp& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -945,7 +945,7 @@ class EntryPartitionRsp : public ::google::protobuf::Message {
   inline ::google::protobuf::uint64 token() const;
   inline void set_token(::google::protobuf::uint64 value);
 
-  // @@protoc_insertion_point(class_scope:cli.EntryPartitionRsp)
+  // @@protoc_insertion_point(class_scope:cli.EnterPartRsp)
  private:
   inline void set_has_ip();
   inline void clear_has_ip();
@@ -966,7 +966,7 @@ class EntryPartitionRsp : public ::google::protobuf::Message {
   friend void protobuf_ShutdownFile_proto_2fclient_5flogin_2eproto();
 
   void InitAsDefaultInstance();
-  static EntryPartitionRsp* default_instance_;
+  static EnterPartRsp* default_instance_;
 };
 // ===================================================================
 
@@ -1721,89 +1721,89 @@ inline void SignInRsp::set_id(::google::protobuf::uint32 value) {
 
 // -------------------------------------------------------------------
 
-// QueryPartitionReq
+// QueryPartReq
 
 // -------------------------------------------------------------------
 
-// QueryPartitionRsp_Partition
+// QueryPartRsp_Part
 
 // required uint32 id = 1;
-inline bool QueryPartitionRsp_Partition::has_id() const {
+inline bool QueryPartRsp_Part::has_id() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void QueryPartitionRsp_Partition::set_has_id() {
+inline void QueryPartRsp_Part::set_has_id() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void QueryPartitionRsp_Partition::clear_has_id() {
+inline void QueryPartRsp_Part::clear_has_id() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void QueryPartitionRsp_Partition::clear_id() {
+inline void QueryPartRsp_Part::clear_id() {
   id_ = 0u;
   clear_has_id();
 }
-inline ::google::protobuf::uint32 QueryPartitionRsp_Partition::id() const {
-  // @@protoc_insertion_point(field_get:cli.QueryPartitionRsp.Partition.id)
+inline ::google::protobuf::uint32 QueryPartRsp_Part::id() const {
+  // @@protoc_insertion_point(field_get:cli.QueryPartRsp.Part.id)
   return id_;
 }
-inline void QueryPartitionRsp_Partition::set_id(::google::protobuf::uint32 value) {
+inline void QueryPartRsp_Part::set_id(::google::protobuf::uint32 value) {
   set_has_id();
   id_ = value;
-  // @@protoc_insertion_point(field_set:cli.QueryPartitionRsp.Partition.id)
+  // @@protoc_insertion_point(field_set:cli.QueryPartRsp.Part.id)
 }
 
 // required string name = 2;
-inline bool QueryPartitionRsp_Partition::has_name() const {
+inline bool QueryPartRsp_Part::has_name() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void QueryPartitionRsp_Partition::set_has_name() {
+inline void QueryPartRsp_Part::set_has_name() {
   _has_bits_[0] |= 0x00000002u;
 }
-inline void QueryPartitionRsp_Partition::clear_has_name() {
+inline void QueryPartRsp_Part::clear_has_name() {
   _has_bits_[0] &= ~0x00000002u;
 }
-inline void QueryPartitionRsp_Partition::clear_name() {
+inline void QueryPartRsp_Part::clear_name() {
   if (name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     name_->clear();
   }
   clear_has_name();
 }
-inline const ::std::string& QueryPartitionRsp_Partition::name() const {
-  // @@protoc_insertion_point(field_get:cli.QueryPartitionRsp.Partition.name)
+inline const ::std::string& QueryPartRsp_Part::name() const {
+  // @@protoc_insertion_point(field_get:cli.QueryPartRsp.Part.name)
   return *name_;
 }
-inline void QueryPartitionRsp_Partition::set_name(const ::std::string& value) {
+inline void QueryPartRsp_Part::set_name(const ::std::string& value) {
   set_has_name();
   if (name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     name_ = new ::std::string;
   }
   name_->assign(value);
-  // @@protoc_insertion_point(field_set:cli.QueryPartitionRsp.Partition.name)
+  // @@protoc_insertion_point(field_set:cli.QueryPartRsp.Part.name)
 }
-inline void QueryPartitionRsp_Partition::set_name(const char* value) {
+inline void QueryPartRsp_Part::set_name(const char* value) {
   set_has_name();
   if (name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     name_ = new ::std::string;
   }
   name_->assign(value);
-  // @@protoc_insertion_point(field_set_char:cli.QueryPartitionRsp.Partition.name)
+  // @@protoc_insertion_point(field_set_char:cli.QueryPartRsp.Part.name)
 }
-inline void QueryPartitionRsp_Partition::set_name(const char* value, size_t size) {
+inline void QueryPartRsp_Part::set_name(const char* value, size_t size) {
   set_has_name();
   if (name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     name_ = new ::std::string;
   }
   name_->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:cli.QueryPartitionRsp.Partition.name)
+  // @@protoc_insertion_point(field_set_pointer:cli.QueryPartRsp.Part.name)
 }
-inline ::std::string* QueryPartitionRsp_Partition::mutable_name() {
+inline ::std::string* QueryPartRsp_Part::mutable_name() {
   set_has_name();
   if (name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     name_ = new ::std::string;
   }
-  // @@protoc_insertion_point(field_mutable:cli.QueryPartitionRsp.Partition.name)
+  // @@protoc_insertion_point(field_mutable:cli.QueryPartRsp.Part.name)
   return name_;
 }
-inline ::std::string* QueryPartitionRsp_Partition::release_name() {
+inline ::std::string* QueryPartRsp_Part::release_name() {
   clear_has_name();
   if (name_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
@@ -1813,7 +1813,7 @@ inline ::std::string* QueryPartitionRsp_Partition::release_name() {
     return temp;
   }
 }
-inline void QueryPartitionRsp_Partition::set_allocated_name(::std::string* name) {
+inline void QueryPartRsp_Part::set_allocated_name(::std::string* name) {
   if (name_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete name_;
   }
@@ -1824,177 +1824,177 @@ inline void QueryPartitionRsp_Partition::set_allocated_name(::std::string* name)
     clear_has_name();
     name_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
-  // @@protoc_insertion_point(field_set_allocated:cli.QueryPartitionRsp.Partition.name)
+  // @@protoc_insertion_point(field_set_allocated:cli.QueryPartRsp.Part.name)
 }
 
-// required .cli.QueryPartitionRsp.StateType status = 3;
-inline bool QueryPartitionRsp_Partition::has_status() const {
+// required .cli.QueryPartRsp.Status status = 3;
+inline bool QueryPartRsp_Part::has_status() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
-inline void QueryPartitionRsp_Partition::set_has_status() {
+inline void QueryPartRsp_Part::set_has_status() {
   _has_bits_[0] |= 0x00000004u;
 }
-inline void QueryPartitionRsp_Partition::clear_has_status() {
+inline void QueryPartRsp_Part::clear_has_status() {
   _has_bits_[0] &= ~0x00000004u;
 }
-inline void QueryPartitionRsp_Partition::clear_status() {
+inline void QueryPartRsp_Part::clear_status() {
   status_ = 0;
   clear_has_status();
 }
-inline ::cli::QueryPartitionRsp_StateType QueryPartitionRsp_Partition::status() const {
-  // @@protoc_insertion_point(field_get:cli.QueryPartitionRsp.Partition.status)
-  return static_cast< ::cli::QueryPartitionRsp_StateType >(status_);
+inline ::cli::QueryPartRsp_Status QueryPartRsp_Part::status() const {
+  // @@protoc_insertion_point(field_get:cli.QueryPartRsp.Part.status)
+  return static_cast< ::cli::QueryPartRsp_Status >(status_);
 }
-inline void QueryPartitionRsp_Partition::set_status(::cli::QueryPartitionRsp_StateType value) {
-  assert(::cli::QueryPartitionRsp_StateType_IsValid(value));
+inline void QueryPartRsp_Part::set_status(::cli::QueryPartRsp_Status value) {
+  assert(::cli::QueryPartRsp_Status_IsValid(value));
   set_has_status();
   status_ = value;
-  // @@protoc_insertion_point(field_set:cli.QueryPartitionRsp.Partition.status)
+  // @@protoc_insertion_point(field_set:cli.QueryPartRsp.Part.status)
 }
 
 // required bool is_recommend = 4;
-inline bool QueryPartitionRsp_Partition::has_is_recommend() const {
+inline bool QueryPartRsp_Part::has_is_recommend() const {
   return (_has_bits_[0] & 0x00000008u) != 0;
 }
-inline void QueryPartitionRsp_Partition::set_has_is_recommend() {
+inline void QueryPartRsp_Part::set_has_is_recommend() {
   _has_bits_[0] |= 0x00000008u;
 }
-inline void QueryPartitionRsp_Partition::clear_has_is_recommend() {
+inline void QueryPartRsp_Part::clear_has_is_recommend() {
   _has_bits_[0] &= ~0x00000008u;
 }
-inline void QueryPartitionRsp_Partition::clear_is_recommend() {
+inline void QueryPartRsp_Part::clear_is_recommend() {
   is_recommend_ = false;
   clear_has_is_recommend();
 }
-inline bool QueryPartitionRsp_Partition::is_recommend() const {
-  // @@protoc_insertion_point(field_get:cli.QueryPartitionRsp.Partition.is_recommend)
+inline bool QueryPartRsp_Part::is_recommend() const {
+  // @@protoc_insertion_point(field_get:cli.QueryPartRsp.Part.is_recommend)
   return is_recommend_;
 }
-inline void QueryPartitionRsp_Partition::set_is_recommend(bool value) {
+inline void QueryPartRsp_Part::set_is_recommend(bool value) {
   set_has_is_recommend();
   is_recommend_ = value;
-  // @@protoc_insertion_point(field_set:cli.QueryPartitionRsp.Partition.is_recommend)
+  // @@protoc_insertion_point(field_set:cli.QueryPartRsp.Part.is_recommend)
 }
 
 // -------------------------------------------------------------------
 
-// QueryPartitionRsp
+// QueryPartRsp
 
-// repeated .cli.QueryPartitionRsp.Partition lists = 1;
-inline int QueryPartitionRsp::lists_size() const {
+// repeated .cli.QueryPartRsp.Part lists = 1;
+inline int QueryPartRsp::lists_size() const {
   return lists_.size();
 }
-inline void QueryPartitionRsp::clear_lists() {
+inline void QueryPartRsp::clear_lists() {
   lists_.Clear();
 }
-inline const ::cli::QueryPartitionRsp_Partition& QueryPartitionRsp::lists(int index) const {
-  // @@protoc_insertion_point(field_get:cli.QueryPartitionRsp.lists)
+inline const ::cli::QueryPartRsp_Part& QueryPartRsp::lists(int index) const {
+  // @@protoc_insertion_point(field_get:cli.QueryPartRsp.lists)
   return lists_.Get(index);
 }
-inline ::cli::QueryPartitionRsp_Partition* QueryPartitionRsp::mutable_lists(int index) {
-  // @@protoc_insertion_point(field_mutable:cli.QueryPartitionRsp.lists)
+inline ::cli::QueryPartRsp_Part* QueryPartRsp::mutable_lists(int index) {
+  // @@protoc_insertion_point(field_mutable:cli.QueryPartRsp.lists)
   return lists_.Mutable(index);
 }
-inline ::cli::QueryPartitionRsp_Partition* QueryPartitionRsp::add_lists() {
-  // @@protoc_insertion_point(field_add:cli.QueryPartitionRsp.lists)
+inline ::cli::QueryPartRsp_Part* QueryPartRsp::add_lists() {
+  // @@protoc_insertion_point(field_add:cli.QueryPartRsp.lists)
   return lists_.Add();
 }
-inline const ::google::protobuf::RepeatedPtrField< ::cli::QueryPartitionRsp_Partition >&
-QueryPartitionRsp::lists() const {
-  // @@protoc_insertion_point(field_list:cli.QueryPartitionRsp.lists)
+inline const ::google::protobuf::RepeatedPtrField< ::cli::QueryPartRsp_Part >&
+QueryPartRsp::lists() const {
+  // @@protoc_insertion_point(field_list:cli.QueryPartRsp.lists)
   return lists_;
 }
-inline ::google::protobuf::RepeatedPtrField< ::cli::QueryPartitionRsp_Partition >*
-QueryPartitionRsp::mutable_lists() {
-  // @@protoc_insertion_point(field_mutable_list:cli.QueryPartitionRsp.lists)
+inline ::google::protobuf::RepeatedPtrField< ::cli::QueryPartRsp_Part >*
+QueryPartRsp::mutable_lists() {
+  // @@protoc_insertion_point(field_mutable_list:cli.QueryPartRsp.lists)
   return &lists_;
 }
 
 // -------------------------------------------------------------------
 
-// EntryPartitionReq
+// EnterPartReq
 
 // required uint32 id = 1;
-inline bool EntryPartitionReq::has_id() const {
+inline bool EnterPartReq::has_id() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void EntryPartitionReq::set_has_id() {
+inline void EnterPartReq::set_has_id() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void EntryPartitionReq::clear_has_id() {
+inline void EnterPartReq::clear_has_id() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void EntryPartitionReq::clear_id() {
+inline void EnterPartReq::clear_id() {
   id_ = 0u;
   clear_has_id();
 }
-inline ::google::protobuf::uint32 EntryPartitionReq::id() const {
-  // @@protoc_insertion_point(field_get:cli.EntryPartitionReq.id)
+inline ::google::protobuf::uint32 EnterPartReq::id() const {
+  // @@protoc_insertion_point(field_get:cli.EnterPartReq.id)
   return id_;
 }
-inline void EntryPartitionReq::set_id(::google::protobuf::uint32 value) {
+inline void EnterPartReq::set_id(::google::protobuf::uint32 value) {
   set_has_id();
   id_ = value;
-  // @@protoc_insertion_point(field_set:cli.EntryPartitionReq.id)
+  // @@protoc_insertion_point(field_set:cli.EnterPartReq.id)
 }
 
 // -------------------------------------------------------------------
 
-// EntryPartitionRsp
+// EnterPartRsp
 
 // required string ip = 1;
-inline bool EntryPartitionRsp::has_ip() const {
+inline bool EnterPartRsp::has_ip() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void EntryPartitionRsp::set_has_ip() {
+inline void EnterPartRsp::set_has_ip() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void EntryPartitionRsp::clear_has_ip() {
+inline void EnterPartRsp::clear_has_ip() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void EntryPartitionRsp::clear_ip() {
+inline void EnterPartRsp::clear_ip() {
   if (ip_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     ip_->clear();
   }
   clear_has_ip();
 }
-inline const ::std::string& EntryPartitionRsp::ip() const {
-  // @@protoc_insertion_point(field_get:cli.EntryPartitionRsp.ip)
+inline const ::std::string& EnterPartRsp::ip() const {
+  // @@protoc_insertion_point(field_get:cli.EnterPartRsp.ip)
   return *ip_;
 }
-inline void EntryPartitionRsp::set_ip(const ::std::string& value) {
+inline void EnterPartRsp::set_ip(const ::std::string& value) {
   set_has_ip();
   if (ip_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     ip_ = new ::std::string;
   }
   ip_->assign(value);
-  // @@protoc_insertion_point(field_set:cli.EntryPartitionRsp.ip)
+  // @@protoc_insertion_point(field_set:cli.EnterPartRsp.ip)
 }
-inline void EntryPartitionRsp::set_ip(const char* value) {
+inline void EnterPartRsp::set_ip(const char* value) {
   set_has_ip();
   if (ip_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     ip_ = new ::std::string;
   }
   ip_->assign(value);
-  // @@protoc_insertion_point(field_set_char:cli.EntryPartitionRsp.ip)
+  // @@protoc_insertion_point(field_set_char:cli.EnterPartRsp.ip)
 }
-inline void EntryPartitionRsp::set_ip(const char* value, size_t size) {
+inline void EnterPartRsp::set_ip(const char* value, size_t size) {
   set_has_ip();
   if (ip_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     ip_ = new ::std::string;
   }
   ip_->assign(reinterpret_cast<const char*>(value), size);
-  // @@protoc_insertion_point(field_set_pointer:cli.EntryPartitionRsp.ip)
+  // @@protoc_insertion_point(field_set_pointer:cli.EnterPartRsp.ip)
 }
-inline ::std::string* EntryPartitionRsp::mutable_ip() {
+inline ::std::string* EnterPartRsp::mutable_ip() {
   set_has_ip();
   if (ip_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     ip_ = new ::std::string;
   }
-  // @@protoc_insertion_point(field_mutable:cli.EntryPartitionRsp.ip)
+  // @@protoc_insertion_point(field_mutable:cli.EnterPartRsp.ip)
   return ip_;
 }
-inline ::std::string* EntryPartitionRsp::release_ip() {
+inline ::std::string* EnterPartRsp::release_ip() {
   clear_has_ip();
   if (ip_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     return NULL;
@@ -2004,7 +2004,7 @@ inline ::std::string* EntryPartitionRsp::release_ip() {
     return temp;
   }
 }
-inline void EntryPartitionRsp::set_allocated_ip(::std::string* ip) {
+inline void EnterPartRsp::set_allocated_ip(::std::string* ip) {
   if (ip_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
     delete ip_;
   }
@@ -2015,55 +2015,55 @@ inline void EntryPartitionRsp::set_allocated_ip(::std::string* ip) {
     clear_has_ip();
     ip_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   }
-  // @@protoc_insertion_point(field_set_allocated:cli.EntryPartitionRsp.ip)
+  // @@protoc_insertion_point(field_set_allocated:cli.EnterPartRsp.ip)
 }
 
 // required uint32 port = 2;
-inline bool EntryPartitionRsp::has_port() const {
+inline bool EnterPartRsp::has_port() const {
   return (_has_bits_[0] & 0x00000002u) != 0;
 }
-inline void EntryPartitionRsp::set_has_port() {
+inline void EnterPartRsp::set_has_port() {
   _has_bits_[0] |= 0x00000002u;
 }
-inline void EntryPartitionRsp::clear_has_port() {
+inline void EnterPartRsp::clear_has_port() {
   _has_bits_[0] &= ~0x00000002u;
 }
-inline void EntryPartitionRsp::clear_port() {
+inline void EnterPartRsp::clear_port() {
   port_ = 0u;
   clear_has_port();
 }
-inline ::google::protobuf::uint32 EntryPartitionRsp::port() const {
-  // @@protoc_insertion_point(field_get:cli.EntryPartitionRsp.port)
+inline ::google::protobuf::uint32 EnterPartRsp::port() const {
+  // @@protoc_insertion_point(field_get:cli.EnterPartRsp.port)
   return port_;
 }
-inline void EntryPartitionRsp::set_port(::google::protobuf::uint32 value) {
+inline void EnterPartRsp::set_port(::google::protobuf::uint32 value) {
   set_has_port();
   port_ = value;
-  // @@protoc_insertion_point(field_set:cli.EntryPartitionRsp.port)
+  // @@protoc_insertion_point(field_set:cli.EnterPartRsp.port)
 }
 
 // required uint64 token = 3;
-inline bool EntryPartitionRsp::has_token() const {
+inline bool EnterPartRsp::has_token() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
-inline void EntryPartitionRsp::set_has_token() {
+inline void EnterPartRsp::set_has_token() {
   _has_bits_[0] |= 0x00000004u;
 }
-inline void EntryPartitionRsp::clear_has_token() {
+inline void EnterPartRsp::clear_has_token() {
   _has_bits_[0] &= ~0x00000004u;
 }
-inline void EntryPartitionRsp::clear_token() {
+inline void EnterPartRsp::clear_token() {
   token_ = GOOGLE_ULONGLONG(0);
   clear_has_token();
 }
-inline ::google::protobuf::uint64 EntryPartitionRsp::token() const {
-  // @@protoc_insertion_point(field_get:cli.EntryPartitionRsp.token)
+inline ::google::protobuf::uint64 EnterPartRsp::token() const {
+  // @@protoc_insertion_point(field_get:cli.EnterPartRsp.token)
   return token_;
 }
-inline void EntryPartitionRsp::set_token(::google::protobuf::uint64 value) {
+inline void EnterPartRsp::set_token(::google::protobuf::uint64 value) {
   set_has_token();
   token_ = value;
-  // @@protoc_insertion_point(field_set:cli.EntryPartitionRsp.token)
+  // @@protoc_insertion_point(field_set:cli.EnterPartRsp.token)
 }
 
 
@@ -2075,10 +2075,10 @@ inline void EntryPartitionRsp::set_token(::google::protobuf::uint64 value) {
 namespace google {
 namespace protobuf {
 
-template <> struct is_proto_enum< ::cli::QueryPartitionRsp_StateType> : ::google::protobuf::internal::true_type {};
+template <> struct is_proto_enum< ::cli::QueryPartRsp_Status> : ::google::protobuf::internal::true_type {};
 template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::cli::QueryPartitionRsp_StateType>() {
-  return ::cli::QueryPartitionRsp_StateType_descriptor();
+inline const EnumDescriptor* GetEnumDescriptor< ::cli::QueryPartRsp_Status>() {
+  return ::cli::QueryPartRsp_Status_descriptor();
 }
 
 }  // namespace google

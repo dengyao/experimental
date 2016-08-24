@@ -28,33 +28,33 @@ message SignInRsp {
 }
 
 // 查询分区列表请求
-message QueryPartitionReq {
+message QueryPartReq {
 }
 
 // 查询分区列表返回
-message QueryPartitionRsp {
-    enum StateType {
+message QueryPartRsp {
+    enum Status {
         kNormal = 0;   // 正常
         kShutdown = 1; // 停机
     } 
 
-    message Partition {
+    message Part {
         required uint32 id = 1;            // 分区id
 	    required string name = 2;          // 分区名称
-	    required StateType status = 3;     // 分区状态
+	    required Status status = 3;        // 分区状态
 	    required bool is_recommend = 4;    // 是否是推荐分区
     };
 
-    repeated Partition lists = 1; // 分区列表
+    repeated Part lists = 1; // 分区列表
 }
 
 // 进入分区请求
-message EntryPartitionReq {
+message EnterPartReq {
     required uint32 id = 1; // 账号id 
 }
 
 // 进入分区返回
-message EntryPartitionRsp {
+message EnterPartRsp {
     required string ip = 1;    // 分区ip
     required uint32 port = 2;  // 分区端口
     required uint64 token = 3; // 令牌

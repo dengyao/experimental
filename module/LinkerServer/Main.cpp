@@ -27,7 +27,7 @@ void RunLoginServer()
 	GlobalLoginConnector()->SetMessageCallback(std::bind(&LinkerManager::OnLoginServerMessage, g_linker_manager.get(),
 		std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 
-	GlobalGatewayClient()->SetMessageCallback(std::bind(&LinkerManager::OnGatewayServerMessage, g_linker_manager.get(),
+	GlobalGWClient()->SetMessageCallback(std::bind(&LinkerManager::OnGatewayServerMessage, g_linker_manager.get(),
 		std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 
 	logger()->info("Linker服务器[ip:{} port:{}]启动成功!", g_server->LocalEndpoint().address().to_string().c_str(), g_server->LocalEndpoint().port());
@@ -46,12 +46,12 @@ void ConnectGatewayServer(uint16_t linker_id)
 	{
 		logger()->info("与登录服务器验证成功!");
 
-		std::unique_ptr<gateway::GatewayClient> connector;
+		std::unique_ptr<gw::GWClient> connector;
 		try
 		{
 			asio::ip::tcp::endpoint endpoint(asio::ip::address_v4::from_string(ServerConfig::GetInstance()->GetGWServerIP()),
 				ServerConfig::GetInstance()->GetGWServerPort());
-			connector = std::make_unique<gateway::GatewayClient>(*g_thread_manager, endpoint, ServerConfig::GetInstance()->GetGWServerConnections(), svr::kLinkerServer, linker_id);
+			connector = std::make_unique<gw::GWClient>(*g_thread_manager, endpoint, ServerConfig::GetInstance()->GetGWServerConnections(), svr::kLinkerServer, linker_id);
 			logger()->info("连接网关服务器成功!");
 		}
 		catch (...)

@@ -8,16 +8,16 @@ namespace db
 	class DBClient;
 }
 
-namespace gateway
+namespace gw
 {
-	class GatewayClient;
+	class GWClient;
 }
 
 const std::unique_ptr<db::DBClient>& GlobalDBClient();
 void OnceInitGlobalDBClient(std::unique_ptr<db::DBClient> &&db_client);
 
-const std::unique_ptr<gateway::GatewayClient>& GlobalGatewayClient();
-void OnceInitGlobalGatewayConnector(std::unique_ptr<gateway::GatewayClient> &&connector);
+const std::unique_ptr<gw::GWClient>& GlobalGWClient();
+void OnceInitGlobalGatewayConnector(std::unique_ptr<gw::GWClient> &&connector);
 
 
 #endif

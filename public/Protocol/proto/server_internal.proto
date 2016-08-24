@@ -76,7 +76,9 @@ message DBAgentErrorRsp {
 enum NodeType {
     kLoginServer = 1;    // 登录服务器
     kLinkerServer = 2;   // 连接器服务器
-    kMainLogicSever = 3; // 主逻辑服务器
+    kLogicSever = 3;     // 逻辑服务器
+    kChatServer = 4;     // 聊天服务器
+    kGameSever = 5;      // 游戏服务器
 }
 
 // 服务器节点
@@ -150,6 +152,22 @@ message ReportLinkerReq {
 /************************************************************************/
 /* 与LinkerServer的协议                                                  */
 /************************************************************************/
+
+// 用户下线
+message UserLeave {
+    repeated uint32 user_id = 1;  // 用户id
+}
+
+// 转发消息
+message LinkerForward {
+    repeated uint32 user_id = 1;  // 用户id
+    required bytes user_data = 2; // 转发数据
+}
+
+// 广播消息
+message LinkerBroadcast {
+    required bytes user_data = 1; // 广播数据
+}
 
 // 更新用户Token请求
 message UpdateTokenReq {

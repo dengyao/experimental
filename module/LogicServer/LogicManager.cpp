@@ -16,7 +16,7 @@ bool LogicManager::OnUnknownMessage(network::TCPSessionHandler *session, google:
 }
 
 // 网关消息
-void LogicManager::OnGatewayServerMessage(gateway::GatewayClient *connector, google::protobuf::Message *messsage, network::NetMessage &buffer)
+void LogicManager::OnGatewayServerMessage(gw::GWClient *connector, google::protobuf::Message *messsage, network::NetMessage &buffer)
 {
 	if (!dispatcher_.OnProtobufMessage(connector->ContextSession(), messsage, buffer))
 	{

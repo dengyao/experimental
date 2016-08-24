@@ -3,9 +3,9 @@
 
 #include <memory>
 
-namespace gateway
+namespace gw
 {
-	class GatewayClient;
+	class GWClient;
 }
 
 class LoginConnector;
@@ -13,8 +13,8 @@ class LoginConnector;
 const std::unique_ptr<LoginConnector> &GlobalLoginConnector();
 void OnceInitGlobalLoginConnector(std::unique_ptr<LoginConnector> &&connector);
 
-const std::unique_ptr<gateway::GatewayClient>& GlobalGatewayClient();
-void OnceInitGlobalGatewayConnector(std::unique_ptr<gateway::GatewayClient> &&connector);
+const std::unique_ptr<gw::GWClient>& GlobalGWClient();
+void OnceInitGlobalGatewayConnector(std::unique_ptr<gw::GWClient> &&connector);
 
 
 #endif

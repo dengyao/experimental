@@ -12,7 +12,7 @@ namespace google
 	}
 }
 
-namespace gateway
+namespace gw
 {
 	class ConnectGatewayFail : public std::runtime_error
 	{
@@ -26,7 +26,7 @@ namespace gateway
 	class SessionHandle;
 	class AsyncReconnectHandle;
 
-	class GatewayClient
+	class GWClient
 	{
 		friend class SessionHandle;
 		friend class AsyncReconnectHandle;
@@ -42,11 +42,11 @@ namespace gateway
 			}
 		};
 
-		typedef std::function<void(GatewayClient*, google::protobuf::Message*, network::NetMessage&)> Callback;
+		typedef std::function<void(GWClient*, google::protobuf::Message*, network::NetMessage&)> Callback;
 
 	public:
-		GatewayClient(network::IOServiceThreadManager &threads, asio::ip::tcp::endpoint &endpoint, size_t connection_num, int node_type, int child_id = 1);
-		~GatewayClient();
+		GWClient(network::IOServiceThreadManager &threads, asio::ip::tcp::endpoint &endpoint, size_t connection_num, int node_type, int child_id = 1);
+		~GWClient();
 
 	public:
 		// 服务器节点类型
