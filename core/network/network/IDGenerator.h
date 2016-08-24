@@ -13,7 +13,6 @@ namespace network
 
 	public:
 		static const uint32_t kInvalidID = 0;
-		static const uint32_t kDefaultThreshold = 8192;
 
 	public:
 		explicit IDGenerator(uint32_t threshold = kDefaultThreshold)
@@ -23,18 +22,20 @@ namespace network
 
 		~IDGenerator() = default;
 
-		uint32_t Get()
+		bool Get(uint32_t &id)
 		{
 			if (pools_.size() >= threshold_)
 			{
-				uint32_t id = pools_.back();
+				id = pools_.back();
 				pools_.pop_back();
-				return id;
+				return true;
 			}
-			else
+			else if (next_ < std::numeric_limits<uint32_t>::max())
 			{
-				return ++next_;
+				id = ++next_;
+				return true;
 			}
+			return false;
 		}
 
 		void Put(uint32_t id)
