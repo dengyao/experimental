@@ -1,7 +1,7 @@
 ﻿#ifndef __ID_GENERATOR_H__
 #define __ID_GENERATOR_H__
 
-#include <vector>
+#include <deque>
 #include <cstdint>
 
 namespace network
@@ -26,8 +26,8 @@ namespace network
 		{
 			if (pools_.size() >= threshold_)
 			{
-				id = pools_.back();
-				pools_.pop_back();
+				id = pools_.front();
+				pools_.pop_front();
 				return true;
 			}
 			else if (next_ < std::numeric_limits<uint32_t>::max())
@@ -57,14 +57,14 @@ namespace network
 				{
 					pools_.erase(iter);
 					break;
-				}				
-			}		
+				}
+			}
 		}
 
 	private:
 		uint32_t				next_;
 		const size_t			threshold_;
-		std::vector<uint32_t>	pools_;
+		std::deque<uint32_t>	pools_;
 	};
 }
 
