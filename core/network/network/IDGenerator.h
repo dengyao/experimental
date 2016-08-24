@@ -23,20 +23,18 @@ namespace network
 
 		~IDGenerator() = default;
 
-		bool Get(uint32_t &id)
+		uint32_t Get()
 		{
 			if (pools_.size() >= threshold_)
 			{
-				id = pools_.back();
+				uint32_t id = pools_.back();
 				pools_.pop_back();
-				return true;
+				return id;
 			}
-			else if (next_ < threshold_)
+			else
 			{
-				id = ++next_;
-				return true;
+				return ++next_;
 			}
-			return false;
 		}
 
 		void Put(uint32_t id)
