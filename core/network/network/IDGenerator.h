@@ -8,6 +8,9 @@ namespace network
 {
 	class IDGenerator
 	{
+		IDGenerator(const IDGenerator&) = delete;
+		IDGenerator& operator= (const IDGenerator&) = delete;
+
 	public:
 		static const uint32_t kInvalidID = 0;
 		static const uint32_t kDefaultThreshold = 8192;
