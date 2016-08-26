@@ -20,15 +20,15 @@ namespace cli {
 
 namespace {
 
-const ::google::protobuf::Descriptor* UserEnterReq_descriptor_ = NULL;
+const ::google::protobuf::Descriptor* UserInfoRep_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
-  UserEnterReq_reflection_ = NULL;
-const ::google::protobuf::Descriptor* UserEnterRsp_descriptor_ = NULL;
+  UserInfoRep_reflection_ = NULL;
+const ::google::protobuf::Descriptor* UserInfoRsp_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
-  UserEnterRsp_reflection_ = NULL;
-const ::google::protobuf::Descriptor* UserLeaveReq_descriptor_ = NULL;
+  UserInfoRsp_reflection_ = NULL;
+const ::google::protobuf::Descriptor* LeaveReq_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
-  UserLeaveReq_reflection_ = NULL;
+  LeaveReq_reflection_ = NULL;
 
 }  // namespace
 
@@ -39,49 +39,52 @@ void protobuf_AssignDesc_proto_2fclient_5flogic_2eproto() {
     ::google::protobuf::DescriptorPool::generated_pool()->FindFileByName(
       "proto/client_logic.proto");
   GOOGLE_CHECK(file != NULL);
-  UserEnterReq_descriptor_ = file->message_type(0);
-  static const int UserEnterReq_offsets_[1] = {
+  UserInfoRep_descriptor_ = file->message_type(0);
+  static const int UserInfoRep_offsets_[1] = {
   };
-  UserEnterReq_reflection_ =
+  UserInfoRep_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
-      UserEnterReq_descriptor_,
-      UserEnterReq::default_instance_,
-      UserEnterReq_offsets_,
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UserEnterReq, _has_bits_[0]),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UserEnterReq, _unknown_fields_),
+      UserInfoRep_descriptor_,
+      UserInfoRep::default_instance_,
+      UserInfoRep_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UserInfoRep, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UserInfoRep, _unknown_fields_),
       -1,
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
-      sizeof(UserEnterReq));
-  UserEnterRsp_descriptor_ = file->message_type(1);
-  static const int UserEnterRsp_offsets_[1] = {
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UserEnterRsp, user_id_),
+      sizeof(UserInfoRep));
+  UserInfoRsp_descriptor_ = file->message_type(1);
+  static const int UserInfoRsp_offsets_[4] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UserInfoRsp, user_id_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UserInfoRsp, nickname_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UserInfoRsp, age_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UserInfoRsp, gender_),
   };
-  UserEnterRsp_reflection_ =
+  UserInfoRsp_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
-      UserEnterRsp_descriptor_,
-      UserEnterRsp::default_instance_,
-      UserEnterRsp_offsets_,
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UserEnterRsp, _has_bits_[0]),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UserEnterRsp, _unknown_fields_),
+      UserInfoRsp_descriptor_,
+      UserInfoRsp::default_instance_,
+      UserInfoRsp_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UserInfoRsp, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UserInfoRsp, _unknown_fields_),
       -1,
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
-      sizeof(UserEnterRsp));
-  UserLeaveReq_descriptor_ = file->message_type(2);
-  static const int UserLeaveReq_offsets_[1] = {
+      sizeof(UserInfoRsp));
+  LeaveReq_descriptor_ = file->message_type(2);
+  static const int LeaveReq_offsets_[1] = {
   };
-  UserLeaveReq_reflection_ =
+  LeaveReq_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
-      UserLeaveReq_descriptor_,
-      UserLeaveReq::default_instance_,
-      UserLeaveReq_offsets_,
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UserLeaveReq, _has_bits_[0]),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UserLeaveReq, _unknown_fields_),
+      LeaveReq_descriptor_,
+      LeaveReq::default_instance_,
+      LeaveReq_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LeaveReq, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LeaveReq, _unknown_fields_),
       -1,
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
-      sizeof(UserLeaveReq));
+      sizeof(LeaveReq));
 }
 
 namespace {
@@ -95,22 +98,22 @@ inline void protobuf_AssignDescriptorsOnce() {
 void protobuf_RegisterTypes(const ::std::string&) {
   protobuf_AssignDescriptorsOnce();
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-    UserEnterReq_descriptor_, &UserEnterReq::default_instance());
+    UserInfoRep_descriptor_, &UserInfoRep::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-    UserEnterRsp_descriptor_, &UserEnterRsp::default_instance());
+    UserInfoRsp_descriptor_, &UserInfoRsp::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-    UserLeaveReq_descriptor_, &UserLeaveReq::default_instance());
+    LeaveReq_descriptor_, &LeaveReq::default_instance());
 }
 
 }  // namespace
 
 void protobuf_ShutdownFile_proto_2fclient_5flogic_2eproto() {
-  delete UserEnterReq::default_instance_;
-  delete UserEnterReq_reflection_;
-  delete UserEnterRsp::default_instance_;
-  delete UserEnterRsp_reflection_;
-  delete UserLeaveReq::default_instance_;
-  delete UserLeaveReq_reflection_;
+  delete UserInfoRep::default_instance_;
+  delete UserInfoRep_reflection_;
+  delete UserInfoRsp::default_instance_;
+  delete UserInfoRsp_reflection_;
+  delete LeaveReq::default_instance_;
+  delete LeaveReq_reflection_;
 }
 
 void protobuf_AddDesc_proto_2fclient_5flogic_2eproto() {
@@ -120,17 +123,18 @@ void protobuf_AddDesc_proto_2fclient_5flogic_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\030proto/client_logic.proto\022\003cli\"\016\n\014UserE"
-    "nterReq\"\037\n\014UserEnterRsp\022\017\n\007user_id\030\001 \002(\r"
-    "\"\016\n\014UserLeaveReq", 96);
+    "\n\030proto/client_logic.proto\022\003cli\"\r\n\013UserI"
+    "nfoRep\"M\n\013UserInfoRsp\022\017\n\007user_id\030\001 \002(\r\022\020"
+    "\n\010nickname\030\002 \002(\t\022\013\n\003age\030\003 \002(\r\022\016\n\006gender\030"
+    "\004 \002(\r\"\n\n\010LeaveReq", 137);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "proto/client_logic.proto", &protobuf_RegisterTypes);
-  UserEnterReq::default_instance_ = new UserEnterReq();
-  UserEnterRsp::default_instance_ = new UserEnterRsp();
-  UserLeaveReq::default_instance_ = new UserLeaveReq();
-  UserEnterReq::default_instance_->InitAsDefaultInstance();
-  UserEnterRsp::default_instance_->InitAsDefaultInstance();
-  UserLeaveReq::default_instance_->InitAsDefaultInstance();
+  UserInfoRep::default_instance_ = new UserInfoRep();
+  UserInfoRsp::default_instance_ = new UserInfoRsp();
+  LeaveReq::default_instance_ = new LeaveReq();
+  UserInfoRep::default_instance_->InitAsDefaultInstance();
+  UserInfoRsp::default_instance_->InitAsDefaultInstance();
+  LeaveReq::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_proto_2fclient_5flogic_2eproto);
 }
 
@@ -146,68 +150,68 @@ struct StaticDescriptorInitializer_proto_2fclient_5flogic_2eproto {
 #ifndef _MSC_VER
 #endif  // !_MSC_VER
 
-UserEnterReq::UserEnterReq()
+UserInfoRep::UserInfoRep()
   : ::google::protobuf::Message() {
   SharedCtor();
-  // @@protoc_insertion_point(constructor:cli.UserEnterReq)
+  // @@protoc_insertion_point(constructor:cli.UserInfoRep)
 }
 
-void UserEnterReq::InitAsDefaultInstance() {
+void UserInfoRep::InitAsDefaultInstance() {
 }
 
-UserEnterReq::UserEnterReq(const UserEnterReq& from)
+UserInfoRep::UserInfoRep(const UserInfoRep& from)
   : ::google::protobuf::Message() {
   SharedCtor();
   MergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:cli.UserEnterReq)
+  // @@protoc_insertion_point(copy_constructor:cli.UserInfoRep)
 }
 
-void UserEnterReq::SharedCtor() {
+void UserInfoRep::SharedCtor() {
   _cached_size_ = 0;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
-UserEnterReq::~UserEnterReq() {
-  // @@protoc_insertion_point(destructor:cli.UserEnterReq)
+UserInfoRep::~UserInfoRep() {
+  // @@protoc_insertion_point(destructor:cli.UserInfoRep)
   SharedDtor();
 }
 
-void UserEnterReq::SharedDtor() {
+void UserInfoRep::SharedDtor() {
   if (this != default_instance_) {
   }
 }
 
-void UserEnterReq::SetCachedSize(int size) const {
+void UserInfoRep::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const ::google::protobuf::Descriptor* UserEnterReq::descriptor() {
+const ::google::protobuf::Descriptor* UserInfoRep::descriptor() {
   protobuf_AssignDescriptorsOnce();
-  return UserEnterReq_descriptor_;
+  return UserInfoRep_descriptor_;
 }
 
-const UserEnterReq& UserEnterReq::default_instance() {
+const UserInfoRep& UserInfoRep::default_instance() {
   if (default_instance_ == NULL) protobuf_AddDesc_proto_2fclient_5flogic_2eproto();
   return *default_instance_;
 }
 
-UserEnterReq* UserEnterReq::default_instance_ = NULL;
+UserInfoRep* UserInfoRep::default_instance_ = NULL;
 
-UserEnterReq* UserEnterReq::New() const {
-  return new UserEnterReq;
+UserInfoRep* UserInfoRep::New() const {
+  return new UserInfoRep;
 }
 
-void UserEnterReq::Clear() {
+void UserInfoRep::Clear() {
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
 
-bool UserEnterReq::MergePartialFromCodedStream(
+bool UserInfoRep::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:cli.UserEnterReq)
+  // @@protoc_insertion_point(parse_start:cli.UserInfoRep)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
     tag = p.first;
@@ -222,36 +226,36 @@ bool UserEnterReq::MergePartialFromCodedStream(
           input, tag, mutable_unknown_fields()));
   }
 success:
-  // @@protoc_insertion_point(parse_success:cli.UserEnterReq)
+  // @@protoc_insertion_point(parse_success:cli.UserInfoRep)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:cli.UserEnterReq)
+  // @@protoc_insertion_point(parse_failure:cli.UserInfoRep)
   return false;
 #undef DO_
 }
 
-void UserEnterReq::SerializeWithCachedSizes(
+void UserInfoRep::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:cli.UserEnterReq)
+  // @@protoc_insertion_point(serialize_start:cli.UserInfoRep)
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
   }
-  // @@protoc_insertion_point(serialize_end:cli.UserEnterReq)
+  // @@protoc_insertion_point(serialize_end:cli.UserInfoRep)
 }
 
-::google::protobuf::uint8* UserEnterReq::SerializeWithCachedSizesToArray(
+::google::protobuf::uint8* UserInfoRep::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // @@protoc_insertion_point(serialize_to_array_start:cli.UserEnterReq)
+  // @@protoc_insertion_point(serialize_to_array_start:cli.UserInfoRep)
   if (!unknown_fields().empty()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:cli.UserEnterReq)
+  // @@protoc_insertion_point(serialize_to_array_end:cli.UserInfoRep)
   return target;
 }
 
-int UserEnterReq::ByteSize() const {
+int UserInfoRep::ByteSize() const {
   int total_size = 0;
 
   if (!unknown_fields().empty()) {
@@ -265,10 +269,10 @@ int UserEnterReq::ByteSize() const {
   return total_size;
 }
 
-void UserEnterReq::MergeFrom(const ::google::protobuf::Message& from) {
+void UserInfoRep::MergeFrom(const ::google::protobuf::Message& from) {
   GOOGLE_CHECK_NE(&from, this);
-  const UserEnterReq* source =
-    ::google::protobuf::internal::dynamic_cast_if_available<const UserEnterReq*>(
+  const UserInfoRep* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const UserInfoRep*>(
       &from);
   if (source == NULL) {
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
@@ -277,40 +281,40 @@ void UserEnterReq::MergeFrom(const ::google::protobuf::Message& from) {
   }
 }
 
-void UserEnterReq::MergeFrom(const UserEnterReq& from) {
+void UserInfoRep::MergeFrom(const UserInfoRep& from) {
   GOOGLE_CHECK_NE(&from, this);
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
 
-void UserEnterReq::CopyFrom(const ::google::protobuf::Message& from) {
+void UserInfoRep::CopyFrom(const ::google::protobuf::Message& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-void UserEnterReq::CopyFrom(const UserEnterReq& from) {
+void UserInfoRep::CopyFrom(const UserInfoRep& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool UserEnterReq::IsInitialized() const {
+bool UserInfoRep::IsInitialized() const {
 
   return true;
 }
 
-void UserEnterReq::Swap(UserEnterReq* other) {
+void UserInfoRep::Swap(UserInfoRep* other) {
   if (other != this) {
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
   }
 }
 
-::google::protobuf::Metadata UserEnterReq::GetMetadata() const {
+::google::protobuf::Metadata UserInfoRep::GetMetadata() const {
   protobuf_AssignDescriptorsOnce();
   ::google::protobuf::Metadata metadata;
-  metadata.descriptor = UserEnterReq_descriptor_;
-  metadata.reflection = UserEnterReq_reflection_;
+  metadata.descriptor = UserInfoRep_descriptor_;
+  metadata.reflection = UserInfoRep_reflection_;
   return metadata;
 }
 
@@ -318,73 +322,104 @@ void UserEnterReq::Swap(UserEnterReq* other) {
 // ===================================================================
 
 #ifndef _MSC_VER
-const int UserEnterRsp::kUserIdFieldNumber;
+const int UserInfoRsp::kUserIdFieldNumber;
+const int UserInfoRsp::kNicknameFieldNumber;
+const int UserInfoRsp::kAgeFieldNumber;
+const int UserInfoRsp::kGenderFieldNumber;
 #endif  // !_MSC_VER
 
-UserEnterRsp::UserEnterRsp()
+UserInfoRsp::UserInfoRsp()
   : ::google::protobuf::Message() {
   SharedCtor();
-  // @@protoc_insertion_point(constructor:cli.UserEnterRsp)
+  // @@protoc_insertion_point(constructor:cli.UserInfoRsp)
 }
 
-void UserEnterRsp::InitAsDefaultInstance() {
+void UserInfoRsp::InitAsDefaultInstance() {
 }
 
-UserEnterRsp::UserEnterRsp(const UserEnterRsp& from)
+UserInfoRsp::UserInfoRsp(const UserInfoRsp& from)
   : ::google::protobuf::Message() {
   SharedCtor();
   MergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:cli.UserEnterRsp)
+  // @@protoc_insertion_point(copy_constructor:cli.UserInfoRsp)
 }
 
-void UserEnterRsp::SharedCtor() {
+void UserInfoRsp::SharedCtor() {
+  ::google::protobuf::internal::GetEmptyString();
   _cached_size_ = 0;
   user_id_ = 0u;
+  nickname_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  age_ = 0u;
+  gender_ = 0u;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
-UserEnterRsp::~UserEnterRsp() {
-  // @@protoc_insertion_point(destructor:cli.UserEnterRsp)
+UserInfoRsp::~UserInfoRsp() {
+  // @@protoc_insertion_point(destructor:cli.UserInfoRsp)
   SharedDtor();
 }
 
-void UserEnterRsp::SharedDtor() {
+void UserInfoRsp::SharedDtor() {
+  if (nickname_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete nickname_;
+  }
   if (this != default_instance_) {
   }
 }
 
-void UserEnterRsp::SetCachedSize(int size) const {
+void UserInfoRsp::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const ::google::protobuf::Descriptor* UserEnterRsp::descriptor() {
+const ::google::protobuf::Descriptor* UserInfoRsp::descriptor() {
   protobuf_AssignDescriptorsOnce();
-  return UserEnterRsp_descriptor_;
+  return UserInfoRsp_descriptor_;
 }
 
-const UserEnterRsp& UserEnterRsp::default_instance() {
+const UserInfoRsp& UserInfoRsp::default_instance() {
   if (default_instance_ == NULL) protobuf_AddDesc_proto_2fclient_5flogic_2eproto();
   return *default_instance_;
 }
 
-UserEnterRsp* UserEnterRsp::default_instance_ = NULL;
+UserInfoRsp* UserInfoRsp::default_instance_ = NULL;
 
-UserEnterRsp* UserEnterRsp::New() const {
-  return new UserEnterRsp;
+UserInfoRsp* UserInfoRsp::New() const {
+  return new UserInfoRsp;
 }
 
-void UserEnterRsp::Clear() {
-  user_id_ = 0u;
+void UserInfoRsp::Clear() {
+#define OFFSET_OF_FIELD_(f) (reinterpret_cast<char*>(      \
+  &reinterpret_cast<UserInfoRsp*>(16)->f) - \
+   reinterpret_cast<char*>(16))
+
+#define ZR_(first, last) do {                              \
+    size_t f = OFFSET_OF_FIELD_(first);                    \
+    size_t n = OFFSET_OF_FIELD_(last) - f + sizeof(last);  \
+    ::memset(&first, 0, n);                                \
+  } while (0)
+
+  if (_has_bits_[0 / 32] & 15) {
+    ZR_(user_id_, gender_);
+    if (has_nickname()) {
+      if (nickname_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+        nickname_->clear();
+      }
+    }
+  }
+
+#undef OFFSET_OF_FIELD_
+#undef ZR_
+
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
 
-bool UserEnterRsp::MergePartialFromCodedStream(
+bool UserInfoRsp::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:cli.UserEnterRsp)
+  // @@protoc_insertion_point(parse_start:cli.UserInfoRsp)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
     tag = p.first;
@@ -397,6 +432,53 @@ bool UserEnterRsp::MergePartialFromCodedStream(
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
                  input, &user_id_)));
           set_has_user_id();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(18)) goto parse_nickname;
+        break;
+      }
+
+      // required string nickname = 2;
+      case 2: {
+        if (tag == 18) {
+         parse_nickname:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_nickname()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+            this->nickname().data(), this->nickname().length(),
+            ::google::protobuf::internal::WireFormat::PARSE,
+            "nickname");
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(24)) goto parse_age;
+        break;
+      }
+
+      // required uint32 age = 3;
+      case 3: {
+        if (tag == 24) {
+         parse_age:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &age_)));
+          set_has_age();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(32)) goto parse_gender;
+        break;
+      }
+
+      // required uint32 gender = 4;
+      case 4: {
+        if (tag == 32) {
+         parse_gender:
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &gender_)));
+          set_has_gender();
         } else {
           goto handle_unusual;
         }
@@ -418,46 +500,87 @@ bool UserEnterRsp::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:cli.UserEnterRsp)
+  // @@protoc_insertion_point(parse_success:cli.UserInfoRsp)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:cli.UserEnterRsp)
+  // @@protoc_insertion_point(parse_failure:cli.UserInfoRsp)
   return false;
 #undef DO_
 }
 
-void UserEnterRsp::SerializeWithCachedSizes(
+void UserInfoRsp::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:cli.UserEnterRsp)
+  // @@protoc_insertion_point(serialize_start:cli.UserInfoRsp)
   // required uint32 user_id = 1;
   if (has_user_id()) {
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->user_id(), output);
+  }
+
+  // required string nickname = 2;
+  if (has_nickname()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->nickname().data(), this->nickname().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "nickname");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      2, this->nickname(), output);
+  }
+
+  // required uint32 age = 3;
+  if (has_age()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(3, this->age(), output);
+  }
+
+  // required uint32 gender = 4;
+  if (has_gender()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(4, this->gender(), output);
   }
 
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
   }
-  // @@protoc_insertion_point(serialize_end:cli.UserEnterRsp)
+  // @@protoc_insertion_point(serialize_end:cli.UserInfoRsp)
 }
 
-::google::protobuf::uint8* UserEnterRsp::SerializeWithCachedSizesToArray(
+::google::protobuf::uint8* UserInfoRsp::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // @@protoc_insertion_point(serialize_to_array_start:cli.UserEnterRsp)
+  // @@protoc_insertion_point(serialize_to_array_start:cli.UserInfoRsp)
   // required uint32 user_id = 1;
   if (has_user_id()) {
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->user_id(), target);
+  }
+
+  // required string nickname = 2;
+  if (has_nickname()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8StringNamedField(
+      this->nickname().data(), this->nickname().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE,
+      "nickname");
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        2, this->nickname(), target);
+  }
+
+  // required uint32 age = 3;
+  if (has_age()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(3, this->age(), target);
+  }
+
+  // required uint32 gender = 4;
+  if (has_gender()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(4, this->gender(), target);
   }
 
   if (!unknown_fields().empty()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:cli.UserEnterRsp)
+  // @@protoc_insertion_point(serialize_to_array_end:cli.UserInfoRsp)
   return target;
 }
 
-int UserEnterRsp::ByteSize() const {
+int UserInfoRsp::ByteSize() const {
   int total_size = 0;
 
   if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
@@ -466,6 +589,27 @@ int UserEnterRsp::ByteSize() const {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::UInt32Size(
           this->user_id());
+    }
+
+    // required string nickname = 2;
+    if (has_nickname()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->nickname());
+    }
+
+    // required uint32 age = 3;
+    if (has_age()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->age());
+    }
+
+    // required uint32 gender = 4;
+    if (has_gender()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->gender());
     }
 
   }
@@ -480,10 +624,10 @@ int UserEnterRsp::ByteSize() const {
   return total_size;
 }
 
-void UserEnterRsp::MergeFrom(const ::google::protobuf::Message& from) {
+void UserInfoRsp::MergeFrom(const ::google::protobuf::Message& from) {
   GOOGLE_CHECK_NE(&from, this);
-  const UserEnterRsp* source =
-    ::google::protobuf::internal::dynamic_cast_if_available<const UserEnterRsp*>(
+  const UserInfoRsp* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const UserInfoRsp*>(
       &from);
   if (source == NULL) {
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
@@ -492,48 +636,60 @@ void UserEnterRsp::MergeFrom(const ::google::protobuf::Message& from) {
   }
 }
 
-void UserEnterRsp::MergeFrom(const UserEnterRsp& from) {
+void UserInfoRsp::MergeFrom(const UserInfoRsp& from) {
   GOOGLE_CHECK_NE(&from, this);
   if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
     if (from.has_user_id()) {
       set_user_id(from.user_id());
     }
+    if (from.has_nickname()) {
+      set_nickname(from.nickname());
+    }
+    if (from.has_age()) {
+      set_age(from.age());
+    }
+    if (from.has_gender()) {
+      set_gender(from.gender());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
 
-void UserEnterRsp::CopyFrom(const ::google::protobuf::Message& from) {
+void UserInfoRsp::CopyFrom(const ::google::protobuf::Message& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-void UserEnterRsp::CopyFrom(const UserEnterRsp& from) {
+void UserInfoRsp::CopyFrom(const UserInfoRsp& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool UserEnterRsp::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
+bool UserInfoRsp::IsInitialized() const {
+  if ((_has_bits_[0] & 0x0000000f) != 0x0000000f) return false;
 
   return true;
 }
 
-void UserEnterRsp::Swap(UserEnterRsp* other) {
+void UserInfoRsp::Swap(UserInfoRsp* other) {
   if (other != this) {
     std::swap(user_id_, other->user_id_);
+    std::swap(nickname_, other->nickname_);
+    std::swap(age_, other->age_);
+    std::swap(gender_, other->gender_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
   }
 }
 
-::google::protobuf::Metadata UserEnterRsp::GetMetadata() const {
+::google::protobuf::Metadata UserInfoRsp::GetMetadata() const {
   protobuf_AssignDescriptorsOnce();
   ::google::protobuf::Metadata metadata;
-  metadata.descriptor = UserEnterRsp_descriptor_;
-  metadata.reflection = UserEnterRsp_reflection_;
+  metadata.descriptor = UserInfoRsp_descriptor_;
+  metadata.reflection = UserInfoRsp_reflection_;
   return metadata;
 }
 
@@ -543,68 +699,68 @@ void UserEnterRsp::Swap(UserEnterRsp* other) {
 #ifndef _MSC_VER
 #endif  // !_MSC_VER
 
-UserLeaveReq::UserLeaveReq()
+LeaveReq::LeaveReq()
   : ::google::protobuf::Message() {
   SharedCtor();
-  // @@protoc_insertion_point(constructor:cli.UserLeaveReq)
+  // @@protoc_insertion_point(constructor:cli.LeaveReq)
 }
 
-void UserLeaveReq::InitAsDefaultInstance() {
+void LeaveReq::InitAsDefaultInstance() {
 }
 
-UserLeaveReq::UserLeaveReq(const UserLeaveReq& from)
+LeaveReq::LeaveReq(const LeaveReq& from)
   : ::google::protobuf::Message() {
   SharedCtor();
   MergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:cli.UserLeaveReq)
+  // @@protoc_insertion_point(copy_constructor:cli.LeaveReq)
 }
 
-void UserLeaveReq::SharedCtor() {
+void LeaveReq::SharedCtor() {
   _cached_size_ = 0;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
-UserLeaveReq::~UserLeaveReq() {
-  // @@protoc_insertion_point(destructor:cli.UserLeaveReq)
+LeaveReq::~LeaveReq() {
+  // @@protoc_insertion_point(destructor:cli.LeaveReq)
   SharedDtor();
 }
 
-void UserLeaveReq::SharedDtor() {
+void LeaveReq::SharedDtor() {
   if (this != default_instance_) {
   }
 }
 
-void UserLeaveReq::SetCachedSize(int size) const {
+void LeaveReq::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const ::google::protobuf::Descriptor* UserLeaveReq::descriptor() {
+const ::google::protobuf::Descriptor* LeaveReq::descriptor() {
   protobuf_AssignDescriptorsOnce();
-  return UserLeaveReq_descriptor_;
+  return LeaveReq_descriptor_;
 }
 
-const UserLeaveReq& UserLeaveReq::default_instance() {
+const LeaveReq& LeaveReq::default_instance() {
   if (default_instance_ == NULL) protobuf_AddDesc_proto_2fclient_5flogic_2eproto();
   return *default_instance_;
 }
 
-UserLeaveReq* UserLeaveReq::default_instance_ = NULL;
+LeaveReq* LeaveReq::default_instance_ = NULL;
 
-UserLeaveReq* UserLeaveReq::New() const {
-  return new UserLeaveReq;
+LeaveReq* LeaveReq::New() const {
+  return new LeaveReq;
 }
 
-void UserLeaveReq::Clear() {
+void LeaveReq::Clear() {
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
 
-bool UserLeaveReq::MergePartialFromCodedStream(
+bool LeaveReq::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:cli.UserLeaveReq)
+  // @@protoc_insertion_point(parse_start:cli.LeaveReq)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
     tag = p.first;
@@ -619,36 +775,36 @@ bool UserLeaveReq::MergePartialFromCodedStream(
           input, tag, mutable_unknown_fields()));
   }
 success:
-  // @@protoc_insertion_point(parse_success:cli.UserLeaveReq)
+  // @@protoc_insertion_point(parse_success:cli.LeaveReq)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:cli.UserLeaveReq)
+  // @@protoc_insertion_point(parse_failure:cli.LeaveReq)
   return false;
 #undef DO_
 }
 
-void UserLeaveReq::SerializeWithCachedSizes(
+void LeaveReq::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:cli.UserLeaveReq)
+  // @@protoc_insertion_point(serialize_start:cli.LeaveReq)
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
   }
-  // @@protoc_insertion_point(serialize_end:cli.UserLeaveReq)
+  // @@protoc_insertion_point(serialize_end:cli.LeaveReq)
 }
 
-::google::protobuf::uint8* UserLeaveReq::SerializeWithCachedSizesToArray(
+::google::protobuf::uint8* LeaveReq::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // @@protoc_insertion_point(serialize_to_array_start:cli.UserLeaveReq)
+  // @@protoc_insertion_point(serialize_to_array_start:cli.LeaveReq)
   if (!unknown_fields().empty()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:cli.UserLeaveReq)
+  // @@protoc_insertion_point(serialize_to_array_end:cli.LeaveReq)
   return target;
 }
 
-int UserLeaveReq::ByteSize() const {
+int LeaveReq::ByteSize() const {
   int total_size = 0;
 
   if (!unknown_fields().empty()) {
@@ -662,10 +818,10 @@ int UserLeaveReq::ByteSize() const {
   return total_size;
 }
 
-void UserLeaveReq::MergeFrom(const ::google::protobuf::Message& from) {
+void LeaveReq::MergeFrom(const ::google::protobuf::Message& from) {
   GOOGLE_CHECK_NE(&from, this);
-  const UserLeaveReq* source =
-    ::google::protobuf::internal::dynamic_cast_if_available<const UserLeaveReq*>(
+  const LeaveReq* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const LeaveReq*>(
       &from);
   if (source == NULL) {
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
@@ -674,40 +830,40 @@ void UserLeaveReq::MergeFrom(const ::google::protobuf::Message& from) {
   }
 }
 
-void UserLeaveReq::MergeFrom(const UserLeaveReq& from) {
+void LeaveReq::MergeFrom(const LeaveReq& from) {
   GOOGLE_CHECK_NE(&from, this);
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
 
-void UserLeaveReq::CopyFrom(const ::google::protobuf::Message& from) {
+void LeaveReq::CopyFrom(const ::google::protobuf::Message& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-void UserLeaveReq::CopyFrom(const UserLeaveReq& from) {
+void LeaveReq::CopyFrom(const LeaveReq& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool UserLeaveReq::IsInitialized() const {
+bool LeaveReq::IsInitialized() const {
 
   return true;
 }
 
-void UserLeaveReq::Swap(UserLeaveReq* other) {
+void LeaveReq::Swap(LeaveReq* other) {
   if (other != this) {
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
   }
 }
 
-::google::protobuf::Metadata UserLeaveReq::GetMetadata() const {
+::google::protobuf::Metadata LeaveReq::GetMetadata() const {
   protobuf_AssignDescriptorsOnce();
   ::google::protobuf::Metadata metadata;
-  metadata.descriptor = UserLeaveReq_descriptor_;
-  metadata.reflection = UserLeaveReq_reflection_;
+  metadata.descriptor = LeaveReq_descriptor_;
+  metadata.reflection = LeaveReq_reflection_;
   return metadata;
 }
 

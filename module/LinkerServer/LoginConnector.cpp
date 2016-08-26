@@ -195,7 +195,7 @@ void LoginConnector::OnConnected(LoginSessionHandle *session)
 void LoginConnector::OnMessage(LoginSessionHandle *session, network::NetMessage &buffer)
 {
 	auto request = ProtubufCodec::Decode(buffer);
-	if (dynamic_cast<svr::LinkerLoginRsp*>(request.get()) != nullptr)
+	if (request->GetDescriptor() == svr::LinkerLoginRsp::descriptor())
 	{
 		// 处理登录结果
 		assert(session_handle_ == nullptr);
@@ -219,9 +219,9 @@ void LoginConnector::OnMessage(LoginSessionHandle *session, network::NetMessage 
 			}
 		}	
 	}
-	else if (dynamic_cast<pub::PongRsp*>(request.get()) == nullptr) 
+	else if (request->GetDescriptor() != pub::PongRsp::descriptor())
 	{
-		if (dynamic_cast<pub::ErrorRsp*>(request.get()) != nullptr)
+		if (request->GetDescriptor() == pub::ErrorRsp::descriptor())
 		{
 			// 处理错误响应
 			pub::ErrorRsp *error = static_cast<pub::ErrorRsp*>(request.get());

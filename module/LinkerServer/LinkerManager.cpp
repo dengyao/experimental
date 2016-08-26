@@ -78,14 +78,14 @@ void LinkerManager::OnUserMessage(SessionHandle *session, google::protobuf::Mess
 	// 用户是否验证
 	auto found = reverse_user_session_.find(session->SessionID());
 	if (found == reverse_user_session_.end())
-	{
-		auto request = dynamic_cast<cli::UserAuthReq*>(messsage);
-		if (request == nullptr)
+	{		
+		if (messsage->GetDescriptor() != cli::UserAuthReq::descriptor())
 		{
 			logger()->debug("用户未验证，来自{}:{}", session->RemoteEndpoint().address().to_string(), session->RemoteEndpoint().port());
 			return SenddErrorCodeToUser(session, buffer, pub::kUserUnverified, messsage->GetTypeName().c_str());
 		}
 
+		auto request = static_cast<cli::UserAuthReq*>(messsage);
 		auto auth_iter = user_auth_.find(request->token());
 		if (auth_iter == user_auth_.end())
 		{
@@ -125,7 +125,7 @@ void LinkerManager::OnUserMessage(SessionHandle *session, google::protobuf::Mess
 		session->Send(buffer);
 
 		// 用户进入通知
-		OnBroadcastUserEnter(auth_iter->second.user_id);
+		OnBroadcastUserEnter(auth_iter->second.user_id, buffer);
 
 		logger()->info("用户[{}]验证成功!", auth_iter->second.user_id);
 	}
@@ -182,28 +182,30 @@ void LinkerManager::OnUserClose(SessionHandle *session)
 }
 
 // 广播用户进入
-void LinkerManager::OnBroadcastUserEnter(uint32_t user_id)
+void LinkerManager::OnBroadcastUserEnter(uint32_t user_id, network::NetMessage &buffer)
 {
-	cli::UserEnterReq req;
-	svr::UserLeave
-	std::vector<int> dst_type_lists;
-	dst_type_lists.push_back(static_cast<int>(svr::NodeType::kChatServer));
-	dst_type_lists.push_back(static_cast<int>(svr::NodeType::kLogicSever));
-	GlobalGWClient()->Broadcast(dst_type_lists, );
+	svr::UserEnterRsp msg;
+	msg.set_user_id(user_id);
+	std::vector<int> dst_type_lists = { svr::NodeType::kLogicSever, svr::NodeType::kChatServer };
+	GlobalGWClient()->Broadcast(dst_type_lists, &msg, buffer);
 }
 
 // 广播用户离开
 void LinkerManager::OnBroadcastUserLeave(uint32_t user_id)
 {
-
+	svr::UserEnterRsp msg;
+	msg.set_user_id(user_id);
+	std::vector<int> dst_type_lists = { svr::NodeType::kLogicSever, svr::NodeType::kChatServer };
+	GlobalGWClient()->Broadcast(dst_type_lists, &msg);
 }
 
 // 登录服务器消息
 void LinkerManager::OnLoginServerMessage(LoginConnector *connector, google::protobuf::Message *messsage, network::NetMessage &buffer)
 {
-	auto request = dynamic_cast<svr::UpdateTokenReq*>(messsage);
-	if (request != nullptr)
+	if (messsage->GetDescriptor() == svr::UpdateTokenReq::descriptor())
 	{
+		auto request = static_cast<svr::UpdateTokenReq*>(messsage);
+
 		// 更新Token
 		SUserAuth auth;
 		auth.user_id = request->user_id();
@@ -219,5 +221,22 @@ void LinkerManager::OnLoginServerMessage(LoginConnector *connector, google::prot
 // 网关服务器消息
 void LinkerManager::OnGatewayServerMessage(gw::GWClient *connector, google::protobuf::Message *messsage, network::NetMessage &buffer)
 {
-
+	if (messsage->GetDescriptor() == svr::ForwardReq::descriptor())
+	{
+		// 转发消息给用户
+		auto request = static_cast<svr::ForwardReq*>(messsage);
+	}
+	else if (messsage->GetDescriptor() == svr::LinkerBroadcast::descriptor())
+	{
+		// 广播消息给用户
+		auto request = static_cast<svr::LinkerBroadcast*>(messsage);
+	}
+	else if (messsage->GetDescriptor() == svr::DisconnectReq::descriptor())
+	{
+		// 关闭用户连接
+	}
+	else
+	{
+		logger()->warn("已忽略来自网关服务器的请求，{}", messsage->GetTypeName());
+	}
 }

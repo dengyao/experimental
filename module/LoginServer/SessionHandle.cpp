@@ -33,7 +33,7 @@ void SessionHandle::OnMessage(network::NetMessage &message)
 	}
 
 	// 注册Linker
-	if (dynamic_cast<svr::LinkerLoginReq*>(request.get()) != nullptr)
+	if (request->GetDescriptor() == svr::LinkerLoginReq::descriptor())
 	{
 		if (login_manager_.OnLinkerMessage(this, request.get(), message))
 		{
@@ -43,7 +43,7 @@ void SessionHandle::OnMessage(network::NetMessage &message)
 	}
 
 	// 处理心跳
-	if (dynamic_cast<pub::PingReq*>(request.get()) != nullptr)
+	if (request->GetDescriptor() == pub::PingReq::descriptor())
 	{
 		message.Clear();
 		pub::PongRsp response;

@@ -53,7 +53,7 @@ void LoginManager::QueryPartitionInfoByDatabase()
 {
 	auto callback = [this](google::protobuf::Message *message)
 	{
-		if (dynamic_cast<svr::QueryDBAgentRsp*>(message) != nullptr)
+		if (message->GetDescriptor() == svr::QueryDBAgentRsp::descriptor())
 		{
 			std::vector<SPartition> partition_lists;
 			auto response = static_cast<svr::QueryDBAgentRsp*>(message);
@@ -360,7 +360,7 @@ bool LoginManager::OnUserSignUp(network::TCPSessionHandler *session, google::pro
 		if (session_ptr != nullptr)
 		{
 			network::NetMessage new_buffer;
-			if (dynamic_cast<svr::QueryDBAgentRsp*>(db_message) != nullptr)
+			if (db_message->GetDescriptor() == svr::QueryDBAgentRsp::descriptor())
 			{
 				auto result = static_cast<svr::QueryDBAgentRsp*>(db_message);
 				db::WrapResultSet result_set(result->result().data(), result->result().size());
@@ -417,7 +417,7 @@ bool LoginManager::OnUserSignIn(network::TCPSessionHandler *session, google::pro
 		if (session_ptr != nullptr)
 		{
 			network::NetMessage new_buffer;
-			if (dynamic_cast<svr::QueryDBAgentRsp*>(db_message) != nullptr)
+			if (db_message->GetDescriptor() == svr::QueryDBAgentRsp::descriptor())
 			{
 				auto result = static_cast<svr::QueryDBAgentRsp*>(db_message);
 				db::WrapResultSet result_set(result->result().data(), result->result().size());

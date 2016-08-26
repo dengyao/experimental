@@ -70,11 +70,12 @@ public:
 
 private:
 	// 广播用户进入
-	void OnBroadcastUserEnter(uint32_t user_id);
+	void OnBroadcastUserEnter(uint32_t user_id, network::NetMessage &buffer);
 
 	// 广播用户离开
 	void OnBroadcastUserLeave(uint32_t user_id);
 
+private:
 	// 更新定时器
 	void OnUpdateTimer(asio::error_code error_code);
 

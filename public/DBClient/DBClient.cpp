@@ -64,9 +64,9 @@ namespace db
 
 			if (!is_logged_)
 			{
-				if (dynamic_cast<pub::PongRsp*>(response.get()) == nullptr)
+				if (response->GetDescriptor() != pub::PongRsp::descriptor())
 				{
-					if (dynamic_cast<svr::LoginDBAgentRsp*>(response.get()) != nullptr)
+					if (response->GetDescriptor() == svr::LoginDBAgentRsp::descriptor())
 					{
 						is_logged_ = true;
 						counter_ = heartbeat_interval_ = static_cast<svr::LoginDBAgentRsp*>(response.get())->heartbeat_interval() / 2;
@@ -78,13 +78,9 @@ namespace db
 					}
 				}
 			}
-			else if (dynamic_cast<pub::PongRsp*>(response.get()) == nullptr)
+			else if (response->GetDescriptor() != pub::PongRsp::descriptor())
 			{
 				client_->OnMessage(this, response.get());
-			}
-			else
-			{
-				assert(dynamic_cast<pub::PongRsp*>(response.get()) != nullptr);
 			}
 		}
 
@@ -354,15 +350,15 @@ namespace db
 	void DBClient::OnMessage(DBSessionHandle *session, google::protobuf::Message *message)
 	{
 		uint32_t sequence = 0;
-		if (dynamic_cast<svr::QueryDBAgentRsp*>(message) != nullptr)
+		if (message->GetDescriptor() == svr::QueryDBAgentRsp::descriptor())
 		{
 			sequence = static_cast<svr::QueryDBAgentRsp*>(message)->sequence();
 		}
-		else if (dynamic_cast<svr::DBErrorRsp*>(message) != nullptr)
+		else if (message->GetDescriptor() == svr::DBErrorRsp::descriptor())
 		{
 			sequence = static_cast<svr::DBErrorRsp*>(message)->sequence();
 		}
-		else if (dynamic_cast<svr::DBAgentErrorRsp*>(message) != nullptr)
+		else if (message->GetDescriptor() == svr::DBAgentErrorRsp::descriptor())
 		{
 			sequence = static_cast<svr::DBAgentErrorRsp*>(message)->sequence();
 		}

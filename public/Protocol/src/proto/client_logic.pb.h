@@ -33,20 +33,20 @@ void  protobuf_AddDesc_proto_2fclient_5flogic_2eproto();
 void protobuf_AssignDesc_proto_2fclient_5flogic_2eproto();
 void protobuf_ShutdownFile_proto_2fclient_5flogic_2eproto();
 
-class UserEnterReq;
-class UserEnterRsp;
-class UserLeaveReq;
+class UserInfoRep;
+class UserInfoRsp;
+class LeaveReq;
 
 // ===================================================================
 
-class UserEnterReq : public ::google::protobuf::Message {
+class UserInfoRep : public ::google::protobuf::Message {
  public:
-  UserEnterReq();
-  virtual ~UserEnterReq();
+  UserInfoRep();
+  virtual ~UserInfoRep();
 
-  UserEnterReq(const UserEnterReq& from);
+  UserInfoRep(const UserInfoRep& from);
 
-  inline UserEnterReq& operator=(const UserEnterReq& from) {
+  inline UserInfoRep& operator=(const UserInfoRep& from) {
     CopyFrom(from);
     return *this;
   }
@@ -60,17 +60,17 @@ class UserEnterReq : public ::google::protobuf::Message {
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
-  static const UserEnterReq& default_instance();
+  static const UserInfoRep& default_instance();
 
-  void Swap(UserEnterReq* other);
+  void Swap(UserInfoRep* other);
 
   // implements Message ----------------------------------------------
 
-  UserEnterReq* New() const;
+  UserInfoRep* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const UserEnterReq& from);
-  void MergeFrom(const UserEnterReq& from);
+  void CopyFrom(const UserInfoRep& from);
+  void MergeFrom(const UserInfoRep& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -92,7 +92,7 @@ class UserEnterReq : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // @@protoc_insertion_point(class_scope:cli.UserEnterReq)
+  // @@protoc_insertion_point(class_scope:cli.UserInfoRep)
  private:
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
@@ -104,18 +104,18 @@ class UserEnterReq : public ::google::protobuf::Message {
   friend void protobuf_ShutdownFile_proto_2fclient_5flogic_2eproto();
 
   void InitAsDefaultInstance();
-  static UserEnterReq* default_instance_;
+  static UserInfoRep* default_instance_;
 };
 // -------------------------------------------------------------------
 
-class UserEnterRsp : public ::google::protobuf::Message {
+class UserInfoRsp : public ::google::protobuf::Message {
  public:
-  UserEnterRsp();
-  virtual ~UserEnterRsp();
+  UserInfoRsp();
+  virtual ~UserInfoRsp();
 
-  UserEnterRsp(const UserEnterRsp& from);
+  UserInfoRsp(const UserInfoRsp& from);
 
-  inline UserEnterRsp& operator=(const UserEnterRsp& from) {
+  inline UserInfoRsp& operator=(const UserInfoRsp& from) {
     CopyFrom(from);
     return *this;
   }
@@ -129,17 +129,17 @@ class UserEnterRsp : public ::google::protobuf::Message {
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
-  static const UserEnterRsp& default_instance();
+  static const UserInfoRsp& default_instance();
 
-  void Swap(UserEnterRsp* other);
+  void Swap(UserInfoRsp* other);
 
   // implements Message ----------------------------------------------
 
-  UserEnterRsp* New() const;
+  UserInfoRsp* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const UserEnterRsp& from);
-  void MergeFrom(const UserEnterRsp& from);
+  void CopyFrom(const UserInfoRsp& from);
+  void MergeFrom(const UserInfoRsp& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -168,33 +168,68 @@ class UserEnterRsp : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 user_id() const;
   inline void set_user_id(::google::protobuf::uint32 value);
 
-  // @@protoc_insertion_point(class_scope:cli.UserEnterRsp)
+  // required string nickname = 2;
+  inline bool has_nickname() const;
+  inline void clear_nickname();
+  static const int kNicknameFieldNumber = 2;
+  inline const ::std::string& nickname() const;
+  inline void set_nickname(const ::std::string& value);
+  inline void set_nickname(const char* value);
+  inline void set_nickname(const char* value, size_t size);
+  inline ::std::string* mutable_nickname();
+  inline ::std::string* release_nickname();
+  inline void set_allocated_nickname(::std::string* nickname);
+
+  // required uint32 age = 3;
+  inline bool has_age() const;
+  inline void clear_age();
+  static const int kAgeFieldNumber = 3;
+  inline ::google::protobuf::uint32 age() const;
+  inline void set_age(::google::protobuf::uint32 value);
+
+  // required uint32 gender = 4;
+  inline bool has_gender() const;
+  inline void clear_gender();
+  static const int kGenderFieldNumber = 4;
+  inline ::google::protobuf::uint32 gender() const;
+  inline void set_gender(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:cli.UserInfoRsp)
  private:
   inline void set_has_user_id();
   inline void clear_has_user_id();
+  inline void set_has_nickname();
+  inline void clear_has_nickname();
+  inline void set_has_age();
+  inline void clear_has_age();
+  inline void set_has_gender();
+  inline void clear_has_gender();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
+  ::std::string* nickname_;
   ::google::protobuf::uint32 user_id_;
+  ::google::protobuf::uint32 age_;
+  ::google::protobuf::uint32 gender_;
   friend void  protobuf_AddDesc_proto_2fclient_5flogic_2eproto();
   friend void protobuf_AssignDesc_proto_2fclient_5flogic_2eproto();
   friend void protobuf_ShutdownFile_proto_2fclient_5flogic_2eproto();
 
   void InitAsDefaultInstance();
-  static UserEnterRsp* default_instance_;
+  static UserInfoRsp* default_instance_;
 };
 // -------------------------------------------------------------------
 
-class UserLeaveReq : public ::google::protobuf::Message {
+class LeaveReq : public ::google::protobuf::Message {
  public:
-  UserLeaveReq();
-  virtual ~UserLeaveReq();
+  LeaveReq();
+  virtual ~LeaveReq();
 
-  UserLeaveReq(const UserLeaveReq& from);
+  LeaveReq(const LeaveReq& from);
 
-  inline UserLeaveReq& operator=(const UserLeaveReq& from) {
+  inline LeaveReq& operator=(const LeaveReq& from) {
     CopyFrom(from);
     return *this;
   }
@@ -208,17 +243,17 @@ class UserLeaveReq : public ::google::protobuf::Message {
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
-  static const UserLeaveReq& default_instance();
+  static const LeaveReq& default_instance();
 
-  void Swap(UserLeaveReq* other);
+  void Swap(LeaveReq* other);
 
   // implements Message ----------------------------------------------
 
-  UserLeaveReq* New() const;
+  LeaveReq* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const UserLeaveReq& from);
-  void MergeFrom(const UserLeaveReq& from);
+  void CopyFrom(const LeaveReq& from);
+  void MergeFrom(const LeaveReq& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -240,7 +275,7 @@ class UserLeaveReq : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // @@protoc_insertion_point(class_scope:cli.UserLeaveReq)
+  // @@protoc_insertion_point(class_scope:cli.LeaveReq)
  private:
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
@@ -252,46 +287,170 @@ class UserLeaveReq : public ::google::protobuf::Message {
   friend void protobuf_ShutdownFile_proto_2fclient_5flogic_2eproto();
 
   void InitAsDefaultInstance();
-  static UserLeaveReq* default_instance_;
+  static LeaveReq* default_instance_;
 };
 // ===================================================================
 
 
 // ===================================================================
 
-// UserEnterReq
+// UserInfoRep
 
 // -------------------------------------------------------------------
 
-// UserEnterRsp
+// UserInfoRsp
 
 // required uint32 user_id = 1;
-inline bool UserEnterRsp::has_user_id() const {
+inline bool UserInfoRsp::has_user_id() const {
   return (_has_bits_[0] & 0x00000001u) != 0;
 }
-inline void UserEnterRsp::set_has_user_id() {
+inline void UserInfoRsp::set_has_user_id() {
   _has_bits_[0] |= 0x00000001u;
 }
-inline void UserEnterRsp::clear_has_user_id() {
+inline void UserInfoRsp::clear_has_user_id() {
   _has_bits_[0] &= ~0x00000001u;
 }
-inline void UserEnterRsp::clear_user_id() {
+inline void UserInfoRsp::clear_user_id() {
   user_id_ = 0u;
   clear_has_user_id();
 }
-inline ::google::protobuf::uint32 UserEnterRsp::user_id() const {
-  // @@protoc_insertion_point(field_get:cli.UserEnterRsp.user_id)
+inline ::google::protobuf::uint32 UserInfoRsp::user_id() const {
+  // @@protoc_insertion_point(field_get:cli.UserInfoRsp.user_id)
   return user_id_;
 }
-inline void UserEnterRsp::set_user_id(::google::protobuf::uint32 value) {
+inline void UserInfoRsp::set_user_id(::google::protobuf::uint32 value) {
   set_has_user_id();
   user_id_ = value;
-  // @@protoc_insertion_point(field_set:cli.UserEnterRsp.user_id)
+  // @@protoc_insertion_point(field_set:cli.UserInfoRsp.user_id)
+}
+
+// required string nickname = 2;
+inline bool UserInfoRsp::has_nickname() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void UserInfoRsp::set_has_nickname() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void UserInfoRsp::clear_has_nickname() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void UserInfoRsp::clear_nickname() {
+  if (nickname_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    nickname_->clear();
+  }
+  clear_has_nickname();
+}
+inline const ::std::string& UserInfoRsp::nickname() const {
+  // @@protoc_insertion_point(field_get:cli.UserInfoRsp.nickname)
+  return *nickname_;
+}
+inline void UserInfoRsp::set_nickname(const ::std::string& value) {
+  set_has_nickname();
+  if (nickname_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    nickname_ = new ::std::string;
+  }
+  nickname_->assign(value);
+  // @@protoc_insertion_point(field_set:cli.UserInfoRsp.nickname)
+}
+inline void UserInfoRsp::set_nickname(const char* value) {
+  set_has_nickname();
+  if (nickname_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    nickname_ = new ::std::string;
+  }
+  nickname_->assign(value);
+  // @@protoc_insertion_point(field_set_char:cli.UserInfoRsp.nickname)
+}
+inline void UserInfoRsp::set_nickname(const char* value, size_t size) {
+  set_has_nickname();
+  if (nickname_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    nickname_ = new ::std::string;
+  }
+  nickname_->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:cli.UserInfoRsp.nickname)
+}
+inline ::std::string* UserInfoRsp::mutable_nickname() {
+  set_has_nickname();
+  if (nickname_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    nickname_ = new ::std::string;
+  }
+  // @@protoc_insertion_point(field_mutable:cli.UserInfoRsp.nickname)
+  return nickname_;
+}
+inline ::std::string* UserInfoRsp::release_nickname() {
+  clear_has_nickname();
+  if (nickname_ == &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    return NULL;
+  } else {
+    ::std::string* temp = nickname_;
+    nickname_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+    return temp;
+  }
+}
+inline void UserInfoRsp::set_allocated_nickname(::std::string* nickname) {
+  if (nickname_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+    delete nickname_;
+  }
+  if (nickname) {
+    set_has_nickname();
+    nickname_ = nickname;
+  } else {
+    clear_has_nickname();
+    nickname_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  }
+  // @@protoc_insertion_point(field_set_allocated:cli.UserInfoRsp.nickname)
+}
+
+// required uint32 age = 3;
+inline bool UserInfoRsp::has_age() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void UserInfoRsp::set_has_age() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void UserInfoRsp::clear_has_age() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void UserInfoRsp::clear_age() {
+  age_ = 0u;
+  clear_has_age();
+}
+inline ::google::protobuf::uint32 UserInfoRsp::age() const {
+  // @@protoc_insertion_point(field_get:cli.UserInfoRsp.age)
+  return age_;
+}
+inline void UserInfoRsp::set_age(::google::protobuf::uint32 value) {
+  set_has_age();
+  age_ = value;
+  // @@protoc_insertion_point(field_set:cli.UserInfoRsp.age)
+}
+
+// required uint32 gender = 4;
+inline bool UserInfoRsp::has_gender() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void UserInfoRsp::set_has_gender() {
+  _has_bits_[0] |= 0x00000008u;
+}
+inline void UserInfoRsp::clear_has_gender() {
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline void UserInfoRsp::clear_gender() {
+  gender_ = 0u;
+  clear_has_gender();
+}
+inline ::google::protobuf::uint32 UserInfoRsp::gender() const {
+  // @@protoc_insertion_point(field_get:cli.UserInfoRsp.gender)
+  return gender_;
+}
+inline void UserInfoRsp::set_gender(::google::protobuf::uint32 value) {
+  set_has_gender();
+  gender_ = value;
+  // @@protoc_insertion_point(field_set:cli.UserInfoRsp.gender)
 }
 
 // -------------------------------------------------------------------
 
-// UserLeaveReq
+// LeaveReq
 
 
 // @@protoc_insertion_point(namespace_scope)

@@ -37,7 +37,7 @@ void QueryPartitionInfo()
 {
 	auto callback = [](google::protobuf::Message *message)
 	{
-		if (dynamic_cast<svr::QueryDBAgentRsp*>(message) != nullptr)
+		if (message->GetDescriptor == svr::QueryDBAgentRsp::descriptor())
 		{
 			std::vector<SPartition> partition_lists;
 			auto response = static_cast<svr::QueryDBAgentRsp*>(message);
@@ -58,12 +58,12 @@ void QueryPartitionInfo()
 		}
 		else
 		{
-			if (dynamic_cast<svr::DBErrorRsp*>(message) != nullptr)
+			if (message->GetDescriptor() == svr::DBErrorRsp::descriptor())
 			{
 				auto error = static_cast<svr::DBErrorRsp*>(message);
 				logger()->critical("查询分区信息失败，error code: {} {}", error->error_code(), error->what());
 			}
-			else if (dynamic_cast<svr::DBAgentErrorRsp*>(message) != nullptr)
+			else if (message->GetDescriptor() == svr::DBAgentErrorRsp::descriptor())
 			{
 				auto error = static_cast<svr::DBAgentErrorRsp*>(message);
 				logger()->critical("查询分区信息失败，error code: {}", error->error_code());

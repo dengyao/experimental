@@ -78,9 +78,15 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* ReportLinkerReq_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   ReportLinkerReq_reflection_ = NULL;
-const ::google::protobuf::Descriptor* UserLeave_descriptor_ = NULL;
+const ::google::protobuf::Descriptor* UserEnterRsp_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
-  UserLeave_reflection_ = NULL;
+  UserEnterRsp_reflection_ = NULL;
+const ::google::protobuf::Descriptor* UserLeaveRsp_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  UserLeaveRsp_reflection_ = NULL;
+const ::google::protobuf::Descriptor* DisconnectReq_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  DisconnectReq_reflection_ = NULL;
 const ::google::protobuf::Descriptor* LinkerForward_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   LinkerForward_reflection_ = NULL;
@@ -409,22 +415,51 @@ void protobuf_AssignDesc_proto_2fserver_5finternal_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(ReportLinkerReq));
-  UserLeave_descriptor_ = file->message_type(19);
-  static const int UserLeave_offsets_[1] = {
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UserLeave, user_id_),
+  UserEnterRsp_descriptor_ = file->message_type(19);
+  static const int UserEnterRsp_offsets_[1] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UserEnterRsp, user_id_),
   };
-  UserLeave_reflection_ =
+  UserEnterRsp_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
-      UserLeave_descriptor_,
-      UserLeave::default_instance_,
-      UserLeave_offsets_,
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UserLeave, _has_bits_[0]),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UserLeave, _unknown_fields_),
+      UserEnterRsp_descriptor_,
+      UserEnterRsp::default_instance_,
+      UserEnterRsp_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UserEnterRsp, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UserEnterRsp, _unknown_fields_),
       -1,
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
-      sizeof(UserLeave));
-  LinkerForward_descriptor_ = file->message_type(20);
+      sizeof(UserEnterRsp));
+  UserLeaveRsp_descriptor_ = file->message_type(20);
+  static const int UserLeaveRsp_offsets_[1] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UserLeaveRsp, user_id_),
+  };
+  UserLeaveRsp_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      UserLeaveRsp_descriptor_,
+      UserLeaveRsp::default_instance_,
+      UserLeaveRsp_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UserLeaveRsp, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UserLeaveRsp, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(UserLeaveRsp));
+  DisconnectReq_descriptor_ = file->message_type(21);
+  static const int DisconnectReq_offsets_[1] = {
+  };
+  DisconnectReq_reflection_ =
+    new ::google::protobuf::internal::GeneratedMessageReflection(
+      DisconnectReq_descriptor_,
+      DisconnectReq::default_instance_,
+      DisconnectReq_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(DisconnectReq, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(DisconnectReq, _unknown_fields_),
+      -1,
+      ::google::protobuf::DescriptorPool::generated_pool(),
+      ::google::protobuf::MessageFactory::generated_factory(),
+      sizeof(DisconnectReq));
+  LinkerForward_descriptor_ = file->message_type(22);
   static const int LinkerForward_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LinkerForward, user_id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LinkerForward, user_data_),
@@ -440,7 +475,7 @@ void protobuf_AssignDesc_proto_2fserver_5finternal_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(LinkerForward));
-  LinkerBroadcast_descriptor_ = file->message_type(21);
+  LinkerBroadcast_descriptor_ = file->message_type(23);
   static const int LinkerBroadcast_offsets_[1] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LinkerBroadcast, user_data_),
   };
@@ -455,7 +490,7 @@ void protobuf_AssignDesc_proto_2fserver_5finternal_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(LinkerBroadcast));
-  UpdateTokenReq_descriptor_ = file->message_type(22);
+  UpdateTokenReq_descriptor_ = file->message_type(24);
   static const int UpdateTokenReq_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UpdateTokenReq, user_id_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(UpdateTokenReq, token_),
@@ -523,7 +558,11 @@ void protobuf_RegisterTypes(const ::std::string&) {
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     ReportLinkerReq_descriptor_, &ReportLinkerReq::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-    UserLeave_descriptor_, &UserLeave::default_instance());
+    UserEnterRsp_descriptor_, &UserEnterRsp::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    UserLeaveRsp_descriptor_, &UserLeaveRsp::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+    DisconnectReq_descriptor_, &DisconnectReq::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     LinkerForward_descriptor_, &LinkerForward::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
@@ -573,8 +612,12 @@ void protobuf_ShutdownFile_proto_2fserver_5finternal_2eproto() {
   delete LinkerLoginRsp_reflection_;
   delete ReportLinkerReq::default_instance_;
   delete ReportLinkerReq_reflection_;
-  delete UserLeave::default_instance_;
-  delete UserLeave_reflection_;
+  delete UserEnterRsp::default_instance_;
+  delete UserEnterRsp_reflection_;
+  delete UserLeaveRsp::default_instance_;
+  delete UserLeaveRsp_reflection_;
+  delete DisconnectReq::default_instance_;
+  delete DisconnectReq_reflection_;
   delete LinkerForward::default_instance_;
   delete LinkerForward_reflection_;
   delete LinkerBroadcast::default_instance_;
@@ -626,13 +669,15 @@ void protobuf_AddDesc_proto_2fserver_5finternal_2eproto() {
     "port\030\003 \002(\r\022\021\n\tlinker_id\030\004 \001(\r\"\?\n\016LinkerL"
     "oginRsp\022\032\n\022heartbeat_interval\030\001 \002(\r\022\021\n\tl"
     "inker_id\030\002 \002(\r\"\037\n\017ReportLinkerReq\022\014\n\004loa"
-    "d\030\001 \002(\r\"\034\n\tUserLeave\022\017\n\007user_id\030\001 \003(\r\"3\n"
-    "\rLinkerForward\022\017\n\007user_id\030\001 \003(\r\022\021\n\tuser_"
-    "data\030\002 \002(\014\"$\n\017LinkerBroadcast\022\021\n\tuser_da"
-    "ta\030\001 \002(\014\"0\n\016UpdateTokenReq\022\017\n\007user_id\030\001 "
-    "\002(\r\022\r\n\005token\030\002 \002(\004*a\n\010NodeType\022\020\n\014kLogin"
-    "Server\020\001\022\021\n\rkLinkerServer\020\002\022\017\n\013kLogicSev"
-    "er\020\003\022\017\n\013kChatServer\020\004\022\016\n\nkGameSever\020\005", 1677);
+    "d\030\001 \002(\r\"\037\n\014UserEnterRsp\022\017\n\007user_id\030\001 \002(\r"
+    "\"\037\n\014UserLeaveRsp\022\017\n\007user_id\030\001 \002(\r\"\017\n\rDis"
+    "connectReq\"3\n\rLinkerForward\022\017\n\007user_id\030\001"
+    " \002(\r\022\021\n\tuser_data\030\002 \002(\014\"$\n\017LinkerBroadca"
+    "st\022\021\n\tuser_data\030\001 \002(\014\"0\n\016UpdateTokenReq\022"
+    "\017\n\007user_id\030\001 \002(\r\022\r\n\005token\030\002 \002(\004*a\n\010NodeT"
+    "ype\022\020\n\014kLoginServer\020\001\022\021\n\rkLinkerServer\020\002"
+    "\022\017\n\013kLogicSever\020\003\022\017\n\013kChatServer\020\004\022\016\n\nkG"
+    "ameSever\020\005", 1730);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "proto/server_internal.proto", &protobuf_RegisterTypes);
   LoginDBAgentReq::default_instance_ = new LoginDBAgentReq();
@@ -654,7 +699,9 @@ void protobuf_AddDesc_proto_2fserver_5finternal_2eproto() {
   LinkerLoginReq::default_instance_ = new LinkerLoginReq();
   LinkerLoginRsp::default_instance_ = new LinkerLoginRsp();
   ReportLinkerReq::default_instance_ = new ReportLinkerReq();
-  UserLeave::default_instance_ = new UserLeave();
+  UserEnterRsp::default_instance_ = new UserEnterRsp();
+  UserLeaveRsp::default_instance_ = new UserLeaveRsp();
+  DisconnectReq::default_instance_ = new DisconnectReq();
   LinkerForward::default_instance_ = new LinkerForward();
   LinkerBroadcast::default_instance_ = new LinkerBroadcast();
   UpdateTokenReq::default_instance_ = new UpdateTokenReq();
@@ -677,7 +724,9 @@ void protobuf_AddDesc_proto_2fserver_5finternal_2eproto() {
   LinkerLoginReq::default_instance_->InitAsDefaultInstance();
   LinkerLoginRsp::default_instance_->InitAsDefaultInstance();
   ReportLinkerReq::default_instance_->InitAsDefaultInstance();
-  UserLeave::default_instance_->InitAsDefaultInstance();
+  UserEnterRsp::default_instance_->InitAsDefaultInstance();
+  UserLeaveRsp::default_instance_->InitAsDefaultInstance();
+  DisconnectReq::default_instance_->InitAsDefaultInstance();
   LinkerForward::default_instance_->InitAsDefaultInstance();
   LinkerBroadcast::default_instance_->InitAsDefaultInstance();
   UpdateTokenReq::default_instance_->InitAsDefaultInstance();
@@ -6059,92 +6108,88 @@ void ReportLinkerReq::Swap(ReportLinkerReq* other) {
 // ===================================================================
 
 #ifndef _MSC_VER
-const int UserLeave::kUserIdFieldNumber;
+const int UserEnterRsp::kUserIdFieldNumber;
 #endif  // !_MSC_VER
 
-UserLeave::UserLeave()
+UserEnterRsp::UserEnterRsp()
   : ::google::protobuf::Message() {
   SharedCtor();
-  // @@protoc_insertion_point(constructor:svr.UserLeave)
+  // @@protoc_insertion_point(constructor:svr.UserEnterRsp)
 }
 
-void UserLeave::InitAsDefaultInstance() {
+void UserEnterRsp::InitAsDefaultInstance() {
 }
 
-UserLeave::UserLeave(const UserLeave& from)
+UserEnterRsp::UserEnterRsp(const UserEnterRsp& from)
   : ::google::protobuf::Message() {
   SharedCtor();
   MergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:svr.UserLeave)
+  // @@protoc_insertion_point(copy_constructor:svr.UserEnterRsp)
 }
 
-void UserLeave::SharedCtor() {
+void UserEnterRsp::SharedCtor() {
   _cached_size_ = 0;
+  user_id_ = 0u;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
-UserLeave::~UserLeave() {
-  // @@protoc_insertion_point(destructor:svr.UserLeave)
+UserEnterRsp::~UserEnterRsp() {
+  // @@protoc_insertion_point(destructor:svr.UserEnterRsp)
   SharedDtor();
 }
 
-void UserLeave::SharedDtor() {
+void UserEnterRsp::SharedDtor() {
   if (this != default_instance_) {
   }
 }
 
-void UserLeave::SetCachedSize(int size) const {
+void UserEnterRsp::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const ::google::protobuf::Descriptor* UserLeave::descriptor() {
+const ::google::protobuf::Descriptor* UserEnterRsp::descriptor() {
   protobuf_AssignDescriptorsOnce();
-  return UserLeave_descriptor_;
+  return UserEnterRsp_descriptor_;
 }
 
-const UserLeave& UserLeave::default_instance() {
+const UserEnterRsp& UserEnterRsp::default_instance() {
   if (default_instance_ == NULL) protobuf_AddDesc_proto_2fserver_5finternal_2eproto();
   return *default_instance_;
 }
 
-UserLeave* UserLeave::default_instance_ = NULL;
+UserEnterRsp* UserEnterRsp::default_instance_ = NULL;
 
-UserLeave* UserLeave::New() const {
-  return new UserLeave;
+UserEnterRsp* UserEnterRsp::New() const {
+  return new UserEnterRsp;
 }
 
-void UserLeave::Clear() {
-  user_id_.Clear();
+void UserEnterRsp::Clear() {
+  user_id_ = 0u;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
 
-bool UserLeave::MergePartialFromCodedStream(
+bool UserEnterRsp::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:svr.UserLeave)
+  // @@protoc_insertion_point(parse_start:svr.UserEnterRsp)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated uint32 user_id = 1;
+      // required uint32 user_id = 1;
       case 1: {
         if (tag == 8) {
-         parse_user_id:
-          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitive<
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
-                 1, 8, input, this->mutable_user_id())));
-        } else if (tag == 10) {
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitiveNoInline<
-                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
-                 input, this->mutable_user_id())));
+                 input, &user_id_)));
+          set_has_user_id();
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(8)) goto parse_user_id;
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -6163,59 +6208,461 @@ bool UserLeave::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:svr.UserLeave)
+  // @@protoc_insertion_point(parse_success:svr.UserEnterRsp)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:svr.UserLeave)
+  // @@protoc_insertion_point(parse_failure:svr.UserEnterRsp)
   return false;
 #undef DO_
 }
 
-void UserLeave::SerializeWithCachedSizes(
+void UserEnterRsp::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:svr.UserLeave)
-  // repeated uint32 user_id = 1;
-  for (int i = 0; i < this->user_id_size(); i++) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(
-      1, this->user_id(i), output);
+  // @@protoc_insertion_point(serialize_start:svr.UserEnterRsp)
+  // required uint32 user_id = 1;
+  if (has_user_id()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->user_id(), output);
   }
 
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
   }
-  // @@protoc_insertion_point(serialize_end:svr.UserLeave)
+  // @@protoc_insertion_point(serialize_end:svr.UserEnterRsp)
 }
 
-::google::protobuf::uint8* UserLeave::SerializeWithCachedSizesToArray(
+::google::protobuf::uint8* UserEnterRsp::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // @@protoc_insertion_point(serialize_to_array_start:svr.UserLeave)
-  // repeated uint32 user_id = 1;
-  for (int i = 0; i < this->user_id_size(); i++) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      WriteUInt32ToArray(1, this->user_id(i), target);
+  // @@protoc_insertion_point(serialize_to_array_start:svr.UserEnterRsp)
+  // required uint32 user_id = 1;
+  if (has_user_id()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->user_id(), target);
   }
 
   if (!unknown_fields().empty()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:svr.UserLeave)
+  // @@protoc_insertion_point(serialize_to_array_end:svr.UserEnterRsp)
   return target;
 }
 
-int UserLeave::ByteSize() const {
+int UserEnterRsp::ByteSize() const {
   int total_size = 0;
 
-  // repeated uint32 user_id = 1;
-  {
-    int data_size = 0;
-    for (int i = 0; i < this->user_id_size(); i++) {
-      data_size += ::google::protobuf::internal::WireFormatLite::
-        UInt32Size(this->user_id(i));
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required uint32 user_id = 1;
+    if (has_user_id()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->user_id());
     }
-    total_size += 1 * this->user_id_size() + data_size;
+
   }
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void UserEnterRsp::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const UserEnterRsp* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const UserEnterRsp*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void UserEnterRsp::MergeFrom(const UserEnterRsp& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_user_id()) {
+      set_user_id(from.user_id());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void UserEnterRsp::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void UserEnterRsp::CopyFrom(const UserEnterRsp& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool UserEnterRsp::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
+
+  return true;
+}
+
+void UserEnterRsp::Swap(UserEnterRsp* other) {
+  if (other != this) {
+    std::swap(user_id_, other->user_id_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata UserEnterRsp::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = UserEnterRsp_descriptor_;
+  metadata.reflection = UserEnterRsp_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
+const int UserLeaveRsp::kUserIdFieldNumber;
+#endif  // !_MSC_VER
+
+UserLeaveRsp::UserLeaveRsp()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:svr.UserLeaveRsp)
+}
+
+void UserLeaveRsp::InitAsDefaultInstance() {
+}
+
+UserLeaveRsp::UserLeaveRsp(const UserLeaveRsp& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:svr.UserLeaveRsp)
+}
+
+void UserLeaveRsp::SharedCtor() {
+  _cached_size_ = 0;
+  user_id_ = 0u;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+UserLeaveRsp::~UserLeaveRsp() {
+  // @@protoc_insertion_point(destructor:svr.UserLeaveRsp)
+  SharedDtor();
+}
+
+void UserLeaveRsp::SharedDtor() {
+  if (this != default_instance_) {
+  }
+}
+
+void UserLeaveRsp::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* UserLeaveRsp::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return UserLeaveRsp_descriptor_;
+}
+
+const UserLeaveRsp& UserLeaveRsp::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_proto_2fserver_5finternal_2eproto();
+  return *default_instance_;
+}
+
+UserLeaveRsp* UserLeaveRsp::default_instance_ = NULL;
+
+UserLeaveRsp* UserLeaveRsp::New() const {
+  return new UserLeaveRsp;
+}
+
+void UserLeaveRsp::Clear() {
+  user_id_ = 0u;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool UserLeaveRsp::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:svr.UserLeaveRsp)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required uint32 user_id = 1;
+      case 1: {
+        if (tag == 8) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &user_id_)));
+          set_has_user_id();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:svr.UserLeaveRsp)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:svr.UserLeaveRsp)
+  return false;
+#undef DO_
+}
+
+void UserLeaveRsp::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:svr.UserLeaveRsp)
+  // required uint32 user_id = 1;
+  if (has_user_id()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->user_id(), output);
+  }
+
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:svr.UserLeaveRsp)
+}
+
+::google::protobuf::uint8* UserLeaveRsp::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:svr.UserLeaveRsp)
+  // required uint32 user_id = 1;
+  if (has_user_id()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->user_id(), target);
+  }
+
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:svr.UserLeaveRsp)
+  return target;
+}
+
+int UserLeaveRsp::ByteSize() const {
+  int total_size = 0;
+
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required uint32 user_id = 1;
+    if (has_user_id()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->user_id());
+    }
+
+  }
+  if (!unknown_fields().empty()) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        unknown_fields());
+  }
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void UserLeaveRsp::MergeFrom(const ::google::protobuf::Message& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  const UserLeaveRsp* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const UserLeaveRsp*>(
+      &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void UserLeaveRsp::MergeFrom(const UserLeaveRsp& from) {
+  GOOGLE_CHECK_NE(&from, this);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_user_id()) {
+      set_user_id(from.user_id());
+    }
+  }
+  mutable_unknown_fields()->MergeFrom(from.unknown_fields());
+}
+
+void UserLeaveRsp::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void UserLeaveRsp::CopyFrom(const UserLeaveRsp& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool UserLeaveRsp::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
+
+  return true;
+}
+
+void UserLeaveRsp::Swap(UserLeaveRsp* other) {
+  if (other != this) {
+    std::swap(user_id_, other->user_id_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
+    _unknown_fields_.Swap(&other->_unknown_fields_);
+    std::swap(_cached_size_, other->_cached_size_);
+  }
+}
+
+::google::protobuf::Metadata UserLeaveRsp::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = UserLeaveRsp_descriptor_;
+  metadata.reflection = UserLeaveRsp_reflection_;
+  return metadata;
+}
+
+
+// ===================================================================
+
+#ifndef _MSC_VER
+#endif  // !_MSC_VER
+
+DisconnectReq::DisconnectReq()
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:svr.DisconnectReq)
+}
+
+void DisconnectReq::InitAsDefaultInstance() {
+}
+
+DisconnectReq::DisconnectReq(const DisconnectReq& from)
+  : ::google::protobuf::Message() {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:svr.DisconnectReq)
+}
+
+void DisconnectReq::SharedCtor() {
+  _cached_size_ = 0;
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+}
+
+DisconnectReq::~DisconnectReq() {
+  // @@protoc_insertion_point(destructor:svr.DisconnectReq)
+  SharedDtor();
+}
+
+void DisconnectReq::SharedDtor() {
+  if (this != default_instance_) {
+  }
+}
+
+void DisconnectReq::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* DisconnectReq::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return DisconnectReq_descriptor_;
+}
+
+const DisconnectReq& DisconnectReq::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_proto_2fserver_5finternal_2eproto();
+  return *default_instance_;
+}
+
+DisconnectReq* DisconnectReq::default_instance_ = NULL;
+
+DisconnectReq* DisconnectReq::New() const {
+  return new DisconnectReq;
+}
+
+void DisconnectReq::Clear() {
+  ::memset(_has_bits_, 0, sizeof(_has_bits_));
+  mutable_unknown_fields()->Clear();
+}
+
+bool DisconnectReq::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:svr.DisconnectReq)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+  handle_unusual:
+    if (tag == 0 ||
+        ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+        ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+      goto success;
+    }
+    DO_(::google::protobuf::internal::WireFormat::SkipField(
+          input, tag, mutable_unknown_fields()));
+  }
+success:
+  // @@protoc_insertion_point(parse_success:svr.DisconnectReq)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:svr.DisconnectReq)
+  return false;
+#undef DO_
+}
+
+void DisconnectReq::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:svr.DisconnectReq)
+  if (!unknown_fields().empty()) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        unknown_fields(), output);
+  }
+  // @@protoc_insertion_point(serialize_end:svr.DisconnectReq)
+}
+
+::google::protobuf::uint8* DisconnectReq::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:svr.DisconnectReq)
+  if (!unknown_fields().empty()) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        unknown_fields(), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:svr.DisconnectReq)
+  return target;
+}
+
+int DisconnectReq::ByteSize() const {
+  int total_size = 0;
 
   if (!unknown_fields().empty()) {
     total_size +=
@@ -6228,10 +6675,10 @@ int UserLeave::ByteSize() const {
   return total_size;
 }
 
-void UserLeave::MergeFrom(const ::google::protobuf::Message& from) {
+void DisconnectReq::MergeFrom(const ::google::protobuf::Message& from) {
   GOOGLE_CHECK_NE(&from, this);
-  const UserLeave* source =
-    ::google::protobuf::internal::dynamic_cast_if_available<const UserLeave*>(
+  const DisconnectReq* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const DisconnectReq*>(
       &from);
   if (source == NULL) {
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
@@ -6240,43 +6687,40 @@ void UserLeave::MergeFrom(const ::google::protobuf::Message& from) {
   }
 }
 
-void UserLeave::MergeFrom(const UserLeave& from) {
+void DisconnectReq::MergeFrom(const DisconnectReq& from) {
   GOOGLE_CHECK_NE(&from, this);
-  user_id_.MergeFrom(from.user_id_);
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
 
-void UserLeave::CopyFrom(const ::google::protobuf::Message& from) {
+void DisconnectReq::CopyFrom(const ::google::protobuf::Message& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-void UserLeave::CopyFrom(const UserLeave& from) {
+void DisconnectReq::CopyFrom(const DisconnectReq& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool UserLeave::IsInitialized() const {
+bool DisconnectReq::IsInitialized() const {
 
   return true;
 }
 
-void UserLeave::Swap(UserLeave* other) {
+void DisconnectReq::Swap(DisconnectReq* other) {
   if (other != this) {
-    user_id_.Swap(&other->user_id_);
-    std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
   }
 }
 
-::google::protobuf::Metadata UserLeave::GetMetadata() const {
+::google::protobuf::Metadata DisconnectReq::GetMetadata() const {
   protobuf_AssignDescriptorsOnce();
   ::google::protobuf::Metadata metadata;
-  metadata.descriptor = UserLeave_descriptor_;
-  metadata.reflection = UserLeave_reflection_;
+  metadata.descriptor = DisconnectReq_descriptor_;
+  metadata.reflection = DisconnectReq_reflection_;
   return metadata;
 }
 
@@ -6307,6 +6751,7 @@ LinkerForward::LinkerForward(const LinkerForward& from)
 void LinkerForward::SharedCtor() {
   ::google::protobuf::internal::GetEmptyString();
   _cached_size_ = 0;
+  user_id_ = 0u;
   user_data_ = const_cast< ::std::string*>(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
@@ -6346,12 +6791,14 @@ LinkerForward* LinkerForward::New() const {
 }
 
 void LinkerForward::Clear() {
-  if (has_user_data()) {
-    if (user_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
-      user_data_->clear();
+  if (_has_bits_[0 / 32] & 3) {
+    user_id_ = 0u;
+    if (has_user_data()) {
+      if (user_data_ != &::google::protobuf::internal::GetEmptyStringAlreadyInited()) {
+        user_data_->clear();
+      }
     }
   }
-  user_id_.Clear();
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
@@ -6366,21 +6813,16 @@ bool LinkerForward::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated uint32 user_id = 1;
+      // required uint32 user_id = 1;
       case 1: {
         if (tag == 8) {
-         parse_user_id:
-          DO_((::google::protobuf::internal::WireFormatLite::ReadRepeatedPrimitive<
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
-                 1, 8, input, this->mutable_user_id())));
-        } else if (tag == 10) {
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPackedPrimitiveNoInline<
-                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
-                 input, this->mutable_user_id())));
+                 input, &user_id_)));
+          set_has_user_id();
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(8)) goto parse_user_id;
         if (input->ExpectTag(18)) goto parse_user_data;
         break;
       }
@@ -6423,10 +6865,9 @@ failure:
 void LinkerForward::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:svr.LinkerForward)
-  // repeated uint32 user_id = 1;
-  for (int i = 0; i < this->user_id_size(); i++) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(
-      1, this->user_id(i), output);
+  // required uint32 user_id = 1;
+  if (has_user_id()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->user_id(), output);
   }
 
   // required bytes user_data = 2;
@@ -6445,10 +6886,9 @@ void LinkerForward::SerializeWithCachedSizes(
 ::google::protobuf::uint8* LinkerForward::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // @@protoc_insertion_point(serialize_to_array_start:svr.LinkerForward)
-  // repeated uint32 user_id = 1;
-  for (int i = 0; i < this->user_id_size(); i++) {
-    target = ::google::protobuf::internal::WireFormatLite::
-      WriteUInt32ToArray(1, this->user_id(i), target);
+  // required uint32 user_id = 1;
+  if (has_user_id()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->user_id(), target);
   }
 
   // required bytes user_data = 2;
@@ -6469,7 +6909,14 @@ void LinkerForward::SerializeWithCachedSizes(
 int LinkerForward::ByteSize() const {
   int total_size = 0;
 
-  if (_has_bits_[1 / 32] & (0xffu << (1 % 32))) {
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required uint32 user_id = 1;
+    if (has_user_id()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->user_id());
+    }
+
     // required bytes user_data = 2;
     if (has_user_data()) {
       total_size += 1 +
@@ -6478,16 +6925,6 @@ int LinkerForward::ByteSize() const {
     }
 
   }
-  // repeated uint32 user_id = 1;
-  {
-    int data_size = 0;
-    for (int i = 0; i < this->user_id_size(); i++) {
-      data_size += ::google::protobuf::internal::WireFormatLite::
-        UInt32Size(this->user_id(i));
-    }
-    total_size += 1 * this->user_id_size() + data_size;
-  }
-
   if (!unknown_fields().empty()) {
     total_size +=
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
@@ -6513,8 +6950,10 @@ void LinkerForward::MergeFrom(const ::google::protobuf::Message& from) {
 
 void LinkerForward::MergeFrom(const LinkerForward& from) {
   GOOGLE_CHECK_NE(&from, this);
-  user_id_.MergeFrom(from.user_id_);
-  if (from._has_bits_[1 / 32] & (0xffu << (1 % 32))) {
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_user_id()) {
+      set_user_id(from.user_id());
+    }
     if (from.has_user_data()) {
       set_user_data(from.user_data());
     }
@@ -6535,14 +6974,14 @@ void LinkerForward::CopyFrom(const LinkerForward& from) {
 }
 
 bool LinkerForward::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000002) != 0x00000002) return false;
+  if ((_has_bits_[0] & 0x00000003) != 0x00000003) return false;
 
   return true;
 }
 
 void LinkerForward::Swap(LinkerForward* other) {
   if (other != this) {
-    user_id_.Swap(&other->user_id_);
+    std::swap(user_id_, other->user_id_);
     std::swap(user_data_, other->user_data_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);

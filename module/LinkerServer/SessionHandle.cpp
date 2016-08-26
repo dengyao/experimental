@@ -29,7 +29,7 @@ void SessionHandle::OnMessage(network::NetMessage &message)
 	}
 
 	// 处理心跳
-	if (dynamic_cast<pub::PingReq*>(request.get()) != nullptr)
+	if (request->GetDescriptor() == pub::PingReq::descriptor())
 	{
 		message.Clear();
 		pub::PongRsp response;

@@ -15,9 +15,9 @@ public:
     {
         cli::UserAuthReq::descriptor();
         cli::UserAuthRsp::descriptor();
-        cli::UserEnterReq::descriptor();
-        cli::UserEnterRsp::descriptor();
-        cli::UserLeaveReq::descriptor();
+        cli::UserInfoRep::descriptor();
+        cli::UserInfoRsp::descriptor();
+        cli::LeaveReq::descriptor();
         cli::SignUpReq::descriptor();
         cli::SignUpRsp::descriptor();
         cli::SignInReq::descriptor();
@@ -49,7 +49,9 @@ public:
         svr::LinkerLoginReq::descriptor();
         svr::LinkerLoginRsp::descriptor();
         svr::ReportLinkerReq::descriptor();
-        svr::UserLeave::descriptor();
+        svr::UserEnterRsp::descriptor();
+        svr::UserLeaveRsp::descriptor();
+        svr::DisconnectReq::descriptor();
         svr::LinkerForward::descriptor();
         svr::LinkerBroadcast::descriptor();
         svr::UpdateTokenReq::descriptor();

@@ -34,9 +34,9 @@ void SessionHandle::OnMessage(network::NetMessage &message)
 	// 连接后必须登录
 	if (!is_logged_)
 	{
-		if (dynamic_cast<pub::PingReq*>(request.get()) == nullptr)
+		if (request->GetDescriptor() != pub::PingReq::descriptor())
 		{
-			if (dynamic_cast<svr::LoginDBAgentReq*>(request.get()) == nullptr)
+			if (request->GetDescriptor() != svr::LoginDBAgentReq::descriptor())
 			{
 				agent_manager_.SendErrorCode(this, 0, pub::kNotLoggedIn, message);
 				logger()->warn("操作前未发起登录请求，来自{}:{}", RemoteEndpoint().address().to_string(), RemoteEndpoint().port());
@@ -53,7 +53,7 @@ void SessionHandle::OnMessage(network::NetMessage &message)
 		}
 	}
 	// 处理心跳包
-	else if (dynamic_cast<pub::PingReq*>(request.get()) != nullptr)
+	else if (request->GetDescriptor() == pub::PingReq::descriptor())
 	{
 		message.Clear();
 		pub::PongRsp response;

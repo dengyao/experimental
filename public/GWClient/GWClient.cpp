@@ -67,9 +67,9 @@ namespace gw
 
 			if (!is_logged_)
 			{
-				if (dynamic_cast<pub::PongRsp*>(response.get()) == nullptr)
+				if (response->GetDescriptor() != pub::PongRsp::descriptor())
 				{
-					if (dynamic_cast<svr::LoginGWRsp*>(response.get()) != nullptr)
+					if (response->GetDescriptor() == svr::LoginGWRsp::descriptor())
 					{
 						is_logged_ = true;
 						counter_ = heartbeat_interval_ = static_cast<svr::LoginGWRsp*>(response.get())->heartbeat_interval() / 2;
@@ -81,13 +81,9 @@ namespace gw
 					}
 				}
 			}
-			else if (dynamic_cast<pub::PongRsp*>(response.get()) == nullptr)
+			else if (response->GetDescriptor() != pub::PongRsp::descriptor())
 			{
 				client_->OnMessage(this, response.get(), message);
-			}
-			else
-			{
-				assert(dynamic_cast<pub::PongRsp*>(response.get()) != nullptr);
 			}
 		}
 
@@ -369,7 +365,7 @@ namespace gw
 	void GWClient::OnMessage(SessionHandle *session, google::protobuf::Message *message, network::NetMessage &buffer)
 	{
 		context_session_ = session;
-		if (dynamic_cast<svr::GWNotify*>(message) != nullptr)
+		if (message->GetDescriptor() == svr::GWNotify::descriptor())
 		{
 			auto response = static_cast<svr::GWNotify*>(message);
 			context_.node_type = response->src().type();
@@ -384,7 +380,7 @@ namespace gw
 				message_cb_(this, forward_message.get(), buffer);
 			}
 		}
-		else if (dynamic_cast<pub::ErrorRsp*>(message) != nullptr)
+		else if (message->GetDescriptor() == pub::ErrorRsp::descriptor())
 		{
 			auto response = static_cast<pub::ErrorRsp*>(message);
 			std::cerr << "gateway error code: " << response->error_code() << std::endl;

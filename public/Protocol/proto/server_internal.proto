@@ -153,14 +153,23 @@ message ReportLinkerReq {
 /* 与LinkerServer的协议                                                  */
 /************************************************************************/
 
+// 用户进入
+message UserEnterRsp {
+    required uint32 user_id = 1;  // 用户id
+}
+
 // 用户下线
-message UserLeave {
-    repeated uint32 user_id = 1;  // 用户id
+message UserLeaveRsp {
+    required uint32 user_id = 1;  // 用户id
+}
+
+// 关闭用户连接
+message DisconnectReq {
 }
 
 // 转发消息
 message LinkerForward {
-    repeated uint32 user_id = 1;  // 用户id
+    required uint32 user_id = 1;  // 用户id
     required bytes user_data = 2; // 转发数据
 }
 
