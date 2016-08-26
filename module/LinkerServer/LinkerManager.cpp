@@ -2,6 +2,7 @@
 #include <GWClient.h>
 #include <ProtobufCodec.h>
 #include <proto/client_link.pb.h>
+#include <proto/client_logic.pb.h>
 #include <proto/public_struct.pb.h>
 #include <proto/server_internal.pb.h>
 #include "Logging.h"
@@ -183,10 +184,12 @@ void LinkerManager::OnUserClose(SessionHandle *session)
 // 广播用户进入
 void LinkerManager::OnBroadcastUserEnter(uint32_t user_id)
 {
+	cli::UserEnterReq req;
+	svr::UserLeave
 	std::vector<int> dst_type_lists;
 	dst_type_lists.push_back(static_cast<int>(svr::NodeType::kChatServer));
 	dst_type_lists.push_back(static_cast<int>(svr::NodeType::kLogicSever));
-	//GlobalGWClient()->Broadcast(dst_type_lists, );
+	GlobalGWClient()->Broadcast(dst_type_lists, );
 }
 
 // 广播用户离开
