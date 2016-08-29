@@ -223,20 +223,36 @@ void LinkerManager::OnGatewayServerMessage(gw::GWClient *connector, google::prot
 {
 	if (messsage->GetDescriptor() == svr::LinkerForward::descriptor())
 	{
-		// 转发消息给用户
-		auto request = static_cast<svr::LinkerForward*>(messsage);
+		OnForwardMessageToUser(messsage, buffer);
 	}
 	else if (messsage->GetDescriptor() == svr::LinkerBroadcast::descriptor())
 	{
-		// 广播消息给用户
-		auto request = static_cast<svr::LinkerBroadcast*>(messsage);
+		OnBroadcastMessageToUser(messsage, buffer);
 	}
 	else if (messsage->GetDescriptor() == svr::CloseUser::descriptor())
 	{
-		// 关闭用户连接
+		OnCloseUserConnection(messsage, buffer);
 	}
 	else
 	{
 		logger()->warn("已忽略来自网关服务器的请求，{}", messsage->GetTypeName());
 	}
+}
+
+// 向用户转发消息
+void LinkerManager::OnForwardMessageToUser(google::protobuf::Message *messsage, network::NetMessage &buffer)
+{
+	auto request = static_cast<svr::LinkerForward*>(messsage);
+}
+
+// 向用户广播消息
+void LinkerManager::OnBroadcastMessageToUser(google::protobuf::Message *messsage, network::NetMessage &buffer)
+{
+	auto request = static_cast<svr::LinkerBroadcast*>(messsage);
+}
+
+// 关闭用户连接
+void LinkerManager::OnCloseUserConnection(google::protobuf::Message *messsage, network::NetMessage &buffer)
+{
+	auto request = static_cast<svr::CloseUser*>(messsage);
 }

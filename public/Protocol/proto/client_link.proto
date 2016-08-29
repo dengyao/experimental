@@ -9,3 +9,8 @@ message UserAuthReq {
 message UserAuthRsp {
     required uint32 user_id = 1; // 用户id
 }
+
+// 关闭连接
+message CloseConnection {
+    required uint32 error_code = 1; // 错误代码
+}

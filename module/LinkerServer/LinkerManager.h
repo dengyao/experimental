@@ -75,6 +75,15 @@ private:
 	// 广播用户离开
 	void OnBroadcastUserLeave(uint32_t user_id);
 
+	// 向用户转发消息
+	void OnForwardMessageToUser(google::protobuf::Message *messsage, network::NetMessage &buffer);
+
+	// 向用户广播消息
+	void OnBroadcastMessageToUser(google::protobuf::Message *messsage, network::NetMessage &buffer);
+
+	// 关闭用户连接
+	void OnCloseUserConnection(google::protobuf::Message *messsage, network::NetMessage &buffer);
+
 private:
 	// 更新定时器
 	void OnUpdateTimer(asio::error_code error_code);
