@@ -84,9 +84,9 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* UserLeaveRsp_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   UserLeaveRsp_reflection_ = NULL;
-const ::google::protobuf::Descriptor* DisconnectReq_descriptor_ = NULL;
+const ::google::protobuf::Descriptor* CloseUser_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
-  DisconnectReq_reflection_ = NULL;
+  CloseUser_reflection_ = NULL;
 const ::google::protobuf::Descriptor* LinkerForward_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   LinkerForward_reflection_ = NULL;
@@ -445,20 +445,20 @@ void protobuf_AssignDesc_proto_2fserver_5finternal_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(UserLeaveRsp));
-  DisconnectReq_descriptor_ = file->message_type(21);
-  static const int DisconnectReq_offsets_[1] = {
+  CloseUser_descriptor_ = file->message_type(21);
+  static const int CloseUser_offsets_[1] = {
   };
-  DisconnectReq_reflection_ =
+  CloseUser_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
-      DisconnectReq_descriptor_,
-      DisconnectReq::default_instance_,
-      DisconnectReq_offsets_,
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(DisconnectReq, _has_bits_[0]),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(DisconnectReq, _unknown_fields_),
+      CloseUser_descriptor_,
+      CloseUser::default_instance_,
+      CloseUser_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CloseUser, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CloseUser, _unknown_fields_),
       -1,
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
-      sizeof(DisconnectReq));
+      sizeof(CloseUser));
   LinkerForward_descriptor_ = file->message_type(22);
   static const int LinkerForward_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LinkerForward, user_id_),
@@ -562,7 +562,7 @@ void protobuf_RegisterTypes(const ::std::string&) {
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     UserLeaveRsp_descriptor_, &UserLeaveRsp::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-    DisconnectReq_descriptor_, &DisconnectReq::default_instance());
+    CloseUser_descriptor_, &CloseUser::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     LinkerForward_descriptor_, &LinkerForward::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
@@ -616,8 +616,8 @@ void protobuf_ShutdownFile_proto_2fserver_5finternal_2eproto() {
   delete UserEnterRsp_reflection_;
   delete UserLeaveRsp::default_instance_;
   delete UserLeaveRsp_reflection_;
-  delete DisconnectReq::default_instance_;
-  delete DisconnectReq_reflection_;
+  delete CloseUser::default_instance_;
+  delete CloseUser_reflection_;
   delete LinkerForward::default_instance_;
   delete LinkerForward_reflection_;
   delete LinkerBroadcast::default_instance_;
@@ -670,14 +670,14 @@ void protobuf_AddDesc_proto_2fserver_5finternal_2eproto() {
     "oginRsp\022\032\n\022heartbeat_interval\030\001 \002(\r\022\021\n\tl"
     "inker_id\030\002 \002(\r\"\037\n\017ReportLinkerReq\022\014\n\004loa"
     "d\030\001 \002(\r\"\037\n\014UserEnterRsp\022\017\n\007user_id\030\001 \002(\r"
-    "\"\037\n\014UserLeaveRsp\022\017\n\007user_id\030\001 \002(\r\"\017\n\rDis"
-    "connectReq\"3\n\rLinkerForward\022\017\n\007user_id\030\001"
-    " \002(\r\022\021\n\tuser_data\030\002 \002(\014\"$\n\017LinkerBroadca"
-    "st\022\021\n\tuser_data\030\001 \002(\014\"0\n\016UpdateTokenReq\022"
-    "\017\n\007user_id\030\001 \002(\r\022\r\n\005token\030\002 \002(\004*a\n\010NodeT"
-    "ype\022\020\n\014kLoginServer\020\001\022\021\n\rkLinkerServer\020\002"
-    "\022\017\n\013kLogicSever\020\003\022\017\n\013kChatServer\020\004\022\016\n\nkG"
-    "ameSever\020\005", 1730);
+    "\"\037\n\014UserLeaveRsp\022\017\n\007user_id\030\001 \002(\r\"\013\n\tClo"
+    "seUser\"3\n\rLinkerForward\022\017\n\007user_id\030\001 \002(\r"
+    "\022\021\n\tuser_data\030\002 \002(\014\"$\n\017LinkerBroadcast\022\021"
+    "\n\tuser_data\030\001 \002(\014\"0\n\016UpdateTokenReq\022\017\n\007u"
+    "ser_id\030\001 \002(\r\022\r\n\005token\030\002 \002(\004*a\n\010NodeType\022"
+    "\020\n\014kLoginServer\020\001\022\021\n\rkLinkerServer\020\002\022\017\n\013"
+    "kLogicSever\020\003\022\017\n\013kChatServer\020\004\022\016\n\nkGameS"
+    "ever\020\005", 1726);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "proto/server_internal.proto", &protobuf_RegisterTypes);
   LoginDBAgentReq::default_instance_ = new LoginDBAgentReq();
@@ -701,7 +701,7 @@ void protobuf_AddDesc_proto_2fserver_5finternal_2eproto() {
   ReportLinkerReq::default_instance_ = new ReportLinkerReq();
   UserEnterRsp::default_instance_ = new UserEnterRsp();
   UserLeaveRsp::default_instance_ = new UserLeaveRsp();
-  DisconnectReq::default_instance_ = new DisconnectReq();
+  CloseUser::default_instance_ = new CloseUser();
   LinkerForward::default_instance_ = new LinkerForward();
   LinkerBroadcast::default_instance_ = new LinkerBroadcast();
   UpdateTokenReq::default_instance_ = new UpdateTokenReq();
@@ -726,7 +726,7 @@ void protobuf_AddDesc_proto_2fserver_5finternal_2eproto() {
   ReportLinkerReq::default_instance_->InitAsDefaultInstance();
   UserEnterRsp::default_instance_->InitAsDefaultInstance();
   UserLeaveRsp::default_instance_->InitAsDefaultInstance();
-  DisconnectReq::default_instance_->InitAsDefaultInstance();
+  CloseUser::default_instance_->InitAsDefaultInstance();
   LinkerForward::default_instance_->InitAsDefaultInstance();
   LinkerBroadcast::default_instance_->InitAsDefaultInstance();
   UpdateTokenReq::default_instance_->InitAsDefaultInstance();
@@ -6556,68 +6556,68 @@ void UserLeaveRsp::Swap(UserLeaveRsp* other) {
 #ifndef _MSC_VER
 #endif  // !_MSC_VER
 
-DisconnectReq::DisconnectReq()
+CloseUser::CloseUser()
   : ::google::protobuf::Message() {
   SharedCtor();
-  // @@protoc_insertion_point(constructor:svr.DisconnectReq)
+  // @@protoc_insertion_point(constructor:svr.CloseUser)
 }
 
-void DisconnectReq::InitAsDefaultInstance() {
+void CloseUser::InitAsDefaultInstance() {
 }
 
-DisconnectReq::DisconnectReq(const DisconnectReq& from)
+CloseUser::CloseUser(const CloseUser& from)
   : ::google::protobuf::Message() {
   SharedCtor();
   MergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:svr.DisconnectReq)
+  // @@protoc_insertion_point(copy_constructor:svr.CloseUser)
 }
 
-void DisconnectReq::SharedCtor() {
+void CloseUser::SharedCtor() {
   _cached_size_ = 0;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
-DisconnectReq::~DisconnectReq() {
-  // @@protoc_insertion_point(destructor:svr.DisconnectReq)
+CloseUser::~CloseUser() {
+  // @@protoc_insertion_point(destructor:svr.CloseUser)
   SharedDtor();
 }
 
-void DisconnectReq::SharedDtor() {
+void CloseUser::SharedDtor() {
   if (this != default_instance_) {
   }
 }
 
-void DisconnectReq::SetCachedSize(int size) const {
+void CloseUser::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const ::google::protobuf::Descriptor* DisconnectReq::descriptor() {
+const ::google::protobuf::Descriptor* CloseUser::descriptor() {
   protobuf_AssignDescriptorsOnce();
-  return DisconnectReq_descriptor_;
+  return CloseUser_descriptor_;
 }
 
-const DisconnectReq& DisconnectReq::default_instance() {
+const CloseUser& CloseUser::default_instance() {
   if (default_instance_ == NULL) protobuf_AddDesc_proto_2fserver_5finternal_2eproto();
   return *default_instance_;
 }
 
-DisconnectReq* DisconnectReq::default_instance_ = NULL;
+CloseUser* CloseUser::default_instance_ = NULL;
 
-DisconnectReq* DisconnectReq::New() const {
-  return new DisconnectReq;
+CloseUser* CloseUser::New() const {
+  return new CloseUser;
 }
 
-void DisconnectReq::Clear() {
+void CloseUser::Clear() {
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
 
-bool DisconnectReq::MergePartialFromCodedStream(
+bool CloseUser::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:svr.DisconnectReq)
+  // @@protoc_insertion_point(parse_start:svr.CloseUser)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
     tag = p.first;
@@ -6632,36 +6632,36 @@ bool DisconnectReq::MergePartialFromCodedStream(
           input, tag, mutable_unknown_fields()));
   }
 success:
-  // @@protoc_insertion_point(parse_success:svr.DisconnectReq)
+  // @@protoc_insertion_point(parse_success:svr.CloseUser)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:svr.DisconnectReq)
+  // @@protoc_insertion_point(parse_failure:svr.CloseUser)
   return false;
 #undef DO_
 }
 
-void DisconnectReq::SerializeWithCachedSizes(
+void CloseUser::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:svr.DisconnectReq)
+  // @@protoc_insertion_point(serialize_start:svr.CloseUser)
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
   }
-  // @@protoc_insertion_point(serialize_end:svr.DisconnectReq)
+  // @@protoc_insertion_point(serialize_end:svr.CloseUser)
 }
 
-::google::protobuf::uint8* DisconnectReq::SerializeWithCachedSizesToArray(
+::google::protobuf::uint8* CloseUser::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // @@protoc_insertion_point(serialize_to_array_start:svr.DisconnectReq)
+  // @@protoc_insertion_point(serialize_to_array_start:svr.CloseUser)
   if (!unknown_fields().empty()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:svr.DisconnectReq)
+  // @@protoc_insertion_point(serialize_to_array_end:svr.CloseUser)
   return target;
 }
 
-int DisconnectReq::ByteSize() const {
+int CloseUser::ByteSize() const {
   int total_size = 0;
 
   if (!unknown_fields().empty()) {
@@ -6675,10 +6675,10 @@ int DisconnectReq::ByteSize() const {
   return total_size;
 }
 
-void DisconnectReq::MergeFrom(const ::google::protobuf::Message& from) {
+void CloseUser::MergeFrom(const ::google::protobuf::Message& from) {
   GOOGLE_CHECK_NE(&from, this);
-  const DisconnectReq* source =
-    ::google::protobuf::internal::dynamic_cast_if_available<const DisconnectReq*>(
+  const CloseUser* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const CloseUser*>(
       &from);
   if (source == NULL) {
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
@@ -6687,40 +6687,40 @@ void DisconnectReq::MergeFrom(const ::google::protobuf::Message& from) {
   }
 }
 
-void DisconnectReq::MergeFrom(const DisconnectReq& from) {
+void CloseUser::MergeFrom(const CloseUser& from) {
   GOOGLE_CHECK_NE(&from, this);
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
 
-void DisconnectReq::CopyFrom(const ::google::protobuf::Message& from) {
+void CloseUser::CopyFrom(const ::google::protobuf::Message& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-void DisconnectReq::CopyFrom(const DisconnectReq& from) {
+void CloseUser::CopyFrom(const CloseUser& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool DisconnectReq::IsInitialized() const {
+bool CloseUser::IsInitialized() const {
 
   return true;
 }
 
-void DisconnectReq::Swap(DisconnectReq* other) {
+void CloseUser::Swap(CloseUser* other) {
   if (other != this) {
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
   }
 }
 
-::google::protobuf::Metadata DisconnectReq::GetMetadata() const {
+::google::protobuf::Metadata CloseUser::GetMetadata() const {
   protobuf_AssignDescriptorsOnce();
   ::google::protobuf::Metadata metadata;
-  metadata.descriptor = DisconnectReq_descriptor_;
-  metadata.reflection = DisconnectReq_reflection_;
+  metadata.descriptor = CloseUser_descriptor_;
+  metadata.reflection = CloseUser_reflection_;
   return metadata;
 }
 

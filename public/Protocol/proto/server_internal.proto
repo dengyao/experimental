@@ -164,7 +164,7 @@ message UserLeaveRsp {
 }
 
 // 关闭用户连接
-message DisconnectReq {
+message CloseUser {
 }
 
 // 转发消息

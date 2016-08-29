@@ -51,7 +51,7 @@ public:
         svr::ReportLinkerReq::descriptor();
         svr::UserEnterRsp::descriptor();
         svr::UserLeaveRsp::descriptor();
-        svr::DisconnectReq::descriptor();
+        svr::CloseUser::descriptor();
         svr::LinkerForward::descriptor();
         svr::LinkerBroadcast::descriptor();
         svr::UpdateTokenReq::descriptor();

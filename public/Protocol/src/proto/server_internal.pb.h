@@ -56,7 +56,7 @@ class LinkerLoginRsp;
 class ReportLinkerReq;
 class UserEnterRsp;
 class UserLeaveRsp;
-class DisconnectReq;
+class CloseUser;
 class LinkerForward;
 class LinkerBroadcast;
 class UpdateTokenReq;
@@ -2063,14 +2063,14 @@ class UserLeaveRsp : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
-class DisconnectReq : public ::google::protobuf::Message {
+class CloseUser : public ::google::protobuf::Message {
  public:
-  DisconnectReq();
-  virtual ~DisconnectReq();
+  CloseUser();
+  virtual ~CloseUser();
 
-  DisconnectReq(const DisconnectReq& from);
+  CloseUser(const CloseUser& from);
 
-  inline DisconnectReq& operator=(const DisconnectReq& from) {
+  inline CloseUser& operator=(const CloseUser& from) {
     CopyFrom(from);
     return *this;
   }
@@ -2084,17 +2084,17 @@ class DisconnectReq : public ::google::protobuf::Message {
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
-  static const DisconnectReq& default_instance();
+  static const CloseUser& default_instance();
 
-  void Swap(DisconnectReq* other);
+  void Swap(CloseUser* other);
 
   // implements Message ----------------------------------------------
 
-  DisconnectReq* New() const;
+  CloseUser* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const DisconnectReq& from);
-  void MergeFrom(const DisconnectReq& from);
+  void CopyFrom(const CloseUser& from);
+  void MergeFrom(const CloseUser& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -2116,7 +2116,7 @@ class DisconnectReq : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // @@protoc_insertion_point(class_scope:svr.DisconnectReq)
+  // @@protoc_insertion_point(class_scope:svr.CloseUser)
  private:
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
@@ -2128,7 +2128,7 @@ class DisconnectReq : public ::google::protobuf::Message {
   friend void protobuf_ShutdownFile_proto_2fserver_5finternal_2eproto();
 
   void InitAsDefaultInstance();
-  static DisconnectReq* default_instance_;
+  static CloseUser* default_instance_;
 };
 // -------------------------------------------------------------------
 
@@ -4002,7 +4002,7 @@ inline void UserLeaveRsp::set_user_id(::google::protobuf::uint32 value) {
 
 // -------------------------------------------------------------------
 
-// DisconnectReq
+// CloseUser
 
 // -------------------------------------------------------------------
 

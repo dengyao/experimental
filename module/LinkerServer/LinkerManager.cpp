@@ -221,17 +221,17 @@ void LinkerManager::OnLoginServerMessage(LoginConnector *connector, google::prot
 // 网关服务器消息
 void LinkerManager::OnGatewayServerMessage(gw::GWClient *connector, google::protobuf::Message *messsage, network::NetMessage &buffer)
 {
-	if (messsage->GetDescriptor() == svr::ForwardReq::descriptor())
+	if (messsage->GetDescriptor() == svr::LinkerForward::descriptor())
 	{
 		// 转发消息给用户
-		auto request = static_cast<svr::ForwardReq*>(messsage);
+		auto request = static_cast<svr::LinkerForward*>(messsage);
 	}
 	else if (messsage->GetDescriptor() == svr::LinkerBroadcast::descriptor())
 	{
 		// 广播消息给用户
 		auto request = static_cast<svr::LinkerBroadcast*>(messsage);
 	}
-	else if (messsage->GetDescriptor() == svr::DisconnectReq::descriptor())
+	else if (messsage->GetDescriptor() == svr::CloseUser::descriptor())
 	{
 		// 关闭用户连接
 	}
