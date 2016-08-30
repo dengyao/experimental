@@ -229,7 +229,7 @@ void LinkerManager::OnGatewayServerMessage(gw::GWClient *connector, google::prot
 	{
 		OnBroadcastMessageToUser(messsage, buffer);
 	}
-	else if (messsage->GetDescriptor() == svr::CloseUser::descriptor())
+	else if (messsage->GetDescriptor() == svr::CloseUserReq::descriptor())
 	{
 		OnCloseUserConnection(messsage, buffer);
 	}
@@ -239,20 +239,65 @@ void LinkerManager::OnGatewayServerMessage(gw::GWClient *connector, google::prot
 	}
 }
 
+// 获取用户Session
+bool LinkerManager::GetUserSession(uint32_t user_id, network::SessionHandlePointer &session)
+{
+	auto found = user_session_.find(user_id);
+	if (found == user_session_.end())
+	{
+		return false;
+	}
+	session = threads_.SessionHandler(found->second.session_id);
+	return session != nullptr;
+}
+
 // 向用户转发消息
 void LinkerManager::OnForwardMessageToUser(google::protobuf::Message *messsage, network::NetMessage &buffer)
 {
+	network::SessionHandlePointer session;
 	auto request = static_cast<svr::LinkerForward*>(messsage);
+	if (GetUserSession(request->user_id(), session))
+	{
+		buffer.Clear();
+		buffer.Write(request->user_data().data(), request->user_data().size());	
+		session->Send(buffer);
+	}
 }
 
 // 向用户广播消息
 void LinkerManager::OnBroadcastMessageToUser(google::protobuf::Message *messsage, network::NetMessage &buffer)
 {
 	auto request = static_cast<svr::LinkerBroadcast*>(messsage);
+	if (!user_session_.empty())
+	{
+		buffer.Clear();
+		buffer.Write(request->user_data().data(), request->user_data().size());
+		for (const auto &pair : user_session_)
+		{
+			network::SessionHandlePointer session = threads_.SessionHandler(pair.first);
+			if (session != nullptr)
+			{
+				session->Send(buffer);
+			}
+		}
+	}
 }
 
 // 关闭用户连接
 void LinkerManager::OnCloseUserConnection(google::protobuf::Message *messsage, network::NetMessage &buffer)
 {
-	auto request = static_cast<svr::CloseUser*>(messsage);
+	network::SessionHandlePointer session;
+	auto request = static_cast<svr::CloseUserReq*>(messsage);
+	if (GetUserSession(request->user_id(), session))
+	{
+		user_session_.erase(request->user_id());
+		reverse_user_session_.erase(session->SessionID());
+
+		buffer.Clear();
+		cli::CloseConnection msg;
+		msg.set_error_code(0);
+		ProtubufCodec::Encode(&msg, buffer);
+		session->Send(buffer);
+		session->Close();
+	}
 }

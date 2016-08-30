@@ -15,6 +15,7 @@ public:
     {
         cli::UserAuthReq::descriptor();
         cli::UserAuthRsp::descriptor();
+        cli::CloseConnection::descriptor();
         cli::UserInfoRep::descriptor();
         cli::UserInfoRsp::descriptor();
         cli::LeaveReq::descriptor();
@@ -51,7 +52,7 @@ public:
         svr::ReportLinkerReq::descriptor();
         svr::UserEnterRsp::descriptor();
         svr::UserLeaveRsp::descriptor();
-        svr::CloseUser::descriptor();
+        svr::CloseUserReq::descriptor();
         svr::LinkerForward::descriptor();
         svr::LinkerBroadcast::descriptor();
         svr::UpdateTokenReq::descriptor();

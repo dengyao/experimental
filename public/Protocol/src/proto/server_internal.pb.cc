@@ -84,9 +84,9 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* UserLeaveRsp_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   UserLeaveRsp_reflection_ = NULL;
-const ::google::protobuf::Descriptor* CloseUser_descriptor_ = NULL;
+const ::google::protobuf::Descriptor* CloseUserReq_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
-  CloseUser_reflection_ = NULL;
+  CloseUserReq_reflection_ = NULL;
 const ::google::protobuf::Descriptor* LinkerForward_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   LinkerForward_reflection_ = NULL;
@@ -445,20 +445,21 @@ void protobuf_AssignDesc_proto_2fserver_5finternal_2eproto() {
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
       sizeof(UserLeaveRsp));
-  CloseUser_descriptor_ = file->message_type(21);
-  static const int CloseUser_offsets_[1] = {
+  CloseUserReq_descriptor_ = file->message_type(21);
+  static const int CloseUserReq_offsets_[1] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CloseUserReq, user_id_),
   };
-  CloseUser_reflection_ =
+  CloseUserReq_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
-      CloseUser_descriptor_,
-      CloseUser::default_instance_,
-      CloseUser_offsets_,
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CloseUser, _has_bits_[0]),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CloseUser, _unknown_fields_),
+      CloseUserReq_descriptor_,
+      CloseUserReq::default_instance_,
+      CloseUserReq_offsets_,
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CloseUserReq, _has_bits_[0]),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(CloseUserReq, _unknown_fields_),
       -1,
       ::google::protobuf::DescriptorPool::generated_pool(),
       ::google::protobuf::MessageFactory::generated_factory(),
-      sizeof(CloseUser));
+      sizeof(CloseUserReq));
   LinkerForward_descriptor_ = file->message_type(22);
   static const int LinkerForward_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(LinkerForward, user_id_),
@@ -562,7 +563,7 @@ void protobuf_RegisterTypes(const ::std::string&) {
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     UserLeaveRsp_descriptor_, &UserLeaveRsp::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-    CloseUser_descriptor_, &CloseUser::default_instance());
+    CloseUserReq_descriptor_, &CloseUserReq::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
     LinkerForward_descriptor_, &LinkerForward::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
@@ -616,8 +617,8 @@ void protobuf_ShutdownFile_proto_2fserver_5finternal_2eproto() {
   delete UserEnterRsp_reflection_;
   delete UserLeaveRsp::default_instance_;
   delete UserLeaveRsp_reflection_;
-  delete CloseUser::default_instance_;
-  delete CloseUser_reflection_;
+  delete CloseUserReq::default_instance_;
+  delete CloseUserReq_reflection_;
   delete LinkerForward::default_instance_;
   delete LinkerForward_reflection_;
   delete LinkerBroadcast::default_instance_;
@@ -670,14 +671,14 @@ void protobuf_AddDesc_proto_2fserver_5finternal_2eproto() {
     "oginRsp\022\032\n\022heartbeat_interval\030\001 \002(\r\022\021\n\tl"
     "inker_id\030\002 \002(\r\"\037\n\017ReportLinkerReq\022\014\n\004loa"
     "d\030\001 \002(\r\"\037\n\014UserEnterRsp\022\017\n\007user_id\030\001 \002(\r"
-    "\"\037\n\014UserLeaveRsp\022\017\n\007user_id\030\001 \002(\r\"\013\n\tClo"
-    "seUser\"3\n\rLinkerForward\022\017\n\007user_id\030\001 \002(\r"
-    "\022\021\n\tuser_data\030\002 \002(\014\"$\n\017LinkerBroadcast\022\021"
-    "\n\tuser_data\030\001 \002(\014\"0\n\016UpdateTokenReq\022\017\n\007u"
-    "ser_id\030\001 \002(\r\022\r\n\005token\030\002 \002(\004*a\n\010NodeType\022"
-    "\020\n\014kLoginServer\020\001\022\021\n\rkLinkerServer\020\002\022\017\n\013"
-    "kLogicSever\020\003\022\017\n\013kChatServer\020\004\022\016\n\nkGameS"
-    "ever\020\005", 1726);
+    "\"\037\n\014UserLeaveRsp\022\017\n\007user_id\030\001 \002(\r\"\037\n\014Clo"
+    "seUserReq\022\017\n\007user_id\030\001 \002(\r\"3\n\rLinkerForw"
+    "ard\022\017\n\007user_id\030\001 \002(\r\022\021\n\tuser_data\030\002 \002(\014\""
+    "$\n\017LinkerBroadcast\022\021\n\tuser_data\030\001 \002(\014\"0\n"
+    "\016UpdateTokenReq\022\017\n\007user_id\030\001 \002(\r\022\r\n\005toke"
+    "n\030\002 \002(\004*a\n\010NodeType\022\020\n\014kLoginServer\020\001\022\021\n"
+    "\rkLinkerServer\020\002\022\017\n\013kLogicSever\020\003\022\017\n\013kCh"
+    "atServer\020\004\022\016\n\nkGameSever\020\005", 1746);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "proto/server_internal.proto", &protobuf_RegisterTypes);
   LoginDBAgentReq::default_instance_ = new LoginDBAgentReq();
@@ -701,7 +702,7 @@ void protobuf_AddDesc_proto_2fserver_5finternal_2eproto() {
   ReportLinkerReq::default_instance_ = new ReportLinkerReq();
   UserEnterRsp::default_instance_ = new UserEnterRsp();
   UserLeaveRsp::default_instance_ = new UserLeaveRsp();
-  CloseUser::default_instance_ = new CloseUser();
+  CloseUserReq::default_instance_ = new CloseUserReq();
   LinkerForward::default_instance_ = new LinkerForward();
   LinkerBroadcast::default_instance_ = new LinkerBroadcast();
   UpdateTokenReq::default_instance_ = new UpdateTokenReq();
@@ -726,7 +727,7 @@ void protobuf_AddDesc_proto_2fserver_5finternal_2eproto() {
   ReportLinkerReq::default_instance_->InitAsDefaultInstance();
   UserEnterRsp::default_instance_->InitAsDefaultInstance();
   UserLeaveRsp::default_instance_->InitAsDefaultInstance();
-  CloseUser::default_instance_->InitAsDefaultInstance();
+  CloseUserReq::default_instance_->InitAsDefaultInstance();
   LinkerForward::default_instance_->InitAsDefaultInstance();
   LinkerBroadcast::default_instance_->InitAsDefaultInstance();
   UpdateTokenReq::default_instance_->InitAsDefaultInstance();
@@ -6554,116 +6555,157 @@ void UserLeaveRsp::Swap(UserLeaveRsp* other) {
 // ===================================================================
 
 #ifndef _MSC_VER
+const int CloseUserReq::kUserIdFieldNumber;
 #endif  // !_MSC_VER
 
-CloseUser::CloseUser()
+CloseUserReq::CloseUserReq()
   : ::google::protobuf::Message() {
   SharedCtor();
-  // @@protoc_insertion_point(constructor:svr.CloseUser)
+  // @@protoc_insertion_point(constructor:svr.CloseUserReq)
 }
 
-void CloseUser::InitAsDefaultInstance() {
+void CloseUserReq::InitAsDefaultInstance() {
 }
 
-CloseUser::CloseUser(const CloseUser& from)
+CloseUserReq::CloseUserReq(const CloseUserReq& from)
   : ::google::protobuf::Message() {
   SharedCtor();
   MergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:svr.CloseUser)
+  // @@protoc_insertion_point(copy_constructor:svr.CloseUserReq)
 }
 
-void CloseUser::SharedCtor() {
+void CloseUserReq::SharedCtor() {
   _cached_size_ = 0;
+  user_id_ = 0u;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
-CloseUser::~CloseUser() {
-  // @@protoc_insertion_point(destructor:svr.CloseUser)
+CloseUserReq::~CloseUserReq() {
+  // @@protoc_insertion_point(destructor:svr.CloseUserReq)
   SharedDtor();
 }
 
-void CloseUser::SharedDtor() {
+void CloseUserReq::SharedDtor() {
   if (this != default_instance_) {
   }
 }
 
-void CloseUser::SetCachedSize(int size) const {
+void CloseUserReq::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const ::google::protobuf::Descriptor* CloseUser::descriptor() {
+const ::google::protobuf::Descriptor* CloseUserReq::descriptor() {
   protobuf_AssignDescriptorsOnce();
-  return CloseUser_descriptor_;
+  return CloseUserReq_descriptor_;
 }
 
-const CloseUser& CloseUser::default_instance() {
+const CloseUserReq& CloseUserReq::default_instance() {
   if (default_instance_ == NULL) protobuf_AddDesc_proto_2fserver_5finternal_2eproto();
   return *default_instance_;
 }
 
-CloseUser* CloseUser::default_instance_ = NULL;
+CloseUserReq* CloseUserReq::default_instance_ = NULL;
 
-CloseUser* CloseUser::New() const {
-  return new CloseUser;
+CloseUserReq* CloseUserReq::New() const {
+  return new CloseUserReq;
 }
 
-void CloseUser::Clear() {
+void CloseUserReq::Clear() {
+  user_id_ = 0u;
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
 }
 
-bool CloseUser::MergePartialFromCodedStream(
+bool CloseUserReq::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:svr.CloseUser)
+  // @@protoc_insertion_point(parse_start:svr.CloseUserReq)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
     tag = p.first;
     if (!p.second) goto handle_unusual;
-  handle_unusual:
-    if (tag == 0 ||
-        ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-        ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
-      goto success;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // required uint32 user_id = 1;
+      case 1: {
+        if (tag == 8) {
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &user_id_)));
+          set_has_user_id();
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, mutable_unknown_fields()));
+        break;
+      }
     }
-    DO_(::google::protobuf::internal::WireFormat::SkipField(
-          input, tag, mutable_unknown_fields()));
   }
 success:
-  // @@protoc_insertion_point(parse_success:svr.CloseUser)
+  // @@protoc_insertion_point(parse_success:svr.CloseUserReq)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:svr.CloseUser)
+  // @@protoc_insertion_point(parse_failure:svr.CloseUserReq)
   return false;
 #undef DO_
 }
 
-void CloseUser::SerializeWithCachedSizes(
+void CloseUserReq::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:svr.CloseUser)
+  // @@protoc_insertion_point(serialize_start:svr.CloseUserReq)
+  // required uint32 user_id = 1;
+  if (has_user_id()) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->user_id(), output);
+  }
+
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
   }
-  // @@protoc_insertion_point(serialize_end:svr.CloseUser)
+  // @@protoc_insertion_point(serialize_end:svr.CloseUserReq)
 }
 
-::google::protobuf::uint8* CloseUser::SerializeWithCachedSizesToArray(
+::google::protobuf::uint8* CloseUserReq::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // @@protoc_insertion_point(serialize_to_array_start:svr.CloseUser)
+  // @@protoc_insertion_point(serialize_to_array_start:svr.CloseUserReq)
+  // required uint32 user_id = 1;
+  if (has_user_id()) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->user_id(), target);
+  }
+
   if (!unknown_fields().empty()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:svr.CloseUser)
+  // @@protoc_insertion_point(serialize_to_array_end:svr.CloseUserReq)
   return target;
 }
 
-int CloseUser::ByteSize() const {
+int CloseUserReq::ByteSize() const {
   int total_size = 0;
 
+  if (_has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    // required uint32 user_id = 1;
+    if (has_user_id()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
+          this->user_id());
+    }
+
+  }
   if (!unknown_fields().empty()) {
     total_size +=
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
@@ -6675,10 +6717,10 @@ int CloseUser::ByteSize() const {
   return total_size;
 }
 
-void CloseUser::MergeFrom(const ::google::protobuf::Message& from) {
+void CloseUserReq::MergeFrom(const ::google::protobuf::Message& from) {
   GOOGLE_CHECK_NE(&from, this);
-  const CloseUser* source =
-    ::google::protobuf::internal::dynamic_cast_if_available<const CloseUser*>(
+  const CloseUserReq* source =
+    ::google::protobuf::internal::dynamic_cast_if_available<const CloseUserReq*>(
       &from);
   if (source == NULL) {
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
@@ -6687,40 +6729,48 @@ void CloseUser::MergeFrom(const ::google::protobuf::Message& from) {
   }
 }
 
-void CloseUser::MergeFrom(const CloseUser& from) {
+void CloseUserReq::MergeFrom(const CloseUserReq& from) {
   GOOGLE_CHECK_NE(&from, this);
+  if (from._has_bits_[0 / 32] & (0xffu << (0 % 32))) {
+    if (from.has_user_id()) {
+      set_user_id(from.user_id());
+    }
+  }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
 
-void CloseUser::CopyFrom(const ::google::protobuf::Message& from) {
+void CloseUserReq::CopyFrom(const ::google::protobuf::Message& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-void CloseUser::CopyFrom(const CloseUser& from) {
+void CloseUserReq::CopyFrom(const CloseUserReq& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool CloseUser::IsInitialized() const {
+bool CloseUserReq::IsInitialized() const {
+  if ((_has_bits_[0] & 0x00000001) != 0x00000001) return false;
 
   return true;
 }
 
-void CloseUser::Swap(CloseUser* other) {
+void CloseUserReq::Swap(CloseUserReq* other) {
   if (other != this) {
+    std::swap(user_id_, other->user_id_);
+    std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
   }
 }
 
-::google::protobuf::Metadata CloseUser::GetMetadata() const {
+::google::protobuf::Metadata CloseUserReq::GetMetadata() const {
   protobuf_AssignDescriptorsOnce();
   ::google::protobuf::Metadata metadata;
-  metadata.descriptor = CloseUser_descriptor_;
-  metadata.reflection = CloseUser_reflection_;
+  metadata.descriptor = CloseUserReq_descriptor_;
+  metadata.reflection = CloseUserReq_reflection_;
   return metadata;
 }
 

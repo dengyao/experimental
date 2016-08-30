@@ -56,7 +56,7 @@ class LinkerLoginRsp;
 class ReportLinkerReq;
 class UserEnterRsp;
 class UserLeaveRsp;
-class CloseUser;
+class CloseUserReq;
 class LinkerForward;
 class LinkerBroadcast;
 class UpdateTokenReq;
@@ -2063,14 +2063,14 @@ class UserLeaveRsp : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
-class CloseUser : public ::google::protobuf::Message {
+class CloseUserReq : public ::google::protobuf::Message {
  public:
-  CloseUser();
-  virtual ~CloseUser();
+  CloseUserReq();
+  virtual ~CloseUserReq();
 
-  CloseUser(const CloseUser& from);
+  CloseUserReq(const CloseUserReq& from);
 
-  inline CloseUser& operator=(const CloseUser& from) {
+  inline CloseUserReq& operator=(const CloseUserReq& from) {
     CopyFrom(from);
     return *this;
   }
@@ -2084,17 +2084,17 @@ class CloseUser : public ::google::protobuf::Message {
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
-  static const CloseUser& default_instance();
+  static const CloseUserReq& default_instance();
 
-  void Swap(CloseUser* other);
+  void Swap(CloseUserReq* other);
 
   // implements Message ----------------------------------------------
 
-  CloseUser* New() const;
+  CloseUserReq* New() const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const CloseUser& from);
-  void MergeFrom(const CloseUser& from);
+  void CopyFrom(const CloseUserReq& from);
+  void MergeFrom(const CloseUserReq& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -2116,19 +2116,29 @@ class CloseUser : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // @@protoc_insertion_point(class_scope:svr.CloseUser)
+  // required uint32 user_id = 1;
+  inline bool has_user_id() const;
+  inline void clear_user_id();
+  static const int kUserIdFieldNumber = 1;
+  inline ::google::protobuf::uint32 user_id() const;
+  inline void set_user_id(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:svr.CloseUserReq)
  private:
+  inline void set_has_user_id();
+  inline void clear_has_user_id();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
   ::google::protobuf::uint32 _has_bits_[1];
   mutable int _cached_size_;
+  ::google::protobuf::uint32 user_id_;
   friend void  protobuf_AddDesc_proto_2fserver_5finternal_2eproto();
   friend void protobuf_AssignDesc_proto_2fserver_5finternal_2eproto();
   friend void protobuf_ShutdownFile_proto_2fserver_5finternal_2eproto();
 
   void InitAsDefaultInstance();
-  static CloseUser* default_instance_;
+  static CloseUserReq* default_instance_;
 };
 // -------------------------------------------------------------------
 
@@ -4002,7 +4012,31 @@ inline void UserLeaveRsp::set_user_id(::google::protobuf::uint32 value) {
 
 // -------------------------------------------------------------------
 
-// CloseUser
+// CloseUserReq
+
+// required uint32 user_id = 1;
+inline bool CloseUserReq::has_user_id() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void CloseUserReq::set_has_user_id() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void CloseUserReq::clear_has_user_id() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void CloseUserReq::clear_user_id() {
+  user_id_ = 0u;
+  clear_has_user_id();
+}
+inline ::google::protobuf::uint32 CloseUserReq::user_id() const {
+  // @@protoc_insertion_point(field_get:svr.CloseUserReq.user_id)
+  return user_id_;
+}
+inline void CloseUserReq::set_user_id(::google::protobuf::uint32 value) {
+  set_has_user_id();
+  user_id_ = value;
+  // @@protoc_insertion_point(field_set:svr.CloseUserReq.user_id)
+}
 
 // -------------------------------------------------------------------
 

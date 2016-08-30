@@ -35,6 +35,7 @@ void protobuf_ShutdownFile_proto_2fclient_5flink_2eproto();
 
 class UserAuthReq;
 class UserAuthRsp;
+class CloseConnection;
 
 // ===================================================================
 
@@ -194,6 +195,85 @@ class UserAuthRsp : public ::google::protobuf::Message {
   void InitAsDefaultInstance();
   static UserAuthRsp* default_instance_;
 };
+// -------------------------------------------------------------------
+
+class CloseConnection : public ::google::protobuf::Message {
+ public:
+  CloseConnection();
+  virtual ~CloseConnection();
+
+  CloseConnection(const CloseConnection& from);
+
+  inline CloseConnection& operator=(const CloseConnection& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  inline const ::google::protobuf::UnknownFieldSet& unknown_fields() const {
+    return _unknown_fields_;
+  }
+
+  inline ::google::protobuf::UnknownFieldSet* mutable_unknown_fields() {
+    return &_unknown_fields_;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const CloseConnection& default_instance();
+
+  void Swap(CloseConnection* other);
+
+  // implements Message ----------------------------------------------
+
+  CloseConnection* New() const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const CloseConnection& from);
+  void MergeFrom(const CloseConnection& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  public:
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // required uint32 error_code = 1;
+  inline bool has_error_code() const;
+  inline void clear_error_code();
+  static const int kErrorCodeFieldNumber = 1;
+  inline ::google::protobuf::uint32 error_code() const;
+  inline void set_error_code(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:cli.CloseConnection)
+ private:
+  inline void set_has_error_code();
+  inline void clear_has_error_code();
+
+  ::google::protobuf::UnknownFieldSet _unknown_fields_;
+
+  ::google::protobuf::uint32 _has_bits_[1];
+  mutable int _cached_size_;
+  ::google::protobuf::uint32 error_code_;
+  friend void  protobuf_AddDesc_proto_2fclient_5flink_2eproto();
+  friend void protobuf_AssignDesc_proto_2fclient_5flink_2eproto();
+  friend void protobuf_ShutdownFile_proto_2fclient_5flink_2eproto();
+
+  void InitAsDefaultInstance();
+  static CloseConnection* default_instance_;
+};
 // ===================================================================
 
 
@@ -251,6 +331,34 @@ inline void UserAuthRsp::set_user_id(::google::protobuf::uint32 value) {
   set_has_user_id();
   user_id_ = value;
   // @@protoc_insertion_point(field_set:cli.UserAuthRsp.user_id)
+}
+
+// -------------------------------------------------------------------
+
+// CloseConnection
+
+// required uint32 error_code = 1;
+inline bool CloseConnection::has_error_code() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void CloseConnection::set_has_error_code() {
+  _has_bits_[0] |= 0x00000001u;
+}
+inline void CloseConnection::clear_has_error_code() {
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline void CloseConnection::clear_error_code() {
+  error_code_ = 0u;
+  clear_has_error_code();
+}
+inline ::google::protobuf::uint32 CloseConnection::error_code() const {
+  // @@protoc_insertion_point(field_get:cli.CloseConnection.error_code)
+  return error_code_;
+}
+inline void CloseConnection::set_error_code(::google::protobuf::uint32 value) {
+  set_has_error_code();
+  error_code_ = value;
+  // @@protoc_insertion_point(field_set:cli.CloseConnection.error_code)
 }
 
 
